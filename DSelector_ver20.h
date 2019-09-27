@@ -13,20 +13,219 @@
 #include "TH2F.h"
 #include "TVector3.h"
 #include "THStack.h"
+#include "TCanvas.h"
 
 bool is_pi0eta=true;
+
+struct histDef_1D{
+    TH1F* hist;
+    string name;
+    bool* cut;
+    std::vector< double* > values;
+    double* weights; 
+    void clear(){
+        values.clear();
+    }
+};
+
+struct histDef_2D{
+    TH2F* hist;
+    string name;
+    bool* cut;
+    std::vector< double* > valuesX;
+    std::vector< double* > valuesY;
+    double* weights; 
+    void clear(){
+        valuesX.clear();
+        valuesY.clear();
+    }
+};
+
+class trackingGroup{
+    private:
+	//set< pair<Int_t,Int_t> > usedIds;
+        set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > usedPairMapIds;
+        set< map<Particle_t, set<Int_t> > >  usedMapIds;
+
+    public:
+        TCanvas *anyCanvas;
+        trackingGroup(){ cout << "Calling constructor" << endl; }; 
+        ~trackingGroup(){ cout << "Calling destructor" << endl; };
+
+        void setNameMakeCanvas(string groupName){
+	    anyCanvas = new TCanvas((groupName).c_str(),"",1440, 900);
+        }
+
+        std::vector<histDef_1D> allHists_1D;
+        std::vector<histDef_2D> allHists_2D;
+
+        std::vector< set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > > allUsedPairMapIds;
+        std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_1D;
+        std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_2D;
+
+        void insert(histDef_1D hist){
+            allHists_1D.push_back(hist);
+            allUsedMapIds_1D.push_back(usedMapIds);
+        }
+
+        void insert_2D(histDef_2D hist){
+            allHists_2D.push_back(hist);
+            allUsedMapIds_2D.push_back(usedMapIds);
+            allUsedPairMapIds.push_back(usedPairMapIds); // we only need this for 2D histograms
+        }
+
+
+        // for filling distance between pairs of particles like dij3FCAL
+        void fillHistograms_vectorMap( std::vector< map<Particle_t, set<Int_t> > > beingUsedPairIds){
+             for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
+                 for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+	              //if (allUsedMapIds_1D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[iHist].end() || *(allHists_1D[iHist].cut)  ){
+	              if ( *(allHists_1D[iHist].cut) ) {
+	                 //allUsedMapIds_1D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
+                         allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[iValue]), *(allHists_1D[iHist].weights) );
+                      }
+            
+                 }
+                 for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+	              if (allUsedMapIds_2D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_2D[iHist].end() || *(allHists_2D[iHist].cut)  ){
+	                 allUsedMapIds_2D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
+                         allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[iValue]),*(allHists_2D[iHist].valuesY[iValue]), *(allHists_2D[iHist].weights) );
+                      }
+                 }
+             }
+        }
+
+        // Similar to above but just for 1D distributions where we don't need to track a pair of maps for correlations
+        void fillHistograms_Map( map<Particle_t, set<Int_t> >  beingUsedMap ){
+             for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+	        if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() || *(allHists_1D[iHist].cut)  ){
+	            allUsedMapIds_1D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
+                    allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[0]), *(allHists_1D[iHist].weights) );
+                }
+             }
+             for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+	         if (allUsedMapIds_2D[iHist].find(beingUsedMap)==allUsedMapIds_2D[iHist].end() || *(allHists_2D[iHist].cut)  ){
+	            allUsedMapIds_2D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
+                    allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
+                }
+             }
+        }
+
+        // This will be used for more complicated sets. Most generic is a pair of maps. i.e. for 2D plot of M(pi0eta) and cosThetaGJ(eta)
+        void fillHistograms_pairMap( pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > beingUsedMapPair ){
+            // there is no 1d version because why would be need a pair of maps to track a 1d distribution...
+            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+	        if (allUsedPairMapIds[iHist].find(beingUsedMapPair)==allUsedPairMapIds[iHist].end() || *(allHists_2D[iHist].cut)){
+	            allUsedPairMapIds[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
+                    allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
+                }
+            }
+             
+        }
+
+
+        void drawHistograms(){
+            for (UInt_t iHist=0; iHist < allHists_1D.size(); ++iHist){
+                anyCanvas->Clear();
+                allHists_1D[iHist].hist->Draw("HIST");
+                anyCanvas->SaveAs(("graphs/"+allHists_1D[iHist].name+".png").c_str());
+            }
+            for (UInt_t iHist=0; iHist < allHists_2D.size(); ++iHist){
+                anyCanvas->Clear();
+                allHists_2D[iHist].hist->Draw();
+                anyCanvas->SaveAs(("graphs/"+allHists_2D[iHist].name+".png").c_str());
+            }
+        }
+
+        void clear(){
+            usedMapIds.clear();
+            usedPairMapIds.clear();
+            usedMapIds.clear();
+        }
+};
+
+    
+        
+        //void setHistogram1D(int iHist, bool cutToApply, double xValue, double weight){
+        //    any1DValue.push_back(&xValue);
+        //    weight1D.push_back(&weight);
+        //    cut1D.push_back(&cutToApply);
+        //    iHist1Ds.push_back(iHist);
+        //}
+
+        //void initHistogram1D(string name, string titles, vector<double> xPars, std::vector<int> valueLocations){
+        //    cout << "initializing 1D histogram" << endl;
+	//    any1DHists.push_back( new TH1F( name.c_str(), titles.c_str(), xPars[0], xPars[1], xPars[2] ) );
+        //    names1D.push_back(name);
+        //    valueLocations1D.push_back(valueLocations);
+        //}
+
+        //void setHistogram2D(int iHist, bool cutToApply, double xValue, double yValue, double weight){
+        //    any2DValue_X.push_back(&xValue);
+        //    any2DValue_Y.push_back(&yValue);
+        //    weight2D.push_back(&weight);
+        //    cut2D.push_back(&cutToApply);
+        //    iHist2Ds.push_back(iHist);
+        //}
+
+        //void initHistogram2D(string name, string titles, bool isvec, vector<double> xPars, vector<double> yPars){
+        //    cout << "initializing 2D histogram" << endl;
+	//    any2DHists.push_back(new TH2F( name.c_str(), titles.c_str(), xPars[0], xPars[1], xPars[2], yPars[0], yPars[1], yPars[2] ) ) ;
+        //    names2D.push_back(name);
+        //}
+
+        //void fillHistograms(){
+        //    for (UInt_t iHist=0; iHist < any1DHists.size(); ++iHist){
+        //        for ( UInt_t iValLocs=0; iValLocs<valueLocations1D[iHist].size(); ++iValLocs){
+        //            if ( *(point_cut1D+iValLocs) ) {
+        //                any1DHists[iHist]->Fill( *(point_any1DValues+iValLocs), *(point_weights1Ds+iValLocs) );
+        //            }
+        //        }
+        //    }
+        //    //for (UInt_t iHist=0; iHist < any2DHists.size(); ++iHist){
+        //    //    if ( *(cut2D[iHist]) ) {
+        //    //        any2DHist[iHists2Ds[iValues]]->Fill( *any2DValue_X[iValues], *any2DValue_Y[iValues], *weight1D[iValues] );
+        //    //    }
+        //    //}
+        //}
+
+        //void drawHistograms(){
+        //    for (UInt_t iHist=0; iHist < any1DHists.size(); ++iHist){
+        //        anyCanvas->Clear();
+        //        any1DHists[iHist]->Draw();
+        //        anyCanvas->SaveAs((names1D[iHist]+".png").c_str());
+        //    }
+        //    for (UInt_t iHist=0; iHist < any2DHists.size(); ++iHist){
+        //        anyCanvas->Clear();
+        //        any2DHists[iHist]->Draw();
+        //        anyCanvas->SaveAs((names2D[iHist]+"png").c_str());
+        //    }
+        //}
+//};
+
+
 
 class DSelector_ver20 : public DSelector
 {
 	public:
-
-		DSelector_ver20(TTree* locTree = NULL) : DSelector(locTree){}
+		DSelector_ver20(TTree* locTree = NULL) : DSelector(locTree){
+                }
 		virtual ~DSelector_ver20(){}
 
 		void Init(TTree *tree);
 		Bool_t Process(Long64_t entry);
 
 	private:
+                trackingGroup group_g;
+                trackingGroup group_p;
+                trackingGroup group_12B_1234B;
+                trackingGroup group_34B_1234B;
+                trackingGroup group_12B;
+                trackingGroup group_34B;
+                trackingGroup group_1234B;
+                trackingGroup group_1234BP;
+                trackingGroup group_pairFCAL;
+                trackingGroup group_pairBCAL;
 
 		void Get_ComboWrappers(void);
 		void Finalize(void);
@@ -118,10 +317,10 @@ class DSelector_ver20 : public DSelector
 		double locWherePhoton=1;
 
 		// Accidental subtraction variables. applyAccSub will either be = to weight or noAccSub=1.
-		double weight=1;
 		double weightAS=1;
-		double applyAccSub=1;
-		double noAccSub=1;
+		double noWeight=1;
+                double weight=1;
+                double appliedWeight=1;
 
 		//************* Other variables
 		double locMissingMassSquared=1;
@@ -504,7 +703,18 @@ class DSelector_ver20 : public DSelector
 		bool mEllipseChiSq_pre = true;
 		bool pMPi0P14=true;
 		bool mMPi0P14=true;
-		// Holder to help partly determine the cuts to apply
+                bool noCut=true;
+
+                bool dzRP=true;
+                bool dzR=true;
+		bool mEllipse_pre_pi0BCAL = true;
+		bool mEllipse_pre_pi0FCAL = true;
+		bool mEllipse_pre_pi0SPLIT = true;
+		bool mEllipse_pre_etaBCAL = true;
+		bool mEllipse_pre_etaFCAL = true;
+		bool mEllipse_pre_etaSPLIT = true;
+                bool allGen_barybkg=true;
+                bool allGen_vanHove=true;
 		bool cutsToApply = true; 
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
