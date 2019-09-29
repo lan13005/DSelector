@@ -29,24 +29,6 @@ int itersToRun = 0;
 int finalStateComboID=0;
 void DSelector_ver20::Init(TTree *locTree)
 {
-        //trackingGroup group_g = trackingGroup("single_gamma");
-        //trackingGroup group_p = trackingGroup("single_proton");
-        //trackingGroup group_12B_1234B = trackingGroup("pi0_pi0eta");
-        //trackingGroup group_34B_1234B = trackingGroup("eta_pi0eta");
-        //trackingGroup group_12B = trackingGroup("pi0");
-        //trackingGroup group_34B = trackingGroup("eta");
-        //trackingGroup group_1234B = trackingGroup("pi0eta");
-        //
-        
-
-        //group_g.setNameMakeCanvas("single_gamma");
-        //group_p.setNameMakeCanvas("single_proton");
-        //group_12B_1234B.setNameMakeCanvas("pi0_pi0eta");
-        //group_34B_1234B.setNameMakeCanvas("eta_pi0eta");
-        //group_12B.setNameMakeCanvas("pi0");
-        //group_34B.setNameMakeCanvas("eta");
-        //group_1234B.setNameMakeCanvas("pi0eta");
-
         cout << "STARTING" << endl;
 	targetCenter = {0,0,65};
 
@@ -163,47 +145,6 @@ void DSelector_ver20::Init(TTree *locTree)
 // **************************************** START INITIALZING VARIABLES TO USE WITH HISTO BUILDING ********************************************//
 // **************************************** START INITIALZING VARIABLES TO USE WITH HISTO BUILDING ********************************************//
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////// ********* DEFINING ALL HISTOGRAMS ****************/////////////////////////////////////////////
-
-	// initialize id to -1. We have to have some initialization of histVals and histCuts or else it wont run properly.
-	id = -1; // have to reinitialize id
-	//for (int i = 0; i < 2; ++i){
-	//       if (i<1) { cutString = ""; cutsToApply = 1; cutsBase="None";  applyAccSub=noAccSub;}
-	//       else { cutString = "Cut"; cutsToApply = allGeneralCutsPassed; cutsBase="GeneralCuts";  applyAccSub=weight;}
-	//	cutsApplied=cutsBase;
-
-        //       ++id; histVals[id] = {8, applyAccSub, locMissingMassSquared};
-	//       if (cutString=="") { histCuts[id] = cutsToApply; }
-	//       else { histCuts[id] = mMMSq; cutsApplied="mMMsq";}
-	//       histList[id] = {("MissingMassSquared"+cutString).c_str(), ("Cuts="+cutsApplied+";Missing Mass Squared (GeV/c^{2})^{2}").c_str(), "200", "-0.2", "0.2", "Events / 0.002 GeV/c^{2}"};
-	//	cutsApplied=cutsBase;
-	//
-	//       ++id; histVals[id] = {1, applyAccSub, locBeamE};
-	//       if (cutString=="") { histCuts[id] = cutsToApply; }
-	//       else { histCuts[id] = mBeamE; cutsApplied="mBeamE";}
-        //       histList[id] = {("BeamEnergy"+cutString).c_str(), ("Cuts="+cutsApplied+";Beam Energy (GeV)").c_str(), "120", "0", "12", "Events / 0.1 GeV" };
-	//	cutsApplied=cutsBase;
-	//       ++id; histVals[id] = {8, applyAccSub, locYDotZ_GJ};
-	//       histList[id] = {("yDotZ_GJ"+cutString).c_str(), ("Cuts="+cutsApplied+";Cos(theta) angle between Z and Y in GJ").c_str(), "100", "0", "1", "Events / 0.01"};
-	//       histCuts[id] = cutsToApply;
-	//       // Invariant Mass Hists
-	//       if (is_pi0eta) {
-	//       		++id; histVals[id] = {9, applyAccSub, locPi0Proton_Kin};
-	//		if (cutString=="") { histCuts[id] = cutsToApply; }
-	//		else { histCuts[id] = mMPi0P14; cutsApplied="mMPi0P14";}
-	//       		histList[id] = {("pi0proton1D"+cutString).c_str(), ("Cuts="+cutsApplied+";M(#pi_{0}proton) (GeV)").c_str(), "400", "0", "4", "Events / 0.01 GeV"};
-	//       		++id; histVals[id] = {10, applyAccSub, locEtaProton_Kin};
-	//		cutsApplied=cutsBase;
-	//       		histList[id] = {("etaproton1D"+cutString).c_str(), ("Cuts="+cutsApplied+";M(#etaproton) (GeV)").c_str(), "450", "0", "4.5", "Events / 0.01 GeV"};
-	//       		histCuts[id] = cutsToApply;
-	//       		++id; histVals[id] = {11, applyAccSub, locPi0Eta_Kin, locPi0Proton_Kin};
-	//       		histList[id] = {("pi0etaPi0Proton"+cutString).c_str(), ("Cuts="+cutsApplied).c_str(), "160", "0.", "4", "90", "0.", "4.5", "M(#pi_{0}#eta) (GeV) with Events / 0.025 GeV", "M(#pi_{0}Proton) (GeV) with Events / 0.05 GeV"};
-	//       		histCuts[id] = cutsToApply;
-	//       		++id; histVals[id] = {11, applyAccSub, locPi0Eta_Kin, locEtaProton_Kin};
-	//       		histList[id] = {("pi0etaEtaProton"+cutString).c_str(), ("Cuts="+cutsApplied).c_str(), "160", "0.", "4", "100", "0.", "5", "M(#pi_{0}#eta) (GeV) with Events / 0.025 GeV", "M(#etaProton) (GeV) with Events / 0.05 GeV"};
-	//       		histCuts[id] = cutsToApply;
-	//	}
 	//	else {
 	//		// ********** NOT SURE IF WE SHOULD INCLUDE mMPi0P14 IN PI0PI0 REACION
 	//       		++id; histVals[id] = {9, applyAccSub, locPi0Proton_Kin};
@@ -549,7 +490,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonXs_Kin[1]) );
         histdef.values.push_back( &(photonXs_Kin[2]) );
         histdef.values.push_back( &(photonXs_Kin[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
        
         histdef.clear();
         histdef.hist = new TH1F("Y_Kin","Cuts=GeneralCuts;position (cm);Events / 1 cm", 160, 0, 160);
@@ -560,7 +501,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonYs_Kin[1]) );
         histdef.values.push_back( &(photonYs_Kin[2]) );
         histdef.values.push_back( &(photonYs_Kin[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
 
         histdef.clear();
         cutsApplied="true";
@@ -572,7 +513,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonZs_Kin[1]) );
         histdef.values.push_back( &(photonZs_Kin[2]) );
         histdef.values.push_back( &(photonZs_Kin[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
 
         histdef.clear();
         cutsApplied="true";
@@ -585,7 +526,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonTs_Kin[1]) );
         histdef.values.push_back( &(photonTs_Kin[2]) );
         histdef.values.push_back( &(photonTs_Kin[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("X_Shower","Cuts=GeneralCuts;position (cm);Events / 1 cm", 160, 0, 160);
@@ -596,7 +537,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonXs_Shower[1]) );
         histdef.values.push_back( &(photonXs_Shower[2]) );
         histdef.values.push_back( &(photonXs_Shower[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("Y_Shower","Cuts=GeneralCuts;position (cm);Events / 1 cm", 160, 0, 160);
@@ -607,7 +548,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonYs_Shower[1]) );
         histdef.values.push_back( &(photonYs_Shower[2]) );
         histdef.values.push_back( &(photonYs_Shower[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("Z_Shower","Cuts=GeneralCuts;position (cm);Events / 1 cm", 160, 0, 160);
@@ -618,7 +559,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonZs_Shower[1]) );
         histdef.values.push_back( &(photonZs_Shower[2]) );
         histdef.values.push_back( &(photonZs_Shower[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
  
         histdef.clear();
         histdef.hist = new TH1F("T_Shower","Cuts=GeneralCuts;position (cm);Events / 1 cm", 160, 0, 160);
@@ -629,7 +570,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonTs_Shower[1]) );
         histdef.values.push_back( &(photonTs_Shower[2]) );
         histdef.values.push_back( &(photonTs_Shower[3]) );
-        group_g.insert(histdef);
+        group_PhNB.insert(histdef);
 
         // ************************** PROTON RELATED HISTS ***********************
         histdef.clear();
@@ -637,35 +578,35 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(),"Cuts=mRProton;Radius(proton) (cm);Events / 0.05 cm", 200, 0 , 10);
         histdef.name = name; histdef.cut = &mRProton; histdef.weights = &weightAS;
         histdef.values.push_back( &locRProton ); 
-        group_p.insert(histdef);
+        group_PB.insert(histdef);
 
         histdef.clear();
         name="dzProton_ZMin";
         histdef.hist = new TH1F(name.c_str(), "Cuts=Zmin;z(Proton) (cm);Events / 1 cm", 160, 0 , 160);
         histdef.name = name; histdef.cut = &mZMin; histdef.weights = &weightAS;
         histdef.values.push_back( &locdzProton );
-        group_p.insert(histdef);
+        group_PB.insert(histdef);
 
         histdef.clear();
         name="dEdxProtonCDC_mdEdxCDC";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mdEdxCDC;dEdx(proton) GeV/cm;Events / 1.5E-7 GeV/cm", 200, 0. , 0.00003);
         histdef.name = name; histdef.cut=&mdEdxCDC; histdef.weights = &weightAS;
         histdef.values.push_back( &locdEdxCDCProton );
-        group_p.insert(histdef);
+        group_PB.insert(histdef);
 
         histdef.clear();
         name = "PzProton_Cut";
         histdef.hist = new TH1F(name.c_str(),  "Cuts=GeneralCuts;Pz GeV;Events / 0.025 GeV", 200, 0, 5 );
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locPzProton );
-        group_p.insert(histdef); 
+        group_PB.insert(histdef); 
 
         histdef.clear();
         name="PolarAngleProton_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;#theta(Proton) degrees;Events / 0.5 degrees", 200, 0, 100);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed ; histdef.weights = &weightAS;
         histdef.values.push_back( &locPolarAngleProton );
-        group_p.insert(histdef); 
+        group_PB.insert(histdef); 
 
         histdef2d.clear();
         name = "XYplaneProton_mRProton";
@@ -673,7 +614,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mRProton; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locXProton );
         histdef2d.valuesY.push_back( &locYProton );
-        group_p.insert_2D(histdef2d); 
+        group_PB.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "RZplaneProton_mRProtonZmin";
@@ -681,22 +622,22 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mRProtonZMin; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locRProton );
         histdef2d.valuesY.push_back( &locdzProton );
-        group_p.insert_2D(histdef2d); 
+        group_PB.insert_2D(histdef2d); 
         
         histdef.clear();
         name = "P3Proton_dzR";
         histdef.hist = new TH1F(name.c_str(), "Cuts=dzR;Momentum(proton) CDC (GeV/c) with Events / 0.04 GeV/c",100,0,4);
         histdef.name = name; histdef.cut=&dzR; histdef.weights = &weightAS;
         histdef.values.push_back( &locMagP3Proton );
-        group_p.insert(histdef); 
+        group_PB.insert(histdef); 
 
-        histdef.clear();
+        histdef2d.clear();
         name = "P3dEdxCDCProton_dzRP";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=dzRP;Momentum(proton) CDC (GeV/c) with Events / 0.04 GeV/c;dEdx(proton) CDC (GeV/cm) with Events / 3E-7",100,0,4,100,0,0.00003);
         histdef2d.name = name; histdef2d.cut=&dzRP; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locMagP3Proton );
         histdef2d.valuesY.push_back( &locdEdxCDCProton );
-        group_p.insert_2D(histdef2d); 
+        group_PB.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "P3dEdxFDCProton_Cut";
@@ -704,7 +645,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locMagP3Proton );
         histdef2d.valuesY.push_back( &locdEdxFDCProton );
-        group_p.insert_2D(histdef2d); 
+        group_PB.insert_2D(histdef2d); 
         
         histdef2d.clear();
         name = "PzPtProton_Cut";
@@ -712,7 +653,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPzProton );
         histdef2d.valuesY.push_back( &locPtProton );
-        group_p.insert_2D(histdef2d);
+        group_PB.insert_2D(histdef2d);
 
         histdef2d.clear();
         name = "PzThetaProton_Cut";
@@ -720,7 +661,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPzProton );
         histdef2d.valuesY.push_back( &locPolarAngleProton );
-        group_p.insert_2D(histdef2d); 
+        group_PB.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name="PtThetaProton_Cut";
@@ -728,7 +669,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPtProton );
         histdef2d.valuesY.push_back( &locPolarAngleProton );
-        group_p.insert_2D(histdef2d); 
+        group_PB.insert_2D(histdef2d); 
 
         // ********************** ANGULAR PLOTS ********************
         
@@ -773,8 +714,8 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &phi_eta_GJ );
         group_34B.insert(histdef); 
-        histdef2d.clear();
 
+        histdef2d.clear();
         name = "eta_cosTheta_GJvsM_Cut";
         histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
@@ -802,7 +743,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(),"Cut=GeneralCuts;#phi of #pi_{0}+#eta;Events / 4 degrees", 90,-180,180 );
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &phi_pi0eta_CM );
-        group_p.insert(histdef); 
+        group_PB.insert(histdef); 
 
         // *********************** MASS SHIFT PLOTS *************************
         histdef.clear();
@@ -825,7 +766,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_charged );
         histdef2d.valuesY.push_back( &locEtaMass_charged );
-        group_1234B.insert_2D(histdef2d); 
+        group_12B_34B.insert_2D(histdef2d); 
         
         histdef.clear();
         name="pi0Mass_targetVertex";
@@ -847,7 +788,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_target );
         histdef2d.valuesY.push_back( &locEtaMass_target );
-        group_1234B.insert_2D(histdef2d); 
+        group_12B_34B.insert_2D(histdef2d); 
 
         // ********************* MASS PLOTS IN DIFFERENT PARTS OF DETECTOR **********************
         histdef.clear();
@@ -912,7 +853,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mEllipse_pre; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_Kin );
         histdef2d.valuesY.push_back( &locEtaMass_Kin );
-        group_1234B.insert_2D(histdef2d); 
+        group_12B_34B.insert_2D(histdef2d); 
 
 
         // *********************** PHOTON PAIR PLOTS ************************
@@ -956,15 +897,60 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef2d.name = name; histdef2d.cut=; histdef2d.weights = &weightAS;
         //histdef2d.valuesX.push_back( & );
         //histdef2d.valuesY.push_back( & );
-        //group_p.insert_2D(histdef2d); 
+        //group_PB.insert_2D(histdef2d); 
 
         //histdef.clear();
         //name;
         //histdef.hist = new TH1F(name.c_str(), );
         //histdef.name = name; histdef.cut=; histdef.weights = &weightAS;
         //histdef.values.push_back( & );
-        //group_p.insert(histdef); 
+        //group_PB.insert(histdef); 
 
+        // ************************** GENERAL KINEMATIC QUANTITIES ***************************
+
+        histdef.clear();
+        name="MissingMassSquared_Cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMMSq;Missing Mass Squared (GeV/c^{2})^{2};Events / 0.002 GeV/c^{2}",200,-0.2,0.2);
+        histdef.name = name; histdef.cut=&mMMSq; histdef.weights = &weightAS;
+        histdef.values.push_back( &locMissingMassSquared );
+        group_1234BP.insert(histdef); 
+
+        histdef.clear();
+        name="BeamEnergy_Cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mBeamE;M(#pi_{0}proton) (GeV);Events / 0.1 GeV",120,0,12);
+        histdef.name = name; histdef.cut=&mBeamE; histdef.weights = &weightAS;
+        histdef.values.push_back( &locBeamE );
+        group_B.insert(histdef); 
+
+        histdef.clear();
+        name="pi0proton1D_Cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMPi0P14;M(#pi_{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
+        histdef.name = name; histdef.cut=&mMPi0P14; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Proton_Kin);
+        group_12PB.insert(histdef); 
+
+        histdef.clear();
+        name="etaproton1D_Cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
+        histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
+        histdef.values.push_back( &locEtaProton_Kin );
+        group_34PB.insert(histdef); 
+
+        histdef2d.clear();
+        name="pi0etaPi0Proton_Cut";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=GeneralCuts;M(#pi_{0}#eta) (GeV) with Events / 0.025 GeV;M(#pi_{0}Proton) (GeV) with Events / 0.05 GeV",160,0,4,90,0,4.5);
+        histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        histdef2d.valuesY.push_back( &locPi0Proton_Kin );
+        group_1234B_12PB.insert_2D(histdef2d); 
+
+        histdef2d.clear();
+        name="pi0etaEtaProton_Cut";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=GeneralCuts;M(#pi_{0}#eta) (GeV) with Events / 0.025 GeV;M(#etaProton) (GeV) with Events / 0.05 GeV",160,0,4,100,0,5);
+        histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        histdef2d.valuesY.push_back( &locEtaProton_Kin );
+        group_1234B_34PB.insert_2D(histdef2d); 
         
         // *************** VANHOVE RELATED ***********************
         histdef2d.clear();
@@ -1126,6 +1112,11 @@ void DSelector_ver20::Init(TTree *locTree)
             dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0"); //fundamental = char, int, float, double, etc.
             dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0pi0"); //fundamental = char, int, float, double, etc.
         }
+        // introducing some variables to keep track of how much unique particles we have
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_eta");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0eta");
+        
         // Introduce some angles to use in the phase space distance calculation
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("phi_X_cm"); //fundamental = char, int, float, double, etc.
@@ -1161,14 +1152,28 @@ void DSelector_ver20::Init(TTree *locTree)
 
 Bool_t DSelector_ver20::Process(Long64_t locEntry)
 {
-    set < map<Particle_t, set<Int_t> > > usedPairIdsFCAL_test;
-    group_g.clear();
-    group_p.clear();
-    group_12B_1234B.clear();
-    group_34B_1234B.clear();
-    group_12B.clear();  
-    group_34B.clear();  
-    group_1234BP.clear();
+    group_PB.clear_tracking();
+    group_12B_1234B.clear_tracking();
+    group_34B_1234B.clear_tracking();
+    group_12B.clear_tracking();  
+    group_34B.clear_tracking();  
+    group_12B_34B.clear_tracking();
+    group_1234B.clear_tracking();
+    group_PhNB.clear_tracking();
+    group_pairFCAL.clear_tracking();
+    group_pairBCAL.clear_tracking();
+    group_1234BP.clear_tracking();
+    group_12PB.clear_tracking();       
+    group_34PB.clear_tracking();       
+    group_B.clear_tracking();
+    group_1234B_12PB.clear_tracking();
+    group_1234B_34PB.clear_tracking();
+
+    // everytime we start a new event we have to reset the tracking
+    set< map<Particle_t, set<Int_t> > > used1234B;
+    set< map<Particle_t, set<Int_t> > > used12B;
+    set< map<Particle_t, set<Int_t> > > used34B;
+
 
     //if(itersToRun<100){ ++itersToRun; //so we can just try to show the outut of one event 
     if(showOutput){cout << "Starting next process looping" << endl;}
@@ -1702,13 +1707,14 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         double delta_Rij_BCAL;
         double delta_Zij_BCAL;
         double delta_Thetaij_BCAL;
-        std::vector<double> dij3VecFCAL;
-        std::vector<double> dijVecBCAL;
         //std::vector<double> angle_ijVec;
         //std::vector<double> deltaZ_ijVec;
         //std::vector<double> deltaPhi_ijVec;
+        std::vector< double> dij3VecFCAL;
+        std::vector< double> dijVecBCAL;
         std::vector< map<Particle_t, set<Int_t> > > usedPairIdsFCAL;// will be used to do our uniqueness trackingo over the entire event
         std::vector< map<Particle_t, set<Int_t> > > usedPairIdsBCAL;
+
         map<Particle_t, set<Int_t> > usingPairIdsFCAL;
         map<Particle_t, set<Int_t> > usingPairIdsBCAL; 
 
@@ -1729,10 +1735,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         			usingPairIdsFCAL[Gamma].insert(photonIds[i]);
         			usingPairIdsFCAL[Gamma].insert(photonIds[j]);
                         	dij3 = (photonX4[i]-photonX4[j]).Vect().Mag();
-                                if (usedPairIdsFCAL_test.find(usingPairIdsFCAL)==usedPairIdsFCAL_test.end()){
-                                        usedPairIdsFCAL_test.insert(usingPairIdsFCAL);
-        			        dij3VecFCAL.push_back(dij3);
-                                }
+                                //if (usedPairIdsFCAL_test.find(usingPairIdsFCAL)==usedPairIdsFCAL_test.end()){
+                                //        usedPairIdsFCAL_test.insert(usingPairIdsFCAL);
+        			//        dij3VecFCAL.push_back(dij3);
+                                //}
+        			dij3VecFCAL.push_back(dij3);
                                 usedPairIdsFCAL.push_back(usingPairIdsFCAL);
         		}
         		else if(photonDetectedSyss[i]==SYS_BCAL && photonDetectedSyss[j]==SYS_BCAL){
@@ -1763,11 +1770,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         			delta_Thetaij_BCAL = theta_BCALj - theta_BCALi;
         			dij = TMath::Sqrt(TMath::Sq(delta_Rij_BCAL)+TMath::Sq((65+delta_Rij_BCAL)*delta_Thetaij_BCAL)+TMath::Sq(delta_Zij_BCAL));
 
+                                cout << "BCAL dij: " << dij << endl;
         			dijVecBCAL.push_back(dij);
         			//angle_ijVec[hist_id].push_back(angle_ij);
         			//deltaZ_ijVec[hist_id].push_back(deltaZ_ij);
         		}
         		else if((photonDetectedSyss[i]==SYS_BCAL && photonDetectedSyss[j]==SYS_FCAL) || (photonDetectedSyss[i]==SYS_FCAL && photonDetectedSyss[j]==SYS_BCAL)){
+                                cout << "SPLIT" << endl;
         			++countNotInEither;
         			if(showOutput){ cout << "ONE IN FCAL ONE IN BCAL" << endl;}
         		}
@@ -1779,7 +1788,15 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         // *********************** PHOTON PAIR PLOTS ************************
         for (UInt_t iPair=0; iPair<dij3VecFCAL.size(); ++iPair){
-            group_pairFCAL.allHists_1D[0].values.push_back( &dij3VecFCAL[iPair]);
+           //cout << "FCAL dij3: " << dij3 << endl;
+           //for ( auto elem : usedPairIdsFCAL[iPair] ){
+           //    cout << elem.first << " ";
+           //    for (auto it=elem.second.begin(); it != elem.second.end(); ++it){
+           //        cout << *it << " ";
+           //    }
+           //    cout << endl;
+           //}
+           group_pairFCAL.allHists_1D[0].values.push_back( &dij3VecFCAL[iPair]);
         }
         for (UInt_t iPair=0; iPair<dijVecBCAL.size(); ++iPair){
             group_pairBCAL.allHists_1D[0].values.push_back( &dijVecBCAL[iPair]);
@@ -2034,6 +2051,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         using34B[Gamma].insert(locPhoton3NeutralID);
         using34B[Gamma].insert(locPhoton4NeutralID);
 
+
         map<Particle_t, set<Int_t> > using13B;
         using13B[Unknown].insert(locBeamID); //beam
         using13B[Gamma].insert(locPhoton1NeutralID);
@@ -2051,22 +2069,25 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         using1234B[Gamma].insert(locPhoton3NeutralID);
         using1234B[Gamma].insert(locPhoton4NeutralID);
 
-        map<Particle_t, set<Int_t> > usingPh12P1;
-        usingPh12P1[Gamma].insert(locPhoton1NeutralID);
-        usingPh12P1[Gamma].insert(locPhoton2NeutralID);
-        usingPh12P1[Gamma].insert(locProtonTrackID);
+        map<Particle_t, set<Int_t> > using12PB;
+        using12PB[Unknown].insert(locBeamID); //beam
+        using12PB[Proton].insert(locProtonTrackID);
+        using12PB[Gamma].insert(locPhoton1NeutralID);
+        using12PB[Gamma].insert(locPhoton2NeutralID);
 
-        map<Particle_t, set<Int_t> > usingPh34P1;
-        usingPh34P1[Proton].insert(locProtonTrackID);
-        usingPh34P1[Gamma].insert(locPhoton3NeutralID);
-        usingPh34P1[Gamma].insert(locPhoton4NeutralID);
+        map<Particle_t, set<Int_t> > using34PB;
+        using34PB[Unknown].insert(locBeamID); //beam
+        using34PB[Proton].insert(locProtonTrackID);
+        using34PB[Gamma].insert(locPhoton3NeutralID);
+        using34PB[Gamma].insert(locPhoton4NeutralID);
 
-        map<Particle_t, set<Int_t> > usingPh1234P1;
-        usingPh1234P1[Proton].insert(locProtonTrackID);
-        usingPh1234P1[Gamma].insert(locPhoton1NeutralID);
-        usingPh1234P1[Gamma].insert(locPhoton2NeutralID);
-        usingPh1234P1[Gamma].insert(locPhoton3NeutralID);
-        usingPh1234P1[Gamma].insert(locPhoton4NeutralID);
+        map<Particle_t, set<Int_t> > using1234PB;
+        using1234PB[Unknown].insert(locBeamID); //beam
+        using1234PB[Proton].insert(locProtonTrackID);
+        using1234PB[Gamma].insert(locPhoton1NeutralID);
+        using1234PB[Gamma].insert(locPhoton2NeutralID);
+        using1234PB[Gamma].insert(locPhoton3NeutralID);
+        using1234PB[Gamma].insert(locPhoton4NeutralID);
 
         std::vector< map<Particle_t, set<Int_t>> > beingUsedNeutralIds; 
         map<Particle_t, set<Int_t>> usingPhB;
@@ -2088,16 +2109,37 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using12B_1234B = make_pair(using12B,using1234B);
         pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using34B_1234B = make_pair(using34B,using1234B);
+        pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using1234B_12PB = make_pair(using1234B,using12PB);
+        pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using1234B_34PB = make_pair(using1234B,using34PB);
+        pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using12B_34B = make_pair(using12B,using34B);
 
         map<Particle_t, set<Int_t> > usingPB;
         usingPB[Unknown].insert(locBeamID);
         usingPB[Proton].insert(locProtonTrackID);
         
 
+        map<Particle_t, set<Int_t> > usingB;
+        usingB[Unknown].insert(locBeamID);
 
+        if(mEllipse_pre){
+	    if (used1234B.find(using1234B)==used1234B.end()){
+                isNotRepeated_pi0eta=true;
+                used1234B.insert(using1234B);
+            }
+            else { isNotRepeated_pi0eta=false; } 
 
+	    if (used12B.find(using12B)==used12B.end()){
+                used12B.insert(using12B);
+                isNotRepeated_pi0=true;
+            }
+            else { isNotRepeated_pi0=false; } 
 
-
+	    if (used34B.find(using34B)==used34B.end()){
+                used34B.insert(using34B);
+                isNotRepeated_eta=true;
+            }
+            else { isNotRepeated_eta=false; } 
+        }
  
         // ********************************************************************************************************************************
         // Recomputing some booleans since they could not have been sucessfully initialized without running though the loop first.
@@ -2112,6 +2154,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         pBeamE78to94 = locBeamE > 7.8 && locBeamE < 9.4;
         pBeamE94to11 = locBeamE > 9.4 && locBeamE < 11.0;
         pBeamE8GeVPlus = locBeamE > 8.0;
+        pBeamE8to9 = locBeamE > 8.0 && locBeamE< 9.0;
 
         dEdxCut = TMath::Power(10,-6)*(0.9+TMath::Exp(3.0-3.5*(locMagP3Proton+0.05)/.93827)); // The bigger then number multiplying MagP3 the sharper the cut.
         // pi0Eta specifc cuts
@@ -2286,27 +2329,27 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dzR = pzCutmin*pRProton;
 
         pShowerQuality=1;
-        allGeneralCutsPassed = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMPi0P14 = pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mBeamE = !pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMMSq = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse;
-        //pDiffCL = pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
-        mRProton = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mRProtonZMin = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mdEdxCDC = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pinsideEllipse;
-        mZMin = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMagP3 = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mPhotonE = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mPhotonTheta = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mdij3 = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mUE = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mUEChiSq = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mChiSq = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
+        allGeneralCutsPassed = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mMPi0P14 = ptLT1*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mBeamE = ptLT1*!pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mMMSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse;
+        //pDiffCL = pBeamE8to9*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
+        mRProton = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mRProtonZMin = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mdEdxCDC = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pinsideEllipse;
+        mZMin = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mMagP3 = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mPhotonE = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mPhotonTheta = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mdij3 = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mUE = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mUEChiSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mChiSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
         // ------ 
-        mEllipse_pre = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        mEllipseUE_pre = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        mEllipseUEChiSq_pre = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        mEllipseChiSq_pre = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pDeltaTRF*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipse_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseUE_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseUEChiSq_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseChiSq_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8to9*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         // ------ Rejects the 0-weight region since that would mess with the uniqueness tracking. We use the OR logic to sum the subsets of the yellow and the red region.
         mEllipse = mEllipse_pre*pYellowBKG || allGeneralCutsPassed;
         mEllipseUE = mEllipseUE_pre*pYellowBKG || mEllipseUE_pre*pinsideEllipse;
@@ -2390,16 +2433,22 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         //
         //
 
-        group_g.fillHistograms_vectorMap(beingUsedNeutralIds);
-        group_p.fillHistograms_Map( usingPB );
+        group_PB.fillHistograms_Map( usingPB );
         group_12B_1234B.fillHistograms_pairMap( using12B_1234B );
         group_34B_1234B.fillHistograms_pairMap( using34B_1234B );
         group_12B.fillHistograms_Map( using12B );
         group_34B.fillHistograms_Map( using34B );
+        group_12B_34B.fillHistograms_pairMap( using12B_34B );
         group_1234B.fillHistograms_Map( using1234B );
+        group_PhNB.fillHistograms_vectorMap(beingUsedNeutralIds);
         group_pairFCAL.fillHistograms_vectorMap(usedPairIdsFCAL);
         group_pairBCAL.fillHistograms_vectorMap(usedPairIdsBCAL);
         group_1234BP.fillHistograms_Map( usingCombo );
+        group_12PB.fillHistograms_Map(using12PB);       
+        group_34PB.fillHistograms_Map(using34PB);       
+        group_B.fillHistograms_Map(usingB);
+        group_1234B_12PB.fillHistograms_pairMap(using1234B_12PB);
+        group_1234B_34PB.fillHistograms_pairMap(using1234B_34PB);
 
         if (!mEllipse_pre) { 
             dComboWrapper->Set_IsComboCut(true); continue; 
@@ -2439,6 +2488,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0pi0", locPi0Eta_Kin);
         }
         dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp);
+
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0",isNotRepeated_pi0);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_eta",isNotRepeated_eta);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0eta",isNotRepeated_pi0eta);
+
 
         // Introduce some angles to use in the phase space distance calculation
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_X_cm", cosTheta_pi0eta_CM); //fundamental = char, int, float, double, etc.
@@ -2544,13 +2598,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 void DSelector_ver20::Finalize(void)
 {
-    //group_g.drawHistograms();
-    //group_p.drawHistograms();
+    //group_PhNB.drawHistograms();
+    //group_PB.drawHistograms();
     //group_12B_1234B.drawHistograms();
     //group_34B_1234B.drawHistograms();
     //group_12B.drawHistograms();
     //group_34B.drawHistograms();
-
 
     //Save anything to output here that you do not want to be in the default DSelector output ROOT file.
 

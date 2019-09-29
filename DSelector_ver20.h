@@ -67,60 +67,82 @@ class trackingGroup{
             allHists_1D.push_back(hist);
             allUsedMapIds_1D.push_back(usedMapIds);
         }
-
         void insert_2D(histDef_2D hist){
+            // ***** NOTE THAT IT IS BEST IF WE DO NOT MIX USING BOTH OF TYPES OF TRACKING TYPES ***** NOT WORKED ON YET
             allHists_2D.push_back(hist);
             allUsedMapIds_2D.push_back(usedMapIds);
             allUsedPairMapIds.push_back(usedPairMapIds); // we only need this for 2D histograms
         }
 
-
         // for filling distance between pairs of particles like dij3FCAL
+        //void fillHistograms_vectorMap( std::vector< map<Particle_t, set<Int_t> > > beingUsedPairIds){
+        //    for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+        //        for (UInt_t iVal=0; iVal<allHists_1D[iHist].values.size(); ++iVal){
+	//            if ( *(allHists_1D[iHist].cut) ) {
+        //               allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[iVal]), *(allHists_1D[iHist].weights) ); 
+        //            }
+        //        }
+        //    }
         void fillHistograms_vectorMap( std::vector< map<Particle_t, set<Int_t> > > beingUsedPairIds){
+            // *********************** THIS COMMENTED CODE IS TO CHECK THE OUTPUT OF THE DIJ3 FCAL FILLING TO MAKE SURE WE ARE DOING THINGS CORRECLTY ***********************************
+              cout << "size of {tracking,value}={"<<beingUsedPairIds.size()<<","<<allHists_1D[0].values.size()<<"}"<<endl;
              for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
-                 for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-	              //if (allUsedMapIds_1D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[iHist].end() || *(allHists_1D[iHist].cut)  ){
-	              if ( *(allHists_1D[iHist].cut) ) {
-	                 //allUsedMapIds_1D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
+                for ( auto elem : beingUsedPairIds[iValue] ){
+                    cout << elem.first << "| ";
+                    for (auto it=elem.second.begin(); it != elem.second.end(); ++it){
+                        cout << *it << " ";
+                    }
+                }
+            bool uniqueBool= allUsedMapIds_1D[0].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[0].end();
+            bool cutBool =  *(allHists_1D[0].cut);
+            cout << " -- " << *(allHists_1D[0].values[iValue]) << " Unique? " << uniqueBool << " passCut? " << cutBool << endl; 
+            }
+                
+             for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
+                for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+	              if (allUsedMapIds_1D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
+	                 allUsedMapIds_1D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
                          allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[iValue]), *(allHists_1D[iHist].weights) );
                       }
             
                  }
                  for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-	              if (allUsedMapIds_2D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_2D[iHist].end() || *(allHists_2D[iHist].cut)  ){
+	              if (allUsedMapIds_2D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)  ){
 	                 allUsedMapIds_2D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
                          allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[iValue]),*(allHists_2D[iHist].valuesY[iValue]), *(allHists_2D[iHist].weights) );
                       }
                  }
              }
+            clear_values();
         }
 
         // Similar to above but just for 1D distributions where we don't need to track a pair of maps for correlations
         void fillHistograms_Map( map<Particle_t, set<Int_t> >  beingUsedMap ){
              for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-	        if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() || *(allHists_1D[iHist].cut)  ){
+	        if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
 	            allUsedMapIds_1D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
                     allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[0]), *(allHists_1D[iHist].weights) );
                 }
              }
              for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-	         if (allUsedMapIds_2D[iHist].find(beingUsedMap)==allUsedMapIds_2D[iHist].end() || *(allHists_2D[iHist].cut)  ){
+	         if (allUsedMapIds_2D[iHist].find(beingUsedMap)==allUsedMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)  ){
 	            allUsedMapIds_2D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
                     allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
                 }
              }
+            clear_values();
         }
 
         // This will be used for more complicated sets. Most generic is a pair of maps. i.e. for 2D plot of M(pi0eta) and cosThetaGJ(eta)
         void fillHistograms_pairMap( pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > beingUsedMapPair ){
             // there is no 1d version because why would be need a pair of maps to track a 1d distribution...
             for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-	        if (allUsedPairMapIds[iHist].find(beingUsedMapPair)==allUsedPairMapIds[iHist].end() || *(allHists_2D[iHist].cut)){
+	        if (allUsedPairMapIds[iHist].find(beingUsedMapPair)==allUsedPairMapIds[iHist].end() && *(allHists_2D[iHist].cut)){
 	            allUsedPairMapIds[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
                     allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
                 }
             }
-             
+            clear_values();
         }
 
 
@@ -137,73 +159,30 @@ class trackingGroup{
             }
         }
 
-        void clear(){
-            usedMapIds.clear();
-            usedPairMapIds.clear();
-            usedMapIds.clear();
+        // use when we are starting a new event
+        void clear_tracking(){
+            for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+                allUsedMapIds_1D[iHist].clear();
+            }
+            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+                allUsedMapIds_2D[iHist].clear();
+                allUsedPairMapIds[iHist].clear();
+            }
+        }
+        
+        // have to use this everytime we fillHistogram or changing combos
+        void clear_values(){
+            for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+                allHists_1D[iHist].clear();
+            }
+            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+                allHists_2D[iHist].clear();
+            }
         }
 };
 
     
         
-        //void setHistogram1D(int iHist, bool cutToApply, double xValue, double weight){
-        //    any1DValue.push_back(&xValue);
-        //    weight1D.push_back(&weight);
-        //    cut1D.push_back(&cutToApply);
-        //    iHist1Ds.push_back(iHist);
-        //}
-
-        //void initHistogram1D(string name, string titles, vector<double> xPars, std::vector<int> valueLocations){
-        //    cout << "initializing 1D histogram" << endl;
-	//    any1DHists.push_back( new TH1F( name.c_str(), titles.c_str(), xPars[0], xPars[1], xPars[2] ) );
-        //    names1D.push_back(name);
-        //    valueLocations1D.push_back(valueLocations);
-        //}
-
-        //void setHistogram2D(int iHist, bool cutToApply, double xValue, double yValue, double weight){
-        //    any2DValue_X.push_back(&xValue);
-        //    any2DValue_Y.push_back(&yValue);
-        //    weight2D.push_back(&weight);
-        //    cut2D.push_back(&cutToApply);
-        //    iHist2Ds.push_back(iHist);
-        //}
-
-        //void initHistogram2D(string name, string titles, bool isvec, vector<double> xPars, vector<double> yPars){
-        //    cout << "initializing 2D histogram" << endl;
-	//    any2DHists.push_back(new TH2F( name.c_str(), titles.c_str(), xPars[0], xPars[1], xPars[2], yPars[0], yPars[1], yPars[2] ) ) ;
-        //    names2D.push_back(name);
-        //}
-
-        //void fillHistograms(){
-        //    for (UInt_t iHist=0; iHist < any1DHists.size(); ++iHist){
-        //        for ( UInt_t iValLocs=0; iValLocs<valueLocations1D[iHist].size(); ++iValLocs){
-        //            if ( *(point_cut1D+iValLocs) ) {
-        //                any1DHists[iHist]->Fill( *(point_any1DValues+iValLocs), *(point_weights1Ds+iValLocs) );
-        //            }
-        //        }
-        //    }
-        //    //for (UInt_t iHist=0; iHist < any2DHists.size(); ++iHist){
-        //    //    if ( *(cut2D[iHist]) ) {
-        //    //        any2DHist[iHists2Ds[iValues]]->Fill( *any2DValue_X[iValues], *any2DValue_Y[iValues], *weight1D[iValues] );
-        //    //    }
-        //    //}
-        //}
-
-        //void drawHistograms(){
-        //    for (UInt_t iHist=0; iHist < any1DHists.size(); ++iHist){
-        //        anyCanvas->Clear();
-        //        any1DHists[iHist]->Draw();
-        //        anyCanvas->SaveAs((names1D[iHist]+".png").c_str());
-        //    }
-        //    for (UInt_t iHist=0; iHist < any2DHists.size(); ++iHist){
-        //        anyCanvas->Clear();
-        //        any2DHists[iHist]->Draw();
-        //        anyCanvas->SaveAs((names2D[iHist]+"png").c_str());
-        //    }
-        //}
-//};
-
-
 
 class DSelector_ver20 : public DSelector
 {
@@ -216,16 +195,22 @@ class DSelector_ver20 : public DSelector
 		Bool_t Process(Long64_t entry);
 
 	private:
-                trackingGroup group_g;
-                trackingGroup group_p;
+                trackingGroup group_PhNB;
+                trackingGroup group_PB;
                 trackingGroup group_12B_1234B;
                 trackingGroup group_34B_1234B;
                 trackingGroup group_12B;
                 trackingGroup group_34B;
+                trackingGroup group_12B_34B;
                 trackingGroup group_1234B;
                 trackingGroup group_1234BP;
                 trackingGroup group_pairFCAL;
                 trackingGroup group_pairBCAL;
+                trackingGroup group_12PB;       
+                trackingGroup group_34PB;       
+                trackingGroup group_B;
+                trackingGroup group_1234B_12PB;
+                trackingGroup group_1234B_34PB;
 
 		void Get_ComboWrappers(void);
 		void Finalize(void);
@@ -237,7 +222,11 @@ class DSelector_ver20 : public DSelector
                 bool hasPolarizationAngle; // true if is polarized but false if through deg5ous radiator or no data. Under what cicumstances is the second one true.
                 int locPolarizationAngle; // actual polarization angle
                 set<UInt_t> usedRuns; //think we are over counting our filling of beam angles since the below condition only checks against previous run, doesn't work for recurrences.
+
                 Int_t eventIdx=0;
+                bool isNotRepeated_eta=true;
+                bool isNotRepeated_pi0=true;
+                bool isNotRepeated_pi0eta=true;
 
 		Int_t uniqueComboID=0;
 
@@ -540,6 +529,7 @@ class DSelector_ver20 : public DSelector
 		bool pBeamE78to94=true;
 		bool pBeamE94to11=true;
 		bool pBeamE8GeVPlus=true;
+		bool pBeamE8to9=true;
 		
 		// pi0Eta specifc cuts
 		bool pEtaProtonBaryonCut=true;
