@@ -63,6 +63,7 @@ class trackingGroup{
         std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_1D;
         std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_2D;
 
+        // every time we add another histogram to track we will push back another tracking set to track it.
         void insert(histDef_1D hist){
             allHists_1D.push_back(hist);
             allUsedMapIds_1D.push_back(usedMapIds);
@@ -85,18 +86,18 @@ class trackingGroup{
         //    }
         void fillHistograms_vectorMap( std::vector< map<Particle_t, set<Int_t> > > beingUsedPairIds){
             // *********************** THIS COMMENTED CODE IS TO CHECK THE OUTPUT OF THE DIJ3 FCAL FILLING TO MAKE SURE WE ARE DOING THINGS CORRECLTY ***********************************
-              cout << "size of {tracking,value}={"<<beingUsedPairIds.size()<<","<<allHists_1D[0].values.size()<<"}"<<endl;
-             for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
-                for ( auto elem : beingUsedPairIds[iValue] ){
-                    cout << elem.first << "| ";
-                    for (auto it=elem.second.begin(); it != elem.second.end(); ++it){
-                        cout << *it << " ";
-                    }
-                }
-            bool uniqueBool= allUsedMapIds_1D[0].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[0].end();
-            bool cutBool =  *(allHists_1D[0].cut);
-            cout << " -- " << *(allHists_1D[0].values[iValue]) << " Unique? " << uniqueBool << " passCut? " << cutBool << endl; 
-            }
+            //  cout << "size of {tracking,value}={"<<beingUsedPairIds.size()<<","<<allHists_1D[0].values.size()<<"}"<<endl;
+            // for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
+            //    for ( auto elem : beingUsedPairIds[iValue] ){
+            //        cout << elem.first << "| ";
+            //        for (auto it=elem.second.begin(); it != elem.second.end(); ++it){
+            //            cout << *it << " ";
+            //        }
+            //    }
+            //bool uniqueBool= allUsedMapIds_1D[0].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[0].end();
+            //bool cutBool =  *(allHists_1D[0].cut);
+            //cout << " -- " << *(allHists_1D[0].values[iValue]) << " Unique? " << uniqueBool << " passCut? " << cutBool << endl; 
+            //}
                 
              for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
                 for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
@@ -227,6 +228,7 @@ class DSelector_ver20 : public DSelector
                 bool isNotRepeated_eta=true;
                 bool isNotRepeated_pi0=true;
                 bool isNotRepeated_pi0eta=true;
+                Int_t uniqueSpectroscopicPi0EtaID=0;
 
 		Int_t uniqueComboID=0;
 
@@ -308,7 +310,8 @@ class DSelector_ver20 : public DSelector
 		// Accidental subtraction variables. applyAccSub will either be = to weight or noAccSub=1.
 		double weightAS=1;
 		double noWeight=1;
-                double weight=1;
+                double weightAS_BS=1;
+                double weightAS_B=1;
                 double appliedWeight=1;
 
 		//************* Other variables
@@ -519,6 +522,7 @@ class DSelector_ver20 : public DSelector
     		double ellipseXBS2; double ellipseYBS2; double ellipseXrBS2; double ellipseYrBS2;
 		double ellipseXr_loose, ellipseYr_loose;
 		double weightBS=1;
+		double weightB=1;
 		double areaRatio=1;
 		
 		// Beam cuts

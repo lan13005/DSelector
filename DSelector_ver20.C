@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_a0_reco";
+string degAngle="pi0eta_data";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -892,19 +892,27 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
         
-        //name;
-        //histdef2d.hist = new TH2F(name.c_str(), );
-        //histdef2d.name = name; histdef2d.cut=; histdef2d.weights = &weightAS;
-        //histdef2d.valuesX.push_back( & );
-        //histdef2d.valuesY.push_back( & );
-        //group_PB.insert_2D(histdef2d); 
+        histdef.clear();
+        // so in side band subraction we have 4 regions. 1=circular signal. 2=disc skip region. 3=disc bkg region. 4=large disc reject region. 
+        name="pi0eta1D_0_1_1pR_1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 0_1_1+R_1;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_B;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
 
-        //histdef.clear();
-        //name;
-        //histdef.hist = new TH1F(name.c_str(), );
-        //histdef.name = name; histdef.cut=; histdef.weights = &weightAS;
-        //histdef.values.push_back( & );
-        //group_PB.insert(histdef); 
+        histdef.clear();
+        name="pi0eta1D_1_0_mR_0";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_0_-R_0;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="pi0eta1D_1_1_1_1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_1_1_1;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
 
         // ************************** GENERAL KINEMATIC QUANTITIES ***************************
 
@@ -984,6 +992,29 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
         group_1234BP.insert_2D(histdef2d); 
+        
+        //name;
+        //histdef2d.hist = new TH2F(name.c_str(), );
+        //histdef2d.name = name; histdef2d.cut=; histdef2d.weights = &weightAS;
+        //histdef2d.valuesX.push_back( & );
+        //histdef2d.valuesY.push_back( & );
+        //group_PB.insert_2D(histdef2d); 
+
+        //histdef.clear();
+        //name;
+        //histdef.hist = new TH1F(name.c_str(), );
+        //histdef.name = name; histdef.cut=; histdef.weights = &weightAS;
+        //histdef.values.push_back( & );
+        //group_PB.insert(histdef); 
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
 
         // ***** MUST CHANGE groupNames INSIDE THE HEADER FILE *****************
@@ -1116,6 +1147,7 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_eta");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0eta");
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID");
         
         // Introduce some angles to use in the phase space distance calculation
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm"); //fundamental = char, int, float, double, etc.
@@ -1171,6 +1203,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
     // everytime we start a new event we have to reset the tracking
     set< map<Particle_t, set<Int_t> > > used1234B;
+    set< map<Particle_t, set<Int_t> > > used1234;
     set< map<Particle_t, set<Int_t> > > used12B;
     set< map<Particle_t, set<Int_t> > > used34B;
 
@@ -2057,10 +2090,18 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         using13B[Gamma].insert(locPhoton1NeutralID);
         using13B[Gamma].insert(locPhoton3NeutralID);
 
+        map<Particle_t, set<Int_t> > using12;
+        using12[Gamma].insert(locPhoton1NeutralID);
+        using12[Gamma].insert(locPhoton2NeutralID);
+
         map<Particle_t, set<Int_t> > using24B;
         using24B[Unknown].insert(locBeamID); //beam
         using24B[Gamma].insert(locPhoton2NeutralID);
         using24B[Gamma].insert(locPhoton4NeutralID);
+
+        map<Particle_t, set<Int_t> > using34;
+        using34[Gamma].insert(locPhoton3NeutralID);
+        using34[Gamma].insert(locPhoton4NeutralID);
 
         map<Particle_t, set<Int_t> > using1234B;
         using1234B[Unknown].insert(locBeamID); //beam
@@ -2068,6 +2109,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         using1234B[Gamma].insert(locPhoton2NeutralID);
         using1234B[Gamma].insert(locPhoton3NeutralID);
         using1234B[Gamma].insert(locPhoton4NeutralID);
+
+        map<Particle_t, set<Int_t> > using1234;
+        using1234[Gamma].insert(locPhoton1NeutralID);
+        using1234[Gamma].insert(locPhoton2NeutralID);
+        using1234[Gamma].insert(locPhoton3NeutralID);
+        using1234[Gamma].insert(locPhoton4NeutralID);
 
         map<Particle_t, set<Int_t> > using12PB;
         using12PB[Unknown].insert(locBeamID); //beam
@@ -2121,25 +2168,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         map<Particle_t, set<Int_t> > usingB;
         usingB[Unknown].insert(locBeamID);
 
-        if(mEllipse_pre){
-	    if (used1234B.find(using1234B)==used1234B.end()){
-                isNotRepeated_pi0eta=true;
-                used1234B.insert(using1234B);
-            }
-            else { isNotRepeated_pi0eta=false; } 
-
-	    if (used12B.find(using12B)==used12B.end()){
-                used12B.insert(using12B);
-                isNotRepeated_pi0=true;
-            }
-            else { isNotRepeated_pi0=false; } 
-
-	    if (used34B.find(using34B)==used34B.end()){
-                used34B.insert(using34B);
-                isNotRepeated_eta=true;
-            }
-            else { isNotRepeated_eta=false; } 
-        }
  
         // ********************************************************************************************************************************
         // Recomputing some booleans since they could not have been sucessfully initialized without running though the loop first.
@@ -2224,20 +2252,24 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         if(pYellowBKG){ 
             // this histogram is just to check if the region I am selecting is good
             dHist_checkEllipseBS[0]->Fill(locPi0Mass_Kin, locEtaMass_Kin);
-            weightBS=-areaRatio; 
+            weightBS = -areaRatio; 
+            weightB = 1+areaRatio;
         } 
         else if (pinsideEllipse){
             dHist_checkEllipseBS[1]->Fill(locPi0Mass_Kin, locEtaMass_Kin);
             weightBS=1;
+            weightB=0;
         }
         else { 
             weightBS=0;
+            weightB=1;
             dHist_checkEllipseBS[2]->Fill(locPi0Mass_Kin, locEtaMass_Kin);
         }
 
         // now that we have defined both the weights we can multiply them together
         //weight = weightAS*weightBS;
-        weight = weightAS;
+        weightAS_BS = weightAS*weightBS;
+        weightAS_B = weightAS*weightB;
 
         // General Cuts
         pUnusedEnergy = locUnusedEnergy <= unusedEnergyCut;
@@ -2453,6 +2485,31 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         if (!mEllipse_pre) { 
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
+        else { 
+	    if (used1234B.find(using1234B)==used1234B.end()){
+                used1234B.insert(using1234B);
+                isNotRepeated_pi0eta=true;
+            }
+            else { isNotRepeated_pi0eta=false; } 
+
+	    if (used12B.find(using12B)==used12B.end()){
+                used12B.insert(using12B);
+                isNotRepeated_pi0=true;
+            }
+            else { isNotRepeated_pi0=false; } 
+
+	    if (used34B.find(using34B)==used34B.end()){
+                used34B.insert(using34B);
+                isNotRepeated_eta=true;
+            }
+            else { isNotRepeated_eta=false; } 
+            if ( used1234.find(using12)==used1234.end() ){
+                used1234.insert(using12);
+                ++uniqueSpectroscopicPi0EtaID;
+                //notRepeatedSpectroscopicPi0Eta=true;
+            }
+
+        }
 
         /****************************************** FILL FLAT TREE (IF DESIRED) ******************************************/
 
@@ -2472,7 +2529,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         }
         */
 
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("AccWeight", weight);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("AccWeight", weightAS);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("uniqueComboID", uniqueComboID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("finalStateComboID", finalStateComboID);
 
@@ -2492,6 +2549,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0",isNotRepeated_pi0);
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_eta",isNotRepeated_eta);
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0eta",isNotRepeated_pi0eta);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID",uniqueSpectroscopicPi0EtaID);
 
 
         // Introduce some angles to use in the phase space distance calculation
