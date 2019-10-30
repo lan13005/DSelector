@@ -96,10 +96,10 @@ split_gen::split_gen(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("thrownNotAmptoolsReady_flat_nameAffix.root");
-      cout << "File input: thrownNotAmptoolsReady_flat_nameAffix.root" << endl;
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("thrownNotAmptoolsReady_a0a2_nameAffix.root");
+      cout << "File input: thrownNotAmptoolsReady_a0a2_nameAffix.root" << endl;
       if (!f || !f->IsOpen()) {
-         f = new TFile("thrownNotAmptoolsReady_flat_nameAffix.root");
+         f = new TFile("thrownNotAmptoolsReady_a0a2_nameAffix.root");
       }
       f->GetObject("Thrown_Tree",tree);
 

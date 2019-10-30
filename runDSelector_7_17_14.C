@@ -23,7 +23,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	gROOT->ProcessLine(".x $ROOT_ANALYSIS_HOME/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 36;
+	int proof_Nthreads = 12;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
@@ -38,14 +38,11 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	
 	// MC flat
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
-	//
-	// a0 new hdgeant to test if mass shift still there
-	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/new_hdgeant/tree_pi0eta__B4_M17_M7.root");
-	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_091519/tree_pi0eta__B4_M17_M7.root");
 	
 	// a0a2 recon_2017
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2pi1_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//
 	// vincent
@@ -63,7 +60,12 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// This one contains the showerQuality variables
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03028*");
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7*");
-	chain->Add("/d/grid15/ln16/pi0eta/092419/boolSpectPi0EtaSelectedFiles/pi0eta_data_tree_DSelector.root");
+
+// ********************* USING THIS FOR Q-values so far *********		
+	//chain->Add("/d/grid15/ln16/pi0eta/092419/boolSpectPi0EtaSelectedFiles/pi0eta_data_tree_DSelector.root");
+
+// ********************** BASE CUTS APPLIED ONLY ********************
+ 	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 
 	// **********************************************************************************	
 	// ************************** ------ PI0PI0 BELOW ---------**************************	

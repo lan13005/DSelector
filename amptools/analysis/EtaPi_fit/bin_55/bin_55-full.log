@@ -1,0 +1,259 @@
+
+## CONFIGURATION INFO DISPLAY ##
+
+############################################
+#############   REACTION INFO  #############
+############################################
+      REACTION NAME:  EtaPi
+      PARTICLE LIST:  4
+		1.  gamma
+		2.  Proton
+		3.  Pi0
+		4.  Eta
+        DATA READER:  ROOTDataReader
+				data_pi0eta_tLT1_55.root
+      ACC MC READER:  ROOTDataReader
+				reco_pi0eta_tLT1_55.root
+      GEN MC READER:  ROOTDataReader
+				thrown_pi0eta_tLT1_55.root
+  NORMALIZATION INTEGRAL FILE: 
+		    bin_55.ni
+********************************************
+***********  COHERENT SUM INFO  ************
+********************************************
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Positive
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Positive
+     AMPLITUDE NAME:  P1+
+            FACTORS:  1
+		1.   TwoPSAngles 1 1 1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (36.1704,-20.6225)
+               REAL?  0
+              FIXED?  0
+              SCALE:  1.0
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Positive
+     AMPLITUDE NAME:  D1+
+            FACTORS:  1
+		1.   TwoPSAngles 2 1 1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (97.8533,0)
+               REAL?  1
+              FIXED?  0
+              SCALE:  1.0
+********************************************
+***********  COHERENT SUM INFO  ************
+********************************************
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Negative
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Negative
+     AMPLITUDE NAME:  S0-
+            FACTORS:  1
+		1.   TwoPSAngles 0 0 -1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (358.115,0)
+               REAL?  1
+              FIXED?  0
+              SCALE:  1.0
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Negative
+     AMPLITUDE NAME:  P0-
+            FACTORS:  1
+		1.   TwoPSAngles 1 0 -1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (37.7322,33.718)
+               REAL?  0
+              FIXED?  0
+              SCALE:  1.0
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Negative
+     AMPLITUDE NAME:  P1-
+            FACTORS:  1
+		1.   TwoPSAngles 1 1 -1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (15.8569,50.0535)
+               REAL?  0
+              FIXED?  0
+              SCALE:  1.0
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Negative
+     AMPLITUDE NAME:  D0-
+            FACTORS:  1
+		1.   TwoPSAngles 2 0 -1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (214.297,85.0244)
+               REAL?  0
+              FIXED?  0
+              SCALE:  1.0
+++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++  AMPLITUDE INFO  +++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
+      REACTION NAME:  EtaPi
+  COHERENT SUM NAME:  Negative
+     AMPLITUDE NAME:  D1-
+            FACTORS:  1
+		1.   TwoPSAngles 2 1 -1
+       PERMUTATIONS:  0
+        CONSTRAINTS:  0
+         PARAMETERS:  0
+      INITIAL VALUE:  (24.8506,6.32373)
+               REAL?  0
+              FIXED?  0
+              SCALE:  1.0
+ **********
+ **    1 **SET STRATEGY  1
+ **********
+ NOW USING STRATEGY  1: TRY TO BALANCE SPEED AGAINST RELIABILITY
+ **********
+ **    2 **SET EPS  1e-13
+ **********
+ FLOATING-POINT NUMBERS ASSUMED ACCURATE TO 1e-13
+
+## AMPLITUDE MANAGER INITIALIZATION ##
+ Creating amplitude manager for reaction:  EtaPi
+	 particle index assignment:  gamma -->> 0
+	 particle index assignment:  Proton -->> 1
+	 particle index assignment:  Pi0 -->> 2
+	 particle index assignment:  Eta -->> 3
+ PARAMETER DEFINITIONS:
+    NO.   NAME                 VALUE      STEP SIZE      LIMITS
+     1 EtaPi::Negative::S0-_re       358.12       3.5812     no limits
+     2 EtaPi::Negative::P0-_re       37.732      0.37732     no limits
+     3 EtaPi::Negative::P0-_im       33.718      0.33718     no limits
+     4 EtaPi::Negative::P1-_re       15.857      0.15857     no limits
+     5 EtaPi::Negative::P1-_im       50.054      0.50054     no limits
+     6 EtaPi::Negative::D0-_re        214.3        2.143     no limits
+     7 EtaPi::Negative::D0-_im       85.024      0.85024     no limits
+     8 EtaPi::Negative::D1-_re       24.851      0.24851     no limits
+     9 EtaPi::Negative::D1-_im       6.3237     0.063237     no limits
+    10 EtaPi::Positive::P1+_re        36.17       0.3617     no limits
+    11 EtaPi::Positive::P1+_im      -20.622      0.20622     no limits
+    12 EtaPi::Positive::D1+_re       97.853      0.97853     no limits
+Allocating Data and Amplitude Array in LikelihoodCalculator for EtaPi...
+Resetting source kin in data_pi0eta_tLT1_55.root
+	Done.
+Loading acccepted Monte Carlo...
+Resetting source kin in reco_pi0eta_tLT1_55.root
+	Done.
+Calculating integrals...
+	Done.
+LIKELIHOOD BEFORE MINIMIZATION:  27035
+ **********
+ **    3 **MIGRAD 5000
+ **********
+ FIRST CALL TO USER FUNCTION AT NEW START POINT, WITH IFLAG=4.
+ START MIGRAD MINIMIZATION.  STRATEGY 1.  CONVERGENCE WHEN EDM .LT. 1.00e-04
+ FCN=27034.9 FROM MIGRAD     STATUS=INITIATE       46          47 TOTAL
+
+                     EDM= unknown      STRATEGY= 1      NO ERROR MATRIX       
+  EXT PARAMETER                          CURRENT GUESS       STEP         FIRST   
+  NO.   NAME                   VALUE          ERROR          SIZE      DERIVATIVE 
+    1 EtaPi::Negative::S0-_re        358.12        3.5812        3.5812        110.89
+    2 EtaPi::Negative::P0-_re        37.732       0.37732       0.37732         11.65
+    3 EtaPi::Negative::P0-_im        33.718       0.33718       0.33718        10.166
+    4 EtaPi::Negative::P1-_re        15.857       0.15857       0.15857        5.4203
+    5 EtaPi::Negative::P1-_im        50.054       0.50054       0.50054        15.402
+    6 EtaPi::Negative::D0-_re         214.3         2.143         2.143        64.961
+    7 EtaPi::Negative::D0-_im        85.024       0.85024       0.85024        25.599
+    8 EtaPi::Negative::D1-_re        24.851       0.24851       0.24851        6.6359
+    9 EtaPi::Negative::D1-_im        6.3237      0.063237      0.063237        1.9713
+   10 EtaPi::Positive::P1+_re         36.17        0.3617        0.3617        11.881
+   11 EtaPi::Positive::P1+_im       -20.622       0.20622       0.20622       -6.3564
+   12 EtaPi::Positive::D1+_re        97.853       0.97853       0.97853        30.998
+
+ MIGRAD FAILS TO FIND IMPROVEMENT
+ MIGRAD MINIMIZATION HAS CONVERGED.
+ FCN=-1931.46 FROM MIGRAD     STATUS=CONVERGED    1013        1014 TOTAL
+
+                     EDM=6.37418e-05    STRATEGY= 1  ERROR MATRIX UNCERTAINTY     2 per cent
+  EXT PARAMETER                                              STEP         FIRST   
+  NO.   NAME                   VALUE          ERROR          SIZE      DERIVATIVE 
+    1 EtaPi::Negative::S0-_re        12.476        16.088            -0   -0.00089295
+    2 EtaPi::Negative::P0-_re       -7.4979        13.549             0     0.0022661
+    3 EtaPi::Negative::P0-_im        5.7087        12.456             0    2.4352e-05
+    4 EtaPi::Negative::P1-_re         4.064        11.392             0   -0.00054774
+    5 EtaPi::Negative::P1-_im      -0.57749        6.7588            -0    0.00063564
+    6 EtaPi::Negative::D0-_re        23.812         25.02             0    0.00058026
+    7 EtaPi::Negative::D0-_im        38.624        14.768            -0    3.6067e-05
+    8 EtaPi::Negative::D1-_re       -1.2178        7.6508            -0    0.00079839
+    9 EtaPi::Negative::D1-_im       0.16151        4.7478             0    -0.0010958
+   10 EtaPi::Positive::P1+_re       -18.083        5.7737            -0    0.00054659
+   11 EtaPi::Positive::P1+_im      -0.88551        18.712             0    -0.0012305
+   12 EtaPi::Positive::D1+_re      -0.19533        5.1426             0    -0.0021055
+
+ EXTERNAL ERROR MATRIX.    NDIM= 100    NPAR= 12    ERR DEF=1
+         259
+         142        184
+        -178       -148        155
+         -70       4.44       37.2        130
+        79.9         17      -46.3      -60.7       45.7
+        -347      -86.7        201        165       -149        626
+         200       54.2       -121       -102       87.6       -363        218
+       -39.8      -24.9       35.4       70.6      -30.3       67.9      -44.3       58.5
+         4.7       8.88      -9.46      -33.7       9.87       -9.1       8.37      -29.4       22.5
+        37.9      -21.3      -8.04      -28.3       23.7       -101       61.1      -4.43      -1.91       33.3
+       -97.6        114      -6.73       79.9      -73.2        326       -186      -6.12       19.9      -89.6        350
+       -7.65       39.2      -13.4       25.7      -15.2       55.6      -31.9       4.63     -0.568      -19.8       76.2
+        26.4
+ PARAMETER  CORRELATION COEFFICIENTS  
+       NO.  GLOBAL      1      2      3      4      5      6      7      8      9     10     11     12
+      1:     0.978  1.000  0.651 -0.888 -0.382  0.735 -0.862  0.843 -0.323  0.062  0.408 -0.324 -0.092
+      2:     0.982  0.651  1.000 -0.874  0.029  0.186 -0.256  0.271 -0.241  0.138 -0.273  0.448  0.562
+      3:     0.980 -0.888 -0.874  1.000  0.263 -0.550  0.646 -0.658  0.372 -0.160 -0.112 -0.029 -0.209
+      4:     0.938 -0.382  0.029  0.263  1.000 -0.789  0.580 -0.604  0.810 -0.623 -0.430  0.375  0.439
+      5:     0.946  0.735  0.186 -0.550 -0.789  1.000 -0.879  0.877 -0.585  0.308  0.608 -0.579 -0.438
+      6:     0.993 -0.862 -0.256  0.646  0.580 -0.879  1.000 -0.983  0.355 -0.077 -0.698  0.696  0.432
+      7:     0.990  0.843  0.271 -0.658 -0.604  0.877 -0.983  1.000 -0.392  0.119  0.717 -0.672 -0.420
+      8:     0.928 -0.323 -0.241  0.372  0.810 -0.585  0.355 -0.392  1.000 -0.809 -0.100 -0.043  0.118
+      9:     0.861  0.062  0.138 -0.160 -0.623  0.308 -0.077  0.119 -0.809  1.000 -0.070  0.224 -0.023
+     10:     0.889  0.408 -0.273 -0.112 -0.430  0.608 -0.698  0.717 -0.100 -0.070  1.000 -0.829 -0.667
+     11:     0.982 -0.324  0.448 -0.029  0.375 -0.579  0.696 -0.672 -0.043  0.224 -0.829  1.000  0.792
+     12:     0.878 -0.092  0.562 -0.209  0.439 -0.438  0.432 -0.420  0.118 -0.023 -0.667  0.792  1.000
+
+ MIGRAD evaluation total wall time:  0.038752 s.
+    average time per function call:  0.038179 ms.
+
+LIKELIHOOD AFTER MINIMIZATION:  -1931.5
+Loading generated Monte Carlo...
+Resetting source kin in thrown_pi0eta_tLT1_55.root
+	Done.
+Calculating integrals...
+	Done.
+Loading acccepted Monte Carlo...
+Resetting source kin in reco_pi0eta_tLT1_55.root
+	Done.
+Calculating integrals...
+	Done.

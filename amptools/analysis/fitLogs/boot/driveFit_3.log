@@ -1,0 +1,2280 @@
+fitName: divideRoot
+nBins: 60
+seedFile: param_init.cfg
+maxIter: 50
+ampNames: ['S0-', 'P0-', 'P1-', 'D0-', 'D1-', 'P1+', 'D1+']
+nSeeds: 2
+percentDeviation: 0.3
+baseDeviation1: 30
+baseDeviation2: 200
+rampIter: 25
+mySeed: 123121
+seedShift: 0
+allSeeds: 
+[195368212, 812053609]
+[0, 1]
+singleBin,nBins = -1,60
+singleBin status: Looking at multiple bins!
+
+
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis
+fit directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot
+Running on seed,seedNum,binNum=195368212,0,3
+================   bin_3    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_3
+Copying bin_3-seed0.cfg from bin_3.cfg
+--------------------------------------------------
+sed -i s/bin_3/bin_3-seed0/g bin_3-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_3/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '62.9623661211884', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 62.9623661212
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 62.9623661212, 62.9623661212
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 62.9623661212,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-8.11450534629576', '-25.9753915739144\n']
+Amps from param_init.cfg: P0-
+realAmp: -8.1145053463
+imAmp: -25.9753915739
+Sampling from the below ranges
+real_low, real_up: -8.1145053463, -8.1145053463
+im_low, im_up: -25.9753915739, -25.9753915739
+realSampled, imSampled: -8.1145053463,-25.9753915739
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '134.373818267843', '175.941035856515\n']
+Amps from param_init.cfg: P1-
+realAmp: 134.373818268
+imAmp: 175.941035857
+Sampling from the below ranges
+real_low, real_up: 134.373818268, 134.373818268
+im_low, im_up: 175.941035857, 175.941035857
+realSampled, imSampled: 134.373818268,175.941035857
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '112.394672654886', '-90.9727939771389\n']
+Amps from param_init.cfg: D0-
+realAmp: 112.394672655
+imAmp: -90.9727939771
+Sampling from the below ranges
+real_low, real_up: 112.394672655, 112.394672655
+im_low, im_up: -90.9727939771, -90.9727939771
+realSampled, imSampled: 112.394672655,-90.9727939771
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-17.0786060037731', '-9.60611719976494\n']
+Amps from param_init.cfg: D1-
+realAmp: -17.0786060038
+imAmp: -9.60611719976
+Sampling from the below ranges
+real_low, real_up: -17.0786060038, -17.0786060038
+im_low, im_up: -9.60611719976, -9.60611719976
+realSampled, imSampled: -17.0786060038,-9.60611719976
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '15.5282090767491', '-172.484848198009\n']
+Amps from param_init.cfg: P1+
+realAmp: 15.5282090767
+imAmp: -172.484848198
+Sampling from the below ranges
+real_low, real_up: 15.5282090767, 15.5282090767
+im_low, im_up: -172.484848198, -172.484848198
+realSampled, imSampled: 15.5282090767,-172.484848198
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-118.234618118687', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -118.234618119
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -118.234618119, -118.234618119
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -118.234618119,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_3-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_3 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,9
+================   bin_9    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_9
+Copying bin_9-seed0.cfg from bin_9.cfg
+--------------------------------------------------
+sed -i s/bin_9/bin_9-seed0/g bin_9-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_9/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '736.113006097877', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 736.113006098
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 736.113006098, 736.113006098
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 736.113006098,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-96.0456397060564', '-127.948182518564\n']
+Amps from param_init.cfg: P0-
+realAmp: -96.0456397061
+imAmp: -127.948182519
+Sampling from the below ranges
+real_low, real_up: -96.0456397061, -96.0456397061
+im_low, im_up: -127.948182519, -127.948182519
+realSampled, imSampled: -96.0456397061,-127.948182519
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '64.6807680510179', '95.686278725583\n']
+Amps from param_init.cfg: P1-
+realAmp: 64.680768051
+imAmp: 95.6862787256
+Sampling from the below ranges
+real_low, real_up: 64.680768051, 64.680768051
+im_low, im_up: 95.6862787256, 95.6862787256
+realSampled, imSampled: 64.680768051,95.6862787256
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '-11.2818206896689', '-156.349990762367\n']
+Amps from param_init.cfg: D0-
+realAmp: -11.2818206897
+imAmp: -156.349990762
+Sampling from the below ranges
+real_low, real_up: -11.2818206897, -11.2818206897
+im_low, im_up: -156.349990762, -156.349990762
+realSampled, imSampled: -11.2818206897,-156.349990762
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-106.408723080681', '-224.795239127255\n']
+Amps from param_init.cfg: D1-
+realAmp: -106.408723081
+imAmp: -224.795239127
+Sampling from the below ranges
+real_low, real_up: -106.408723081, -106.408723081
+im_low, im_up: -224.795239127, -224.795239127
+realSampled, imSampled: -106.408723081,-224.795239127
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '44.1954347833015', '-0.186935742355614\n']
+Amps from param_init.cfg: P1+
+realAmp: 44.1954347833
+imAmp: -0.186935742356
+Sampling from the below ranges
+real_low, real_up: 44.1954347833, 44.1954347833
+im_low, im_up: -0.186935742356, -0.186935742356
+realSampled, imSampled: 44.1954347833,-0.186935742356
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-13.75055043634', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -13.7505504363
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -13.7505504363, -13.7505504363
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -13.7505504363,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_9-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_9 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,15
+================   bin_15    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_15
+Copying bin_15-seed0.cfg from bin_15.cfg
+--------------------------------------------------
+sed -i s/bin_15/bin_15-seed0/g bin_15-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_15/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '457.547120526833', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 457.547120527
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 457.547120527, 457.547120527
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 457.547120527,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-169.217026977696', '475.283684213525\n']
+Amps from param_init.cfg: P0-
+realAmp: -169.217026978
+imAmp: 475.283684214
+Sampling from the below ranges
+real_low, real_up: -169.217026978, -169.217026978
+im_low, im_up: 475.283684214, 475.283684214
+realSampled, imSampled: -169.217026978,475.283684214
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '121.007466017233', '-405.380886352973\n']
+Amps from param_init.cfg: P1-
+realAmp: 121.007466017
+imAmp: -405.380886353
+Sampling from the below ranges
+real_low, real_up: 121.007466017, 121.007466017
+im_low, im_up: -405.380886353, -405.380886353
+realSampled, imSampled: 121.007466017,-405.380886353
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '-72.8586209168921', '15.9053367936884\n']
+Amps from param_init.cfg: D0-
+realAmp: -72.8586209169
+imAmp: 15.9053367937
+Sampling from the below ranges
+real_low, real_up: -72.8586209169, -72.8586209169
+im_low, im_up: 15.9053367937, 15.9053367937
+realSampled, imSampled: -72.8586209169,15.9053367937
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '188.451065084097', '166.288228194993\n']
+Amps from param_init.cfg: D1-
+realAmp: 188.451065084
+imAmp: 166.288228195
+Sampling from the below ranges
+real_low, real_up: 188.451065084, 188.451065084
+im_low, im_up: 166.288228195, 166.288228195
+realSampled, imSampled: 188.451065084,166.288228195
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '310.374393701843', '-32.7754711558401\n']
+Amps from param_init.cfg: P1+
+realAmp: 310.374393702
+imAmp: -32.7754711558
+Sampling from the below ranges
+real_low, real_up: 310.374393702, 310.374393702
+im_low, im_up: -32.7754711558, -32.7754711558
+realSampled, imSampled: 310.374393702,-32.7754711558
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-6.90495437681923', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -6.90495437682
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -6.90495437682, -6.90495437682
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -6.90495437682,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_15-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_15 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,21
+================   bin_21    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_21
+Copying bin_21-seed0.cfg from bin_21.cfg
+--------------------------------------------------
+sed -i s/bin_21/bin_21-seed0/g bin_21-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_21/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '-98.9772078953089', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: -98.9772078953
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -98.9772078953, -98.9772078953
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -98.9772078953,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '199.064870246243', '213.872354274958\n']
+Amps from param_init.cfg: P0-
+realAmp: 199.064870246
+imAmp: 213.872354275
+Sampling from the below ranges
+real_low, real_up: 199.064870246, 199.064870246
+im_low, im_up: 213.872354275, 213.872354275
+realSampled, imSampled: 199.064870246,213.872354275
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '-36.1155070726633', '-4.67556333811591\n']
+Amps from param_init.cfg: P1-
+realAmp: -36.1155070727
+imAmp: -4.67556333812
+Sampling from the below ranges
+real_low, real_up: -36.1155070727, -36.1155070727
+im_low, im_up: -4.67556333812, -4.67556333812
+realSampled, imSampled: -36.1155070727,-4.67556333812
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '278.835736672323', '-312.322375301042\n']
+Amps from param_init.cfg: D0-
+realAmp: 278.835736672
+imAmp: -312.322375301
+Sampling from the below ranges
+real_low, real_up: 278.835736672, 278.835736672
+im_low, im_up: -312.322375301, -312.322375301
+realSampled, imSampled: 278.835736672,-312.322375301
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '22.6581320655655', '22.9087389500472\n']
+Amps from param_init.cfg: D1-
+realAmp: 22.6581320656
+imAmp: 22.90873895
+Sampling from the below ranges
+real_low, real_up: 22.6581320656, 22.6581320656
+im_low, im_up: 22.90873895, 22.90873895
+realSampled, imSampled: 22.6581320656,22.90873895
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '34.8158963377192', '-0.0589556326105348\n']
+Amps from param_init.cfg: P1+
+realAmp: 34.8158963377
+imAmp: -0.0589556326105
+Sampling from the below ranges
+real_low, real_up: 34.8158963377, 34.8158963377
+im_low, im_up: -0.0589556326105, -0.0589556326105
+realSampled, imSampled: 34.8158963377,-0.0589556326105
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '42.9665107524844', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 42.9665107525
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 42.9665107525, 42.9665107525
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 42.9665107525,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_21-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_21 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,27
+================   bin_27    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_27
+Copying bin_27-seed0.cfg from bin_27.cfg
+--------------------------------------------------
+sed -i s/bin_27/bin_27-seed0/g bin_27-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_27/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '64.1762338623737', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 64.1762338624
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 64.1762338624, 64.1762338624
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 64.1762338624,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-183.885801479991', '-39.9459518321769\n']
+Amps from param_init.cfg: P0-
+realAmp: -183.88580148
+imAmp: -39.9459518322
+Sampling from the below ranges
+real_low, real_up: -183.88580148, -183.88580148
+im_low, im_up: -39.9459518322, -39.9459518322
+realSampled, imSampled: -183.88580148,-39.9459518322
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '214.156021753744', '-6.68708022022908\n']
+Amps from param_init.cfg: P1-
+realAmp: 214.156021754
+imAmp: -6.68708022023
+Sampling from the below ranges
+real_low, real_up: 214.156021754, 214.156021754
+im_low, im_up: -6.68708022023, -6.68708022023
+realSampled, imSampled: 214.156021754,-6.68708022023
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '229.147381132245', '1081.68349104568\n']
+Amps from param_init.cfg: D0-
+realAmp: 229.147381132
+imAmp: 1081.68349105
+Sampling from the below ranges
+real_low, real_up: 229.147381132, 229.147381132
+im_low, im_up: 1081.68349105, 1081.68349105
+realSampled, imSampled: 229.147381132,1081.68349105
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-207.062691696088', '3.77692474231739\n']
+Amps from param_init.cfg: D1-
+realAmp: -207.062691696
+imAmp: 3.77692474232
+Sampling from the below ranges
+real_low, real_up: -207.062691696, -207.062691696
+im_low, im_up: 3.77692474232, 3.77692474232
+realSampled, imSampled: -207.062691696,3.77692474232
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-35.89247670603', '0.523242061652873\n']
+Amps from param_init.cfg: P1+
+realAmp: -35.892476706
+imAmp: 0.523242061653
+Sampling from the below ranges
+real_low, real_up: -35.892476706, -35.892476706
+im_low, im_up: 0.523242061653, 0.523242061653
+realSampled, imSampled: -35.892476706,0.523242061653
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '35.3706367926313', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 35.3706367926
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 35.3706367926, 35.3706367926
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 35.3706367926,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_27-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_27 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,33
+================   bin_33    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_33
+Copying bin_33-seed0.cfg from bin_33.cfg
+--------------------------------------------------
+sed -i s/bin_33/bin_33-seed0/g bin_33-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_33/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '72.6492479709565', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 72.649247971
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 72.649247971, 72.649247971
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 72.649247971,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-61.607975570528', '-91.9919611050131\n']
+Amps from param_init.cfg: P0-
+realAmp: -61.6079755705
+imAmp: -91.991961105
+Sampling from the below ranges
+real_low, real_up: -61.6079755705, -61.6079755705
+im_low, im_up: -91.991961105, -91.991961105
+realSampled, imSampled: -61.6079755705,-91.991961105
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '244.252712985976', '-46.4696606001332\n']
+Amps from param_init.cfg: P1-
+realAmp: 244.252712986
+imAmp: -46.4696606001
+Sampling from the below ranges
+real_low, real_up: 244.252712986, 244.252712986
+im_low, im_up: -46.4696606001, -46.4696606001
+realSampled, imSampled: 244.252712986,-46.4696606001
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '270.29872949286', '516.788305389196\n']
+Amps from param_init.cfg: D0-
+realAmp: 270.298729493
+imAmp: 516.788305389
+Sampling from the below ranges
+real_low, real_up: 270.298729493, 270.298729493
+im_low, im_up: 516.788305389, 516.788305389
+realSampled, imSampled: 270.298729493,516.788305389
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-99.5947137555286', '-35.7706166744886\n']
+Amps from param_init.cfg: D1-
+realAmp: -99.5947137555
+imAmp: -35.7706166745
+Sampling from the below ranges
+real_low, real_up: -99.5947137555, -99.5947137555
+im_low, im_up: -35.7706166745, -35.7706166745
+realSampled, imSampled: -99.5947137555,-35.7706166745
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '109.940854390902', '-0.986385010066574\n']
+Amps from param_init.cfg: P1+
+realAmp: 109.940854391
+imAmp: -0.986385010067
+Sampling from the below ranges
+real_low, real_up: 109.940854391, 109.940854391
+im_low, im_up: -0.986385010067, -0.986385010067
+realSampled, imSampled: 109.940854391,-0.986385010067
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '12.3974654631724', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 12.3974654632
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 12.3974654632, 12.3974654632
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 12.3974654632,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_33-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_33 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,39
+================   bin_39    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_39
+Copying bin_39-seed0.cfg from bin_39.cfg
+--------------------------------------------------
+sed -i s/bin_39/bin_39-seed0/g bin_39-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_39/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '69.9929840598064', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 69.9929840598
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 69.9929840598, 69.9929840598
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 69.9929840598,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-302.638891272551', '57.4344402711921\n']
+Amps from param_init.cfg: P0-
+realAmp: -302.638891273
+imAmp: 57.4344402712
+Sampling from the below ranges
+real_low, real_up: -302.638891273, -302.638891273
+im_low, im_up: 57.4344402712, 57.4344402712
+realSampled, imSampled: -302.638891273,57.4344402712
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '61.7551546481071', '-41.4174012505404\n']
+Amps from param_init.cfg: P1-
+realAmp: 61.7551546481
+imAmp: -41.4174012505
+Sampling from the below ranges
+real_low, real_up: 61.7551546481, 61.7551546481
+im_low, im_up: -41.4174012505, -41.4174012505
+realSampled, imSampled: 61.7551546481,-41.4174012505
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '32.857626920141', '-435.148541505911\n']
+Amps from param_init.cfg: D0-
+realAmp: 32.8576269201
+imAmp: -435.148541506
+Sampling from the below ranges
+real_low, real_up: 32.8576269201, 32.8576269201
+im_low, im_up: -435.148541506, -435.148541506
+realSampled, imSampled: 32.8576269201,-435.148541506
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-39.8540942712392', '97.7308569363682\n']
+Amps from param_init.cfg: D1-
+realAmp: -39.8540942712
+imAmp: 97.7308569364
+Sampling from the below ranges
+real_low, real_up: -39.8540942712, -39.8540942712
+im_low, im_up: 97.7308569364, 97.7308569364
+realSampled, imSampled: -39.8540942712,97.7308569364
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-0.063504401221391', '0.00363894860636482\n']
+Amps from param_init.cfg: P1+
+realAmp: -0.0635044012214
+imAmp: 0.00363894860636
+Sampling from the below ranges
+real_low, real_up: -0.0635044012214, -0.0635044012214
+im_low, im_up: 0.00363894860636, 0.00363894860636
+realSampled, imSampled: -0.0635044012214,0.00363894860636
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-0.0215846312461145', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -0.0215846312461
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -0.0215846312461, -0.0215846312461
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -0.0215846312461,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_39-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_39 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,45
+================   bin_45    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_45
+Copying bin_45-seed0.cfg from bin_45.cfg
+--------------------------------------------------
+sed -i s/bin_45/bin_45-seed0/g bin_45-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_45/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '297.782394814222', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 297.782394814
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 297.782394814, 297.782394814
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 297.782394814,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-74.0827464804812', '-96.5106459199208\n']
+Amps from param_init.cfg: P0-
+realAmp: -74.0827464805
+imAmp: -96.5106459199
+Sampling from the below ranges
+real_low, real_up: -74.0827464805, -74.0827464805
+im_low, im_up: -96.5106459199, -96.5106459199
+realSampled, imSampled: -74.0827464805,-96.5106459199
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '96.826662281562', '67.397675741348\n']
+Amps from param_init.cfg: P1-
+realAmp: 96.8266622816
+imAmp: 67.3976757413
+Sampling from the below ranges
+real_low, real_up: 96.8266622816, 96.8266622816
+im_low, im_up: 67.3976757413, 67.3976757413
+realSampled, imSampled: 96.8266622816,67.3976757413
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '90.029139570454', '544.22345399864\n']
+Amps from param_init.cfg: D0-
+realAmp: 90.0291395705
+imAmp: 544.223453999
+Sampling from the below ranges
+real_low, real_up: 90.0291395705, 90.0291395705
+im_low, im_up: 544.223453999, 544.223453999
+realSampled, imSampled: 90.0291395705,544.223453999
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-56.930598324834', '-64.0845763893268\n']
+Amps from param_init.cfg: D1-
+realAmp: -56.9305983248
+imAmp: -64.0845763893
+Sampling from the below ranges
+real_low, real_up: -56.9305983248, -56.9305983248
+im_low, im_up: -64.0845763893, -64.0845763893
+realSampled, imSampled: -56.9305983248,-64.0845763893
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '0.0607463726711745', '-0.0366125458997544\n']
+Amps from param_init.cfg: P1+
+realAmp: 0.0607463726712
+imAmp: -0.0366125458998
+Sampling from the below ranges
+real_low, real_up: 0.0607463726712, 0.0607463726712
+im_low, im_up: -0.0366125458998, -0.0366125458998
+realSampled, imSampled: 0.0607463726712,-0.0366125458998
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '0.0407157144140258', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 0.040715714414
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 0.040715714414, 0.040715714414
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 0.040715714414,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_45-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_45 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,51
+================   bin_51    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51
+Copying bin_51-seed0.cfg from bin_51.cfg
+--------------------------------------------------
+sed -i s/bin_51/bin_51-seed0/g bin_51-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '51.0587053632779', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 51.0587053633
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 51.0587053633, 51.0587053633
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 51.0587053633,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-115.751938350429', '12.5535052685201\n']
+Amps from param_init.cfg: P0-
+realAmp: -115.75193835
+imAmp: 12.5535052685
+Sampling from the below ranges
+real_low, real_up: -115.75193835, -115.75193835
+im_low, im_up: 12.5535052685, 12.5535052685
+realSampled, imSampled: -115.75193835,12.5535052685
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '155.985717089704', '27.9047738002218\n']
+Amps from param_init.cfg: P1-
+realAmp: 155.98571709
+imAmp: 27.9047738002
+Sampling from the below ranges
+real_low, real_up: 155.98571709, 155.98571709
+im_low, im_up: 27.9047738002, 27.9047738002
+realSampled, imSampled: 155.98571709,27.9047738002
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '295.264245878454', '-422.275649996365\n']
+Amps from param_init.cfg: D0-
+realAmp: 295.264245878
+imAmp: -422.275649996
+Sampling from the below ranges
+real_low, real_up: 295.264245878, 295.264245878
+im_low, im_up: -422.275649996, -422.275649996
+realSampled, imSampled: 295.264245878,-422.275649996
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-147.92149570343', '17.2986043794482\n']
+Amps from param_init.cfg: D1-
+realAmp: -147.921495703
+imAmp: 17.2986043794
+Sampling from the below ranges
+real_low, real_up: -147.921495703, -147.921495703
+im_low, im_up: 17.2986043794, 17.2986043794
+realSampled, imSampled: -147.921495703,17.2986043794
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '117.70151672769', '-10.0164668043498\n']
+Amps from param_init.cfg: P1+
+realAmp: 117.701516728
+imAmp: -10.0164668043
+Sampling from the below ranges
+real_low, real_up: 117.701516728, 117.701516728
+im_low, im_up: -10.0164668043, -10.0164668043
+realSampled, imSampled: 117.701516728,-10.0164668043
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '7.42301932880255', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 7.4230193288
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 7.4230193288, 7.4230193288
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 7.4230193288,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_51-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_51 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=195368212,0,57
+================   bin_57    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_57
+Copying bin_57-seed0.cfg from bin_57.cfg
+--------------------------------------------------
+sed -i s/bin_57/bin_57-seed0/g bin_57-seed0.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_57/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '79.8019249607716', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 79.8019249608
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 79.8019249608, 79.8019249608
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 79.8019249608,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-12.1936191967429', '60.5972610788173\n']
+Amps from param_init.cfg: P0-
+realAmp: -12.1936191967
+imAmp: 60.5972610788
+Sampling from the below ranges
+real_low, real_up: -12.1936191967, -12.1936191967
+im_low, im_up: 60.5972610788, 60.5972610788
+realSampled, imSampled: -12.1936191967,60.5972610788
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '39.110261066723', '-19.6553747155449\n']
+Amps from param_init.cfg: P1-
+realAmp: 39.1102610667
+imAmp: -19.6553747155
+Sampling from the below ranges
+real_low, real_up: 39.1102610667, 39.1102610667
+im_low, im_up: -19.6553747155, -19.6553747155
+realSampled, imSampled: 39.1102610667,-19.6553747155
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '-33.8675766828978', '-318.881711777883\n']
+Amps from param_init.cfg: D0-
+realAmp: -33.8675766829
+imAmp: -318.881711778
+Sampling from the below ranges
+real_low, real_up: -33.8675766829, -33.8675766829
+im_low, im_up: -318.881711778, -318.881711778
+realSampled, imSampled: -33.8675766829,-318.881711778
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-60.2641161202313', '35.0361222899117\n']
+Amps from param_init.cfg: D1-
+realAmp: -60.2641161202
+imAmp: 35.0361222899
+Sampling from the below ranges
+real_low, real_up: -60.2641161202, -60.2641161202
+im_low, im_up: 35.0361222899, 35.0361222899
+realSampled, imSampled: -60.2641161202,35.0361222899
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '29.578287393583', '0.0617304698306757\n']
+Amps from param_init.cfg: P1+
+realAmp: 29.5782873936
+imAmp: 0.0617304698307
+Sampling from the below ranges
+real_low, real_up: 29.5782873936, 29.5782873936
+im_low, im_up: 0.0617304698307, 0.0617304698307
+realSampled, imSampled: 29.5782873936,0.0617304698307
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '17.8936269323008', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 17.8936269323
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 17.8936269323, 17.8936269323
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 17.8936269323,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_57-seed0.cfg -s seed0-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_57 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,3
+================   bin_3    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_3
+Copying bin_3-seed1.cfg from bin_3.cfg
+--------------------------------------------------
+sed -i s/bin_3/bin_3-seed1/g bin_3-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_3/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '62.9623661211884', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 62.9623661212
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 62.9623661212, 62.9623661212
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 62.9623661212,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-8.11450534629576', '-25.9753915739144\n']
+Amps from param_init.cfg: P0-
+realAmp: -8.1145053463
+imAmp: -25.9753915739
+Sampling from the below ranges
+real_low, real_up: -8.1145053463, -8.1145053463
+im_low, im_up: -25.9753915739, -25.9753915739
+realSampled, imSampled: -8.1145053463,-25.9753915739
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '134.373818267843', '175.941035856515\n']
+Amps from param_init.cfg: P1-
+realAmp: 134.373818268
+imAmp: 175.941035857
+Sampling from the below ranges
+real_low, real_up: 134.373818268, 134.373818268
+im_low, im_up: 175.941035857, 175.941035857
+realSampled, imSampled: 134.373818268,175.941035857
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '112.394672654886', '-90.9727939771389\n']
+Amps from param_init.cfg: D0-
+realAmp: 112.394672655
+imAmp: -90.9727939771
+Sampling from the below ranges
+real_low, real_up: 112.394672655, 112.394672655
+im_low, im_up: -90.9727939771, -90.9727939771
+realSampled, imSampled: 112.394672655,-90.9727939771
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-17.0786060037731', '-9.60611719976494\n']
+Amps from param_init.cfg: D1-
+realAmp: -17.0786060038
+imAmp: -9.60611719976
+Sampling from the below ranges
+real_low, real_up: -17.0786060038, -17.0786060038
+im_low, im_up: -9.60611719976, -9.60611719976
+realSampled, imSampled: -17.0786060038,-9.60611719976
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '15.5282090767491', '-172.484848198009\n']
+Amps from param_init.cfg: P1+
+realAmp: 15.5282090767
+imAmp: -172.484848198
+Sampling from the below ranges
+real_low, real_up: 15.5282090767, 15.5282090767
+im_low, im_up: -172.484848198, -172.484848198
+realSampled, imSampled: 15.5282090767,-172.484848198
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-118.234618118687', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -118.234618119
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -118.234618119, -118.234618119
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -118.234618119,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_3-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_3 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,9
+================   bin_9    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_9
+Copying bin_9-seed1.cfg from bin_9.cfg
+--------------------------------------------------
+sed -i s/bin_9/bin_9-seed1/g bin_9-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_9/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '736.113006097877', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 736.113006098
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 736.113006098, 736.113006098
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 736.113006098,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-96.0456397060564', '-127.948182518564\n']
+Amps from param_init.cfg: P0-
+realAmp: -96.0456397061
+imAmp: -127.948182519
+Sampling from the below ranges
+real_low, real_up: -96.0456397061, -96.0456397061
+im_low, im_up: -127.948182519, -127.948182519
+realSampled, imSampled: -96.0456397061,-127.948182519
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '64.6807680510179', '95.686278725583\n']
+Amps from param_init.cfg: P1-
+realAmp: 64.680768051
+imAmp: 95.6862787256
+Sampling from the below ranges
+real_low, real_up: 64.680768051, 64.680768051
+im_low, im_up: 95.6862787256, 95.6862787256
+realSampled, imSampled: 64.680768051,95.6862787256
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '-11.2818206896689', '-156.349990762367\n']
+Amps from param_init.cfg: D0-
+realAmp: -11.2818206897
+imAmp: -156.349990762
+Sampling from the below ranges
+real_low, real_up: -11.2818206897, -11.2818206897
+im_low, im_up: -156.349990762, -156.349990762
+realSampled, imSampled: -11.2818206897,-156.349990762
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-106.408723080681', '-224.795239127255\n']
+Amps from param_init.cfg: D1-
+realAmp: -106.408723081
+imAmp: -224.795239127
+Sampling from the below ranges
+real_low, real_up: -106.408723081, -106.408723081
+im_low, im_up: -224.795239127, -224.795239127
+realSampled, imSampled: -106.408723081,-224.795239127
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '44.1954347833015', '-0.186935742355614\n']
+Amps from param_init.cfg: P1+
+realAmp: 44.1954347833
+imAmp: -0.186935742356
+Sampling from the below ranges
+real_low, real_up: 44.1954347833, 44.1954347833
+im_low, im_up: -0.186935742356, -0.186935742356
+realSampled, imSampled: 44.1954347833,-0.186935742356
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-13.75055043634', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -13.7505504363
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -13.7505504363, -13.7505504363
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -13.7505504363,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_9-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_9 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,15
+================   bin_15    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_15
+Copying bin_15-seed1.cfg from bin_15.cfg
+--------------------------------------------------
+sed -i s/bin_15/bin_15-seed1/g bin_15-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_15/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '457.547120526833', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 457.547120527
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 457.547120527, 457.547120527
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 457.547120527,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-169.217026977696', '475.283684213525\n']
+Amps from param_init.cfg: P0-
+realAmp: -169.217026978
+imAmp: 475.283684214
+Sampling from the below ranges
+real_low, real_up: -169.217026978, -169.217026978
+im_low, im_up: 475.283684214, 475.283684214
+realSampled, imSampled: -169.217026978,475.283684214
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '121.007466017233', '-405.380886352973\n']
+Amps from param_init.cfg: P1-
+realAmp: 121.007466017
+imAmp: -405.380886353
+Sampling from the below ranges
+real_low, real_up: 121.007466017, 121.007466017
+im_low, im_up: -405.380886353, -405.380886353
+realSampled, imSampled: 121.007466017,-405.380886353
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '-72.8586209168921', '15.9053367936884\n']
+Amps from param_init.cfg: D0-
+realAmp: -72.8586209169
+imAmp: 15.9053367937
+Sampling from the below ranges
+real_low, real_up: -72.8586209169, -72.8586209169
+im_low, im_up: 15.9053367937, 15.9053367937
+realSampled, imSampled: -72.8586209169,15.9053367937
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '188.451065084097', '166.288228194993\n']
+Amps from param_init.cfg: D1-
+realAmp: 188.451065084
+imAmp: 166.288228195
+Sampling from the below ranges
+real_low, real_up: 188.451065084, 188.451065084
+im_low, im_up: 166.288228195, 166.288228195
+realSampled, imSampled: 188.451065084,166.288228195
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '310.374393701843', '-32.7754711558401\n']
+Amps from param_init.cfg: P1+
+realAmp: 310.374393702
+imAmp: -32.7754711558
+Sampling from the below ranges
+real_low, real_up: 310.374393702, 310.374393702
+im_low, im_up: -32.7754711558, -32.7754711558
+realSampled, imSampled: 310.374393702,-32.7754711558
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-6.90495437681923', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -6.90495437682
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -6.90495437682, -6.90495437682
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -6.90495437682,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_15-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_15 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,21
+================   bin_21    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_21
+Copying bin_21-seed1.cfg from bin_21.cfg
+--------------------------------------------------
+sed -i s/bin_21/bin_21-seed1/g bin_21-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_21/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '-98.9772078953089', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: -98.9772078953
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -98.9772078953, -98.9772078953
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -98.9772078953,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '199.064870246243', '213.872354274958\n']
+Amps from param_init.cfg: P0-
+realAmp: 199.064870246
+imAmp: 213.872354275
+Sampling from the below ranges
+real_low, real_up: 199.064870246, 199.064870246
+im_low, im_up: 213.872354275, 213.872354275
+realSampled, imSampled: 199.064870246,213.872354275
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '-36.1155070726633', '-4.67556333811591\n']
+Amps from param_init.cfg: P1-
+realAmp: -36.1155070727
+imAmp: -4.67556333812
+Sampling from the below ranges
+real_low, real_up: -36.1155070727, -36.1155070727
+im_low, im_up: -4.67556333812, -4.67556333812
+realSampled, imSampled: -36.1155070727,-4.67556333812
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '278.835736672323', '-312.322375301042\n']
+Amps from param_init.cfg: D0-
+realAmp: 278.835736672
+imAmp: -312.322375301
+Sampling from the below ranges
+real_low, real_up: 278.835736672, 278.835736672
+im_low, im_up: -312.322375301, -312.322375301
+realSampled, imSampled: 278.835736672,-312.322375301
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '22.6581320655655', '22.9087389500472\n']
+Amps from param_init.cfg: D1-
+realAmp: 22.6581320656
+imAmp: 22.90873895
+Sampling from the below ranges
+real_low, real_up: 22.6581320656, 22.6581320656
+im_low, im_up: 22.90873895, 22.90873895
+realSampled, imSampled: 22.6581320656,22.90873895
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '34.8158963377192', '-0.0589556326105348\n']
+Amps from param_init.cfg: P1+
+realAmp: 34.8158963377
+imAmp: -0.0589556326105
+Sampling from the below ranges
+real_low, real_up: 34.8158963377, 34.8158963377
+im_low, im_up: -0.0589556326105, -0.0589556326105
+realSampled, imSampled: 34.8158963377,-0.0589556326105
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '42.9665107524844', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 42.9665107525
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 42.9665107525, 42.9665107525
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 42.9665107525,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_21-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_21 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,27
+================   bin_27    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_27
+Copying bin_27-seed1.cfg from bin_27.cfg
+--------------------------------------------------
+sed -i s/bin_27/bin_27-seed1/g bin_27-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_27/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '64.1762338623737', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 64.1762338624
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 64.1762338624, 64.1762338624
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 64.1762338624,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-183.885801479991', '-39.9459518321769\n']
+Amps from param_init.cfg: P0-
+realAmp: -183.88580148
+imAmp: -39.9459518322
+Sampling from the below ranges
+real_low, real_up: -183.88580148, -183.88580148
+im_low, im_up: -39.9459518322, -39.9459518322
+realSampled, imSampled: -183.88580148,-39.9459518322
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '214.156021753744', '-6.68708022022908\n']
+Amps from param_init.cfg: P1-
+realAmp: 214.156021754
+imAmp: -6.68708022023
+Sampling from the below ranges
+real_low, real_up: 214.156021754, 214.156021754
+im_low, im_up: -6.68708022023, -6.68708022023
+realSampled, imSampled: 214.156021754,-6.68708022023
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '229.147381132245', '1081.68349104568\n']
+Amps from param_init.cfg: D0-
+realAmp: 229.147381132
+imAmp: 1081.68349105
+Sampling from the below ranges
+real_low, real_up: 229.147381132, 229.147381132
+im_low, im_up: 1081.68349105, 1081.68349105
+realSampled, imSampled: 229.147381132,1081.68349105
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-207.062691696088', '3.77692474231739\n']
+Amps from param_init.cfg: D1-
+realAmp: -207.062691696
+imAmp: 3.77692474232
+Sampling from the below ranges
+real_low, real_up: -207.062691696, -207.062691696
+im_low, im_up: 3.77692474232, 3.77692474232
+realSampled, imSampled: -207.062691696,3.77692474232
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-35.89247670603', '0.523242061652873\n']
+Amps from param_init.cfg: P1+
+realAmp: -35.892476706
+imAmp: 0.523242061653
+Sampling from the below ranges
+real_low, real_up: -35.892476706, -35.892476706
+im_low, im_up: 0.523242061653, 0.523242061653
+realSampled, imSampled: -35.892476706,0.523242061653
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '35.3706367926313', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 35.3706367926
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 35.3706367926, 35.3706367926
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 35.3706367926,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_27-seed1.cfg -s seed1-param_init.cfg
+seed1-param_init.cfg is somehow not made reason below:!
+The seed was not made because the fit did not converge!
+THIS IS ITERATION 0
+num_lines: 0 should equal the total number of waves!
+Bin_27 did not converge with this set of initialization!
+======================== NEXT ATTEMPT =========================
+=======================================================
+sed -i s/bin_27/bin_27-seed1/g bin_27-seed1.cfg
+using percentDeviation as: 0.3
+using baseDeviation as: 30
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_27/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '64.1762338623737', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 64.1762338624
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 14.9233637037, 113.429104021
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 25.5584591159,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-183.885801479991', '-39.9459518321769\n']
+Amps from param_init.cfg: P0-
+realAmp: -183.88580148
+imAmp: -39.9459518322
+Sampling from the below ranges
+real_low, real_up: -158.720061036, -209.051541924
+im_low, im_up: -57.9621662825, -21.9297373818
+realSampled, imSampled: -191.282051207,-53.727491955
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '214.156021753744', '-6.68708022022908\n']
+Amps from param_init.cfg: P1-
+realAmp: 214.156021754
+imAmp: -6.68708022023
+Sampling from the below ranges
+real_low, real_up: 119.909215228, 308.40282828
+im_low, im_up: -34.6809561542, 21.3067957137
+realSampled, imSampled: 230.527588098,-12.7856281428
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '229.147381132245', '1081.68349104568\n']
+Amps from param_init.cfg: D0-
+realAmp: 229.147381132
+imAmp: 1081.68349105
+Sampling from the below ranges
+real_low, real_up: 130.403166793, 327.891595472
+im_low, im_up: 727.178443732, 1436.18853836
+realSampled, imSampled: 203.187927024,992.968402051
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-207.062691696088', '3.77692474231739\n']
+Amps from param_init.cfg: D1-
+realAmp: -207.062691696
+imAmp: 3.77692474232
+Sampling from the below ranges
+real_low, real_up: -174.943884187, -239.181499205
+im_low, im_up: -27.3561526804, 34.910002165
+realSampled, imSampled: -205.616494086,2.26273169624
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-35.89247670603', '0.523242061652873\n']
+Amps from param_init.cfg: P1+
+realAmp: -35.892476706
+imAmp: 0.523242061653
+Sampling from the below ranges
+real_low, real_up: -55.1247336942, -16.6602197178
+im_low, im_up: -29.6337305568, 30.6802146801
+realSampled, imSampled: -53.3942360358,-12.374760292
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '35.3706367926313', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 35.3706367926
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -5.24055424516, 75.9818278304
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 26.1133939835,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_27-seed1.cfg -s seed1-param_init.cfg
+seed1-param_init.cfg is somehow not made reason below:!
+The seed was not made because the fit did not converge!
+THIS IS ITERATION 1
+num_lines: 0 should equal the total number of waves!
+Bin_27 did not converge with this set of initialization!
+======================== NEXT ATTEMPT =========================
+=======================================================
+sed -i s/bin_27/bin_27-seed1/g bin_27-seed1.cfg
+using percentDeviation as: 0.3
+using baseDeviation as: 30
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_27/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '64.1762338623737', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 64.1762338624
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 14.9233637037, 113.429104021
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 47.1657873334,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-183.885801479991', '-39.9459518321769\n']
+Amps from param_init.cfg: P0-
+realAmp: -183.88580148
+imAmp: -39.9459518322
+Sampling from the below ranges
+real_low, real_up: -158.720061036, -209.051541924
+im_low, im_up: -57.9621662825, -21.9297373818
+realSampled, imSampled: -199.644660385,-28.1842464145
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '214.156021753744', '-6.68708022022908\n']
+Amps from param_init.cfg: P1-
+realAmp: 214.156021754
+imAmp: -6.68708022023
+Sampling from the below ranges
+real_low, real_up: 119.909215228, 308.40282828
+im_low, im_up: -34.6809561542, 21.3067957137
+realSampled, imSampled: 169.38986069,20.8166595802
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '229.147381132245', '1081.68349104568\n']
+Amps from param_init.cfg: D0-
+realAmp: 229.147381132
+imAmp: 1081.68349105
+Sampling from the below ranges
+real_low, real_up: 130.403166793, 327.891595472
+im_low, im_up: 727.178443732, 1436.18853836
+realSampled, imSampled: 293.033628937,1205.29458776
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-207.062691696088', '3.77692474231739\n']
+Amps from param_init.cfg: D1-
+realAmp: -207.062691696
+imAmp: 3.77692474232
+Sampling from the below ranges
+real_low, real_up: -174.943884187, -239.181499205
+im_low, im_up: -27.3561526804, 34.910002165
+realSampled, imSampled: -194.314674732,27.2585334951
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-35.89247670603', '0.523242061652873\n']
+Amps from param_init.cfg: P1+
+realAmp: -35.892476706
+imAmp: 0.523242061653
+Sampling from the below ranges
+real_low, real_up: -55.1247336942, -16.6602197178
+im_low, im_up: -29.6337305568, 30.6802146801
+realSampled, imSampled: -49.1240441063,-14.2535590302
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '35.3706367926313', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 35.3706367926
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -5.24055424516, 75.9818278304
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 51.3481149054,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_27-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 2
+num_lines: 7 should equal the total number of waves!
+Bin_27 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,33
+================   bin_33    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_33
+Copying bin_33-seed1.cfg from bin_33.cfg
+--------------------------------------------------
+sed -i s/bin_33/bin_33-seed1/g bin_33-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_33/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '72.6492479709565', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 72.649247971
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 72.649247971, 72.649247971
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 72.649247971,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-61.607975570528', '-91.9919611050131\n']
+Amps from param_init.cfg: P0-
+realAmp: -61.6079755705
+imAmp: -91.991961105
+Sampling from the below ranges
+real_low, real_up: -61.6079755705, -61.6079755705
+im_low, im_up: -91.991961105, -91.991961105
+realSampled, imSampled: -61.6079755705,-91.991961105
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '244.252712985976', '-46.4696606001332\n']
+Amps from param_init.cfg: P1-
+realAmp: 244.252712986
+imAmp: -46.4696606001
+Sampling from the below ranges
+real_low, real_up: 244.252712986, 244.252712986
+im_low, im_up: -46.4696606001, -46.4696606001
+realSampled, imSampled: 244.252712986,-46.4696606001
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '270.29872949286', '516.788305389196\n']
+Amps from param_init.cfg: D0-
+realAmp: 270.298729493
+imAmp: 516.788305389
+Sampling from the below ranges
+real_low, real_up: 270.298729493, 270.298729493
+im_low, im_up: 516.788305389, 516.788305389
+realSampled, imSampled: 270.298729493,516.788305389
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-99.5947137555286', '-35.7706166744886\n']
+Amps from param_init.cfg: D1-
+realAmp: -99.5947137555
+imAmp: -35.7706166745
+Sampling from the below ranges
+real_low, real_up: -99.5947137555, -99.5947137555
+im_low, im_up: -35.7706166745, -35.7706166745
+realSampled, imSampled: -99.5947137555,-35.7706166745
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '109.940854390902', '-0.986385010066574\n']
+Amps from param_init.cfg: P1+
+realAmp: 109.940854391
+imAmp: -0.986385010067
+Sampling from the below ranges
+real_low, real_up: 109.940854391, 109.940854391
+im_low, im_up: -0.986385010067, -0.986385010067
+realSampled, imSampled: 109.940854391,-0.986385010067
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '12.3974654631724', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 12.3974654632
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 12.3974654632, 12.3974654632
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 12.3974654632,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_33-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_33 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,39
+================   bin_39    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_39
+Copying bin_39-seed1.cfg from bin_39.cfg
+--------------------------------------------------
+sed -i s/bin_39/bin_39-seed1/g bin_39-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_39/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '69.9929840598064', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 69.9929840598
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 69.9929840598, 69.9929840598
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 69.9929840598,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-302.638891272551', '57.4344402711921\n']
+Amps from param_init.cfg: P0-
+realAmp: -302.638891273
+imAmp: 57.4344402712
+Sampling from the below ranges
+real_low, real_up: -302.638891273, -302.638891273
+im_low, im_up: 57.4344402712, 57.4344402712
+realSampled, imSampled: -302.638891273,57.4344402712
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '61.7551546481071', '-41.4174012505404\n']
+Amps from param_init.cfg: P1-
+realAmp: 61.7551546481
+imAmp: -41.4174012505
+Sampling from the below ranges
+real_low, real_up: 61.7551546481, 61.7551546481
+im_low, im_up: -41.4174012505, -41.4174012505
+realSampled, imSampled: 61.7551546481,-41.4174012505
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '32.857626920141', '-435.148541505911\n']
+Amps from param_init.cfg: D0-
+realAmp: 32.8576269201
+imAmp: -435.148541506
+Sampling from the below ranges
+real_low, real_up: 32.8576269201, 32.8576269201
+im_low, im_up: -435.148541506, -435.148541506
+realSampled, imSampled: 32.8576269201,-435.148541506
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-39.8540942712392', '97.7308569363682\n']
+Amps from param_init.cfg: D1-
+realAmp: -39.8540942712
+imAmp: 97.7308569364
+Sampling from the below ranges
+real_low, real_up: -39.8540942712, -39.8540942712
+im_low, im_up: 97.7308569364, 97.7308569364
+realSampled, imSampled: -39.8540942712,97.7308569364
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-0.063504401221391', '0.00363894860636482\n']
+Amps from param_init.cfg: P1+
+realAmp: -0.0635044012214
+imAmp: 0.00363894860636
+Sampling from the below ranges
+real_low, real_up: -0.0635044012214, -0.0635044012214
+im_low, im_up: 0.00363894860636, 0.00363894860636
+realSampled, imSampled: -0.0635044012214,0.00363894860636
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-0.0215846312461145', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -0.0215846312461
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -0.0215846312461, -0.0215846312461
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: -0.0215846312461,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_39-seed1.cfg -s seed1-param_init.cfg
+seed1-param_init.cfg is somehow not made reason below:!
+The seed was not made because the fit did not converge!
+THIS IS ITERATION 0
+num_lines: 0 should equal the total number of waves!
+Bin_39 did not converge with this set of initialization!
+======================== NEXT ATTEMPT =========================
+=======================================================
+sed -i s/bin_39/bin_39-seed1/g bin_39-seed1.cfg
+using percentDeviation as: 0.3
+using baseDeviation as: 30
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_39/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '69.9929840598064', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 69.9929840598
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 18.9950888419, 120.990879278
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 110.1715222,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-302.638891272551', '57.4344402711921\n']
+Amps from param_init.cfg: P0-
+realAmp: -302.638891273
+imAmp: 57.4344402712
+Sampling from the below ranges
+real_low, real_up: -241.847223891, -363.430558654
+im_low, im_up: 10.2041081898, 104.664772353
+realSampled, imSampled: -339.650044092,65.1385272025
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '61.7551546481071', '-41.4174012505404\n']
+Amps from param_init.cfg: P1-
+realAmp: 61.7551546481
+imAmp: -41.4174012505
+Sampling from the below ranges
+real_low, real_up: 13.2286082537, 110.281701043
+im_low, im_up: -58.9921808754, -23.8426216257
+realSampled, imSampled: 86.6579506118,-47.7257430695
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '32.857626920141', '-435.148541505911\n']
+Amps from param_init.cfg: D0-
+realAmp: 32.8576269201
+imAmp: -435.148541506
+Sampling from the below ranges
+real_low, real_up: -6.9996611559, 72.7149149962
+im_low, im_up: -334.603979054, -535.693103958
+realSampled, imSampled: 34.542848363,-513.409273562
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-39.8540942712392', '97.7308569363682\n']
+Amps from param_init.cfg: D1-
+realAmp: -39.8540942712
+imAmp: 97.7308569364
+Sampling from the below ranges
+real_low, real_up: -57.8978659899, -21.8103225526
+im_low, im_up: 38.4115998555, 157.050114017
+realSampled, imSampled: -51.2791756318,148.084888165
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '-0.063504401221391', '0.00363894860636482\n']
+Amps from param_init.cfg: P1+
+realAmp: -0.0635044012214
+imAmp: 0.00363894860636
+Sampling from the below ranges
+real_low, real_up: -30.0444530809, 29.9174442784
+im_low, im_up: -29.997452736, 30.0047306332
+realSampled, imSampled: -0.0403582804467,-0.461804291591
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '-0.0215846312461145', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: -0.0215846312461
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -30.0151092419, 29.9719399794
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 14.8644525466,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_39-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 1
+num_lines: 7 should equal the total number of waves!
+Bin_39 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,45
+================   bin_45    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_45
+Copying bin_45-seed1.cfg from bin_45.cfg
+--------------------------------------------------
+sed -i s/bin_45/bin_45-seed1/g bin_45-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_45/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '297.782394814222', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 297.782394814
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 297.782394814, 297.782394814
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 297.782394814,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-74.0827464804812', '-96.5106459199208\n']
+Amps from param_init.cfg: P0-
+realAmp: -74.0827464805
+imAmp: -96.5106459199
+Sampling from the below ranges
+real_low, real_up: -74.0827464805, -74.0827464805
+im_low, im_up: -96.5106459199, -96.5106459199
+realSampled, imSampled: -74.0827464805,-96.5106459199
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '96.826662281562', '67.397675741348\n']
+Amps from param_init.cfg: P1-
+realAmp: 96.8266622816
+imAmp: 67.3976757413
+Sampling from the below ranges
+real_low, real_up: 96.8266622816, 96.8266622816
+im_low, im_up: 67.3976757413, 67.3976757413
+realSampled, imSampled: 96.8266622816,67.3976757413
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '90.029139570454', '544.22345399864\n']
+Amps from param_init.cfg: D0-
+realAmp: 90.0291395705
+imAmp: 544.223453999
+Sampling from the below ranges
+real_low, real_up: 90.0291395705, 90.0291395705
+im_low, im_up: 544.223453999, 544.223453999
+realSampled, imSampled: 90.0291395705,544.223453999
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-56.930598324834', '-64.0845763893268\n']
+Amps from param_init.cfg: D1-
+realAmp: -56.9305983248
+imAmp: -64.0845763893
+Sampling from the below ranges
+real_low, real_up: -56.9305983248, -56.9305983248
+im_low, im_up: -64.0845763893, -64.0845763893
+realSampled, imSampled: -56.9305983248,-64.0845763893
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '0.0607463726711745', '-0.0366125458997544\n']
+Amps from param_init.cfg: P1+
+realAmp: 0.0607463726712
+imAmp: -0.0366125458998
+Sampling from the below ranges
+real_low, real_up: 0.0607463726712, 0.0607463726712
+im_low, im_up: -0.0366125458998, -0.0366125458998
+realSampled, imSampled: 0.0607463726712,-0.0366125458998
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '0.0407157144140258', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 0.040715714414
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 0.040715714414, 0.040715714414
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 0.040715714414,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_45-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_45 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,51
+================   bin_51    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51
+Copying bin_51-seed1.cfg from bin_51.cfg
+--------------------------------------------------
+sed -i s/bin_51/bin_51-seed1/g bin_51-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '51.0587053632779', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 51.0587053633
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 51.0587053633, 51.0587053633
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 51.0587053633,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-115.751938350429', '12.5535052685201\n']
+Amps from param_init.cfg: P0-
+realAmp: -115.75193835
+imAmp: 12.5535052685
+Sampling from the below ranges
+real_low, real_up: -115.75193835, -115.75193835
+im_low, im_up: 12.5535052685, 12.5535052685
+realSampled, imSampled: -115.75193835,12.5535052685
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '155.985717089704', '27.9047738002218\n']
+Amps from param_init.cfg: P1-
+realAmp: 155.98571709
+imAmp: 27.9047738002
+Sampling from the below ranges
+real_low, real_up: 155.98571709, 155.98571709
+im_low, im_up: 27.9047738002, 27.9047738002
+realSampled, imSampled: 155.98571709,27.9047738002
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '295.264245878454', '-422.275649996365\n']
+Amps from param_init.cfg: D0-
+realAmp: 295.264245878
+imAmp: -422.275649996
+Sampling from the below ranges
+real_low, real_up: 295.264245878, 295.264245878
+im_low, im_up: -422.275649996, -422.275649996
+realSampled, imSampled: 295.264245878,-422.275649996
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-147.92149570343', '17.2986043794482\n']
+Amps from param_init.cfg: D1-
+realAmp: -147.921495703
+imAmp: 17.2986043794
+Sampling from the below ranges
+real_low, real_up: -147.921495703, -147.921495703
+im_low, im_up: 17.2986043794, 17.2986043794
+realSampled, imSampled: -147.921495703,17.2986043794
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '117.70151672769', '-10.0164668043498\n']
+Amps from param_init.cfg: P1+
+realAmp: 117.701516728
+imAmp: -10.0164668043
+Sampling from the below ranges
+real_low, real_up: 117.701516728, 117.701516728
+im_low, im_up: -10.0164668043, -10.0164668043
+realSampled, imSampled: 117.701516728,-10.0164668043
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '7.42301932880255', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 7.4230193288
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 7.4230193288, 7.4230193288
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 7.4230193288,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_51-seed1.cfg -s seed1-param_init.cfg
+seed1-param_init.cfg is somehow not made reason below:!
+The seed was not made because the fit did not converge!
+THIS IS ITERATION 0
+num_lines: 0 should equal the total number of waves!
+Bin_51 did not converge with this set of initialization!
+======================== NEXT ATTEMPT =========================
+=======================================================
+sed -i s/bin_51/bin_51-seed1/g bin_51-seed1.cfg
+using percentDeviation as: 0.3
+using baseDeviation as: 30
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '51.0587053632779', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 51.0587053633
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 5.74109375429, 96.3763169723
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 64.2269463936,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-115.751938350429', '12.5535052685201\n']
+Amps from param_init.cfg: P0-
+realAmp: -115.75193835
+imAmp: 12.5535052685
+Sampling from the below ranges
+real_low, real_up: -111.026356845, -120.477519856
+im_low, im_up: -21.212546312, 46.3195568491
+realSampled, imSampled: -115.394710287,7.25054171438
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '155.985717089704', '27.9047738002218\n']
+Amps from param_init.cfg: P1-
+realAmp: 155.98571709
+imAmp: 27.9047738002
+Sampling from the below ranges
+real_low, real_up: 79.1900019628, 232.781432217
+im_low, im_up: -10.4666583398, 66.2762059403
+realSampled, imSampled: 145.379933659,37.5489561142
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '295.264245878454', '-422.275649996365\n']
+Amps from param_init.cfg: D0-
+realAmp: 295.264245878
+imAmp: -422.275649996
+Sampling from the below ranges
+real_low, real_up: 176.684972115, 413.843519642
+im_low, im_up: -325.592954997, -518.958344995
+realSampled, imSampled: 285.110660127,-499.653218919
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-147.92149570343', '17.2986043794482\n']
+Amps from param_init.cfg: D1-
+realAmp: -147.921495703
+imAmp: 17.2986043794
+Sampling from the below ranges
+real_low, real_up: -133.545046992, -162.297944414
+im_low, im_up: -17.8909769344, 52.4881856933
+realSampled, imSampled: -158.596428873,19.1618615976
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '117.70151672769', '-10.0164668043498\n']
+Amps from param_init.cfg: P1+
+realAmp: 117.701516728
+imAmp: -10.0164668043
+Sampling from the below ranges
+real_low, real_up: 52.3910617094, 183.011971746
+im_low, im_up: -37.011526763, 16.9785931543
+realSampled, imSampled: 105.195720633,-11.6968564294
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '7.42301932880255', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 7.4230193288
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -24.8038864698, 39.6499251274
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 37.9203493364,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_51-seed1.cfg -s seed1-param_init.cfg
+seed1-param_init.cfg is somehow not made reason below:!
+The seed was not made because the fit did not converge!
+THIS IS ITERATION 1
+num_lines: 0 should equal the total number of waves!
+Bin_51 did not converge with this set of initialization!
+======================== NEXT ATTEMPT =========================
+=======================================================
+sed -i s/bin_51/bin_51-seed1/g bin_51-seed1.cfg
+using percentDeviation as: 0.3
+using baseDeviation as: 30
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '51.0587053632779', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 51.0587053633
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 5.74109375429, 96.3763169723
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 16.9340123312,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-115.751938350429', '12.5535052685201\n']
+Amps from param_init.cfg: P0-
+realAmp: -115.75193835
+imAmp: 12.5535052685
+Sampling from the below ranges
+real_low, real_up: -111.026356845, -120.477519856
+im_low, im_up: -21.212546312, 46.3195568491
+realSampled, imSampled: -119.129256809,32.1347569271
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '155.985717089704', '27.9047738002218\n']
+Amps from param_init.cfg: P1-
+realAmp: 155.98571709
+imAmp: 27.9047738002
+Sampling from the below ranges
+real_low, real_up: 79.1900019628, 232.781432217
+im_low, im_up: -10.4666583398, 66.2762059403
+realSampled, imSampled: 219.286721915,63.2088576832
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '295.264245878454', '-422.275649996365\n']
+Amps from param_init.cfg: D0-
+realAmp: 295.264245878
+imAmp: -422.275649996
+Sampling from the below ranges
+real_low, real_up: 176.684972115, 413.843519642
+im_low, im_up: -325.592954997, -518.958344995
+realSampled, imSampled: 235.678144636,-487.802988498
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-147.92149570343', '17.2986043794482\n']
+Amps from param_init.cfg: D1-
+realAmp: -147.921495703
+imAmp: 17.2986043794
+Sampling from the below ranges
+real_low, real_up: -133.545046992, -162.297944414
+im_low, im_up: -17.8909769344, 52.4881856933
+realSampled, imSampled: -153.559293753,31.4708084866
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '117.70151672769', '-10.0164668043498\n']
+Amps from param_init.cfg: P1+
+realAmp: 117.701516728
+imAmp: -10.0164668043
+Sampling from the below ranges
+real_low, real_up: 52.3910617094, 183.011971746
+im_low, im_up: -37.011526763, 16.9785931543
+realSampled, imSampled: 182.380635626,-15.5029922132
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '7.42301932880255', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 7.4230193288
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -24.8038864698, 39.6499251274
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 38.6515341676,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_51-seed1.cfg -s seed1-param_init.cfg
+seed1-param_init.cfg is somehow not made reason below:!
+The seed was not made because the fit did not converge!
+THIS IS ITERATION 2
+num_lines: 0 should equal the total number of waves!
+Bin_51 did not converge with this set of initialization!
+======================== NEXT ATTEMPT =========================
+=======================================================
+sed -i s/bin_51/bin_51-seed1/g bin_51-seed1.cfg
+using percentDeviation as: 0.3
+using baseDeviation as: 30
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_51/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '51.0587053632779', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 51.0587053633
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 5.74109375429, 96.3763169723
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 45.4016611476,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-115.751938350429', '12.5535052685201\n']
+Amps from param_init.cfg: P0-
+realAmp: -115.75193835
+imAmp: 12.5535052685
+Sampling from the below ranges
+real_low, real_up: -111.026356845, -120.477519856
+im_low, im_up: -21.212546312, 46.3195568491
+realSampled, imSampled: -117.032147287,5.64024510372
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '155.985717089704', '27.9047738002218\n']
+Amps from param_init.cfg: P1-
+realAmp: 155.98571709
+imAmp: 27.9047738002
+Sampling from the below ranges
+real_low, real_up: 79.1900019628, 232.781432217
+im_low, im_up: -10.4666583398, 66.2762059403
+realSampled, imSampled: 197.666689077,-7.93945102854
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '295.264245878454', '-422.275649996365\n']
+Amps from param_init.cfg: D0-
+realAmp: 295.264245878
+imAmp: -422.275649996
+Sampling from the below ranges
+real_low, real_up: 176.684972115, 413.843519642
+im_low, im_up: -325.592954997, -518.958344995
+realSampled, imSampled: 178.180345981,-383.954393403
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-147.92149570343', '17.2986043794482\n']
+Amps from param_init.cfg: D1-
+realAmp: -147.921495703
+imAmp: 17.2986043794
+Sampling from the below ranges
+real_low, real_up: -133.545046992, -162.297944414
+im_low, im_up: -17.8909769344, 52.4881856933
+realSampled, imSampled: -137.563285896,23.2040756715
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '117.70151672769', '-10.0164668043498\n']
+Amps from param_init.cfg: P1+
+realAmp: 117.701516728
+imAmp: -10.0164668043
+Sampling from the below ranges
+real_low, real_up: 52.3910617094, 183.011971746
+im_low, im_up: -37.011526763, 16.9785931543
+realSampled, imSampled: 139.962363045,-29.7884510642
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '7.42301932880255', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 7.4230193288
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: -24.8038864698, 39.6499251274
+im_low, im_up: -30.0, 30.0
+realSampled, imSampled: 33.4309719391,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_51-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 3
+num_lines: 7 should equal the total number of waves!
+Bin_51 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Running on seed,seedNum,binNum=812053609,1,57
+================   bin_57    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_57
+Copying bin_57-seed1.cfg from bin_57.cfg
+--------------------------------------------------
+sed -i s/bin_57/bin_57-seed1/g bin_57-seed1.cfg
+We will use the converged values instead of randomly sampling around them!
+Opening: /d/grid15/ln16/pi0eta/092419/amptools/analysis/divideRoot/bin_57/param_init.cfg
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::S0-', 'cartesian', '79.8019249607716', '0', 'real\n']
+Amps from param_init.cfg: S0-
+realAmp: 79.8019249608
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 79.8019249608, 79.8019249608
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 79.8019249608,0.0
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P0-', 'cartesian', '-12.1936191967429', '60.5972610788173\n']
+Amps from param_init.cfg: P0-
+realAmp: -12.1936191967
+imAmp: 60.5972610788
+Sampling from the below ranges
+real_low, real_up: -12.1936191967, -12.1936191967
+im_low, im_up: 60.5972610788, 60.5972610788
+realSampled, imSampled: -12.1936191967,60.5972610788
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::P1-', 'cartesian', '39.110261066723', '-19.6553747155449\n']
+Amps from param_init.cfg: P1-
+realAmp: 39.1102610667
+imAmp: -19.6553747155
+Sampling from the below ranges
+real_low, real_up: 39.1102610667, 39.1102610667
+im_low, im_up: -19.6553747155, -19.6553747155
+realSampled, imSampled: 39.1102610667,-19.6553747155
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D0-', 'cartesian', '-33.8675766828978', '-318.881711777883\n']
+Amps from param_init.cfg: D0-
+realAmp: -33.8675766829
+imAmp: -318.881711778
+Sampling from the below ranges
+real_low, real_up: -33.8675766829, -33.8675766829
+im_low, im_up: -318.881711778, -318.881711778
+realSampled, imSampled: -33.8675766829,-318.881711778
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Negative::D1-', 'cartesian', '-60.2641161202313', '35.0361222899117\n']
+Amps from param_init.cfg: D1-
+realAmp: -60.2641161202
+imAmp: 35.0361222899
+Sampling from the below ranges
+real_low, real_up: -60.2641161202, -60.2641161202
+im_low, im_up: 35.0361222899, 35.0361222899
+realSampled, imSampled: -60.2641161202,35.0361222899
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::P1+', 'cartesian', '29.578287393583', '0.0617304698306757\n']
+Amps from param_init.cfg: P1+
+realAmp: 29.5782873936
+imAmp: 0.0617304698307
+Sampling from the below ranges
+real_low, real_up: 29.5782873936, 29.5782873936
+im_low, im_up: 0.0617304698307, 0.0617304698307
+realSampled, imSampled: 29.5782873936,0.0617304698307
+----------------------------
+Below is paramLists, check if below values match:
+['initialize', 'EtaPi::Positive::D1+', 'cartesian', '17.8936269323008', '0', 'real\n']
+Amps from param_init.cfg: D1+
+realAmp: 17.8936269323
+imAmp: 0.0
+Sampling from the below ranges
+real_low, real_up: 17.8936269323, 17.8936269323
+im_low, im_up: 0.0, 0.0
+realSampled, imSampled: 17.8936269323,0.0
+----------------------------
+length of realAmps, imAmps, isreal is good!
+fit -c bin_57-seed1.cfg -s seed1-param_init.cfg
+THIS IS ITERATION 0
+num_lines: 7 should equal the total number of waves!
+Bin_57 converged with this set of initialization!
+
+
+**********************************************************************
+***************************** NEXT SEED *********************************
+
+Execution time in seconds: 48.6628520489

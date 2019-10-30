@@ -5,9 +5,9 @@ use Cwd;
 $lowMass = 0.7; #is a shared lower cutoff for all 3 datas.
 $highMass = 2; #2 is the upper cutoff of the thrown data and 3ish is the upper cutoff for the reco/data
 #$nBins = 65; # not sure why old me chose 65 bins... that is alot of bins and we might not have enough statistics
-$nBins=60; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
+$nBins=65; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
 
-$fitName = "divideRoot";
+$fitName = "EtaPi_fit";
 $nameAffix = "tLT1";
 
 # put a limit on the number of data events to process
@@ -60,7 +60,7 @@ print "splitted data!\n";
 $accMCTag = pop @accMCParts;
 $accMCTag =~ s/\.root//;
 print "datatag: $accMCTag\n";
-system( "split_mass $accMCFile $accMCTag $lowMass $highMass $nBins -T $nameAffix:kin" );
+system( "split_mass $accMCFile $accMCTag $lowMass $highMass $nBins -T Thrown_Tree:kin" );
 print "splitted data!\n"; 
 
 @genMCParts = split /\//, $genMCFile;

@@ -127,7 +127,7 @@ for binNum in binsArray:
 			###############################################################################################################
 			# VERY IMPORT STEP TO GET SAVE THE .FIT FILE SO THAT PROEJCT MOMENTS CAN USE THE ONE THAT IS NOT BOOTSTRAPPPED
 			print("renaming bin_"+str(binNum)+".fit to bin_"+str(binNum)+"-full.fit")
-			os.rename("bin_"+str(binNum)+".fit","bin_"+str(binNum)+"-full.fit")
+			#os.rename("bin_"+str(binNum)+".fit","bin_"+str(binNum)+"-full.fit")
 			###############################################################################################################
 			break
 		if (num_lines==0 and j==maxIter-1):

@@ -115,6 +115,8 @@ public :
 
    /// ****************** MAKE SURE THEY TYPES MATCH!!!!!!! CHECK THE TYPE BY LOOKING AT THE FLAT TREE USING PRINT()
    Double_t        AccWeight;
+   Double_t        weightASBS;
+   Float_t         float_weightASBS;
    Double_t        mandelstam_tp;
 
    // List of branches
@@ -208,6 +210,7 @@ public :
    TBranch        *b_g4_bcal_delz;   //!
    TBranch        *b_g4_fcal_doca;   //!
    TBranch        *b_AccWeight;   //!
+   TBranch        *b_weightASBS;
    TBranch        *b_mandelstam_tp;   //!
 
    split_selected_in_t(TTree *tree=0);
@@ -244,7 +247,6 @@ public :
    float m_pyBeam;
    float m_pzBeam;
    /// ****************** MAKE SURE THEY TYPES MATCH!!!!!!! CHECK THE TYPE BY LOOKING AT THE FLAT TREE USING PRINT()
-   Float_t m_weight;
    float m_TargetMass;
    float m_tp;
    static size_t locNumFinalStateParticles;
@@ -259,12 +261,12 @@ split_selected_in_t::split_selected_in_t(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("tag_treeFlat_DSelector_pi0eta.root");
-      cout << "File input: tag_treeFlat_DSelector_pi0eta.root" << endl;
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("tag_a0a2treeFlat_DSelector_pi0eta.root");
+      cout << "File input: tag_a0a2treeFlat_DSelector_pi0eta.root" << endl;
       if (!f || !f->IsOpen()) {
-         f = new TFile("tag_treeFlat_DSelector_pi0eta.root");
+         f = new TFile("tag_a0a2treeFlat_DSelector_pi0eta.root");
       }
-      f->GetObject("tag_tree_tag",tree);
+      f->GetObject("pi0eta_a0a2tree_flat",tree);
 
    }
    Init(tree);
@@ -428,6 +430,7 @@ void split_selected_in_t::Init(TTree *tree)
    fChain->SetBranchAddress("g4_bcal_delz", &g4_bcal_delz, &b_g4_bcal_delz);
    fChain->SetBranchAddress("g4_fcal_doca", &g4_fcal_doca, &b_g4_fcal_doca);
    fChain->SetBranchAddress("AccWeight", &AccWeight, &b_AccWeight);
+   fChain->SetBranchAddress("weightASBS", &weightASBS, &b_weightASBS);
    fChain->SetBranchAddress("mandelstam_tp", &mandelstam_tp, &b_mandelstam_tp);
    Notify();
 }

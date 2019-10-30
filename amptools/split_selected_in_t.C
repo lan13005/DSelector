@@ -149,7 +149,7 @@ void split_selected_in_t::Loop()
    m_OutTree_tLT1->SetBranchAddress("Px_Beam", &m_pxBeam);
    m_OutTree_tLT1->SetBranchAddress("Py_Beam", &m_pyBeam);
    m_OutTree_tLT1->SetBranchAddress("Pz_Beam", &m_pzBeam);
-   m_OutTree_tLT1->SetBranchAddress("Weight", &m_weight);
+   m_OutTree_tLT1->SetBranchAddress("Weight", &float_weightASBS);
 // =============================== 
    m_OutTree_tLT06->SetBranchAddress("NumFinalState", &m_nPart);
    m_OutTree_tLT06->SetBranchAddress("Target_Mass", &m_TargetMass);
@@ -162,7 +162,7 @@ void split_selected_in_t::Loop()
    m_OutTree_tLT06->SetBranchAddress("Px_Beam", &m_pxBeam);
    m_OutTree_tLT06->SetBranchAddress("Py_Beam", &m_pyBeam);
    m_OutTree_tLT06->SetBranchAddress("Pz_Beam", &m_pzBeam);
-   m_OutTree_tLT06->SetBranchAddress("Weight", &m_weight);
+   m_OutTree_tLT06->SetBranchAddress("Weight", &float_weightASBS);
 // =============================== 
    m_OutTree_tGT05LT1->SetBranchAddress("NumFinalState", &m_nPart);
    m_OutTree_tGT05LT1->SetBranchAddress("Target_Mass", &m_TargetMass);
@@ -175,7 +175,7 @@ void split_selected_in_t::Loop()
    m_OutTree_tGT05LT1->SetBranchAddress("Px_Beam", &m_pxBeam);
    m_OutTree_tGT05LT1->SetBranchAddress("Py_Beam", &m_pyBeam);
    m_OutTree_tGT05LT1->SetBranchAddress("Pz_Beam", &m_pzBeam);
-   m_OutTree_tGT05LT1->SetBranchAddress("Weight", &m_weight);
+   m_OutTree_tGT05LT1->SetBranchAddress("Weight", &float_weightASBS);
 
 
    diagnostic->SetBranchAddress("mandelstam_tp", &mandelstam_tp);
@@ -220,16 +220,18 @@ void split_selected_in_t::Loop()
       m_pxBeam = beam_p4_kin->Px();
       m_pyBeam = beam_p4_kin->Py();
       m_pzBeam = beam_p4_kin->Pz();
-      m_weight = AccWeight;
       m_tp = mandelstam_tp;
 
       Double_t resonanceMass = resonance.M();
       Double_t psuedoScalarMass_1 = psuedoScalar_1.M();
       Double_t psuedoScalarMass_2 = psuedoScalar_2.M();
 
-      res_mass->Fill(resonanceMass,AccWeight);
-      psuedoScalar1_mass->Fill(psuedoScalarMass_1,AccWeight);
-      psuedoScalar2_mass->Fill(psuedoScalarMass_2,AccWeight);
+      float_weightASBS = (Float_t)weightASBS;
+	float_weightASBS = 1;
+
+      res_mass->Fill(resonanceMass,float_weightASBS);
+      psuedoScalar1_mass->Fill(psuedoScalarMass_1,float_weightASBS);
+      psuedoScalar2_mass->Fill(psuedoScalarMass_2,float_weightASBS);
 
 	TLorentzVector dTargetP4 = TLorentzVector(TVector3(), m_TargetMass);
 	TLorentzVector cm_vec = *beam_p4_kin+dTargetP4;
@@ -250,37 +252,37 @@ void split_selected_in_t::Loop()
 	TVector3 angles_eta;
 	angles_eta.SetXYZ ( eta_res_unit.Dot(x), eta_res_unit.Dot(y), eta_res_unit.Dot(z) );
 	Double_t cosTheta_eta_GJ = angles_eta.CosTheta();
-	cosThetaVsResMass->Fill(resonanceMass, cosTheta_eta_GJ, AccWeight);
+	cosThetaVsResMass->Fill(resonanceMass, cosTheta_eta_GJ, float_weightASBS);
 
-      if(AccWeight!=1){ cout << "accweight != 1";} 
-      tp_tot->Fill(m_tp,AccWeight);
+      //if(float_weightASBS!=1){ cout << "accdouble_weightASBS != 1";} 
+      tp_tot->Fill(m_tp,float_weightASBS);
       // Here we check what region of tp are we considering so we can od the amp analysis correctly split up
       if ((m_tp>0.5) && (m_tp<1)){
 	n_GT05LT1++;
       	m_OutTree_tGT05LT1->Fill();
-	tp_reg3->Fill(m_tp,AccWeight);
-        res_mass_t[2]->Fill(resonanceMass, AccWeight);
-        cosThetaVsResMass_t[2]->Fill(resonanceMass, cosTheta_eta_GJ, AccWeight);
-        psuedoScalar1_mass_t[2]->Fill(psuedoScalarMass_1, AccWeight);
-        psuedoScalar2_mass_t[2]->Fill(psuedoScalarMass_2, AccWeight);
+	tp_reg3->Fill(m_tp,float_weightASBS);
+        res_mass_t[2]->Fill(resonanceMass, float_weightASBS);
+        cosThetaVsResMass_t[2]->Fill(resonanceMass, cosTheta_eta_GJ, float_weightASBS);
+        psuedoScalar1_mass_t[2]->Fill(psuedoScalarMass_1, float_weightASBS);
+        psuedoScalar2_mass_t[2]->Fill(psuedoScalarMass_2, float_weightASBS);
       }
       if (m_tp<1){
 	n_LT1++;
       	m_OutTree_tLT1->Fill();
-	tp_reg1->Fill(m_tp,AccWeight);
-        res_mass_t[0]->Fill(resonanceMass, AccWeight);
-        cosThetaVsResMass_t[0]->Fill(resonanceMass, cosTheta_eta_GJ, AccWeight);
-        psuedoScalar1_mass_t[0]->Fill(psuedoScalarMass_1, AccWeight);
-        psuedoScalar2_mass_t[0]->Fill(psuedoScalarMass_2, AccWeight);
+	tp_reg1->Fill(m_tp,float_weightASBS);
+        res_mass_t[0]->Fill(resonanceMass, float_weightASBS);
+        cosThetaVsResMass_t[0]->Fill(resonanceMass, cosTheta_eta_GJ, float_weightASBS);
+        psuedoScalar1_mass_t[0]->Fill(psuedoScalarMass_1, float_weightASBS);
+        psuedoScalar2_mass_t[0]->Fill(psuedoScalarMass_2, float_weightASBS);
       }
       if (m_tp<0.6){
 	n_LT06++;
       	m_OutTree_tLT06->Fill();
-	tp_reg2->Fill(m_tp,AccWeight);
-        res_mass_t[1]->Fill(resonanceMass, AccWeight);
-        cosThetaVsResMass_t[1]->Fill(resonanceMass, cosTheta_eta_GJ, AccWeight);
-        psuedoScalar1_mass_t[1]->Fill(psuedoScalarMass_1, AccWeight);
-        psuedoScalar2_mass_t[1]->Fill(psuedoScalarMass_2, AccWeight);
+	tp_reg2->Fill(m_tp,float_weightASBS);
+        res_mass_t[1]->Fill(resonanceMass, float_weightASBS);
+        cosThetaVsResMass_t[1]->Fill(resonanceMass, cosTheta_eta_GJ, float_weightASBS);
+        psuedoScalar1_mass_t[1]->Fill(psuedoScalarMass_1, float_weightASBS);
+        psuedoScalar2_mass_t[1]->Fill(psuedoScalarMass_2, float_weightASBS);
       }
    }
    // write out tree

@@ -1,0 +1,257 @@
+realSpace_low: [100, 10, -10, 100, -10, 20, 20]
+realSpace_up: [500, 70, 50, 350, 30, 60, 100]
+imSpace_low: [0, 0, 0, -50, -20, -30, 0]
+imSpace_up: [0, 80, 80, 100, 30, -10, 0]
+fitName: EtaPi_fit
+seedFile: param_init.cfg
+maxIter: 50
+ampNames: ['S0-', 'P0-', 'P1-', 'D0-', 'D1-', 'P1+', 'D1+']
+
+
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis
+fit directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit
+================   bin_2    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_2
+----------------------------------------------------------
+fit -c bin_2.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 475.959261074 0.0 real
+initialize EtaPi::Negative::P0- cartesian 11.3138466612 1.41852165094
+initialize EtaPi::Negative::P1- cartesian 38.6631038602 32.4473284698
+initialize EtaPi::Negative::D0- cartesian 332.612334231 -36.3097972354
+initialize EtaPi::Negative::D1- cartesian 11.2628154269 1.37017686928
+initialize EtaPi::Positive::P1+ cartesian 27.8830247807 -27.8478228539
+initialize EtaPi::Positive::D1+ cartesian 72.6294430852 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_2 converged with this set of initialization!
+renaming bin_2.fit to bin_2-full.fit
+================   bin_7    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_7
+----------------------------------------------------------
+fit -c bin_7.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 326.255432767 0.0 real
+initialize EtaPi::Negative::P0- cartesian 57.8639431519 42.4949828484
+initialize EtaPi::Negative::P1- cartesian -4.92862396069 53.8056869546
+initialize EtaPi::Negative::D0- cartesian 340.607595858 86.8325265298
+initialize EtaPi::Negative::D1- cartesian 15.309336031 25.1590078474
+initialize EtaPi::Positive::P1+ cartesian 38.5445035437 -10.2858407492
+initialize EtaPi::Positive::D1+ cartesian 57.0950102848 0.0 real
+num_lines: 0 should equal the total number of waves!
+----------------------------------------------------------
+fit -c bin_7.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=1
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 481.846999823 0.0 real
+initialize EtaPi::Negative::P0- cartesian 68.1987764779 59.244314087
+initialize EtaPi::Negative::P1- cartesian 34.7996040916 55.6207893282
+initialize EtaPi::Negative::D0- cartesian 296.362538315 84.1646381852
+initialize EtaPi::Negative::D1- cartesian 4.10228730121 20.4703931933
+initialize EtaPi::Positive::P1+ cartesian 27.335698913 -20.4155284521
+initialize EtaPi::Positive::D1+ cartesian 30.3545439302 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_7 converged with this set of initialization!
+renaming bin_7.fit to bin_7-full.fit
+================   bin_12    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_12
+----------------------------------------------------------
+fit -c bin_12.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 332.005867943 0.0 real
+initialize EtaPi::Negative::P0- cartesian 56.6343449069 21.3165258507
+initialize EtaPi::Negative::P1- cartesian 11.5324364428 40.2885940756
+initialize EtaPi::Negative::D0- cartesian 139.64526549 84.4478099176
+initialize EtaPi::Negative::D1- cartesian -4.41399613354 -8.84659870106
+initialize EtaPi::Positive::P1+ cartesian 34.7400547818 -29.8472566981
+initialize EtaPi::Positive::D1+ cartesian 64.2937027116 0.0 real
+num_lines: 0 should equal the total number of waves!
+----------------------------------------------------------
+fit -c bin_12.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=1
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 197.3040276 0.0 real
+initialize EtaPi::Negative::P0- cartesian 68.7477362436 23.8635467077
+initialize EtaPi::Negative::P1- cartesian 31.5314788468 48.4359702652
+initialize EtaPi::Negative::D0- cartesian 293.965935245 -48.6106852683
+initialize EtaPi::Negative::D1- cartesian 9.5987434738 -15.7771518338
+initialize EtaPi::Positive::P1+ cartesian 56.3877673089 -16.1402728111
+initialize EtaPi::Positive::D1+ cartesian 53.3552218588 0.0 real
+num_lines: 0 should equal the total number of waves!
+----------------------------------------------------------
+fit -c bin_12.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=2
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 170.877244595 0.0 real
+initialize EtaPi::Negative::P0- cartesian 31.3541817149 42.9193658164
+initialize EtaPi::Negative::P1- cartesian 4.59271620706 9.32354316731
+initialize EtaPi::Negative::D0- cartesian 206.262776496 53.6664236135
+initialize EtaPi::Negative::D1- cartesian 24.4082248369 -19.1080890601
+initialize EtaPi::Positive::P1+ cartesian 30.5466688097 -12.1704139594
+initialize EtaPi::Positive::D1+ cartesian 86.4420992254 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_12 converged with this set of initialization!
+renaming bin_12.fit to bin_12-full.fit
+================   bin_17    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_17
+----------------------------------------------------------
+fit -c bin_17.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 332.017753919 0.0 real
+initialize EtaPi::Negative::P0- cartesian 23.5802366067 46.6738907513
+initialize EtaPi::Negative::P1- cartesian -0.895760044583 15.9601326378
+initialize EtaPi::Negative::D0- cartesian 197.887253732 40.2212468624
+initialize EtaPi::Negative::D1- cartesian 14.6135331153 -7.62232453984
+initialize EtaPi::Positive::P1+ cartesian 51.5863855162 -26.4930693401
+initialize EtaPi::Positive::D1+ cartesian 32.0651990494 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_17 converged with this set of initialization!
+renaming bin_17.fit to bin_17-full.fit
+================   bin_22    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_22
+----------------------------------------------------------
+fit -c bin_22.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 124.536323492 0.0 real
+initialize EtaPi::Negative::P0- cartesian 32.85056666 18.2628264985
+initialize EtaPi::Negative::P1- cartesian 27.0518365117 50.6159116262
+initialize EtaPi::Negative::D0- cartesian 227.966846089 35.585016363
+initialize EtaPi::Negative::D1- cartesian 25.6999244227 -13.2998163459
+initialize EtaPi::Positive::P1+ cartesian 25.6186304946 -27.7080897438
+initialize EtaPi::Positive::D1+ cartesian 31.7060034254 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_22 converged with this set of initialization!
+renaming bin_22.fit to bin_22-full.fit
+================   bin_27    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_27
+----------------------------------------------------------
+fit -c bin_27.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 277.279267225 0.0 real
+initialize EtaPi::Negative::P0- cartesian 16.5097874768 34.7813789472
+initialize EtaPi::Negative::P1- cartesian 24.074328196 62.3837124136
+initialize EtaPi::Negative::D0- cartesian 266.51186555 85.0404563054
+initialize EtaPi::Negative::D1- cartesian -1.43421455783 9.73365265304
+initialize EtaPi::Positive::P1+ cartesian 49.8967383194 -20.0457308924
+initialize EtaPi::Positive::D1+ cartesian 71.9421389061 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_27 converged with this set of initialization!
+renaming bin_27.fit to bin_27-full.fit
+================   bin_32    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_32
+----------------------------------------------------------
+fit -c bin_32.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 421.341169149 0.0 real
+initialize EtaPi::Negative::P0- cartesian 23.9348872345 46.0958796279
+initialize EtaPi::Negative::P1- cartesian 12.9667584915 12.9510270866
+initialize EtaPi::Negative::D0- cartesian 304.619563908 52.9622219758
+initialize EtaPi::Negative::D1- cartesian 24.6850053524 23.6442234638
+initialize EtaPi::Positive::P1+ cartesian 45.4894836364 -11.2874741889
+initialize EtaPi::Positive::D1+ cartesian 75.9044060861 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_32 converged with this set of initialization!
+renaming bin_32.fit to bin_32-full.fit
+================   bin_37    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_37
+----------------------------------------------------------
+fit -c bin_37.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 407.938932003 0.0 real
+initialize EtaPi::Negative::P0- cartesian 37.7305556076 43.8665066773
+initialize EtaPi::Negative::P1- cartesian 13.6880776969 6.12985197171
+initialize EtaPi::Negative::D0- cartesian 140.060934477 14.7320979271
+initialize EtaPi::Negative::D1- cartesian 0.2432478703 -13.3963387795
+initialize EtaPi::Positive::P1+ cartesian 56.3724151096 -23.9248832202
+initialize EtaPi::Positive::D1+ cartesian 77.2194193314 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_37 converged with this set of initialization!
+renaming bin_37.fit to bin_37-full.fit
+================   bin_42    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_42
+----------------------------------------------------------
+fit -c bin_42.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 101.047080907 0.0 real
+initialize EtaPi::Negative::P0- cartesian 27.8605683696 1.70789543764
+initialize EtaPi::Negative::P1- cartesian -7.70543056329 16.7392886924
+initialize EtaPi::Negative::D0- cartesian 239.458040567 -8.71960559238
+initialize EtaPi::Negative::D1- cartesian 4.6475658605 -6.25024011514
+initialize EtaPi::Positive::P1+ cartesian 55.3980121022 -13.0133996023
+initialize EtaPi::Positive::D1+ cartesian 72.4099722466 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_42 converged with this set of initialization!
+renaming bin_42.fit to bin_42-full.fit
+================   bin_47    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_47
+----------------------------------------------------------
+fit -c bin_47.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 368.200818058 0.0 real
+initialize EtaPi::Negative::P0- cartesian 66.4424288921 74.0921576402
+initialize EtaPi::Negative::P1- cartesian 34.0306750253 36.1192287186
+initialize EtaPi::Negative::D0- cartesian 252.524493888 89.6396760396
+initialize EtaPi::Negative::D1- cartesian 0.134328094956 25.414980098
+initialize EtaPi::Positive::P1+ cartesian 24.2232101874 -12.1764337155
+initialize EtaPi::Positive::D1+ cartesian 25.2975284149 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_47 converged with this set of initialization!
+renaming bin_47.fit to bin_47-full.fit
+================   bin_52    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_52
+----------------------------------------------------------
+fit -c bin_52.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 219.300714057 0.0 real
+initialize EtaPi::Negative::P0- cartesian 38.1143246962 34.2805987668
+initialize EtaPi::Negative::P1- cartesian 31.7717736199 31.4255812461
+initialize EtaPi::Negative::D0- cartesian 139.606697943 -10.1004668567
+initialize EtaPi::Negative::D1- cartesian 24.9804969566 -5.33292936182
+initialize EtaPi::Positive::P1+ cartesian 55.0436183155 -12.1450884231
+initialize EtaPi::Positive::D1+ cartesian 86.2155783133 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_52 converged with this set of initialization!
+renaming bin_52.fit to bin_52-full.fit
+================   bin_57    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_57
+----------------------------------------------------------
+fit -c bin_57.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 264.863350676 0.0 real
+initialize EtaPi::Negative::P0- cartesian 21.1480235748 13.9788865149
+initialize EtaPi::Negative::P1- cartesian -1.27818450089 61.9054254825
+initialize EtaPi::Negative::D0- cartesian 161.587637708 92.8174403709
+initialize EtaPi::Negative::D1- cartesian 4.94548412238 8.32596114101
+initialize EtaPi::Positive::P1+ cartesian 57.3363846808 -16.5059959379
+initialize EtaPi::Positive::D1+ cartesian 94.8797584514 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_57 converged with this set of initialization!
+renaming bin_57.fit to bin_57-full.fit
+================   bin_62    =================
+current working directory: /d/grid15/ln16/pi0eta/092419/amptools/analysis/EtaPi_fit/bin_62
+----------------------------------------------------------
+fit -c bin_62.cfg -s param_init.cfg
+Trying with seed=673911 at iteration=0
+##  initialize    <reaction> <sum> <amp> <"events"/"polar"/"cartesian">
+initialize EtaPi::Negative::S0- cartesian 143.185687973 0.0 real
+initialize EtaPi::Negative::P0- cartesian 48.8170460279 9.40191812035
+initialize EtaPi::Negative::P1- cartesian 25.2112852248 31.2858827595
+initialize EtaPi::Negative::D0- cartesian 192.138006159 6.2312074962
+initialize EtaPi::Negative::D1- cartesian 9.09946992323 3.78409623186
+initialize EtaPi::Positive::P1+ cartesian 21.7995783433 -24.2769552889
+initialize EtaPi::Positive::D1+ cartesian 50.8820770112 0.0 real
+num_lines: 7 should equal the total number of waves!
+Bin_62 converged with this set of initialization!
+renaming bin_62.fit to bin_62-full.fit
+Execution time in seconds: 37.920855999

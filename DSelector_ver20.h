@@ -17,6 +17,33 @@
 
 bool is_pi0eta=true;
 
+void withinBox(bool inBox[], bool additionalCut, double x, double y, double xmin, double xmax, double ymin, double ymax, double xskip, double yskip){
+	// regions are:
+	//  0 1 2
+	//  3 4 5 
+	//  6 7 8
+	//  where xmin, xmax, ymin,ymax all belong to region 5
+	//  the 10th element is the interesection of the negation of all regions 
+	//  11th element is 1345 and 12th element is 0268
+	double xlength = xmax-xmin;
+	double ylength = ymax-ymin;
+	inBox[4] = x<xmax && x>xmin && y<ymax && y>ymin;
+	inBox[3] = x<(xmin-xskip) && x>(xmin-xskip-xlength) && y<ymax && y>ymin;
+	inBox[5] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y<ymax && y>ymin;
+	inBox[1] = x<xmax && x>xmin && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+	inBox[7] = x<xmax && x>xmin && y>(ymin-yskip-ylength) && y<(ymin-yskip);
+	inBox[0] = x<(xmin-xskip) && x>(xmin-xskip-xlength) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+	inBox[2] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xlength) &&  y>(ymin-yskip-ylength) && y<(ymin-yskip);
+	inBox[8] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y>(ymin-yskip-ylength) && y<(ymin-yskip);
+	inBox[9] = !inBox[0] * !inBox[1] * !inBox[2] * !inBox[3] * !inBox[4] * !inBox[5] * !inBox[6] * !inBox[7] * !inBox[8];	
+	inBox[10] = inBox[1]*inBox[3]*inBox[5]*inBox[7];
+	inBox[11] = inBox[0]*inBox[2]*inBox[6]*inBox[8];
+	for (int i=0; i<12; ++i){
+		inBox[i]*=additionalCut;
+	}
+}
+
 struct histDef_1D{
     TH1F* hist;
     string name;
@@ -333,6 +360,7 @@ class DSelector_ver20 : public DSelector
 		double locEtaProton_Kin=1;
 		double locPi0Proton_Kin=1;
 		double locPi0Eta_Kin=1;
+		double locPi0Eta=1;
 
 		double locEtaMass=1;
 		double locPi0Mass=1;
@@ -429,10 +457,12 @@ class DSelector_ver20 : public DSelector
 		double phi_eta_hel=1;
 		double theta_eta_GJ=1;
 		double phi_eta_GJ=1;
+		double phi_eta_GJ_meas=1;
 		double cosTheta_pi0eta_hel=1;
 		double phi_pi0eta_hel=1;
 		double cosTheta_pi0_GJ=1;
 		double cosTheta_eta_GJ=1;
+		double cosTheta_eta_GJ_meas=1;
 		double phi_pi0eta_GJ=1;
 
 		double vanHove_x;
@@ -454,6 +484,7 @@ class DSelector_ver20 : public DSelector
 		std::vector<double> countCone = {0,1,2,3,4};
 		// calculating the cosTheta of pi0eta system, pi0, eta  in the CM framei
 		double cosTheta_pi0eta_CM=1;
+		double cosTheta_pi0eta_CM_meas=1;
 		double cosTheta_pi0_CM=1;
 		double cosTheta_eta_CM=1;
 		double phi_pi0eta_CM=1;
@@ -520,6 +551,7 @@ class DSelector_ver20 : public DSelector
 		double ellipseX; double ellipseY; double ellipseXr; double ellipseYr; 
     		double ellipseXBS1; double ellipseYBS1; double ellipseXrBS1; double ellipseYrBS1;
     		double ellipseXBS2; double ellipseYBS2; double ellipseXrBS2; double ellipseYrBS2;
+		double skipX, skipY;
 		double ellipseXr_loose, ellipseYr_loose;
 		double weightBS=1;
 		double weightB=1;
@@ -545,6 +577,8 @@ class DSelector_ver20 : public DSelector
 		bool p_tMassBinned[numBinsMass_t]; 
 		double iLowMass_t;
 		double iUpMass_t;
+
+		bool p_massTBinned[10];
 
 		static const int numRegions_UE=10;
 		static const int numRegions_ChiSq=10;
@@ -593,6 +627,9 @@ class DSelector_ver20 : public DSelector
 		bool pinsideEllipseBS1=true;
 		bool outsideEllipseBS2=true;
 		bool pinsideEllipseBS2=true;
+		
+		bool  inBox[12]={0,0,0,0,0,0,0,0,0,0,0,0};
+
 		bool pYellowBKG=true;
 		bool pdij3pass=true;
 		bool pPhoton1E=true;
@@ -689,6 +726,7 @@ class DSelector_ver20 : public DSelector
 		// mEllipseRY contains both the red and yellow regions only.
 		bool mEllipse = true;
 		bool mEllipse_pre = true;
+		bool mEllipse_pre_tAll = true;
 		bool mEllipseUE = true;
 		bool mEllipseUE_pre = true;
 		bool mEllipseUEChiSq = true;
@@ -696,7 +734,8 @@ class DSelector_ver20 : public DSelector
 		bool mEllipseChiSq = true;
 		bool mEllipseChiSq_pre = true;
 		bool pMPi0P14=true;
-		bool mMPi0P14=true;
+		bool mMPi0P14_ellipse=true;
+		bool baseCuts=true;
                 bool noCut=true;
 
                 bool dzRP=true;
