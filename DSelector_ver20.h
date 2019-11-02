@@ -17,7 +17,7 @@
 
 bool is_pi0eta=true;
 
-void withinBox(bool inBox[], bool additionalCut, double x, double y, double xmin, double xmax, double ymin, double ymax, double xskip, double yskip){
+void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double x, double y, double xmin, double xmax, double ymin, double ymax, double xskip, double yskip){
 	// regions are:
 	//  0 1 2
 	//  3 4 5 
@@ -37,9 +37,12 @@ void withinBox(bool inBox[], bool additionalCut, double x, double y, double xmin
 	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xlength) &&  y>(ymin-yskip-ylength) && y<(ymin-yskip);
 	inBox[8] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y>(ymin-yskip-ylength) && y<(ymin-yskip);
 	inBox[9] = !inBox[0] * !inBox[1] * !inBox[2] * !inBox[3] * !inBox[4] * !inBox[5] * !inBox[6] * !inBox[7] * !inBox[8];	
-	inBox[10] = inBox[1]*inBox[3]*inBox[5]*inBox[7];
-	inBox[11] = inBox[0]*inBox[2]*inBox[6]*inBox[8];
-	for (int i=0; i<12; ++i){
+	inBox[10] = inBox[0] || inBox[2] || inBox[6] || inBox[8];
+	inBox[11] = inBox[1] || inBox[7];
+       	inBox[12] = inBox[3] || inBox[5];
+
+	for (int i=0; i<13; ++i){
+		inBox_noOtherCuts[i] = inBox[i]; // save the inBox bools before modifiying them by the cut. We will use these for defining the weightBS
 		inBox[i]*=additionalCut;
 	}
 }
@@ -433,6 +436,8 @@ class DSelector_ver20 : public DSelector
 		double locDecayPlaneTheta=1;
 		double locPhi=1;
 		// Calculating kinematic variables like t and cosTheta
+		double mandelstam_teta=1;
+		double mandelstam_teta_Kin=1;
 		double mandelstam_tp=1;
 		double mandelstam_tp_pe=1;
 		double mandelstam_t=1;
@@ -628,7 +633,8 @@ class DSelector_ver20 : public DSelector
 		bool outsideEllipseBS2=true;
 		bool pinsideEllipseBS2=true;
 		
-		bool  inBox[12]={0,0,0,0,0,0,0,0,0,0,0,0};
+		bool inBox[13]={0,0,0,0,0,0,0,0,0,0,0,0,0};
+		bool inBox_noOtherCuts[13]={0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 		bool pYellowBKG=true;
 		bool pdij3pass=true;
@@ -709,6 +715,7 @@ class DSelector_ver20 : public DSelector
 		// Various combinations of cuts, the majority of them will be used just for a few histograms like when showing unused energy graph we will use mUE which
 		// removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
 		bool allGeneralCutsPassed=true;
+		bool mMandelstamT=true;
 		//bool pDiffCL=true; 
 		bool pDiffUE=true; 
 		bool mRProton=true;
@@ -727,6 +734,7 @@ class DSelector_ver20 : public DSelector
 		bool mEllipse = true;
 		bool mEllipse_pre = true;
 		bool mEllipse_pre_tAll = true;
+		bool mEllipse_pre_tAll_delta = true;
 		bool mEllipseUE = true;
 		bool mEllipseUE_pre = true;
 		bool mEllipseUEChiSq = true;
