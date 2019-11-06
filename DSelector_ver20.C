@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_data";
+string degAngle="pi0eta_flat8GeVPlus";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -494,6 +494,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histDef_1D histdef;
         histDef_2D histdef2d;
 
+	// Will leave bin to contain all the bad regions
+        histdef.clear();
+        name="tetaVsMpi0eta_recCounts";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
+        histdef.values.push_back( &teta_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tpi0VsMpi0eta_recCounts";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
+        histdef.values.push_back( &tpi0_recCounts );
+        group_34B_1234B.insert(histdef); 
+
         histdef.clear();
         cutsApplied="true";
         histdef.hist = new TH1F("X_Kin","Cuts=GeneralCuts;position (cm);Events / 1 cm", 160, 0, 160);
@@ -915,6 +930,12 @@ void DSelector_ver20::Init(TTree *locTree)
         group_pairBCAL.insert(histdef); 
 
         // *********************** PI0ETA MASS PLOTS ******************************
+        histdef.clear();
+        name="pi0eta1D_mMandelstamT";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_Cut";
@@ -1013,8 +1034,16 @@ void DSelector_ver20::Init(TTree *locTree)
         name="tetaVsMpi0eta";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);t_{#eta} (GeV^2)", 260, 0.6, 3.2, 80,0,8);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
-        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
-        histdef2d.valuesY.push_back( &mandelstam_teta_Kin );
+        histdef2d.valuesX.push_back( &locPi0Eta );
+        histdef2d.valuesY.push_back( &mandelstam_teta );
+        group_34B_1234B.insert_2D(histdef2d); 
+
+        histdef2d.clear();
+        name="tpi0VsMpi0eta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);t_{#pi_{0}} (GeV^2)", 260, 0.6, 3.2, 80,0,8);
+        histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &locPi0Eta );
+        histdef2d.valuesY.push_back( &mandelstam_tpi0 );
         group_34B_1234B.insert_2D(histdef2d); 
 
         histdef.clear();
@@ -1253,6 +1282,8 @@ void DSelector_ver20::Init(TTree *locTree)
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0eta_meas"); //fundamental = char, int, float, double, etc.
 		dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_teta_meas");	
 		dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_teta");	
+		dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tpi0_meas");	
+		dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tpi0");	
         }
         else{
             dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0"); //fundamental = char, int, float, double, etc.
@@ -1262,7 +1293,9 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_eta");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0eta");
-        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_eta_pi0eta");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0_pi0eta");
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID"); //fundamental = char, int, float, double, etc.
         
         // Introduce some angles to use in the phase space distance calculation
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm"); //fundamental = char, int, float, double, etc.
@@ -1294,6 +1327,8 @@ void DSelector_ver20::Init(TTree *locTree)
 
         //dTreeInterface->Clear_GetEntryBranches(); //now get none
         //dTreeInterface->Register_GetEntryBranch("Proton__P4"); //manually set the branches you want
+	//
+	if(showOutput) { cout << "Finished creating branch funamentals" <<endl; }
 
 
 
@@ -1321,12 +1356,14 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
     // everytime we start a new event we have to reset the tracking
     set< map<Particle_t, set<Int_t> > > used1234B;
+    set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used12B_1234B;
+    set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used34B_1234B;
     set< map<Particle_t, set<Int_t> > > used1234;
     set< map<Particle_t, set<Int_t> > > used12B;
     set< map<Particle_t, set<Int_t> > > used34B;
 
 
-    //if(itersToRun<2000){ ++itersToRun; //so we can just try to show the outut of one event 
+    //if(itersToRun<20){ ++itersToRun; //so we can just try to show the outut of one event 
     if(showOutput){cout << "Starting next process looping" << endl;}
     // The Process() function is called for each entry in the tree. The entry argument
     // specifies which entry in the currently loaded tree is to be processed.
@@ -1370,6 +1407,41 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     //	cout << "	FOM: " << dThrownWrapper->Get_MatchFOM() << endl;
     //}
     //cout << endl;
+    //
+        //TLorentzVector thrownEta;
+	//TLorentzVector thrownPi0;
+	//TLorentzVector thrownBeam;
+	//int countEtas=0;
+	//int countPi0s=0;
+    	//for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+    	//{
+    	//	dThrownWrapper->Set_ArrayIndex(loc_i);
+    	//	if ( dThrownWrapper->Get_ParentIndex() == -1 ) {
+	//		if ( dThrownWrapper->Get_PID() == 7 ) {
+	//			thrownPi0 = dThrownWrapper->Get_P4();
+	//			++countEtas;
+	//		}	
+	//		if ( dThrownWrapper->Get_PID() == 17 ) {
+	//			thrownEta = dThrownWrapper->Get_P4();
+	//			++countPi0s;
+	//		}	
+	//	}
+    	//}
+	//if (countEtas!=1 || countPi0s!=1){
+	//	cout << "There is more than one eta, one pi0 in this event!" << endl;
+	//	exit(0);
+	//}
+	//thrownBeam = dThrownBeam->Get_P4();
+	//double mandelstam_teta_thrown = -(thrownBeam-thrownEta).M2();
+	//double locPi0Eta_thrown = (thrownPi0+thrownEta).M();
+	//idx_t = (int)( ( mandelstam_teta_thrown-tMin )/tStep ); 
+	//idx_m = (int)( ( locPi0Eta_thrown-mMin)/mStep );
+	//if (  mandelstam_teta_thrown < tMin || locPi0Eta_thrown < mMin || mandelstam_teta_thrown > tMax || locPi0Eta_thrown > mMax ) {
+	//	teta_genCounts = -1;
+	//}
+	//else {
+	//	teta_genCounts = idx_t+num_tBins*idx_m;
+	//}
 
 
 
@@ -1975,7 +2047,26 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         mandelstam_t = (locProtonP4_Kin-dTargetP4).M2();
         mandelstam_t_pe = (locBeamP4_Kin-mixingPi0Eta).M2();
         mandelstam_teta = -(locBeamP4-locEtaP4).M2();
+        mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
         mandelstam_teta_Kin = -(locBeamP4_Kin-locEtaP4_Kin).M2();
+        mandelstam_tpi0_Kin = -(locBeamP4_Kin-locPi0P4_Kin).M2();
+	idx_t_eta = (int)( (mandelstam_teta-tMin)/tStep ); 
+	idx_t_pi0 = (int)( (mandelstam_tpi0-tMin)/tStep ); 
+	idx_m = (int)( (locPi0Eta-mMin)/mStep );
+	if ( mandelstam_teta < tMin || locPi0Eta < mMin || mandelstam_teta>tMax || locPi0Eta>mMax ) {
+		teta_recCounts = -1;
+	}
+	else {
+		teta_recCounts = idx_t_eta+num_tBins*idx_m;
+	}
+	if ( mandelstam_tpi0 < tMin || locPi0Eta < mMin || mandelstam_tpi0>tMax || locPi0Eta>mMax ) {
+		tpi0_recCounts = -1;
+	}
+	else {
+		tpi0_recCounts = idx_t_pi0+num_tBins*idx_m;
+	}
+	cout << "teta_recCounts: " << teta_recCounts << endl;
+	cout << "tpi0_recCounts: " << tpi0_recCounts << endl;
 
         // We will also calculate the cos theta in the lab frame. This is used to see if we are actually getting the right amount of events in the detector
         theta_pi0_lab = locPi0P4.Theta()*radToDeg;
@@ -2517,7 +2608,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         allGeneralCutsPassed = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMandelstamT = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mMandelstamT = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
         mMPi0P14_ellipse = ptLT1*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mBeamE = ptLT1*!pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
         mMMSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse;
@@ -2659,15 +2750,31 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         group_1234B_12PB.fillHistograms_pairMap(using1234B_12PB);
         group_1234B_34PB.fillHistograms_pairMap(using1234B_34PB);
 
-        if (!mEllipse_pre_tAll_delta) { 
+	if(showOutput){ cout << "Filling histogram's uniqueness elements" << endl; }
+
+        if (!mEllipse_pre_tAll) { 
+	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
         else { 
+	    if (showOutput) { cout << "Passed cut, continuing.... " << endl; }  
 	    if (used1234B.find(using1234B)==used1234B.end()){
                 used1234B.insert(using1234B);
                 isNotRepeated_pi0eta=true;
             }
             else { isNotRepeated_pi0eta=false; } 
+
+	    if (used12B_1234B.find(using12B_1234B)==used12B_1234B.end()){
+                used12B_1234B.insert(using12B_1234B);
+                isNotRepeated_pi0_pi0eta=true;
+            }
+            else { isNotRepeated_pi0_pi0eta=false; } 
+
+	    if (used34B_1234B.find(using34B_1234B)==used34B_1234B.end()){
+                used34B_1234B.insert(using34B_1234B);
+                isNotRepeated_eta_pi0eta=true;
+            }
+            else { isNotRepeated_eta_pi0eta=false; } 
 
 	    if (used12B.find(using12B)==used12B.end()){
                 used12B.insert(using12B);
@@ -2680,6 +2787,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
                 isNotRepeated_eta=true;
             }
             else { isNotRepeated_eta=false; } 
+
             if ( used1234.find(using34)==used1234.end() ){
                 used1234.insert(using34);
                 ++uniqueSpectroscopicPi0EtaID;
@@ -2687,6 +2795,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             }
 
         }
+	if (showOutput){ cout << "Calculated uniqueness booleans" << endl; } 
 
         /****************************************** FILL FLAT TREE (IF DESIRED) ******************************************/
 
@@ -2711,6 +2820,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("uniqueComboID", uniqueComboID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("finalStateComboID", finalStateComboID);
 
+	if(showOutput){ cout << "Filled some fundamental branches" << endl; } 
+
         ++uniqueComboID;
         if (is_pi0eta){
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0", locPi0Mass_Kin);
@@ -2721,6 +2832,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0eta_meas", locPi0Eta);
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_teta_meas", mandelstam_teta);
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_teta", mandelstam_teta_Kin);
+        	dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tpi0_meas", mandelstam_tpi0);
+        	dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tpi0", mandelstam_tpi0_Kin);
         }
         else{
             dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0", locPi0Mass_Kin);
@@ -2728,11 +2841,21 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0pi0", locPi0Eta_Kin);
         }
         dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp);
+	if(showOutput){ cout << "Filled some more fundamental branches" << endl; } 
+	
+
+
 
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0",isNotRepeated_pi0);
+	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_eta",isNotRepeated_eta);
+	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0eta",isNotRepeated_pi0eta);
+	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_eta_pi0eta",isNotRepeated_eta_pi0eta);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0_pi0eta",isNotRepeated_pi0_pi0eta);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID",uniqueSpectroscopicPi0EtaID);
+	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
 
 
         // Introduce some angles to use in the phase space distance calculation
@@ -2750,6 +2873,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("vanHove_omega",omega);
         // If we were to do Q-Values for the pi0pi0 system we will probably do the same thing and use one of the pi0 as the discriminator varible and check against the other
         dFlatTreeInterface->Fill_Fundamental<Double_t>("pi0_energy", locPi0E_Kin );
+
+	if(showOutput){ cout << "Filled fundamental branches" <<endl; }
         //FILL FLAT TREE
         //dComboWrapper->Set_ComboIndex(loc_i);  // Combo succeeded // this might be redundant since this is after the continue command in the cut condition above, combo must have succeeded already. But Elton has it! 
         Fill_FlatTree(); //for the active combo
@@ -2760,6 +2885,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
     //FILL HISTOGRAMS: Num combos / events surviving actions
     Fill_NumCombosSurvivedHists();
+    if(showOutput){ cout << "Fillied NumComboSurvivedHists" << endl; } 
 
     /******************************************* LOOP OVER THROWN DATA (OPTIONAL) ***************************************/
     /*
@@ -2825,16 +2951,23 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     // Even though we have this Set_IsComboCut and continue, that only "continues" the combo loop. This is outside that loop so we have to loop over all the combos again and check to see if any of the combos have 
     // been cut. We only the fill the tree if at least one combo succeeded. If that happens it breaks the loop and begins to fill the output (if there is a file you want to fill it in. 
     Bool_t locIsEventCut = true;
+    if(showOutput) { cout << "Looping over through the comobs to check passed or not" << endl; } 
     for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i) {
         //Set branch array indices for combo and all combo particles
         dComboWrapper->Set_ComboIndex(loc_i);
         // Is used to indicate when combos have been cut
-        if(dComboWrapper->Get_IsComboCut())
+        if(dComboWrapper->Get_IsComboCut()){
+    	    if(showOutput) { cout << "Combo did not pass cuts" << endl; } 
             continue;
+	}
         locIsEventCut = false; // At least one combo succeeded                                                     
+        if(showOutput) { cout << "Combo passed cuts!"  << endl; } 
         break;
     }
-    if(!locIsEventCut && dOutputTreeFileName != ""){ Fill_OutputTree(); }
+    if(!locIsEventCut && dOutputTreeFileName != ""){ 
+	    if (showOutput) {cout<<"Filling outputt tree" << endl; }
+	    Fill_OutputTree(); 
+    }
 
     //}//closes the //if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.

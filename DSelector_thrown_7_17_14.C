@@ -38,6 +38,10 @@ void DSelector_thrown_7_17_14::Init(TTree *locTree)
 	dHist_phiVsMass = new TH2F("phiVsMass","phi vs mass", 150,0,3.5,60,-180,180);
 	dHist_phi = new TH1F("phi","phi GJ",60,-180,180);
 	dHist_cosTheta = new TH1F("cosTheta","cosTheta GJ",60,-1,1);
+
+	dHist_numEventsOnePi0OneEta = new TH1F( "onePi0oneEta", "", 2,0,1);
+        dHist_genCounts_eta = new TH1F("tetaVsMpi0eta_genCounts", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_pi0 = new TH1F("tpi0VsMpi0eta_genCounts", "genCounts", numHists+1, -1, numHists);
 	
 	for (int beamE=0; beamE<12; ++beamE){
 		dHist_pi0eta1DBeam[beamE] = new TH1F(("pi0eta1DbeamE"+std::to_string(beamE)).c_str(),"M(pi0eta)",150,0,3);
@@ -431,6 +435,7 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	bool passCuts = beamEisFinite*etaTwoDaughters*pi0TwoDaughters*etaPhotonDaughters*pi0PhotonDaughters*oneInitialEta*oneInitialPi0;
 	//bool passCutsOneEtaPi0 = beamEisFinite*oneInitialEta*oneInitialPi0;
 	bool passCutsOneEtaPi0 = beamEisFinite*oneEta*onePi0;
+	dHist_numEventsOnePi0OneEta->Fill( (float)passCutsOneEtaPi0 );
 	
 	auto locNumThrown = Get_NumThrown();
 	// There are some events with NumThrown=8; we have to check them out;
@@ -453,13 +458,33 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	if ( passCutsOneEtaPi0 && mandelstam_tp < 1) {
 		//Fill_OutputTree("selected_tLT1"); //your user-defined key
 	}
-	if (passCutsOneEtaPi0*pBeamE8to9GeV){
+	if (passCutsOneEtaPi0){
+        	mandelstam_teta = -(locBeamP4-locEtaP4).M2();
+        	mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
+		idx_t_eta = (int)( (mandelstam_teta-tMin)/tStep ); 
+		idx_t_pi0 = (int)( (mandelstam_tpi0-tMin)/tStep ); 
+		idx_m = (int)( (locPi0EtaP4.M()-mMin)/mStep );
+		if ( mandelstam_teta < tMin || locPi0EtaP4.M() < mMin || mandelstam_teta>tMax || locPi0EtaP4.M() >mMax ) {
+			teta_genCounts = -1;
+		}
+		else {
+			teta_genCounts = idx_t_eta+num_tBins*idx_m;
+		}
+		if ( mandelstam_tpi0 < tMin || locPi0EtaP4.M() < mMin || mandelstam_tpi0>tMax || locPi0EtaP4.M() >mMax ) {
+			tpi0_genCounts = -1;
+		}
+		else {
+			tpi0_genCounts = idx_t_pi0+num_tBins*idx_m;
+		}
+		dHist_genCounts_eta->Fill(teta_genCounts);
+		dHist_genCounts_pi0->Fill(tpi0_genCounts);
+
+
 		//Fill_OutputTree must be run with proof!
 		mandelstam_tpAll->Fill(mandelstam_tp);
 		dHist_pi0eta1D->Fill(locPi0EtaMass);
 		//cout << locPi0P4.M() << endl;
 		//cout << locEtaP4.M() << endl;
-		dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 		dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
 		dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
 		if(mandelstam_tp < 1){

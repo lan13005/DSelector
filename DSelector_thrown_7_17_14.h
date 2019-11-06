@@ -19,6 +19,23 @@ class DSelector_thrown_7_17_14 : public DSelector
 		Bool_t Process(Long64_t entry);
 
 	private:
+		// These variables are for the teta vs Meta plots
+		int num_tBins=14;
+		double tMin=0;
+		double tMax=2.8;
+		int num_massBins=12;
+		const int numHists = num_tBins*num_massBins;
+		double mMin=1.7;
+		double mMax=2.9;
+		double tStep=(tMax-tMin)/num_tBins;
+		double mStep=(mMax-mMin)/num_massBins;
+		int idx_t_eta;
+		int idx_t_pi0;
+		int idx_m;
+		double mandelstam_teta;
+		double mandelstam_tpi0;
+		double teta_genCounts;
+		double tpi0_genCounts;
 
 		void Finalize(void);
 
@@ -52,6 +69,9 @@ class DSelector_thrown_7_17_14 : public DSelector
 		TH1F *dHist_phi;
 		TH1F *dHist_cosTheta;
 		TH1F *dHist_beamE;
+		TH1F *dHist_numEventsOnePi0OneEta;
+        	TH1F *dHist_genCounts_eta;
+        	TH1F *dHist_genCounts_pi0;
 
 		bool pBeamE[12];
 		bool pBeamE8to9GeV;

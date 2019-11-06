@@ -56,7 +56,7 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_thrown.root");
 
 	// Flat
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730/tree_thrown.root");
+	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_thrown.root");
 
 	// The following two files work separately but not together...
 	//chain->Add("rootFiles_Geant4_7M/tree_thrown_gen_amp_030730_514.root");//_GEANT4.root"); //the code I generated from ifarm

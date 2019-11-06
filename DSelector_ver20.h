@@ -89,7 +89,8 @@ class trackingGroup{
         std::vector<histDef_1D> allHists_1D;
         std::vector<histDef_2D> allHists_2D;
 
-        std::vector< set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > > allUsedPairMapIds;
+        std::vector< set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > > allUsedPairMapIds_2D;
+        std::vector< set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > > allUsedPairMapIds_1D;
         std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_1D;
         std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_2D;
 
@@ -97,12 +98,13 @@ class trackingGroup{
         void insert(histDef_1D hist){
             allHists_1D.push_back(hist);
             allUsedMapIds_1D.push_back(usedMapIds);
+            allUsedPairMapIds_1D.push_back(usedPairMapIds); // we only need this for 2D histograms
         }
         void insert_2D(histDef_2D hist){
             // ***** NOTE THAT IT IS BEST IF WE DO NOT MIX USING BOTH OF TYPES OF TRACKING TYPES ***** NOT WORKED ON YET
             allHists_2D.push_back(hist);
             allUsedMapIds_2D.push_back(usedMapIds);
-            allUsedPairMapIds.push_back(usedPairMapIds); // we only need this for 2D histograms
+            allUsedPairMapIds_2D.push_back(usedPairMapIds); // we only need this for 2D histograms
         }
 
         // for filling distance between pairs of particles like dij3FCAL
@@ -130,13 +132,6 @@ class trackingGroup{
             //}
                 
              for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
-                for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-	              if (allUsedMapIds_1D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
-	                 allUsedMapIds_1D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
-                         allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[iValue]), *(allHists_1D[iHist].weights) );
-                      }
-            
-                 }
                  for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
 	              if (allUsedMapIds_2D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)  ){
 	                 allUsedMapIds_2D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
@@ -166,16 +161,20 @@ class trackingGroup{
 
         // This will be used for more complicated sets. Most generic is a pair of maps. i.e. for 2D plot of M(pi0eta) and cosThetaGJ(eta)
         void fillHistograms_pairMap( pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > beingUsedMapPair ){
-            // there is no 1d version because why would be need a pair of maps to track a 1d distribution...
+             for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+	        if (allUsedPairMapIds_1D[iHist].find(beingUsedMapPair)==allUsedPairMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)){
+	            allUsedPairMapIds_1D[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
+                    allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[0]), *(allHists_1D[iHist].weights) );
+                }
+             }
             for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-	        if (allUsedPairMapIds[iHist].find(beingUsedMapPair)==allUsedPairMapIds[iHist].end() && *(allHists_2D[iHist].cut)){
-	            allUsedPairMapIds[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
+	        if (allUsedPairMapIds_2D[iHist].find(beingUsedMapPair)==allUsedPairMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)){
+	            allUsedPairMapIds_2D[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
                     allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
                 }
             }
             clear_values();
         }
-
 
         void drawHistograms(){
             for (UInt_t iHist=0; iHist < allHists_1D.size(); ++iHist){
@@ -194,10 +193,11 @@ class trackingGroup{
         void clear_tracking(){
             for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
                 allUsedMapIds_1D[iHist].clear();
+                allUsedPairMapIds_1D[iHist].clear();
             }
             for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
                 allUsedMapIds_2D[iHist].clear();
-                allUsedPairMapIds[iHist].clear();
+                allUsedPairMapIds_2D[iHist].clear();
             }
         }
         
@@ -254,10 +254,31 @@ class DSelector_ver20 : public DSelector
                 int locPolarizationAngle; // actual polarization angle
                 set<UInt_t> usedRuns; //think we are over counting our filling of beam angles since the below condition only checks against previous run, doesn't work for recurrences.
 
+
+		// These variables are for the teta vs Meta plots
+		int num_tBins=14;
+		double tMin=0;
+		double tMax=2.8;
+		int num_massBins=12;
+		const int numHists = num_tBins*num_massBins;
+		double mMin=1.7;
+		double mMax=2.9;
+		double tStep=(tMax-tMin)/num_tBins;
+		double mStep=(mMax-mMin)/num_massBins;
+		double teta_recCounts=0;
+		double tpi0_recCounts=0;
+		int idx_t_eta;
+		int idx_t_pi0;
+		int idx_m;
+
+
+
                 Int_t eventIdx=0;
                 bool isNotRepeated_eta=true;
                 bool isNotRepeated_pi0=true;
                 bool isNotRepeated_pi0eta=true;
+                bool isNotRepeated_pi0_pi0eta=true;
+                bool isNotRepeated_eta_pi0eta=true;
                 Int_t uniqueSpectroscopicPi0EtaID=0;
 
 		Int_t uniqueComboID=0;
@@ -438,6 +459,8 @@ class DSelector_ver20 : public DSelector
 		// Calculating kinematic variables like t and cosTheta
 		double mandelstam_teta=1;
 		double mandelstam_teta_Kin=1;
+		double mandelstam_tpi0=1;
+		double mandelstam_tpi0_Kin=1;
 		double mandelstam_tp=1;
 		double mandelstam_tp_pe=1;
 		double mandelstam_t=1;
