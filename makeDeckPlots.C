@@ -18,13 +18,19 @@ Double_t gaus(Double_t *x, Double_t *par){
 	return par[3]+par[4]*(x[0]-par[1])+par[0]/sqrt(2*TMath::Pi())/par[2]*TMath::Exp(-0.5*r1*r1 );
 }
 
+
+	
 void makeDeckPlots(){
+	// *********** PREPARING THE CODE ***************
+	// *********************************************
+	gStyle->SetErrorX(0.000001); // remove the x-error bars
 	gSystem->Exec("rm -rf deckPlots");
 	gSystem->Exec("mkdir -p deckPlots/mandelstam_teta_meas");
 	gSystem->Exec("mkdir deckPlots/mandelstam_tpi0_meas");
     	ofstream logFile;
     	logFile.open("deckPlots/failedFittingPlotIDs.txt");
 
+	
 	TFile* dataFile = TFile::Open("pi0eta_datatreeFlat_DSelector.root");
 	TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);
 	TCanvas *allCanvases_yields = new TCanvas("anyHists_yields","",1440,900);
@@ -33,6 +39,19 @@ void makeDeckPlots(){
 	TTree *dataTree;
 	dataFile->GetObject("pi0eta_datatree_flat",dataTree);
 
+	// THese will define the bins
+	int num_tBins=14;
+	double tMin=0;
+	double tMax=2.8;
+	int num_massBins=12;
+	double mMin=1.7;
+	double mMax=2.9;
+	double tStep=(tMax-tMin)/num_tBins;
+	double mStep=(mMax-mMin)/num_massBins;
+	const int numHists = (const int)num_tBins*num_massBins;
+	cout << "numHists: " << numHists << endl;
+	
+	// Load the data from the flat tree
 	double new_t;
 	double new_m;
 	double new_accWeight;
@@ -49,6 +68,89 @@ void makeDeckPlots(){
 	dataTree->SetBranchAddress("Mpi0eta_meas",&new_m);
 	cout << "Loaded addresses" << endl;
 
+
+	// *********** CALC EFFIENCY FIRST ***************
+	// *********************************************
+	 // For the efficiency plots
+	TFile* genFile = TFile::Open("v20_flat_gen_hists_DSelector_pi0eta.root");
+	TFile* recFile = TFile::Open("pi0eta_flat8GeVPlus_hists_DSelector.root");
+	TH1F *tetaVsMpi0eta_genCounts;
+	TH1F *tpi0VsMpi0eta_genCounts;
+	TH1F *tetaVsMpi0eta_recCounts;
+	TH1F *tpi0VsMpi0eta_recCounts;
+	genFile->GetObject("tetaVsMpi0eta_genCounts",tetaVsMpi0eta_genCounts);
+	genFile->GetObject("tpi0VsMpi0eta_genCounts",tpi0VsMpi0eta_genCounts);
+	recFile->GetObject("tetaVsMpi0eta_recCounts",tetaVsMpi0eta_recCounts);
+	recFile->GetObject("tpi0VsMpi0eta_recCounts",tpi0VsMpi0eta_recCounts);
+	TH1F *hist_efficiencies_pi0[num_massBins];
+	TH1F *hist_efficiencies_eta[num_massBins];
+	for (iHist=0; iHist < num_massBins; ++iHist){
+		hist_efficiencies_pi0[iHist] = new TH1F("","",num_tBins,tMin,tMax);
+		hist_efficiencies_eta[iHist] = new TH1F("","",num_tBins,tMin,tMax);
+	}
+	double c_teta_genCounts;
+	double c_tpi0_genCounts;
+	double c_teta_recCounts;
+	double c_tpi0_recCounts;
+	double efficiencies_pi0[numHists];
+	double efficiencies_eta[numHists];
+	double efficiencies_error_pi0[numHists];
+	double efficiencies_error_eta[numHists];
+	double maxEfficiency=DBL_MIN;
+	bool skipCalc;
+	// bin0 = underflow
+	// bin1 = -1 which we used to hold all the data that wasn't in a bin
+	for (int i=2; i<numHists+2; ++i) { 
+		// To make the code more understandable we will just calculate the efficiencies first then fill the histogram. There will be too much going on with the array indicies if
+		//     we have to consider the overflow bin and the shifting of the histograms we read in since they also have an overflow and an extra bin that holds non-bin events. 
+		//     ALSO: we have to find the maximum value first
+		int j=i-2; // shifted i
+		c_teta_genCounts = tetaVsMpi0eta_genCounts->GetBinContent(i);
+		c_tpi0_genCounts = tpi0VsMpi0eta_genCounts->GetBinContent(i);
+		c_teta_recCounts = tetaVsMpi0eta_recCounts->GetBinContent(i);
+		c_tpi0_recCounts = tpi0VsMpi0eta_recCounts->GetBinContent(i);
+		
+		skipCalc=false;
+		cout << " ** IF COUNTS <=0 THEN WE SET THEM =0 **" << endl;
+		if ( c_teta_genCounts <= 0 ) { efficiencies_eta[j]=0; efficiencies_error_eta[j]=0; skipCalc=true; } 
+		if ( c_tpi0_genCounts <= 0 ) { efficiencies_pi0[j]=0; efficiencies_error_pi0[j]=0; skipCalc=true; } 
+		if ( c_teta_recCounts <= 0 ) { efficiencies_eta[j]=0; efficiencies_error_eta[j]=0; skipCalc=true; } 
+		if ( c_tpi0_recCounts <= 0 ) { efficiencies_pi0[j]=0; efficiencies_error_pi0[j]=0; skipCalc=true; } 
+
+		cout << "c_teta_genCounts, c_tpi0_genCounts, c_teta_recCounts, c_tpi0_recCounts: " << c_teta_genCounts << ", " << c_tpi0_genCounts << ", " << c_teta_recCounts << ", " << c_tpi0_recCounts << endl;
+		if (!skipCalc) {
+			efficiencies_eta[j] = c_teta_recCounts/c_teta_genCounts; 
+			efficiencies_pi0[j] = c_tpi0_recCounts/c_tpi0_genCounts; 
+			efficiencies_error_eta[j] = efficiencies_eta[j]*sqrt(1/c_teta_recCounts+1/c_teta_genCounts); 
+			efficiencies_error_pi0[j] = efficiencies_pi0[j]*sqrt(1/c_tpi0_recCounts+1/c_tpi0_genCounts); 
+
+			if ( efficiencies_eta[j] > maxEfficiency ) { maxEfficiency = efficiencies_eta[j]; }
+			if ( efficiencies_pi0[j] > maxEfficiency ) { maxEfficiency = efficiencies_pi0[j]; }
+		}
+		
+		int massBin = j/num_tBins;
+		int tBin = j%num_tBins;
+		cout << "\tFilling Mass Bin: " << massBin << " at t Bin: " << tBin << " with efficiency,error: " << efficiencies_pi0[j] << "," << efficiencies_error_pi0[j] << endl;
+		hist_efficiencies_pi0[massBin]->SetBinContent( tBin+1, efficiencies_pi0[j]);
+		hist_efficiencies_pi0[massBin]->SetBinError( tBin+1, efficiencies_error_pi0[j]);
+		hist_efficiencies_eta[massBin]->SetBinContent( tBin+1,  efficiencies_eta[j]);
+		hist_efficiencies_eta[massBin]->SetBinError( tBin+1, efficiencies_error_eta[j]);
+	}
+	//for (int massBin=0; massBin < num_massBins; ++massBin){
+	//	allCanvases_yields->cd(massBin+1);
+	//	hist_efficiencies_pi0[massBin]->SetMarkerStyle(kFullCircle);
+	//	hist_efficiencies_pi0[massBin]->SetMarkerSize(0.5);
+	//	hist_efficiencies_pi0[massBin]->SetMarkerColor(kRed);
+	//	hist_efficiencies_pi0[massBin]->Draw("E1 PMC");
+	//	hist_efficiencies_eta[massBin]->SetMarkerStyle(kFullCircle);
+	//	hist_efficiencies_eta[massBin]->SetMarkerSize(0.5);
+	//	hist_efficiencies_eta[massBin]->SetMarkerColor(kBlue);
+	//	hist_efficiencies_eta[massBin]->Draw("E1 SAME");
+	//}
+	//allCanvases_yields->SaveAs("effs.png");
+
+	// *********** CALCULATE YIELDS IN BINS  ***************
+	// *********************************************
 	//string branchNames[2]={"mandelstam_tpi0_meas","mandelstam_teta_meas"};
 	string branchNames[2]={"mandelstam_teta_meas","mandelstam_tpi0_meas"};
 	int counter=-1;
@@ -58,22 +160,11 @@ void makeDeckPlots(){
 		allCanvases->cd();
 		dataTree->SetBranchAddress( branchName.c_str(),&new_t);
 
-		int num_tBins=14;
-		double tMin=0;
-		double tMax=2.8;
-		int num_massBins=12;
-		double mMin=1.7;
-		double mMax=2.9;
-		double tStep=(tMax-tMin)/num_tBins;
-		double mStep=(mMax-mMin)/num_massBins;
-
 		// So the following indicies would describe the bin for a specific variable. We have to multiplex them into a single array. 
 		// The obvious way to do that is to use the array index = num_tBins*m+t
 		// This would order the array where the first [0,num_tBins] would belong in the smallest mass bin, [num_tBins,2*num_tBins] belongs to the second smallest.
 		int idx_t;
 		int idx_m;
-		const int numHists = (const int)num_tBins*num_massBins;
-		cout << "numHists: " << numHists << endl;
 		TH2F* hists_meta_mpi0[numHists];
 		TH2F* hists_mpi0eta_t[numHists];
 		double yields[numHists];
@@ -299,14 +390,37 @@ void makeDeckPlots(){
 				//cout << "yield in bin: " << i+num_tBins*iAmp << " is " << yields[i+num_tBins*iAmp] << endl;
 			}
 			massHist->SetMarkerStyle(kFullCircle);
+			massHist->SetMarkerSize(0.75);
+			double scaleAxis;
 			if (counter==0){
-				massHist->SetMarkerColor(kCyan-2);
+				massHist->SetMarkerColor(kBlue);
 				massHist->Draw("E1 PMC");
+				allCanvases_yields->Update();
+				scaleAxis = gPad->GetUymax()/(maxEfficiency*1.1); // this should be the same for all pads since I set the axisRange above
+				hist_efficiencies_eta[iAmp]->Scale(scaleAxis);  
+				//hist_efficiencies_eta[iAmp]->SetMarkerStyle(kFullSquare);
+				//hist_efficiencies_eta[iAmp]->SetMarkerSize(0.75);
+				//hist_efficiencies_eta[iAmp]->SetMarkerColor(kAzure-2);
+				hist_efficiencies_eta[iAmp]->SetLineColor(kAzure-2);
+				hist_efficiencies_eta[iAmp]->Draw("E SAME");
+				hist_efficiencies_eta[iAmp]->Draw("SAME Lhist");
 			}
 			else { 
-				massHist->SetMarkerColor(kRed-3);
+				massHist->SetMarkerColor(kRed);
 				massHist->Draw("E1 PMC SAME");
+				hist_efficiencies_pi0[iAmp]->Scale(scaleAxis);  
+				//hist_efficiencies_pi0[iAmp]->SetMarkerColor(kOrange+8);
+				//hist_efficiencies_pi0[iAmp]->SetMarkerStyle(kFullSquare);
+				//hist_efficiencies_pi0[iAmp]->SetMarkerSize(0.75);
+				hist_efficiencies_pi0[iAmp]->SetLineColor(kOrange+8);
+				hist_efficiencies_pi0[iAmp]->Draw("E SAME");
+				hist_efficiencies_pi0[iAmp]->Draw("SAME Lhist");
 			}
+			TGaxis *axis = new TGaxis(gPad->GetUxmax(),gPad->GetUymin(),
+					            gPad->GetUxmax(), gPad->GetUymax(),0,maxEfficiency*1.1,510,"+L");
+			axis->SetLineColor(kRed);
+			axis->SetLabelColor(kRed);
+			axis->Draw();
 		}
 
 		cout << "Initial parameter values: " << endl;

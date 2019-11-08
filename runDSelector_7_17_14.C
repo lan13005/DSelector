@@ -16,7 +16,7 @@
 //R__LOAD_LIBRARY(/d/grid15/ln16/gluex_top/gluex_root_analysis/gluex_root_analysis-0.5/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so) 
 R__LOAD_LIBRARY(/d/grid13/gluex/gluex_top/gluex_root_analysis/gluex_root_analysis-1.3.0^rec1701v03/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so)
    
-void runDSelector_7_17_14(bool useproof = 1, string path = "") 
+void runDSelector_7_17_14(bool useproof = 0, string path = "") 
 {
 	cout << "Loaded using R__LOAD_LIBRARY" << endl;
 	// Load DSelector library
@@ -37,7 +37,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// **********************************************************************************	
 	
 	// MC flat
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_pi0eta__B4_M17_M7.root");
+	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_pi0eta__B4_M17_M7.root");
 	
 	// a0a2 recon_2017
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");

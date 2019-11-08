@@ -261,12 +261,12 @@ split_selected_in_t::split_selected_in_t(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("tag_a0a2treeFlat_DSelector_pi0eta.root");
-      cout << "File input: tag_a0a2treeFlat_DSelector_pi0eta.root" << endl;
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("thrownNotAmptoolsReady_flat_nameAffix.root");
+      cout << "File input: thrownNotAmptoolsReady_flat_nameAffix.root" << endl;
       if (!f || !f->IsOpen()) {
-         f = new TFile("tag_a0a2treeFlat_DSelector_pi0eta.root");
+         f = new TFile("thrownNotAmptoolsReady_flat_nameAffix.root");
       }
-      f->GetObject("pi0eta_a0a2tree_flat",tree);
+      f->GetObject("Thrown_Tree",tree);
 
    }
    Init(tree);

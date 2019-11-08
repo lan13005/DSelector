@@ -746,8 +746,8 @@ void DSelector_ver20::Init(TTree *locTree)
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsM_Cut";
-        histdef2d.hist = new TH2F(name.c_str(), "Cut=mEllipse_pre_tAll;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=&mEllipse_pre_tAll; histdef2d.weights = &weightAS_BS;
+        histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
+        histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS_BS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         group_34B_1234B.insert_2D(histdef2d); 

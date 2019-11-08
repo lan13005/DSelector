@@ -13,7 +13,7 @@
 
 R__LOAD_LIBRARY(libDSelector) 
    
-void runDSelectorThrown_7_17_14(bool proof = 1, string path = "") 
+void runDSelectorThrown_7_17_14(bool proof = 0, string path = "") 
 {
 	// Load DSelector library
 	gROOT->ProcessLine(".x $ROOT_ANALYSIS_HOME/scripts/Load_DSelector.C");
@@ -44,7 +44,7 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 //	Old Data when I first started
 	//chain->Add("/d/home/sdobbs/grid13/gluex_data/RunPeriod-2017-01/analysis-ver08/tree_pi0eta__B4/merged/tree_pi0eta__B4_030298.root"); //large file in sean's directory
 	
-	//chain->Add("/d/home/ln16/pi0etaUpdated/tree_thrown_gen_amp_030730_7_17_14_GEANT4.root");//_GEANT4.root"); //the code I generated from ifarm
+	//chain->Add("/d/home/ln16/pi0etaUpdated/tree_thrown_gen_amp_030730_GEANT4.root");//_GEANT4.root"); //the code I generated from ifarm
 	//chain->Add("../rootFiles/pi0eta/rootFiles_Geant4_7M_1.8.0/tree_thrown_gen_amp_030730_**");
 	//
 	//a0
@@ -56,7 +56,8 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_thrown.root");
 
 	// Flat
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_thrown.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_thrown.root");
+	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_thrown.root");
 
 	// The following two files work separately but not together...
 	//chain->Add("rootFiles_Geant4_7M/tree_thrown_gen_amp_030730_514.root");//_GEANT4.root"); //the code I generated from ifarm
@@ -65,14 +66,14 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	//string options = sample;
 	string options = "";
 	if(proof) { // add TTree to chain and use PROOFLiteManager
-		string outputHistFileName = Form("v20_flat_gen_hists_DSelector_pi0eta.root");//_GEANT4.root");
-                string outputTreeFileName = Form("v20_flat_gen_trees_DSelector_pi0eta.root");//_GEANT4.root");
-		DPROOFLiteManager::Process_Chain(chain, "DSelector_thrown_7_17_14.C+",  proof_Nthreads, outputHistFileName, outputTreeFileName, options);
+		string outputHistFileName = Form("flatUpTo3GeVResMass_gen_hists_DSelector_pi0eta.root");//_GEANT4.root");
+                string outputTreeFileName = Form("flatUpTo3GeVResMass_gen_trees_DSelector_pi0eta.root");//_GEANT4.root");
+		DPROOFLiteManager::Process_Chain(chain, "DSelector_thrown.C+",  proof_Nthreads, outputHistFileName, outputTreeFileName, options);
 	}
 	else { // get TTree and use standard TTree::Process
 		//TFile *f = TFile::Open(fileName);
 		//TTree *tree = (TTree*)f->Get("omega_skim_Tree");
-		chain->Process("DSelector_thrown_7_17_14.C+", options.data());
+		chain->Process("DSelector_thrown.C+", options.data());
 		
 	}
 	

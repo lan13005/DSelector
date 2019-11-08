@@ -31,7 +31,7 @@ void split_gen::Loop()
 //by  b_branchname->GetEntry(ientry); //read only this branch
    if (fChain == 0) return;
 
-   outFile = new TFile("thrown_flat_pi0eta_nameAffix.root", "RECREATE");
+   outFile = new TFile("thrown_a0a2_pi0eta_nameAffix.root", "RECREATE");
    m_OutTree = new TTree("Thrown_Tree", "kin2");
 
    m_OutTree->Branch("Weight", new Float_t, "Weight/F");
@@ -55,8 +55,8 @@ void split_gen::Loop()
    m_OutTree->SetBranchAddress("Py_Beam", &m_pyBeam);
    m_OutTree->SetBranchAddress("Pz_Beam", &m_pzBeam);
    m_OutTree->SetBranchAddress("Target_Mass", &m_TargetMass);
-   //m_OutTree->SetBranchAddress("NumFinalState", &NumThrown);
-   //m_OutTree->SetBranchAddress("PID_FinalState", Thrown__PID);
+   m_OutTree->SetBranchAddress("NumFinalState", &NumThrown);
+   m_OutTree->SetBranchAddress("PID_FinalState", Thrown__PID);
    m_OutTree->SetBranchAddress("E_FinalState", m_e);
    m_OutTree->SetBranchAddress("Px_FinalState", m_px);
    m_OutTree->SetBranchAddress("Py_FinalState", m_py);
@@ -78,30 +78,31 @@ void split_gen::Loop()
    double countEta = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
-      if (ientry < 0) break;
+      if (ientry < 0) { cout << "breaking since ientry<0" << endl; break; } 
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
 	//cout << "NumThrown: " << NumThrown << endl;
 	countProton=0;	
 	countPi0=0;	
 	countEta=0;	
+	cout << jentry << endl;
         for (int particleN=0; particleN<NumThrown; ++particleN){
                 TLorentzVector *single_P4 = (TLorentzVector *)Thrown__P4->At(particleN);
-		if (Thrown__PID[particleN]==221) {
+		if (Thrown__PID[particleN]==221 && Thrown__ParentIndex[particleN]==-1) {
 			++countEta;
                 	m_e[2] = single_P4->E();
                 	m_px[2] = single_P4->Px();
                 	m_py[2] = single_P4->Py();
                 	m_pz[2] = single_P4->Pz();
 		}
-		else if (Thrown__PID[particleN]==111) {
+		else if (Thrown__PID[particleN]==111 && Thrown__ParentIndex[particleN]==-1) {
 			++countPi0;
                 	m_e[1] = single_P4->E();
                 	m_px[1] = single_P4->Px();
                 	m_py[1] = single_P4->Py();
                 	m_pz[1] = single_P4->Pz();
 		}
-		else if (Thrown__PID[particleN]==2212) {
+		else if (Thrown__PID[particleN]==2212 && Thrown__ParentIndex[particleN]==-1) {
 			++countProton;
                 	m_e[0] = single_P4->E();
                 	m_px[0] = single_P4->Px();

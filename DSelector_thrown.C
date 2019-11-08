@@ -1,6 +1,6 @@
-#include "DSelector_thrown_7_17_14.h"
+#include "DSelector_thrown.h"
 
-void DSelector_thrown_7_17_14::Init(TTree *locTree)
+void DSelector_thrown::Init(TTree *locTree)
 {
 	// USERS: IN THIS FUNCTION, ONLY MODIFY SECTIONS WITH A "USER" OR "EXAMPLE" LABEL. LEAVE THE REST ALONE.
 
@@ -63,10 +63,10 @@ void DSelector_thrown_7_17_14::Init(TTree *locTree)
 	//dTreeInterface->Register_GetEntryBranch("Proton__P4"); //manually set the branches you want
 	//
 	ievent=0;
-	maxevent=10;
+	maxevent=100;
 }
 
-Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
+Bool_t DSelector_thrown::Process(Long64_t locEntry)
 {
 	// The Process() function is called for each entry in the tree. The entry argument
 	// specifies which entry in the currently loaded tree is to be processed.
@@ -81,7 +81,7 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 
 	//CALL THIS FIRST
 	//
-	//if ( ievent<maxevent ){
+	if ( ievent<maxevent ){
 	DSelector::Process(locEntry); //Gets the data from the tree for the entry
 	//cout << "RUN " << Get_RunNumber() << ", EVENT " << Get_EventNumber() << endl;
 	//
@@ -115,6 +115,8 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	else { ++beamEinf; }	
 
 	std::vector<TLorentzVector> allP4;
+	std::vector<int> parentArray;
+	std::vector<int> pids;
 	TLorentzVector locEtaP4;
 	TLorentzVector locPi0P4;
 	TLorentzVector locProtonP4;
@@ -127,10 +129,10 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	if (is_in){
 		cout << "########    EventIdx: " << eventIdx << "    #############" << endl;
 	}
-	vector<Int_t> vecParent;
-	vector<Particle_t> vecParticle;
-	Int_t numTotalEta = 0;
-	Int_t numTotalPi0 = 0;
+
+	int countPrimaryEta=0;
+	int countPrimaryPi0=0;
+	int locNumThrown = Get_NumThrown();
 	for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 	{	
 		//Set branch array indices corresponding to this particle
@@ -140,231 +142,69 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 		Particle_t locPID = dThrownWrapper->Get_PID();
 		Int_t locParentPID = dThrownWrapper->Get_ParentIndex();
 		allP4.push_back(dThrownWrapper->Get_P4());
+
+		if (locParentPID==-1 && locPID==7) { ++countPrimaryPi0; locPi0P4 = dThrownWrapper->Get_P4(); } 
+		if (locParentPID==-1 && locPID==17) { ++countPrimaryEta; locEtaP4 = dThrownWrapper->Get_P4(); } 
+
 		//Some verbal confirmation checking
 		if (is_in){
-		// The loc_i'th particle would have a particle ID saying the particle type and a ParentPID that matches it with the loc_j'th particle to say its parent is the loc_j'th particle.
-		cout << "Thrown " << loc_i << " with (PID,ParentPID) = (" << locPID << " ," << locParentPID << ")"  << endl;
-		//cout << dThrownWrapper->Get_ParentIndex() << endl;
+			cout << "Thrown " << loc_i << " with (PID,ParentArrayLoc) = (" << locPID << " ," << locParentPID << ")"  << endl;
 		}
-		// seeding the decay chain..
-		vecParticle.push_back(locPID);
-		vecParent.push_back(locParentPID);
 		dHist_PID->Fill(locPID);	
-		if (locPID==17){ numTotalEta++;	}
-		if (locPID==7){ numTotalPi0++;}	
-	}
-	
 
-	///////////////// BOOLS to control which combos to cut ///////////////////
-	bool etaTwoDaughters = 0;
-	bool pi0TwoDaughters = 0;
-	bool etaPhotonDaughters = 1;
-	bool pi0PhotonDaughters = 1;
-	bool oneInitialEta = 0;
-	bool oneInitialPi0 = 0;
-	bool oneEta = 0;
-	bool onePi0 = 0;
-
-	if (numTotalEta==1){ oneEta=1; }
-	if (numTotalPi0==1){ onePi0=1; }
-
-	//bool etaPi0NotTwo = 0; // the eta OR pi0 does not decay into two particles.
-	//bool etaPi0NotPhoton = 0; // the eta OR pi0
-	// the above two conditions are not enough to selec our event, since if there were no pi0 it would still pass, we introduce
-	//bool notOneEtaOnePi0 = 0; 
-	//////////////////////////////////////////////////////////////////////////
-	
-	vector<Int_t> idxInitial;
-	set<Int_t> complete; // will be used to check if we use all the particles
-	Int_t vecSize = static_cast<Int_t>(vecParent.size());
-	// complete is a set complete set of intergers from 0 to vecSize
-	for (Int_t i=0; i < vecSize; ++i){complete.insert(i);}
-	set<Int_t> completing;
-	Int_t matchId = 0;
-        for (auto it = vecParent.begin(); it != vecParent.end(); ++it){
-		// it is an iterator that iterates vecParent. *it would dereference to give the underlying value the pointer was pointing at. -1 = no parents
-                if (*it == -1){
-			// *it is = 1 when this particle has no parent
-                        idxInitial.push_back(matchId);
-			// say we have used this particle up.
-			completing.insert(matchId);
-                }
-        	++matchId;
-        }
-	if (is_in) {
-		for (int const& element : completing) { cout << element << " "; } 
-		cout << "primaries" << endl;
-	} 
-	// since matchId would also correspond to the array index we can use it in looking for its daughters
-	// searching for daughters of initial particles
-	vector<vector<Int_t>> secondaries;
-	vector<Int_t> secondary;
-	vector<Int_t> vecSizeSec;
-	// loop through the idxInital vector we just created with the parent particles AND the vector of parent particles
-	for (auto it2 = idxInitial.begin(); it2 != idxInitial.end(); ++it2){
-		matchId = 0;
-		secondary.clear();
-		if (is_in) {
-			cout << *it2 << " has daughters : ";
-		}
-        	for (auto it = vecParent.begin(); it != vecParent.end(); ++it){
-			if (*it == *it2){
-				if (is_in){
-					cout << matchId << ", ";
-				}
-				// basically this will be a vector of indices of particles that would have the same parent
-				secondary.push_back(matchId);
-				completing.insert(matchId);	
-			}
-			++matchId;
-		}
-		Int_t sizeSec = static_cast<Int_t>(secondary.size());
-		if (is_in){ 
-			cout << endl << "sizeSec: " << sizeSec << endl;
-		}
-		vecSizeSec.push_back(sizeSec);
-		secondaries.push_back(secondary);
+		parentArray.push_back(locParentPID);
+		pids.push_back(locPID);
 	}
-	
-	// here we check if we have used up all the particles
-	if (completing != complete) {
-		vecHasSecondaryDaughters.push_back(eventIdx);
-	}
-	
-	//turns out there are decays with 3 fragementations. So we need to implement something for that.
-	//secondaries_2 should have the same size and the number of daughters to the initial particles
-	vector<vector<Int_t>> secondaries_2;
-	vector<Int_t> secondary_2;
-	for (auto it2 = secondaries.begin(); it2 != secondaries.end(); ++it2){
-		//it2 is a pointer
-		//here we iterate through all the secondaries where secondaries is a vector of vectors where the subvectors share the same parent
-		for (auto it = it2->begin(); it != it2->end(); ++it){
-			matchId = 0;
-			secondary_2.clear();
-			if (is_in){
-				cout << *it << " has daughters : ";
-			}
-			// here we loop through the full vector of parent particles again to do our matching
-			for (auto it3 = vecParent.begin(); it3 != vecParent.end(); ++it3){
-			      //between vecParent and it2 which represents the daughters of the initial
-				if (*it3 == *it){
-			      		if (is_in){
-						cout << matchId << ", ";		
-					}
-					secondary_2.push_back(matchId);
-					completing.insert(matchId);
-				}
-				++matchId;
-			}
-			if (is_in){
-				cout << endl;
-			}
-			secondaries_2.push_back(secondary_2);
-		}
+	if ( countPrimaryPi0!=1 || countPrimaryEta!=1 ) {
+		cout << "SHOOT I HAVE TO SHOULD BREAK PROGRAM TO REMIND MYSELF THAT ASKING FOR A 7 AND 17 DOESNT GUARANTEE IT" << endl; 
+		exit(0);
 	}
 
 
-	if (is_in) { 
-		for (Int_t const& element : completing) { cout << element << " "; }; 
-		cout << "completing" << endl;
-		for (Int_t const& element : complete) { cout << element << " ";}
-		cout << "complete" << endl;
-	} 
-	if (completing == complete) {
-		vecEqual.push_back(eventIdx);
-		++equal;
+	std::vector<int> parents;
+	findParents(parentArray,parents);
+	//cout << "\nTHESE ARE THE PARENTS" << endl;
+	for ( auto parent=0; parent < (int)parents.size(); ++parent){
+		//cout << parents[parent] << endl;
+	}
+
+	int pi0ToNGamma=0;
+	int etaToNGamma=0;
+	bool correctFinalState=false;
+	for (auto parent : parents){
+		std::vector<int> daughters;
+		cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
+		findDaughters( parentArray, daughters, parent );
+		for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
+			if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
+			if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
+			//cout << "-  " << daughters[daughter] << " which has PID=" << pids[daughters[daughter]] << endl;
+			//
+			// THESE CODE BELOW WILL GET THE SECONDARY DAUGHTERS
+			//std::vector<int> secDaughters;
+			//findDaughters( parentArray, secDaughters, daughters[daughter] ); 
+			//for ( int secDaughter=0; secDaughter < secDaughters.size(); ++secDaughter) {
+			//	cout << "--" << secDaughters[secDaughter] << endl;
+			//}
 		}
+	}
+	if ( pi0ToNGamma==2 && etaToNGamma==2) {
+		correctFinalState=true;
+		//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
+	}
 	else {
-		++notEqual;
-		vecNotEqual.push_back(eventIdx);
-	} 
+		//cout << "NOT THE CORRECT STATE..." << endl;
+	}	
+
+
+
+
+
 
 	// check for etas in idxInitial
 	Int_t eta = 17;
 	Int_t pi0 = 7;
 	Int_t proton =14;
-	//itIter is indexing idxInitial, the initial particles, we have to keep an increment that mactches with itIter to use for indexing secondaries
-	matchId = 0; //matchId will be the index of the initial particles that have a matching pi0 OR eta
-	// checking that we have only one eta and one pi0
-	Int_t numEta = 0;
-	Int_t numPi0 = 0;
-	Int_t startIdx;
-	for (auto itIter = idxInitial.begin(); itIter != idxInitial.end(); ++itIter){
-		numEta = 0; numPi0 = 0;
-		// Only looks for an inital eta or pi0 that have no parents
-		if (vecParticle[*itIter] == eta || vecParticle[*itIter] == pi0){
-			vector<Int_t> etaPi0Daughters = secondaries[matchId]; // this will be a the daughters vector of the pi0 i.e. as a vector of two photons	
-			Int_t sizeEtaPi0Daughters = vecSizeSec[matchId];
-			if(vecParticle[*itIter] == proton){
-				locProtonP4 = allP4[*itIter];
-			}
-			if (vecParticle[*itIter] == eta) {
-				numEta += 1; 
-				locEtaP4 = allP4[*itIter];
-				if (sizeEtaPi0Daughters == 2){
-					// checking eta has only two daughters....
-					etaTwoDaughters = 1;	
-				}
-			}
-			if (vecParticle[*itIter] == pi0) { 
-				numPi0 += 1; 
-				locPi0P4 = allP4[*itIter];
-				if (sizeEtaPi0Daughters == 2){
-					pi0TwoDaughters = 1;	
-				}
-			}
-			if (numEta > 1 || numPi0 > 1){ throw std::invalid_argument( "numEta or numPi0 > 1!" ); }
-			if (is_in){
-				cout << "Found particle with PID " << vecParticle[*itIter] << " having daughters: " << endl;
-			}
-			startIdx = 0; 
-			for (auto itSizes = vecSizeSec.begin(); itSizes != vecSizeSec.begin()+matchId;++itSizes){
-				startIdx += *itSizes;
-				//cout << "startIdx/itSizes: " << startIdx << "/" << *itSizes << endl;
-			}
-			//cout << "final startIdx: " << startIdx << endl;
-			
-			Int_t incrementStartIdx = 0;
-			Int_t secondariesSize = static_cast<Int_t>(secondaries.size());
-			for (auto itDaughter = etaPi0Daughters.begin(); itDaughter != etaPi0Daughters.end(); ++itDaughter){
-				// first check if our decays are to photons. We initialize _PhotonDaughters to be 1. If we find any of the daughters to not be a gamma we set it to 0
-				if (vecParticle[*itIter] == eta) {
-					if (vecParticle[*itDaughter]!=1){ // photons have GEANT pid = 1
-						etaPhotonDaughters = 0;
-					}
-				}
-				if (vecParticle[*itIter] == pi0) {
-					if (vecParticle[*itDaughter]!=1){ // photons have GEANT pid = 1
-						etaPhotonDaughters = 0;
-					}
-				}
-				// to grab the secondary daughters, where secondaries_2 has the same length as the total number of all daughters for all the initial
-				// we first have to grab where the secondary daughters of the eta's begin which is denoted by startIdx and runs for sizeEtaDaughters
-				if (is_in){
-					cout <<  *itDaughter << " => ";
-				}
-				vector<Int_t> etaPi0Daughters2 = secondaries_2[startIdx+incrementStartIdx];
-					if (etaPi0Daughters2.size() != 0){
-						for (auto itDaughters2 = etaPi0Daughters2.begin(); itDaughters2 != etaPi0Daughters2.end(); ++itDaughters2){
-							if (is_in){
-								cout << "(" << *itDaughters2 << "," << vecParticle[*itDaughters2] << ") ";
-							}
-						}
-					}
-					else { if (is_in){cout << "(These are final states)";} }
-					if (is_in){
-						cout << " with (array_index, PID)" << endl;
-					}
-				++incrementStartIdx;
-			}
-			if (is_in){	
-				cout << endl;
-			}
-		}
-		++matchId;	
-		if ( numEta == 1 ) { oneInitialEta = 1; } 
-		if ( numPi0 == 1 ) { oneInitialPi0 = 1; } 
-	}
 
 	double lowE = 0;
 	double uppE = 1;
@@ -376,6 +216,7 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	}
 
 	TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
+
         TLorentzVector cm_vec = locBeamP4+locTargetP4;
         TLorentzVector locPi0EtaP4_cm = locPi0EtaP4;
         TLorentzVector locPi0P4_cm = locPi0P4;
@@ -388,7 +229,6 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
         locBeamP4_cm.Boost(-cm_vec.BoostVector());
         locProtonP4_cm.Boost(-cm_vec.BoostVector());
 
-
 	TLorentzVector locPi0Eta_gj = locPi0EtaP4_cm;	
 	TLorentzVector locPi0P4_gj = locPi0P4_cm;
 	TLorentzVector locEtaP4_gj = locEtaP4_cm;
@@ -399,7 +239,6 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	locEtaP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
 	locBeamP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
 	locProtonP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-
 
 	double radToDeg = 57.3;
         TVector3 locPi0P4_gj_unit = locPi0P4_gj.Vect().Unit();
@@ -428,21 +267,7 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
 	double mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
 
-	// the passCuts we use would depend on what we are looking for. Since our overall goal is to look at the pi0eta -> 4 photon final states. If we want to look at the full
-	// distribution of eta and pi0 to see if there is an a0 or a2 resonance we should probably not restrict to 4 photon final states. 
-	// We can probably use passCuts if we are trying to compare the q-value weighting of the mass distributions to the thrown distributions. Since we have not restricted on EBeam>8GeV
-	// 	and we have used the fact that the eta and pi0 decay into two photons I think using this cut variable is appropriate.
-	bool passCuts = beamEisFinite*etaTwoDaughters*pi0TwoDaughters*etaPhotonDaughters*pi0PhotonDaughters*oneInitialEta*oneInitialPi0;
-	//bool passCutsOneEtaPi0 = beamEisFinite*oneInitialEta*oneInitialPi0;
-	bool passCutsOneEtaPi0 = beamEisFinite*oneEta*onePi0;
-	dHist_numEventsOnePi0OneEta->Fill( (float)passCutsOneEtaPi0 );
 	
-	auto locNumThrown = Get_NumThrown();
-	// There are some events with NumThrown=8; we have to check them out;
-	// apparently there are states with NumThrown=4 also
-	if (locNumThrown != 7){
-		vecNumThrownNot7.push_back(eventIdx);
-	}
 	dHist_NumThrown->Fill(locNumThrown);
 	dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 	dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
@@ -476,23 +301,21 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	}
 
 
-
-
-	if (passCutsOneEtaPi0){
+	if (correctFinalState){
 		dHist_genCounts_eta->Fill(teta_genCounts);
 		dHist_genCounts_pi0->Fill(tpi0_genCounts);
 
 		//Fill_OutputTree must be run with proof!
 		mandelstam_tpAll->Fill(mandelstam_tp);
 		dHist_pi0eta1D->Fill(locPi0EtaMass);
-		//cout << locPi0P4.M() << endl;
-		//cout << locEtaP4.M() << endl;
 		dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
 		dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
 		if(mandelstam_tp < 1){
-			Fill_OutputTree("selected_tLT1"); //your user-defined key
+			dHist_genCounts_eta->Fill(teta_genCounts);
+			dHist_genCounts_pi0->Fill(tpi0_genCounts);
 			mandelstam_tpLT1->Fill(mandelstam_tp);
 			dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+			Fill_OutputTree("selected_tLT1"); //your user-defined key
 		}
 		if(mandelstam_tp < 0.6){
 			Fill_OutputTree("selected_tLT06"); //your user-defined key
@@ -507,14 +330,9 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 		pass += 1;
 		Fill_OutputTree();
 	}
-	else {	
-		vecNotPassCuts.push_back(eventIdx);
-		notPass += 1;
-	}
+
+
 	++eventIdx;
-
-	//Fill_OutputTree();
-
 
 	//OR Manually:
 	//BEWARE: Do not expect the particles to be at the same array indices from one event to the next!!!!
@@ -547,51 +365,13 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 	else if((locBeamEnergyUsedForBinning >= 10.0) && (locBeamEnergyUsedForBinning < 11.0))
 		Fill_OutputTree("Bin3"); //your user-defined key
 */
-	//}
+	}
 	ievent++;
 	return kTRUE;
 }
 
-void DSelector_thrown_7_17_14::Finalize(void)
+void DSelector_thrown::Finalize(void)
 {
-
-	cout << "sets are equal: " << equal << " not equal: " << notEqual << endl;
-	cout << "Some of the eventIdx which the sets are not equal: " << endl;
-	Int_t N = 0;
-	for (auto itVNE = vecNotEqual.begin(); itVNE != vecNotEqual.end(); ++itVNE){
-		if (N < 10){
-			cout << *itVNE << " ";
-		} 
-		++N;
-	}
-	N = 0;
-	cout << "Pass cuts: " << pass << " Not pass cuts: " << notPass << endl;
-	cout << "Some of the eventIdx which they are not pass cuts: " << endl;
-	for (auto itVNPC = vecNotPassCuts.begin(); itVNPC != vecNotPassCuts.end(); ++itVNPC){
-		if (N < 10){
-			cout << *itVNPC << " ";
-		} 
-		++N;
-	}
-	N = 0;
-	cout << endl << "Some of the eventIdx which has secondary Daughters: " << endl;
-	for (auto itVHSD = vecHasSecondaryDaughters.begin(); itVHSD != vecHasSecondaryDaughters.end(); ++itVHSD){
-		if (N < 10){
-			cout << *itVHSD << " ";
-		} 
-		++N;
-	}
-	N = 0;
-	cout << endl << "Some of the eventIdx which has NumThrown != 7: " << endl;
-	for (auto itVNTN7 = vecNumThrownNot7.begin(); itVNTN7 != vecNumThrownNot7.end(); ++itVNTN7){
-		if (N < 10){
-			cout << *itVNTN7 << " ";
-		} 
-		++N;
-	}
-
-	cout << endl << "beamEinf: " << beamEinf << " beamEfin: " << beamEfin << endl;
-
 	//Save anything to output here that you do not want to be in the default DSelector output ROOT file.
 
 	//Otherwise, don't do anything else (especially if you are using PROOF).
