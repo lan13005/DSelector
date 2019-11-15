@@ -11,9 +11,9 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	dOutputTreeFileNameMap["selected_tLT1"] = "thrownNotAmptoolsReady_a0a2_tLT1.root"; //key is user-defined, value is output file name
-	dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
-	dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
+	dOutputTreeFileNameMap["selected_tLT1"] = "thrownNotAmptoolsReady_flat_tLT1.root"; //key is user-defined, value is output file name
+	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
+	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
 	//Because this function gets called for each TTree in the TChain, we must be careful:
 		//We need to re-initialize the tree interface & branch wrappers, but don't want to recreate histograms
@@ -81,7 +81,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 	//CALL THIS FIRST
 	//
-	if ( ievent<maxevent ){
+	//if ( ievent<maxevent ){
 	DSelector::Process(locEntry); //Gets the data from the tree for the entry
 	//cout << "RUN " << Get_RunNumber() << ", EVENT " << Get_EventNumber() << endl;
 	//
@@ -132,6 +132,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 	int countPrimaryEta=0;
 	int countPrimaryPi0=0;
+	bool notCorrectTopology=0;
 	int locNumThrown = Get_NumThrown();
 	for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 	{	
@@ -156,181 +157,190 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		pids.push_back(locPID);
 	}
 	if ( countPrimaryPi0!=1 || countPrimaryEta!=1 ) {
+		// Interesting, that there is an event that starts with one eta -> 3pi0 -> 6 gamma
 		cout << "SHOOT I HAVE TO SHOULD BREAK PROGRAM TO REMIND MYSELF THAT ASKING FOR A 7 AND 17 DOESNT GUARANTEE IT" << endl; 
-		exit(0);
-	}
-
-
-	std::vector<int> parents;
-	findParents(parentArray,parents);
-	//cout << "\nTHESE ARE THE PARENTS" << endl;
-	for ( auto parent=0; parent < (int)parents.size(); ++parent){
-		//cout << parents[parent] << endl;
-	}
-
-	int pi0ToNGamma=0;
-	int etaToNGamma=0;
-	bool correctFinalState=false;
-	for (auto parent : parents){
-		std::vector<int> daughters;
-		cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
-		findDaughters( parentArray, daughters, parent );
-		for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
-			if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
-			if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
-			//cout << "-  " << daughters[daughter] << " which has PID=" << pids[daughters[daughter]] << endl;
-			//
-			// THESE CODE BELOW WILL GET THE SECONDARY DAUGHTERS
-			//std::vector<int> secDaughters;
-			//findDaughters( parentArray, secDaughters, daughters[daughter] ); 
-			//for ( int secDaughter=0; secDaughter < secDaughters.size(); ++secDaughter) {
-			//	cout << "--" << secDaughters[secDaughter] << endl;
-			//}
+		cout << " These are the ids and their parents: " << endl;
+		for ( int idx=0; idx<(int)pids.size(); ++idx ){
+			cout << "  " << pids[idx] << ", " << parentArray[idx] << endl;
 		}
-	}
-	if ( pi0ToNGamma==2 && etaToNGamma==2) {
-		correctFinalState=true;
-		//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
-	}
-	else {
-		//cout << "NOT THE CORRECT STATE..." << endl;
-	}	
-
-
-
-
-
-
-	// check for etas in idxInitial
-	Int_t eta = 17;
-	Int_t pi0 = 7;
-	Int_t proton =14;
-
-	double lowE = 0;
-	double uppE = 1;
-	for (int beamE=0; beamE<12; ++beamE){
-		//cout << "lowE, uppE: "<<lowE<<", "<<uppE<<endl;
-		pBeamE[beamE] = lowE<locBeamP4.E() && locBeamP4.E()<uppE;
-		lowE+=1;
-		uppE+=1;
+		notCorrectTopology=true;
+		//exit(0);
 	}
 
-	TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
 
-        TLorentzVector cm_vec = locBeamP4+locTargetP4;
-        TLorentzVector locPi0EtaP4_cm = locPi0EtaP4;
-        TLorentzVector locPi0P4_cm = locPi0P4;
-        TLorentzVector locEtaP4_cm = locEtaP4;
-        TLorentzVector locBeamP4_cm = locBeamP4;
-        TLorentzVector locProtonP4_cm = locProtonP4;
-        locPi0EtaP4_cm.Boost(-cm_vec.BoostVector());
-        locPi0P4_cm.Boost(-cm_vec.BoostVector());
-        locEtaP4_cm.Boost(-cm_vec.BoostVector());
-        locBeamP4_cm.Boost(-cm_vec.BoostVector());
-        locProtonP4_cm.Boost(-cm_vec.BoostVector());
-
-	TLorentzVector locPi0Eta_gj = locPi0EtaP4_cm;	
-	TLorentzVector locPi0P4_gj = locPi0P4_cm;
-	TLorentzVector locEtaP4_gj = locEtaP4_cm;
-	TLorentzVector locBeamP4_gj = locBeamP4_cm;
-	TLorentzVector locProtonP4_gj = locProtonP4_cm;
-	locPi0Eta_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-	locPi0P4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-	locEtaP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-	locBeamP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-	locProtonP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-
-	double radToDeg = 57.3;
-        TVector3 locPi0P4_gj_unit = locPi0P4_gj.Vect().Unit();
-        TVector3 locEtaP4_gj_unit = locEtaP4_gj.Vect().Unit();
-        TVector3 locPi0EtaP4_gj_unit = locPi0Eta_gj.Vect().Unit();
-        // Calculate cosTheta, phi in maybe the GJ axes.
-        // since we already defined the x,y,z as TVector3 we don't have to do it again.
-        TVector3 z = locBeamP4_gj.Vect().Unit();
-        // this y should be the normal of the production plane. If we do a boost in a direction in the production plane the perp direction doesn't change. We could use the beam and the recoiled proton to define the
-        // production plane in this new frame. Let us define it in the CM frame. 
-        TVector3 y = locPi0EtaP4_cm.Vect().Cross(locBeamP4_cm.Vect()).Unit();
-        TVector3 x = y.Cross(z).Unit();
-
-	TVector3 angles_pi0;
-	TVector3 angles_eta;
-        angles_pi0.SetXYZ ( locPi0P4_gj_unit.Dot(x), locPi0P4_gj_unit.Dot(y), locPi0P4_gj_unit.Dot(z) );
-        angles_eta.SetXYZ ( locEtaP4_gj_unit.Dot(x), locEtaP4_gj_unit.Dot(y), locEtaP4_gj_unit.Dot(z) );
-
-        double cosTheta_pi0_GJ = angles_pi0.CosTheta();
-        double cosTheta_eta_GJ = angles_eta.CosTheta();
-        double phi_pi0_GJ = angles_pi0.Phi()*radToDeg;
-        double phi_eta_GJ = angles_eta.Phi()*radToDeg;
-
-	double locPi0EtaMass = locPi0EtaP4.M();
-	double mandelstam_t = (locProtonP4-locTargetP4).M2();
-	double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
-	double mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
-
-	
-	dHist_NumThrown->Fill(locNumThrown);
-	dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-	dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
-	dHist_phi->Fill(phi_pi0_GJ);
-	dHist_cosTheta->Fill(cosTheta_pi0_GJ);
-	dHist_beamE->Fill(locBeamP4.E());
-	for (int beamE=0; beamE<12; ++beamE){
-		if (pBeamE[beamE]){
-			dHist_pi0eta1DBeam[beamE]->Fill(locPi0EtaMass);
+	if ( !notCorrectTopology ) { // if it doesn't have 1 pi0 and eta parent
+		std::vector<int> parents;
+		findParents(parentArray,parents);
+		cout << "\nTHESE ARE THE PARENTS" << endl;
+		for ( auto parent=0; parent < (int)parents.size(); ++parent){
+			cout << parents[parent] << endl;
 		}
-	}
-	pBeamE8to9GeV=locBeamP4.E()>8 && locBeamP4.E()<9;	
-	//if ( passCutsOneEtaPi0 && mandelstam_tp < 1) {
-	//}
-        mandelstam_teta = -(locBeamP4-locEtaP4).M2();
-        mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
-	idx_t_eta = (int)( (mandelstam_teta-tMin)/tStep ); 
-	idx_t_pi0 = (int)( (mandelstam_tpi0-tMin)/tStep ); 
-	idx_m = (int)( (locPi0EtaP4.M()-mMin)/mStep );
-	if ( mandelstam_teta < tMin || locPi0EtaP4.M() < mMin || mandelstam_teta>tMax || locPi0EtaP4.M() >mMax ) {
-		teta_genCounts = -1;
-	}
-	else {
-		teta_genCounts = idx_t_eta+num_tBins*idx_m;
-	}
-	if ( mandelstam_tpi0 < tMin || locPi0EtaP4.M() < mMin || mandelstam_tpi0>tMax || locPi0EtaP4.M() >mMax ) {
-		tpi0_genCounts = -1;
-	}
-	else {
-		tpi0_genCounts = idx_t_pi0+num_tBins*idx_m;
-	}
+
+		int pi0ToNGamma=0;
+		int etaToNGamma=0;
+		bool correctFinalState=false;
+		for (auto parent : parents){ // each one of these parents are already a primary particle
+			std::vector<int> daughters;
+			cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
+			findDaughters( parentArray, daughters, parent );
+			for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
+				if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
+				if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
+				//cout << "-  " << daughters[daughter] << " which has PID=" << pids[daughters[daughter]] << endl;
+				//
+				// THESE CODE BELOW WILL GET THE SECONDARY DAUGHTERS
+				//std::vector<int> secDaughters;
+				//findDaughters( parentArray, secDaughters, daughters[daughter] ); 
+				//for ( int secDaughter=0; secDaughter < secDaughters.size(); ++secDaughter) {
+				//	cout << "--" << secDaughters[secDaughter] << endl;
+				//}
+			}
+		}
+		if ( pi0ToNGamma==2 && etaToNGamma==2) {
+			correctFinalState=true;
+			//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
+		}
+
+		cout << "Found all the daughters" << endl;
+
+		// check for etas in idxInitial
+		Int_t eta = 17;
+		Int_t pi0 = 7;
+		Int_t proton =14;
+
+		double lowE = 0;
+		double uppE = 1;
+		for (int beamE=0; beamE<12; ++beamE){
+			//cout << "lowE, uppE: "<<lowE<<", "<<uppE<<endl;
+			pBeamE[beamE] = lowE<locBeamP4.E() && locBeamP4.E()<uppE;
+			lowE+=1;
+			uppE+=1;
+		}
+		cout << "Calculated EBeam bins" << endl;
+
+		TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
+
+        	TLorentzVector cm_vec = locBeamP4+locTargetP4;
+        	TLorentzVector locPi0EtaP4_cm = locPi0EtaP4;
+        	TLorentzVector locPi0P4_cm = locPi0P4;
+        	TLorentzVector locEtaP4_cm = locEtaP4;
+        	TLorentzVector locBeamP4_cm = locBeamP4;
+        	TLorentzVector locProtonP4_cm = locProtonP4;
+        	locPi0EtaP4_cm.Boost(-cm_vec.BoostVector());
+        	locPi0P4_cm.Boost(-cm_vec.BoostVector());
+        	locEtaP4_cm.Boost(-cm_vec.BoostVector());
+        	locBeamP4_cm.Boost(-cm_vec.BoostVector());
+        	locProtonP4_cm.Boost(-cm_vec.BoostVector());
+
+		TLorentzVector locPi0Eta_gj = locPi0EtaP4_cm;	
+		TLorentzVector locPi0P4_gj = locPi0P4_cm;
+		TLorentzVector locEtaP4_gj = locEtaP4_cm;
+		TLorentzVector locBeamP4_gj = locBeamP4_cm;
+		TLorentzVector locProtonP4_gj = locProtonP4_cm;
+		locPi0Eta_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+		locPi0P4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+		locEtaP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+		locBeamP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+		locProtonP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+
+		double radToDeg = 57.3;
+        	TVector3 locPi0P4_gj_unit = locPi0P4_gj.Vect().Unit();
+        	TVector3 locEtaP4_gj_unit = locEtaP4_gj.Vect().Unit();
+        	TVector3 locPi0EtaP4_gj_unit = locPi0Eta_gj.Vect().Unit();
+        	// Calculate cosTheta, phi in maybe the GJ axes.
+        	// since we already defined the x,y,z as TVector3 we don't have to do it again.
+        	TVector3 z = locBeamP4_gj.Vect().Unit();
+        	// this y should be the normal of the production plane. If we do a boost in a direction in the production plane the perp direction doesn't change. We could use the beam and the recoiled proton to define the
+        	// production plane in this new frame. Let us define it in the CM frame. 
+        	TVector3 y = locPi0EtaP4_cm.Vect().Cross(locBeamP4_cm.Vect()).Unit();
+        	TVector3 x = y.Cross(z).Unit();
+
+		TVector3 angles_pi0;
+		TVector3 angles_eta;
+        	angles_pi0.SetXYZ ( locPi0P4_gj_unit.Dot(x), locPi0P4_gj_unit.Dot(y), locPi0P4_gj_unit.Dot(z) );
+        	angles_eta.SetXYZ ( locEtaP4_gj_unit.Dot(x), locEtaP4_gj_unit.Dot(y), locEtaP4_gj_unit.Dot(z) );
+
+        	double cosTheta_pi0_GJ = angles_pi0.CosTheta();
+        	double cosTheta_eta_GJ = angles_eta.CosTheta();
+        	double phi_pi0_GJ = angles_pi0.Phi()*radToDeg;
+        	double phi_eta_GJ = angles_eta.Phi()*radToDeg;
+
+		cout << "Calculated the kinematic angles" << endl;
+
+		double locPi0EtaMass = locPi0EtaP4.M();
+		double mandelstam_t = (locProtonP4-locTargetP4).M2();
+		double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
+		double mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
+
+		
+		dHist_NumThrown->Fill(locNumThrown);
+		dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
+		dHist_phi->Fill(phi_pi0_GJ);
+		dHist_cosTheta->Fill(cosTheta_pi0_GJ);
+		dHist_beamE->Fill(locBeamP4.E());
+		for (int beamE=0; beamE<12; ++beamE){
+			if (pBeamE[beamE]){
+				dHist_pi0eta1DBeam[beamE]->Fill(locPi0EtaMass);
+			}
+		}
+		pBeamE8to9GeV=locBeamP4.E()>8 && locBeamP4.E()<9;	
+		cout << "Filled some histograms" << endl;
+
+		//if ( passCutsOneEtaPi0 && mandelstam_tp < 1) {
+		//}
+        	mandelstam_teta = -(locBeamP4-locEtaP4).M2();
+        	mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
+		idx_t_eta = (int)( (mandelstam_teta-tMin)/tStep ); 
+		idx_t_pi0 = (int)( (mandelstam_tpi0-tMin)/tStep ); 
+		idx_m = (int)( (locPi0EtaP4.M()-mMin)/mStep );
+		if ( mandelstam_teta < tMin || locPi0EtaP4.M() < mMin || mandelstam_teta>tMax || locPi0EtaP4.M() >mMax ) {
+			teta_genCounts = -1;
+		}
+		else {
+			teta_genCounts = idx_t_eta+num_tBins*idx_m;
+		}
+		if ( mandelstam_tpi0 < tMin || locPi0EtaP4.M() < mMin || mandelstam_tpi0>tMax || locPi0EtaP4.M() >mMax ) {
+			tpi0_genCounts = -1;
+		}
+		else {
+			tpi0_genCounts = idx_t_pi0+num_tBins*idx_m;
+		}
+		cout << "Determined teta and tpi0 bins" << endl;
 
 
-	if (correctFinalState){
-		dHist_genCounts_eta->Fill(teta_genCounts);
-		dHist_genCounts_pi0->Fill(tpi0_genCounts);
-
-		//Fill_OutputTree must be run with proof!
-		mandelstam_tpAll->Fill(mandelstam_tp);
-		dHist_pi0eta1D->Fill(locPi0EtaMass);
-		dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
-		dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
-		if(mandelstam_tp < 1){
+		if (correctFinalState){
 			dHist_genCounts_eta->Fill(teta_genCounts);
 			dHist_genCounts_pi0->Fill(tpi0_genCounts);
-			mandelstam_tpLT1->Fill(mandelstam_tp);
-			dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-			Fill_OutputTree("selected_tLT1"); //your user-defined key
-		}
-		if(mandelstam_tp < 0.6){
-			Fill_OutputTree("selected_tLT06"); //your user-defined key
-			mandelstam_tpLT06->Fill(mandelstam_tp);
-			dHist_cosThetaVsMass_tpLT06->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-		}
-		if((mandelstam_tp >= 0.5) && (mandelstam_tp < 1)) {
-			Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
-			mandelstam_tpGT05LT1->Fill(mandelstam_tp);
-			dHist_cosThetaVsMass_tpGT05LT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-		}
-		pass += 1;
-		Fill_OutputTree();
-	}
 
+			//Fill_OutputTree must be run with proof!
+			mandelstam_tpAll->Fill(mandelstam_tp);
+			dHist_pi0eta1D->Fill(locPi0EtaMass);
+			dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
+			dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
+			if(mandelstam_tp < 1){
+				dHist_genCounts_eta->Fill(teta_genCounts);
+				dHist_genCounts_pi0->Fill(tpi0_genCounts);
+				mandelstam_tpLT1->Fill(mandelstam_tp);
+				dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+				Fill_OutputTree("selected_tLT1"); //your user-defined key
+			}
+			//if(mandelstam_tp < 0.6){
+			//	Fill_OutputTree("selected_tLT06"); //your user-defined key
+			//	mandelstam_tpLT06->Fill(mandelstam_tp);
+			//	dHist_cosThetaVsMass_tpLT06->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+			//}
+			//if((mandelstam_tp >= 0.5) && (mandelstam_tp < 1)) {
+			//	Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
+			//	mandelstam_tpGT05LT1->Fill(mandelstam_tp);
+			//	dHist_cosThetaVsMass_tpGT05LT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+			//}
+			pass += 1;
+			Fill_OutputTree();
+		}
+		cout << "Filling the rest of the histograms" << endl;
+
+	}
 
 	++eventIdx;
 
@@ -365,7 +375,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 	else if((locBeamEnergyUsedForBinning >= 10.0) && (locBeamEnergyUsedForBinning < 11.0))
 		Fill_OutputTree("Bin3"); //your user-defined key
 */
-	}
+	//}
 	ievent++;
 	return kTRUE;
 }

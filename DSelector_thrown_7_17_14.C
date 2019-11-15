@@ -490,22 +490,22 @@ Bool_t DSelector_thrown_7_17_14::Process(Long64_t locEntry)
 		dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
 		dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
 		if(mandelstam_tp < 1){
-			Fill_OutputTree("selected_tLT1"); //your user-defined key
+			//Fill_OutputTree("selected_tLT1"); //your user-defined key
 			mandelstam_tpLT1->Fill(mandelstam_tp);
 			dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 		}
 		if(mandelstam_tp < 0.6){
-			Fill_OutputTree("selected_tLT06"); //your user-defined key
+			//Fill_OutputTree("selected_tLT06"); //your user-defined key
 			mandelstam_tpLT06->Fill(mandelstam_tp);
 			dHist_cosThetaVsMass_tpLT06->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 		}
 		if((mandelstam_tp >= 0.5) && (mandelstam_tp < 1)) {
-			Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
+			//Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
 			mandelstam_tpGT05LT1->Fill(mandelstam_tp);
 			dHist_cosThetaVsMass_tpGT05LT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 		}
 		pass += 1;
-		Fill_OutputTree();
+		//Fill_OutputTree();
 	}
 	else {	
 		vecNotPassCuts.push_back(eventIdx);

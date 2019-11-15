@@ -44,14 +44,14 @@ void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double
 	double xlength = xmax-xmin;
 	double ylength = ymax-ymin;
 	inBox[4] = x<xmax && x>xmin && y<ymax && y>ymin;
-	inBox[3] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) && y<ymax && y>ymin;
-	inBox[5] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y<ymax && y>ymin;
+	inBox[3] = x<(xmin-xskip) && x>(xmin-xskip-xlength) && y<ymax && y>ymin;
+	inBox[5] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y<ymax && y>ymin;
 	inBox[1] = x<xmax && x>xmin && y<(ymax+yskip+ylength) && y>(ymax+yskip);
 	inBox[7] = x<xmax && x>xmin && y>(ymin-yskip-ylength) && y<(ymin-yskip);
-	inBox[0] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
-	inBox[2] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
-	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) &&  y>(ymin-yskip-ylength) && y<(ymin-yskip);
-	inBox[8] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y>(ymin-yskip-ylength) && y<(ymin-yskip);
+	inBox[0] = x<(xmin-xskip) && x>(xmin-xskip-xlength) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+	inBox[2] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xlength) &&  y>(ymin-yskip-ylength) && y<(ymin-yskip);
+	inBox[8] = x<(xmax+xskip+xlength) && x>(xmax+xskip) && y>(ymin-yskip-ylength) && y<(ymin-yskip);
 	inBox[9] = !inBox[0] * !inBox[1] * !inBox[2] * !inBox[3] * !inBox[4] * !inBox[5] * !inBox[6] * !inBox[7] * !inBox[8];	
 	inBox[10] = inBox[0] || inBox[2] || inBox[6] || inBox[8];
 	inBox[11] = inBox[1] || inBox[7];
@@ -147,15 +147,6 @@ class trackingGroup{
             //cout << " -- " << *(allHists_1D[0].values[iValue]) << " Unique? " << uniqueBool << " passCut? " << cutBool << endl; 
             //}
                 
-             for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
-                 for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-	              if (allUsedMapIds_1D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
-	                 allUsedMapIds_1D[iHist].insert(beingUsedPairIds[iValue]); //we get a iterator which references the element of the set so we need to dereference.              
-                         allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[iValue]), *(allHists_1D[iHist].weights) );
-                      }
-                 }
-             }
-
              for (UInt_t iValue=0; iValue<beingUsedPairIds.size(); ++iValue){
                  for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
 	              if (allUsedMapIds_2D[iHist].find(beingUsedPairIds[iValue])==allUsedMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)  ){
@@ -279,12 +270,12 @@ class DSelector_ver20 : public DSelector
                 int locPolarizationAngle; // actual polarization angle
                 set<UInt_t> usedRuns; //think we are over counting our filling of beam angles since the below condition only checks against previous run, doesn't work for recurrences.
 
-
 		// These variables are for the teta vs Meta plots
 		int num_tBins=14;
 		double tMin=0;
 		double tMax=2.8;
-		static const int num_massBins=12;
+		int num_massBins=12;
+		const int c_num_massBins = (const int)num_massBins;
 		const int numHists = num_tBins*num_massBins;
 		double mMin=1.7;
 		double mMax=2.9;
@@ -295,10 +286,7 @@ class DSelector_ver20 : public DSelector
 		int idx_t_eta;
 		int idx_t_pi0;
 		int idx_m;
-		bool passMassBin_tetaIntegrated[num_massBins];
-		bool passMassBin_tpi0Integrated[num_massBins];
-
-
+		bool passMassBin_tIntegrated[c_num_massBins];
 
                 Int_t eventIdx=0;
                 bool isNotRepeated_eta=true;

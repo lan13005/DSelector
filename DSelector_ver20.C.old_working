@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_data";
+string degAngle="pi0eta_flat8GeVPlus";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -38,12 +38,7 @@ void DSelector_ver20::Init(TTree *locTree)
                 etaProtonBaryonCut = 1.65;
                 pi0ProtonBaryonCut = 2;
 		binScale = (upMass-lowMass)/numBinsMass;
-
-		// using the meas data
-		//ellipseX = 0.134285; ellipseY = 0.540383; ellipseXr = 0.02308917; ellipseYr = 0.0699516;  
-
                 //ellipseX = 0.134547; ellipseY = 0.541950; ellipseXr = 0.025449; ellipseYr = 0.069267;
-
                 //using the kin data
                 ellipseX = 0.135881; ellipseY = 0.548625; ellipseXr = 0.0160375; ellipseYr = 0.025671;
 //                ellipseXBS1 = 0.135881; ellipseYBS1 = 0.548625; ellipseXrBS1 = 0.022; ellipseYrBS1 = 0.06;
@@ -475,6 +470,7 @@ void DSelector_ver20::Init(TTree *locTree)
 	//       ++id; histVals[id] = {2, applyAccSub, locSigTheta_BCAL_proton}; 
 	//       histList[id] = {("sigTheta_BCAL_proton"+cutString).c_str(), ("Cuts="+cutsApplied+";SigTheta_BCAL").c_str(), "80", "0", "0.2", "Entries / 0.0025 GeV"};
 	//       histCuts[id] = cutsToApply;
+	//}
 
 
 
@@ -498,15 +494,12 @@ void DSelector_ver20::Init(TTree *locTree)
         histDef_1D histdef;
         histDef_2D histdef2d;
 
-	// ********************************** DECK REALTED PLOTS *****************************************
-
 	// Will leave bin to contain all the bad regions
         histdef.clear();
         name="tetaVsMpi0eta_recCounts";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
-	//    chose this uniqueness set since I use the 2D distribution to select out the regions. So technically I use this set
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
@@ -515,24 +508,6 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
         group_34B_1234B.insert(histdef); 
-
-	for ( int iMass=0; iMass < num_massBins; ++iMass){
-        	histdef.clear();
-        	name="tetaMassBinned"+to_string(iMass);
-        	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tetaIntegrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
-        	histdef.name = name; histdef.cut=&passMassBin_tetaIntegrated[iMass]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &mandelstam_teta );
-        	group_34B_1234B.insert(histdef); 
-
-        	histdef.clear();
-        	name="tpi0MassBinned"+to_string(iMass);
-        	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tpi0Integrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
-        	histdef.name = name; histdef.cut=&passMassBin_tpi0Integrated[iMass]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &mandelstam_tpi0 );
-        	group_34B_1234B.insert(histdef); 
-	}
-
-	// *************************** PHOTON VECTOR QUANTITIES ****************************
 
         histdef.clear();
         cutsApplied="true";
@@ -770,29 +745,14 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B.insert(histdef); 
 
         histdef2d.clear();
-        name = "eta_cosTheta_GJvsM_mMandelstamT";
+        name = "eta_cosTheta_GJvsM_Cut";
         histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS_BS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         group_34B_1234B.insert_2D(histdef2d); 
 
-        name = "eta_phi_GJvsM_mMandelstamT";
-        histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT;M(#pi_{0}#eta)Events / 0.01 GeV;#phi of #eta Events / 4 degrees",350,0,3.5,90,-180,180);
-        histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
-        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
-        histdef2d.valuesY.push_back( &phi_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
-
         histdef2d.clear();
-        name = "eta_cosTheta_GJvsM_Cut";
-        histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS_BS;
-        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
-        histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
-        histdef2d.clear();
-
         name = "eta_phi_GJvsM_Cut";
         histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi_{0}#eta)Events / 0.01 GeV;#phi of #eta Events / 4 degrees",350,0,3.5,90,-180,180);
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
@@ -875,7 +835,6 @@ void DSelector_ver20::Init(TTree *locTree)
         group_12B.insert(histdef); 
         histdef.clear();
 
-        histdef.clear();
         name="pi0MassFCAL_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InFCAL;M(#pi_{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&mEllipse_pre_pi0FCAL; histdef.weights = &weightAS;
@@ -911,7 +870,6 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B.insert(histdef); 
         histdef.clear();
 
-        histdef.clear();
         name="etaMassFCAL_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InFCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaFCAL; histdef.weights = &weightAS;
@@ -931,28 +889,6 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&mEllipse_pre_etaSPLIT; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_Kin );
         group_34B.insert(histdef); 
-
-        histdef.clear();
-        name="etaMassFCAL_mEllipsePre";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InFCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
-        histdef.name = name; histdef.cut=&mEllipse_pre_etaFCAL; histdef.weights = &weightAS;
-        histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
-        
-        histdef.clear();
-        name="etaMassBCAL_mEllipsePre";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InBCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
-        histdef.name = name; histdef.cut=&mEllipse_pre_etaBCAL; histdef.weights = &weightAS;
-        histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
-
-        histdef.clear();
-        name="etaMassSPLIT_mEllipsePre";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*SPLIT;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
-        histdef.name = name; histdef.cut=&mEllipse_pre_etaSPLIT; histdef.weights = &weightAS;
-        histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
-        histdef2d.clear();
 
         histdef2d.clear();
         name="pi0eta_mEllipsePre";
@@ -995,13 +931,6 @@ void DSelector_ver20::Init(TTree *locTree)
 
         // *********************** PI0ETA MASS PLOTS ******************************
         histdef.clear();
-        name="pi0eta1D_Cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=allGeneralCutsPassed;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
-
-        histdef.clear();
         name="pi0eta1D_mMandelstamT";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
@@ -1009,14 +938,14 @@ void DSelector_ver20::Init(TTree *locTree)
         group_1234B.insert(histdef); 
 
         histdef.clear();
-        name="pi0eta1D_ASBS";
+        name="pi0eta1D_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
 
         histdef.clear();
-        name="pi0eta1D_ASBS_meas";
+        name="pi0eta1D_Cut_meas";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &locPi0Eta );
@@ -1098,7 +1027,6 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&(inBox[12]); histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
-	
 
 
         // ************************** GENERAL KINEMATIC QUANTITIES ***************************
@@ -1453,60 +1381,67 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     //cout << "RUN " << Get_RunNumber() << ", EVENT " << Get_EventNumber() << endl;
     //TLorentzVector locProductionX4 = Get_X4_Production();
 
-	std::vector<int> parentArray;
-	std::vector<int> pids;
-	int locNumThrown = Get_NumThrown();
-	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
-	if (Get_NumThrown() != 0 ) {
-		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
-		{	
-			//Set branch array indices corresponding to this particle
-			dThrownWrapper->Set_ArrayIndex(loc_i);
 
-			//Do stuff with the wrapper here ...
-			Particle_t locPID = dThrownWrapper->Get_PID();
-			Int_t locParentPID = dThrownWrapper->Get_ParentIndex();
 
-			parentArray.push_back(locParentPID);
-			pids.push_back(locPID);
-		}
 
-		std::vector<int> parents;
-		findParents(parentArray,parents);
-		//cout << "\nTHESE ARE THE PARENTS" << endl;
-		for ( auto parent=0; parent < (int)parents.size(); ++parent){
-			//cout << parents[parent] << endl;
-		}
-
-		int pi0ToNGamma=0;
-		int etaToNGamma=0;
-		bool correctFinalState=false;
-		for (auto parent : parents){
-			std::vector<int> daughters;
-			cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
-			findDaughters( parentArray, daughters, parent );
-			for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
-				if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
-				if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
-			}
-		}
-		if ( pi0ToNGamma==2 && etaToNGamma==2) {
-			//correctFinalState=true;
-			//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
-		}
-		else { 
-        		if(showOutput) { cout << "\n\n\n*********************************************************\n**************************************************\n########    EventIdx: " << (eventIdx) << "    #############" << endl; }
-			++eventIdx;
-			cout << "SKIPPING THIS COMBO SINCE IT DOESN'T HAVE THE 4 GAMMA TOPOLOGY" << endl;
-			cout << "THESE ARE THE PARTICLES:" << endl;
-			for ( auto pid : pids ) {
-				cout << pid << " ";
-			}
-			cout << endl;
-        		dComboWrapper->Set_IsComboCut(true); return kTRUE;
-		}
-	}
-
+    // NOT SURE IF THIS WOULD EVEN WORK. SO IT SEEMS LIKE dThrownWrapper MATCHES EACH OF THE THROWN PARTICLES TO A HYPOTHESIS AND ASSIGNS A FIGURE OF MERIT TO IT.
+    // THERE IS NO WAY TO REALLY TELL FROM THIS HOW TO SEPARATE SIGNAL AND BKG UNLESS WE JUST TAKE THE HIGHEST FOM COMBINATION AND USE IT, DISCARDING ALL OTHER COMBOS.
+    // PROBABLY NOT SO GOOD OF A WAY OF DISCERNING BKG AND SIGNAL. 
+    // First we loop through the thrown combo wrapper and save all the parent ids and p4s
+    //cout << "Event " << eventIdx << "!\n-----------------------" << endl;
+    //TLorentzVector thrownP4s[Get_NumThrown()];
+    //Int_t thrownPIDs[Get_NumThrown()];
+    //for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+    //{
+    //	//Set branch array indices corresponding to this particle
+    //	dThrownWrapper->Set_ArrayIndex(loc_i);
+    //	thrownP4s[loc_i] = dThrownWrapper->Get_P4();
+    //	thrownPIDs[loc_i] = dThrownWrapper->Get_PID();
+    //	
+    //}
+    //for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+    //{
+    //	dThrownWrapper->Set_ArrayIndex(loc_i);
+    //	cout << "particle_pid: " <<  thrownPIDs[loc_i] << " with parent_pid: " << thrownPIDs[dThrownWrapper->Get_ParentIndex()] << endl;
+    //	cout << "	matching NeutralID/TrackID: " << dThrownWrapper->Get_MatchID() << endl;
+    //	cout << "	FOM: " << dThrownWrapper->Get_MatchFOM() << endl;
+    //}
+    //cout << endl;
+    //
+        //TLorentzVector thrownEta;
+	//TLorentzVector thrownPi0;
+	//TLorentzVector thrownBeam;
+	//int countEtas=0;
+	//int countPi0s=0;
+    	//for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+    	//{
+    	//	dThrownWrapper->Set_ArrayIndex(loc_i);
+    	//	if ( dThrownWrapper->Get_ParentIndex() == -1 ) {
+	//		if ( dThrownWrapper->Get_PID() == 7 ) {
+	//			thrownPi0 = dThrownWrapper->Get_P4();
+	//			++countEtas;
+	//		}	
+	//		if ( dThrownWrapper->Get_PID() == 17 ) {
+	//			thrownEta = dThrownWrapper->Get_P4();
+	//			++countPi0s;
+	//		}	
+	//	}
+    	//}
+	//if (countEtas!=1 || countPi0s!=1){
+	//	cout << "There is more than one eta, one pi0 in this event!" << endl;
+	//	exit(0);
+	//}
+	//thrownBeam = dThrownBeam->Get_P4();
+	//double mandelstam_teta_thrown = -(thrownBeam-thrownEta).M2();
+	//double locPi0Eta_thrown = (thrownPi0+thrownEta).M();
+	//idx_t = (int)( ( mandelstam_teta_thrown-tMin )/tStep ); 
+	//idx_m = (int)( ( locPi0Eta_thrown-mMin)/mStep );
+	//if (  mandelstam_teta_thrown < tMin || locPi0Eta_thrown < mMin || mandelstam_teta_thrown > tMax || locPi0Eta_thrown > mMax ) {
+	//	teta_genCounts = -1;
+	//}
+	//else {
+	//	teta_genCounts = idx_t+num_tBins*idx_m;
+	//}
 
 
 
@@ -1737,7 +1672,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         locEtaProton_Kin = mixingEtaProton_Kin.M();
         locPi0Proton_Kin = mixingPi0Proton_Kin.M();
         locPi0Eta_Kin = mixingPi0Eta_Kin.M();
-        locPi0Eta = mixingPi0Eta.M();
+        locPi0Eta = mixingPi0Eta_Kin.M();
 
         // IN THE FOLLOWING SECTION WE WILL CALCUALTE BY OURSELVES THE MASS OF THE PI0 AND THE ETA WITH DIFFERENT STARTING POINTS ( USING THE PROTON X3 VS USING THE TARGET CENTER)
         //
@@ -2209,7 +2144,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         cosTheta_pi0_hel = angles_pi0.CosTheta();
         cosTheta_eta_hel = angles_eta.CosTheta();
         cosTheta_pi0eta_hel = angles_pi0eta.CosTheta();
-	cout << "cosTheta_pi0eta_hel: " << cosTheta_pi0eta_hel << endl;
         theta_pi0_hel = angles_pi0.Theta();
         theta_eta_hel = angles_eta.Theta();
         phi_pi0_hel = angles_pi0.Phi()*radToDeg;
@@ -2716,27 +2650,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         allGen_barybkg=allGeneralCutsPassed*pEtaProtonBaryonCut*ppi0ProtonBaryonCut;
         allGen_vanHove=allGeneralCutsPassed*pVanHove;
 
-
-
-	// SOME MORE BOOLS FOR THE DECK PLOTS. 
-	for ( int iMass=0; iMass < num_massBins; ++iMass){
-		if ( mandelstam_teta > tMin && mandelstam_teta < tMax && mEllipse_pre_tAll) {
-			if ( locPi0Eta > mMin+iMass*mStep && locPi0Eta < mMin+(iMass+1)*mStep ) {
-				passMassBin_tetaIntegrated[iMass] = true;
-			}
-			else { passMassBin_tetaIntegrated[iMass] = false; } 
-		}
-		else { passMassBin_tetaIntegrated[iMass] = false; } 
-
-		if ( mandelstam_tpi0 > tMin && mandelstam_tpi0 < tMax && mEllipse_pre_tAll) {
-			if ( locPi0Eta > mMin+iMass*mStep && locPi0Eta < mMin+(iMass+1)*mStep ) {
-				passMassBin_tpi0Integrated[iMass] = true;
-			}
-			else { passMassBin_tpi0Integrated[iMass] = false; } 
-		}
-		else { passMassBin_tpi0Integrated[iMass] = false; } 
-	}
-
 		// Full rect
 	//withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin,ellipseX-ellipseXr, ellipseX+ellipseXr, ellipseY-0.03, ellipseY+0.03, skipX-0.005, 0.030);
 		// Diff rect size
@@ -2745,13 +2658,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	//withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin, 0.115, 0.155, 0.49, 0.59, 0.01, 0.02);
 	//withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin, 0.12, 0.15, 0.51, 0.57, 0.01, 0.035);
 		// Using meas values, full rect
-		//  ETA
-		// par3 0.540383
-		// par4 0.0233172
-		//  PI0
-		// par3 0.134285
-		// par4 0.00769639
-	withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass,locEtaMass, 0.134285-2*0.00769639, 0.134285+2*0.00769639, 0.540383-2*0.0233172, 0.540383+2*0.0233172, 0.01, 0.02);
+	withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass,locEtaMass, 0.125, 0.145, 0.50, 0.58, 0.01, 0.02);
 	if ( inBox_noOtherCuts[10] ) { weightBS = 0.25; weightB = -1.25; }
 	else if ( inBox_noOtherCuts[11] ) { weightBS = -0.5; weightB = 1.5; }
 	else if ( inBox_noOtherCuts[12] ) { weightBS = -0.5; weightB = 1.5; }

@@ -9,9 +9,11 @@
 #include "TH2I.h"
 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
+	cout << "Finding daughters of parent " << selfLoc << endl;
         for ( auto parent=0; parent<(int)parentArray.size(); ++parent ){
                 if ( parentArray[parent] == selfLoc ){
                         daughters.push_back(parent);
+			cout << "  found daughter " << parent << endl; 
                 }
         }
 }
