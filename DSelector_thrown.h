@@ -77,6 +77,7 @@ class DSelector_thrown : public DSelector
                 TH1I* dHist_PID;
                 TH1I* dHist_NumThrown;
 		TH1F *mandelstam_tpAll; 
+		TH1F *mandelstam_tAll; 
 		TH1F *mandelstam_tpLT1 ;
 		TH1F *mandelstam_tpLT06;
 		TH1F *mandelstam_tpGT05LT1;
@@ -89,8 +90,14 @@ class DSelector_thrown : public DSelector
 		TH1F *dHist_cosTheta;
 		TH1F *dHist_beamE;
 		TH1F *dHist_numEventsOnePi0OneEta;
-        	TH1F *dHist_genCounts_eta;
-        	TH1F *dHist_genCounts_pi0;
+        	TH1F *dHist_genCounts_eta_tAll;
+        	TH1F *dHist_genCounts_pi0_tAll;
+        	TH1F *dHist_genCounts_eta_tLT1;
+        	TH1F *dHist_genCounts_pi0_tLT1;
+        	TH1F *dHist_genCounts_eta_tLT05;
+        	TH1F *dHist_genCounts_pi0_tLT05;
+        	TH1F *dHist_genCounts_eta_tGT05LT1;
+        	TH1F *dHist_genCounts_pi0_tGT05LT1;
 
 		bool pBeamE[12];
 		bool pBeamE8to9GeV;

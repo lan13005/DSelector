@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_data";
+string degAngle="pi0eta_flat8GeVPlus";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -499,38 +499,86 @@ void DSelector_ver20::Init(TTree *locTree)
         histDef_2D histdef2d;
 
 	// ********************************** DECK REALTED PLOTS *****************************************
+        histdef.clear();
+        name="mandelstam_t";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;-t momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
+        histdef.values.push_back( &mandelstam_abst );
+        group_1234B.insert(histdef); 
 
 	// Will leave bin to contain all the bad regions
         histdef.clear();
-        name="tetaVsMpi0eta_recCounts";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
-        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
+        name="tetaVsMpi0eta_recCounts_LT05";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT05;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tLT05; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
 	//    chose this uniqueness set since I use the 2D distribution to select out the regions. So technically I use this set
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tpi0VsMpi0eta_recCounts";
+        name="tetaVsMpi0eta_recCounts_GT05LT1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT05LT1;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tGT05LT1; histdef.weights = &weightAS;
+        histdef.values.push_back( &teta_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tetaVsMpi0eta_recCounts_LT1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT1;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tLT1; histdef.weights = &weightAS;
+        histdef.values.push_back( &teta_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tetaVsMpi0eta_recCounts_tAll";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
+        histdef.values.push_back( &teta_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tpi0VsMpi0eta_recCounts_LT05";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT05;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tLT05; histdef.weights = &weightAS;
+        histdef.values.push_back( &tpi0_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tpi0VsMpi0eta_recCounts_GT05LT1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT05LT1;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tGT05LT1; histdef.weights = &weightAS;
+        histdef.values.push_back( &tpi0_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tpi0VsMpi0eta_recCounts_LT1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT1;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tLT1; histdef.weights = &weightAS;
+        histdef.values.push_back( &tpi0_recCounts );
+        group_34B_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="tpi0VsMpi0eta_recCounts_tAll";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
         group_34B_1234B.insert(histdef); 
 
-	for ( int iMass=0; iMass < num_massBins; ++iMass){
-        	histdef.clear();
-        	name="tetaMassBinned"+to_string(iMass);
-        	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tetaIntegrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
-        	histdef.name = name; histdef.cut=&passMassBin_tetaIntegrated[iMass]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &mandelstam_teta );
-        	group_34B_1234B.insert(histdef); 
+	//for ( int iMass=0; iMass < num_massBins; ++iMass){
+        //	histdef.clear();
+        //	name="tetaMassBinned"+to_string(iMass);
+        //	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tetaIntegrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
+        //	histdef.name = name; histdef.cut=&passMassBin_tetaIntegrated[iMass]; histdef.weights = &weightAS;
+        //	histdef.values.push_back( &mandelstam_teta );
+        //	group_34B_1234B.insert(histdef); 
 
-        	histdef.clear();
-        	name="tpi0MassBinned"+to_string(iMass);
-        	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tpi0Integrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
-        	histdef.name = name; histdef.cut=&passMassBin_tpi0Integrated[iMass]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &mandelstam_tpi0 );
-        	group_34B_1234B.insert(histdef); 
-	}
+        //	histdef.clear();
+        //	name="tpi0MassBinned"+to_string(iMass);
+        //	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tpi0Integrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
+        //	histdef.name = name; histdef.cut=&passMassBin_tpi0Integrated[iMass]; histdef.weights = &weightAS;
+        //	histdef.values.push_back( &mandelstam_tpi0 );
+        //	group_34B_1234B.insert(histdef); 
+	//}
 
 	// *************************** PHOTON VECTOR QUANTITIES ****************************
 
@@ -1106,16 +1154,16 @@ void DSelector_ver20::Init(TTree *locTree)
         name="tetaVsMpi0eta";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);t_{#eta} (GeV^2)", 260, 0.6, 3.2, 80,0,8);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
-        histdef2d.valuesX.push_back( &locPi0Eta );
-        histdef2d.valuesY.push_back( &mandelstam_teta );
+        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        histdef2d.valuesY.push_back( &mandelstam_teta_Kin );
         group_34B_1234B.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name="tpi0VsMpi0eta";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);t_{#pi_{0}} (GeV^2)", 260, 0.6, 3.2, 80,0,8);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
-        histdef2d.valuesX.push_back( &locPi0Eta );
-        histdef2d.valuesY.push_back( &mandelstam_tpi0 );
+        histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        histdef2d.valuesY.push_back( &mandelstam_tpi0_Kin );
         group_34B_1234B.insert_2D(histdef2d); 
 
         histdef.clear();
@@ -1344,6 +1392,9 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("weightASBS"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("uniqueComboID"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptLT1");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptLT05");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptGT05LT1");
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("finalStateComboID"); //fundamental = char, int, float, double, etc.
         if (is_pi0eta){
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0"); //fundamental = char, int, float, double, etc.
@@ -2110,6 +2161,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         // Calculating kinematic variables like t and cosTheta
         mandelstam_t = (locProtonP4_Kin-dTargetP4).M2();
+	mandelstam_abst = abs(mandelstam_t);
         mandelstam_t_pe = (locBeamP4_Kin-mixingPi0Eta).M2();
         mandelstam_teta = -(locBeamP4-locEtaP4).M2();
         mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
@@ -2656,7 +2708,10 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             pVanHove = omega > 240 && omega < 300; 
         }
 
-        ptLT1 = mandelstam_tp<1; 
+        ptpLT1 = mandelstam_tp<1; 
+        ptLT1 = mandelstam_abst<1; 
+        ptLT05 = mandelstam_abst<0.5; 
+        ptGT05LT1 = mandelstam_abst<1 && mandelstam_abst>0.5; 
 
 
 
@@ -2673,33 +2728,37 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         pShowerQuality=pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3;
 	
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        allGeneralCutsPassed = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
         mMandelstamT = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMPi0P14_ellipse = ptLT1*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        mBeamE = ptLT1*!pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMMSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse;
+        mMPi0P14_ellipse = ptpLT1*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mBeamE = ptpLT1*!pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mMMSq = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse;
         //pDiffCL = pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
-        mRProton = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mRProtonZMin = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mdEdxCDC = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pinsideEllipse;
-        mZMin = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mMagP3 = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mPhotonE = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mPhotonTheta = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mdij3 = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mUE = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mUEChiSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-        mChiSq = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
+        mRProton = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mRProtonZMin = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mdEdxCDC = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pinsideEllipse;
+        mZMin = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mMagP3 = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mPhotonE = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mPhotonTheta = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mdij3 = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mUE = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mUEChiSq = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+        mChiSq = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pdEdxCDCProton*pinsideEllipse*pMissingMassSquared;
         // ------ 
-        mEllipse_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipse_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mEllipse_pre_tAll = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+	mEllipse_pre_tLT1 = mEllipse_pre_tAll*ptLT1;
+	mEllipse_pre_tLT05 = mEllipse_pre_tAll*ptLT05;
+	mEllipse_pre_tGT05LT1 = mEllipse_pre_tAll*ptGT05LT1;
+
         mEllipse_pre_tAll_delta = pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
 	for ( int iTBin=0; iTBin< 10; ++iTBin ) {
 		p_massTBinned[iTBin] = ( (mandelstam_tp < 0.1*(iTBin+1))  && (mandelstam_tp > 0.1*(iTBin)) ) *mEllipse_pre;	
 	}
-        mEllipseUE_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        mEllipseUEChiSq_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        mEllipseChiSq_pre = ptLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseUE_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseUEChiSq_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseChiSq_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         // ------ Rejects the 0-weight region since that would mess with the uniqueness tracking. We use the OR logic to sum the subsets of the yellow and the red region.
         mEllipse = mEllipse_pre*pYellowBKG || allGeneralCutsPassed;
         mEllipseUE = mEllipseUE_pre*pYellowBKG || mEllipseUE_pre*pinsideEllipse;
@@ -2934,6 +2993,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0pi0", locPi0Eta_Kin);
         }
         dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptLT1", ptLT1);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptLT05", ptLT05);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptGT05LT1", ptGT05LT1);
 	if(showOutput){ cout << "Filled some more fundamental branches" << endl; } 
 	
 

@@ -48,6 +48,7 @@ class overlayPlots{
 			TCanvas* overlayCanvas = new TCanvas( ("canvas_"+fileName).c_str(),"",1440,900);
 			overlayHists[0]->Scale(histWeights[0]);
 			overlayHists[0]->SetLineColor( colors[0] );
+			overlayHists[0]->SetLineWidth( 2 ) ;
 			leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
 			overlayHists[0]->Draw();
 			overlayHists[0]->SetAxisRange(minimum1D,maximum1D*1.05,"Y");
@@ -55,6 +56,7 @@ class overlayPlots{
 				cout << "Overlaying hist " << overlayHists[i]->GetName() << endl;
 				overlayHists[i]->Scale(histWeights[i]);
 				overlayHists[i]->SetLineColor( colors[i] );
+				overlayHists[i]->SetLineWidth( 2 ) ;
 				overlayHists[i]->Draw("same");
 				leg->AddEntry(overlayHists[i],overlayHists[i]->GetTitle() , "l");
 			}
@@ -156,8 +158,8 @@ void makeGraphs(){
 	overlayPlots pi0eta1D_RectSBSubRegion(trackHists);
 	trackHists = { {"pi0eta_mEllipsePre",1 } };
 	sideBySide2D pi0eta_mEllipsePre(trackHists);	
-	trackHists = { {"pi0eta_Meas_mEllipsePre",1 } };
-	sideBySide2D pi0eta_Meas_mEllipsePre(trackHists);	
+	trackHists = { {"pi0eta_Meas_mEllipsePre_showEllipse",1 } };
+	sideBySide2D pi0eta_Meas_mEllipsePre_showEllipse(trackHists);	
         trackHists = { {"pi0Mass_Kin_mEllipsePre",  1 }, {"pi0MassFCAL_Kin_mEllipsePre", 1 }, {"pi0MassBCAL_Kin_mEllipsePre", 1 }, {"pi0MassSPLIT_Kin_mEllipsePre", 1 } };
 	overlayPlots pi0MassDiffSubDetectors(trackHists);
         trackHists = { {"etaMass_Kin_mEllipsePre",  1 }, {"etaMassFCAL_Kin_mEllipsePre", 1 }, {"etaMassBCAL_Kin_mEllipsePre", 1 }, {"etaMassSPLIT_Kin_mEllipsePre", 1 } };
@@ -173,7 +175,7 @@ void makeGraphs(){
 			string fileName="newGraphs/";
    	   		TH2F *h = (TH2F*)key->ReadObj();
    	   		h->Draw("COLZ HIST");
-			if ( strcmp(h->GetName(),"pi0eta_mEllipsePre")==0 || strcmp(h->GetName(),"pi0eta_mEllipsePre_rectSBregions_meas")==0){
+			if ( strcmp(h->GetName(),"pi0eta_Meas_mEllipsePre")==0 || strcmp(h->GetName(),"pi0eta_mEllipsePre_rectSBregions_meas")==0){
 				cout << "DRAWING RECTANGULAR SIDEBANDS" << endl;
 				drawRectSB(0.134285-2*0.00769639, 0.134285+2*0.00769639, 0.540383-2*0.0233172, 0.540383+2*0.0233172, 0.01, 0.02);
 			}	
@@ -181,7 +183,7 @@ void makeGraphs(){
 			fileName.append(".png");
    	   		c1->SaveAs((fileName).c_str());
 			pi0eta_mEllipsePre.fillHist(h);
-			pi0eta_Meas_mEllipsePre.fillHist(h);
+			pi0eta_Meas_mEllipsePre_showEllipse.fillHist(h);
 		}
 		else if (cl->InheritsFrom("TH1")){
 			string fileName="newGraphs/";
@@ -211,7 +213,7 @@ void makeGraphs(){
 	pi0proton1D_Cut_ASBS.plot("newGraphs/pi0proton1D_Cut_ASBS.png",true,lineCutThresholds);
 	
 	cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
-	pi0eta_Meas_mEllipsePre.plot("newGraphs/pi0eta_Meas_mEllipsePre_withCut.png","ellipse",cutThreshold2D);
+	pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
 	
 	cutThreshold2D = { {0.134285, 0.540383, 0.02308917, 0.0699516 } }; //meas
 	cutThreshold2D = { {0.135881, 0.548625, 0.0160375, 0.025671 } }; // kinFit

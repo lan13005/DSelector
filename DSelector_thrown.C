@@ -11,7 +11,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	dOutputTreeFileNameMap["selected_tLT1"] = "thrownNotAmptoolsReady_flat_tLT1.root"; //key is user-defined, value is output file name
+	//dOutputTreeFileNameMap["selected_tLT1"] = "thrownNotAmptoolsReady_flat_tLT1.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
@@ -28,6 +28,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_NumThrown = new TH1I("NumThrown","",10,0,10);
 	dHist_beamE = new TH1F("beamE","Beam Energy", 100,0,15);
 	mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime",100,0,6);
+	mandelstam_tAll = new TH1F("mandelstam_tAll","tprime",100,0,6);
 	mandelstam_tpLT1 = new TH1F("mandelstam_tpLT1","tprime<1",100,0,6);
 	mandelstam_tpLT06 = new TH1F("mandelstam_tpLT06","tprime<0.6",100,0,6);
 	mandelstam_tpGT05LT1 = new TH1F("mandelstam_tpGT05LT1","0.5<tprime<1",100,0,6);
@@ -40,8 +41,14 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_cosTheta = new TH1F("cosTheta","cosTheta GJ",60,-1,1);
 
 	dHist_numEventsOnePi0OneEta = new TH1F( "onePi0oneEta", "", 2,0,1);
-        dHist_genCounts_eta = new TH1F("tetaVsMpi0eta_genCounts", "genCounts", numHists+1, -1, numHists);
-        dHist_genCounts_pi0 = new TH1F("tpi0VsMpi0eta_genCounts", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_eta_tLT05 = new TH1F("tetaVsMpi0eta_genCounts_tLT05", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_pi0_tLT05 = new TH1F("tpi0VsMpi0eta_genCounts_tLT05", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_eta_tGT05LT1 = new TH1F("tetaVsMpi0eta_genCounts_tGT05LT1", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_pi0_tGT05LT1 = new TH1F("tpi0VsMpi0eta_genCounts_tGT05LT1", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_eta_tLT1 = new TH1F("tetaVsMpi0eta_genCounts_tLT1", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_pi0_tLT1 = new TH1F("tpi0VsMpi0eta_genCounts_tLT1", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_eta_tAll = new TH1F("tetaVsMpi0eta_genCounts_tAll", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_pi0_tAll = new TH1F("tpi0VsMpi0eta_genCounts_tAll", "genCounts", numHists+1, -1, numHists);
 	
 	for (int beamE=0; beamE<12; ++beamE){
 		dHist_pi0eta1DBeam[beamE] = new TH1F(("pi0eta1DbeamE"+std::to_string(beamE)).c_str(),"M(pi0eta)",150,0,3);
@@ -146,6 +153,8 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 		if (locParentPID==-1 && locPID==7) { ++countPrimaryPi0; locPi0P4 = dThrownWrapper->Get_P4(); } 
 		if (locParentPID==-1 && locPID==17) { ++countPrimaryEta; locEtaP4 = dThrownWrapper->Get_P4(); } 
+
+		if(locParentPID==-1 && locPID==14) { locProtonP4 = dThrownWrapper->Get_P4(); } 
 
 		//Some verbal confirmation checking
 		if (is_in){
@@ -269,6 +278,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 		double locPi0EtaMass = locPi0EtaP4.M();
 		double mandelstam_t = (locProtonP4-locTargetP4).M2();
+		double mandelstam_abst = abs(mandelstam_t);
 		double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
 		double mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
 
@@ -310,21 +320,37 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 
 		if (correctFinalState){
-			dHist_genCounts_eta->Fill(teta_genCounts);
-			dHist_genCounts_pi0->Fill(tpi0_genCounts);
+			dHist_genCounts_eta_tAll->Fill(teta_genCounts);
+			dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
 
 			//Fill_OutputTree must be run with proof!
 			mandelstam_tpAll->Fill(mandelstam_tp);
 			dHist_pi0eta1D->Fill(locPi0EtaMass);
 			dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
 			dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
-			if(mandelstam_tp < 1){
-				dHist_genCounts_eta->Fill(teta_genCounts);
-				dHist_genCounts_pi0->Fill(tpi0_genCounts);
-				mandelstam_tpLT1->Fill(mandelstam_tp);
-				dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-				Fill_OutputTree("selected_tLT1"); //your user-defined key
+			mandelstam_tAll->Fill(mandelstam_abst);
+
+			
+			if (mandelstam_abst<0.5){
+				dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
+				dHist_genCounts_pi0_tLT05->Fill(tpi0_genCounts);
 			}
+			if (mandelstam_abst>0.5 && mandelstam_abst<1){
+				dHist_genCounts_eta_tGT05LT1->Fill(teta_genCounts);
+				dHist_genCounts_pi0_tGT05LT1->Fill(tpi0_genCounts);
+			}
+			if (mandelstam_abst<1){
+				dHist_genCounts_eta_tLT1->Fill(teta_genCounts);
+				dHist_genCounts_pi0_tLT1->Fill(tpi0_genCounts);
+			}
+
+			//if(mandelstam_t < 1){
+			//	//dHist_genCounts_eta->Fill(teta_genCounts);
+			//	//dHist_genCounts_pi0->Fill(tpi0_genCounts);
+			//	mandelstam_tpLT1->Fill(mandelstam_tp);
+			//	dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+			//	//Fill_OutputTree("selected_tLT1"); //your user-defined key
+			//}
 			//if(mandelstam_tp < 0.6){
 			//	Fill_OutputTree("selected_tLT06"); //your user-defined key
 			//	mandelstam_tpLT06->Fill(mandelstam_tp);

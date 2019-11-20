@@ -491,6 +491,7 @@ class DSelector_ver20 : public DSelector
 		double mandelstam_tp=1;
 		double mandelstam_tp_pe=1;
 		double mandelstam_t=1;
+		double mandelstam_abst=1;
 		double mandelstam_t_pe=1;
 		double mandelstam_t0=1;
 		// Calculate cosTheta in maybe the gottfried-jackson frame.
@@ -734,7 +735,7 @@ class DSelector_ver20 : public DSelector
 		bool pEtaInBCAL_mismatch=true; 
 		bool pEtaInSplit_mismatch=true;
 
-		bool ptLT1=true;
+		bool ptpLT1=true;
 		// Times it passes a cut
 		int count_ShowerQuality=0;
 		int count_BeamE8GeVPlus=0;
@@ -784,6 +785,12 @@ class DSelector_ver20 : public DSelector
 		bool mEllipse = true;
 		bool mEllipse_pre = true;
 		bool mEllipse_pre_tAll = true;
+		bool ptLT1=true;
+		bool ptLT05=true;
+		bool ptGT05LT1=true;
+		bool mEllipse_pre_tLT1 = true;
+		bool mEllipse_pre_tGT05LT1 = true;
+		bool mEllipse_pre_tLT05 = true;
 		bool mEllipse_pre_tAll_delta = true;
 		bool mEllipseUE = true;
 		bool mEllipseUE_pre = true;
