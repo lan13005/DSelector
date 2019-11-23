@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_flat8GeVPlus";
+string degAngle="pi0eta_data";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -508,7 +508,7 @@ void DSelector_ver20::Init(TTree *locTree)
 
 	// Will leave bin to contain all the bad regions
         histdef.clear();
-        name="tetaVsMpi0eta_recCounts_LT05";
+        name="tetaVsMpi0eta_recCounts_tLT05";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT05;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tLT05; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
@@ -516,14 +516,14 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tetaVsMpi0eta_recCounts_GT05LT1";
+        name="tetaVsMpi0eta_recCounts_tGT05LT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT05LT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tGT05LT1; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tetaVsMpi0eta_recCounts_LT1";
+        name="tetaVsMpi0eta_recCounts_tLT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tLT1; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
@@ -537,21 +537,21 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tpi0VsMpi0eta_recCounts_LT05";
+        name="tpi0VsMpi0eta_recCounts_tLT05";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT05;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tLT05; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tpi0VsMpi0eta_recCounts_GT05LT1";
+        name="tpi0VsMpi0eta_recCounts_tGT05LT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT05LT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tGT05LT1; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tpi0VsMpi0eta_recCounts_LT1";
+        name="tpi0VsMpi0eta_recCounts_tLT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tLT1; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );

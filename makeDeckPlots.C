@@ -49,13 +49,9 @@ void makeDeckPlot(string selectionString){
    	TFile *deckDiagnosticFile = new TFile("deckDiagnosticHists.root", "RECREATE");
 	// *********** PREPARING THE CODE ***************
 	// *********************************************
-	gStyle->SetErrorX(0.000001); // remove the x-error bars
-	gSystem->Exec("rm -rf deckPlots");
-	gSystem->Exec("mkdir -p deckPlots/"+selectionString+"/mandelstam_teta_meas");
-	gSystem->Exec("mkdir deckPlots/"+selectionString+"/mandelstam_tpi0_meas");
-	gSystem->Exec("mkdir deckPlots/"+selectionString+"/tSlope");
+	//gStyle->SetErrorX(0.000001); // remove the x-error bars
     	ofstream logFile;
-    	logFile.open("deckPlots/"+selectionString+"/failedFittingPlotIDs.txt");
+    	logFile.open(("deckPlots/"+selectionString+"/failedFittingPlotIDs.txt").c_str());
 
 	
 	TFile* dataFile = TFile::Open("pi0eta_datatreeFlat_DSelector.root");
@@ -122,16 +118,16 @@ void makeDeckPlot(string selectionString){
 	recFile->GetObject( ("tpi0VsMpi0eta_recCounts_"+selectionString).c_str(),tpi0VsMpi0eta_recCounts);
 	allCanvases->cd(); allCanvases->Clear(); allCanvases->SetLogy(); 
 	tetaVsMpi0eta_genCounts->Draw();
-	allCanvases->SaveAs("deckPlots/"+selectionString+"/tetaVsMpi0eta_genCounts.png");
+	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tetaVsMpi0eta_genCounts.png").c_str());
 	allCanvases->Clear();allCanvases->SetLogy();
 	tpi0VsMpi0eta_genCounts->Draw();
-	allCanvases->SaveAs("deckPlots/"+selectionString+"/tpi0VsMpi0eta_genCounts.png");
+	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tpi0VsMpi0eta_genCounts.png").c_str());
 	allCanvases->Clear();allCanvases->SetLogy();
 	tetaVsMpi0eta_recCounts->Draw();
-	allCanvases->SaveAs("deckPlots/"+selectionString+"/tetaVsMpi0eta_recCounts.png");
+	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tetaVsMpi0eta_recCounts.png").c_str());
 	allCanvases->Clear();allCanvases->SetLogy();
 	tpi0VsMpi0eta_recCounts->Draw();
-	allCanvases->SaveAs("deckPlots/"+selectionString+"/tpi0VsMpi0eta_recCounts.png");
+	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tpi0VsMpi0eta_recCounts.png").c_str());
 
 	allCanvases->SetLogy(0);
 
@@ -246,7 +242,7 @@ void makeDeckPlot(string selectionString){
 	// *********************************************
 	//string branchNames[2]={"mandelstam_tpi0_meas","mandelstam_teta_meas"};
 	string branchNames[2]={"mandelstam_teta_meas","mandelstam_tpi0_meas"};
-	int counter=-1;
+	int branchIdx=-1;
 	std::vector<TH1F> massHists_eta;
 	std::vector<TH1F> massHists_pi0;
 	std::vector<TF1> expPlusLinFits_eta;
@@ -256,9 +252,18 @@ void makeDeckPlot(string selectionString){
 	std::vector<double> tSlopesError_eta;
 	std::vector<double> tSlopesError_pi0;
 
+	double maxYield=DBL_MIN;
+	double minYield=DBL_MAX;
+	double maxUnscaledYield=DBL_MIN;
+	double yields[2][numHists];
+	double yieldErrors[2][numHists];
+	double unscaledYields[2][numHists];
+	double unscaledYieldErrors[2][numHists];
 	for ( string branchName: branchNames ) {
+		++branchIdx;
+		gStyle->SetErrorX(0.000001); // remove the x-error bars
+		gStyle->SetTitleSize(0.06,"t");
 		logFile << branchName << endl;
-		++counter;
 		allCanvases->cd();
 		dataTree->SetBranchAddress( branchName.c_str(),&new_t);
 
@@ -271,16 +276,25 @@ void makeDeckPlot(string selectionString){
 		//TH1F* hists_meta[numHists];
 		//TH1F* hists_mpi0[numHists];
 		TH2F* hists_mpi0eta_t[numHists];
-		double yields[numHists];
-		double yieldErrors[numHists];
-		double unscaledYields[numHists];
-		double unscaledYieldErrors[numHists];
-		TH2F* full_meta_mpi0 = new TH2F(("full_meta_mpi0_"+std::to_string(counter)).c_str(), "Cuts=GeneralCuts;M(#pi_{0}) GeV;M(#eta)(GeV)", 100,0.05,0.25,100,0.25,0.85 );
+		TH2F* full_meta_mpi0 = new TH2F(("full_meta_mpi0_"+std::to_string(branchIdx)).c_str(), "Cuts=GeneralCuts;M(#pi_{0}) GeV;M(#eta)(GeV)", 100,0.05,0.25,100,0.25,0.85 );
 
 		double xfitMin=0.085;
 		double xfitMax=0.185;
-		double yfitMin=0.4;
-		double yfitMax=0.64;
+
+		double yfitMin;
+		double yfitMax;
+
+		if (selectionString=="tLT1" || selectionString=="tAll" || selectionString=="tGT05LT1"){
+			//  These were fitRange we used for the analysis presentation
+			yfitMin=0.4;
+			yfitMax=0.64;
+		}
+		else if (selectionString=="tLT05") { 
+			//  Since tLT05 doesnt fit easily we can shorten the range in the eta
+			yfitMin=0.46;
+			yfitMax=0.625;
+		}
+
 		double chiSq;
 		double dof;
 
@@ -292,15 +306,15 @@ void makeDeckPlot(string selectionString){
 		double yWidth = (yBins[1]-yBins[0])/nyBins;
 		double differentialArea = 1/(xWidth*yWidth);
 		cout << "Differential Area:"<< differentialArea << endl;
-		TH1F* chiSqPerDOF = new TH1F(("chiSqPerDOF_"+std::to_string(counter)).c_str(), "#chi^{2}/n_{dof}; #chi^{2}/n_{dof}; Events / 0.1", 30,0,3 );
-		TH1F* full_meta = new TH1F(("full_meta_"+std::to_string(counter)).c_str(), ";M(#eta)(GeV)", nxBins,yBins[1],yBins[0] );
-		TH1F* full_mpi0 = new TH1F(("full_mpi0_"+std::to_string(counter)).c_str(), ";M(#pi_0)(GeV)",nyBins,xBins[1],xBins[0] );
+		TH1F* chiSqPerDOF = new TH1F(("chiSqPerDOF_"+std::to_string(branchIdx)).c_str(), "#chi^{2}/n_{dof}; #chi^{2}/n_{dof}; Events / 0.1", 30,0,3 );
+		TH1F* full_meta = new TH1F(("full_meta_"+std::to_string(branchIdx)).c_str(), ";M(#eta)(GeV)", nxBins,yBins[1],yBins[0] );
+		TH1F* full_mpi0 = new TH1F(("full_mpi0_"+std::to_string(branchIdx)).c_str(), ";M(#pi_0)(GeV)",nyBins,xBins[1],xBins[0] );
 		
 		for (int i=0; i< numHists; ++i){
-			hists_meta_mpi0[i] = new TH2F(("meta_mpi0"+to_string(i)+"_"+std::to_string(counter)).c_str(), "Cuts=GeneralCuts;M(#pi_{0}) GeV;M(#eta)(GeV)", 100,0.05,0.25,100,0.25,0.85 ); 
-			//hists_meta[i] = new TH1F(("meta"+to_string(i)+"_"+std::to_string(counter)).c_str(), "Cuts=GeneralCuts;M(#eta)(GeV)", 100,0.25,0.85 ); 
-			//hists_mpi0[i] = new TH1F(("mpi0"+to_string(i)+"_"+std::to_string(counter)).c_str(), "Cuts=GeneralCuts;M(#pi_{0}) GeV", 100,0.05,0.25 ); 
-			hists_mpi0eta_t[i] = new TH2F(("mpi0eta_t"+to_string(i)+"_"+std::to_string(counter)).c_str(), "Cuts=mMandelstamT_eta;M(#pi_{0}#eta) (GeV);t_{#eta} (GeV^2)", 260, 0.6, 3.2, 80,0,8);
+			hists_meta_mpi0[i] = new TH2F(("meta_mpi0"+to_string(i)+"_"+std::to_string(branchIdx)).c_str(), "Cuts=GeneralCuts;M(#pi_{0}) GeV;M(#eta)(GeV)", 100,0.05,0.25,100,0.25,0.85 ); 
+			//hists_meta[i] = new TH1F(("meta"+to_string(i)+"_"+std::to_string(branchIdx)).c_str(), "Cuts=GeneralCuts;M(#eta)(GeV)", 100,0.25,0.85 ); 
+			//hists_mpi0[i] = new TH1F(("mpi0"+to_string(i)+"_"+std::to_string(branchIdx)).c_str(), "Cuts=GeneralCuts;M(#pi_{0}) GeV", 100,0.05,0.25 ); 
+			hists_mpi0eta_t[i] = new TH2F(("mpi0eta_t"+to_string(i)+"_"+std::to_string(branchIdx)).c_str(), "Cuts=mMandelstamT_eta;M(#pi_{0}#eta) (GeV);t_{#eta} (GeV^2)", 260, 0.6, 3.2, 80,0,8);
 		}
 		int histIdx;
 		cout << "Initialized histograms" << endl;
@@ -311,7 +325,7 @@ void makeDeckPlot(string selectionString){
 			dataTree->GetEntry(ientry);
 			if ( (selectionString == "tLT1" && new_ptLT1) || (selectionString == "tLT05" && new_ptLT05) || (selectionString == "tGT05LT1" && new_ptGT05LT1) || 
 					selectionString == "tAll" ) {  
-				if (counter==0){ isUnique = new_isUnique34B_1234B; }
+				if (branchIdx==0){ isUnique = new_isUnique34B_1234B; }
 				else { isUnique = new_isUnique12B_1234B; } 
 				if ( new_t < tMin || new_m < mMin || new_t>tMax || new_m>mMax ) {continue; }
 				idx_t = (int)( (new_t-tMin)/tStep ); 
@@ -329,6 +343,10 @@ void makeDeckPlot(string selectionString){
 		}
 		cout << "Loaded all the data" << endl;
 
+		logFile << "THESE ARE PROBABLY THE MOST IMPORTANT FITS TO CHECK SINCE THEY ARE THE INITIALIZATIONS OF THE BINNED FITS" << endl;
+		logFile << " -------------------------------------------------------------------------------------------------------" << endl;
+		logFile << "Distribution, fitStatus, chiSqPerDOF" << endl;
+
 		///////////////////////////////////////////
 		// DOING 1D FIT TO USE AS INITIALIZATION FOR 2D
 		///////////////////////////////////////////
@@ -342,9 +360,14 @@ void makeDeckPlot(string selectionString){
 		feta->SetParLimits(0,0,5000);
 		feta->SetParLimits(1,0.52,0.585);
 		feta->SetParLimits(2,0,0.1);
-		full_meta->Fit(feta,"RLV");
+		feta->SetParLimits(4,0,1000); 
+		Int_t fitStatus_eta = full_meta->Fit(feta,"RLV");
+		full_meta->SetTitle(("ChiSqPerDOF: "+to_string(feta->GetChisquare()/feta->GetNDF())).c_str());
+		full_meta->Draw();
 		feta->GetParameters(fitPars_eta);
 		allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/project_full_meta.png").c_str());
+
+		logFile << "M(eta), " << fitStatus_eta << ", " << feta->GetChisquare()/feta->GetNDF() << endl;
 
 		cout << "-----------------------\nSTARTING FULL PI0 FIT!\n---------------------------- " << endl;
 		double fitPars_pi0[5];
@@ -354,9 +377,13 @@ void makeDeckPlot(string selectionString){
 		fpi0->SetParLimits(0,0,1000);
 		fpi0->SetParLimits(1,0.125,0.145);
 		fpi0->SetParLimits(2,0.005,0.02);
-		full_mpi0->Fit(fpi0,"RLV");
+		fpi0->SetParLimits(4,0,1000); 
+		Int_t fitStatus_pi0  = full_mpi0->Fit(fpi0,"RLV");
+		full_mpi0->SetTitle(("ChiSqPerDOF: "+to_string(fpi0->GetChisquare()/fpi0->GetNDF())).c_str());
+		full_mpi0->Draw();
 		fpi0->GetParameters(fitPars_pi0);
 		allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/project_full_mpi0.png").c_str());
+		logFile << "M(pi0), " << fitStatus_pi0 << ", " << fpi0->GetChisquare()/fpi0->GetNDF() << endl;
 
 		cout << "-----------------------\nSTARTING FULL PI0ETA FIT!\n---------------------------- " << endl;
 		TF2 * f2 = new TF2("f2",g2,xfitMin,xfitMax,yfitMin,yfitMax,numDOFsig); 
@@ -370,8 +397,6 @@ void makeDeckPlot(string selectionString){
 		double full_initParams[8]={peakBin*2*TMath::Pi()*fitPars_pi0[2]*fitPars_eta[2],fitPars_pi0[1], fitPars_pi0[2], fitPars_eta[1], fitPars_eta[2], (fitPars_eta[3]+fitPars_pi0[3])/2/100, fitPars_eta[4]/100, fitPars_pi0[4]/100};
 		double full_convParams[8];
 		double fitPars[8];
-		double fitPars_projection_eta[9]; // modified for the 1D projections
-		double fitPars_projection_pi0[9]; // modified for the 1D projections
 		double fitParErrors[8];
 		const double *pointParError;
 		f2->SetParameters(full_initParams[0],full_initParams[1],full_initParams[2],full_initParams[3],full_initParams[4],full_initParams[5],full_initParams[6],full_initParams[7]); 
@@ -384,28 +409,30 @@ void makeDeckPlot(string selectionString){
 		f2->SetLineColorAlpha(kRed, 1);
 		f2->SetContour(8);
 		f2->SetLineWidth(2);
-		full_meta_mpi0->Fit(f2,"RLV");
+		Int_t fitStatus_pi0eta = full_meta_mpi0->Fit(f2,"RLV");
+		full_meta_mpi0->SetTitle(("ChiSqPerDOF: "+to_string(f2->GetChisquare()/f2->GetNDF())).c_str());
 		f2->GetParameters(full_convParams);
 		full_meta_mpi0->Draw("COLZ");
 		//full_meta_mpi0->Draw("SURF2");
 		//f2->Draw("SURF SAME");
 		allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/full_meta_mpi0.png").c_str());	
 		allCanvases->Clear();
+		logFile << "M(pi0eta), " << fitStatus_pi0eta << ", " << f2->GetChisquare()/f2->GetNDF() << endl;
 
 
 		cout << "-----------------------\nSTARTING BINNED FITS!\n---------------------------- " << endl;
+		logFile << " -------------------------------------------------------------------------------------------------------" << endl;
+		logFile << "id, fitStatus, chiSqPerDOF, numEntries"  << endl;
 
 
 		///////////////////////////////////////////
 		// STARTING THE INDIVIDUAL FITS IN EACH BIN
 		///////////////////////////////////////////
+
 		TF1 * feta_projected = new TF1("meta_projected",g1_eta,yfitMin,yfitMax,numDOF_1D); 
 		TF1 * fpi0_projected = new TF1("mpi0_projected",g1_pi0,xfitMin,xfitMax,numDOF_1D); 
 		double scaled_initParams[8];
 		double scaleFactor;
-		double maxYield=DBL_MIN;
-		double minYield=DBL_MAX;
-		double maxUnscaledYield=DBL_MIN;
 		TRandom randomGenerator;
 		int maxResamplings=10;
 		double scales[3]={0.1,0.2,0.3};
@@ -432,6 +459,21 @@ void makeDeckPlot(string selectionString){
 			//f2->SetParLimits(6,-scaled_initParams[5]*10,scaled_initParams[5]*10);
 			//f2->SetParLimits(7,-scaled_initParams[6]*10,scaled_initParams[6]*10);
 			cout << "\n\n*******************\nFITTING NEXT BIN************************"<<endl;
+			TCanvas *allCanvases_binChecks = new TCanvas("anyHists_binChecks","",1440,900);
+			allCanvases_binChecks->Divide(3,1);
+			allCanvases_binChecks->cd();
+			TPad *pad1 = new TPad("pad1", "",0.3,0.5,0.7,1.0);
+			TPad *pad2 = new TPad("pad2", "",0.0,0.0,0.5,0.5);
+			TPad *pad3 = new TPad("pad3", "",0.5,0.0,1.0,0.5);
+			TPad *pad4 = new TPad("pad4", "",0.1,0.65,0.25,0.85);
+			pad1->Draw();
+			pad2->Draw();
+			pad3->Draw();
+			pad4->Draw();
+
+			pad1->cd();
+			gStyle->SetOptStat(0);
+
 			Int_t fitStatus = hists_meta_mpi0[i]->Fit(f2,"RLE");
 
 			if ( fitStatus != 0 ) {  
@@ -439,8 +481,15 @@ void makeDeckPlot(string selectionString){
 				f2->FixParameter(6,0);
 				f2->FixParameter(7,0);
 				fitStatus = hists_meta_mpi0[i]->Fit(f2,"RLE");
-				if (fitStatus != 0) { cout << "FUDGE WE STILL NEED TO FIX THIS.... EXITING..." << endl; logFile << i << endl; }
+				if (fitStatus != 0) { cout << "FUDGE WE STILL NEED TO FIX THIS.... EXITING..." << endl; }
 			}
+			
+			dof=f2->GetNDF();
+			chiSq=f2->GetChisquare();
+			chiSqPerDOF->Fill(chiSq/dof);
+			hists_meta_mpi0[i]->SetTitle(("chiSqPerDOF: "+to_string(chiSq/dof)).c_str());
+			hists_meta_mpi0[i]->Draw("COLZ");
+			logFile << i << ", " << fitStatus << ", " << chiSq/dof << ", " << hists_meta_mpi0[i]->GetEntries() << endl; 
 			//f2->SetParameter(0,randomGenerator.Uniform( scaled_initParams[0]*(1-scale),scaled_initParams[0]*(1+scale) ) );
 			//f2->SetParameter(5,randomGenerator.Uniform( scaled_initParams[5]*(1-scale),scaled_initParams[5]*(1+scale) ) );
 			
@@ -461,51 +510,49 @@ void makeDeckPlot(string selectionString){
 			//}
 			//if (fitStatus != 0) { cout << "FUDGE WE STILL NEED TO FIX THIS.... EXITING..." << endl; exit(0); }
 			
-			dof=f2->GetNDF();
-			chiSq=f2->GetChisquare();
 			f2->GetParameters(fitPars);
-
-			for (int iPar=0; iPar<sizeof(fitPars)/sizeof(*fitPars); ++iPar){
-				fitPars_projection_eta[iPar] = fitPars[iPar];
-				fitPars_projection_pi0[iPar] = fitPars[iPar];
-			}
-			fitPars_projection_eta[8]=fitPars[1];
-			fitPars_projection_pi0[8]=fitPars[3];
-			int max_pi0 = (fitPars[1]-0.05)/0.002;
-			int max_eta = (fitPars[3]-0.25)/0.006;
-			TH1D * hists_meta = hists_meta_mpi0[i]->ProjectionY("proj_eta", 0, -1);//max_pi0, max_pi0); 
-			TH1D * hists_mpi0 = hists_meta_mpi0[i]->ProjectionX("proj_pi0", 0, -1);//max_eta, max_eta); 
-
-			
 
 			feta_projected->SetParameters(fitPars[0],fitPars[1],fitPars[2],fitPars[3],fitPars[4],fitPars[5],fitPars[6],fitPars[7],1/0.002,xfitMin,xfitMax);
 			fpi0_projected->SetParameters(fitPars[0],fitPars[1],fitPars[2],fitPars[3],fitPars[4],fitPars[5],fitPars[6],fitPars[7],1/0.006,yfitMin,yfitMax);// yfitMax-yfitMin);
+			TH1D * hists_meta = hists_meta_mpi0[i]->ProjectionY("proj_eta", 0, -1);
+			TH1D * hists_mpi0 = hists_meta_mpi0[i]->ProjectionX("proj_pi0", 0, -1);
+			hists_meta->SetTitle("");
+			hists_mpi0->SetTitle("");
 
 			pointParError = f2->GetParErrors();
 
-			allCanvases->Clear();
+			pad2->cd();
 			gStyle->SetOptStat(0);
-			chiSqPerDOF->Fill(chiSq/dof);
-			hists_meta_mpi0[i]->SetTitle(("scaleFactor:"+std::to_string(scaleFactor)+"  ChiSqPerDOF: "+std::to_string(chiSq/dof)).c_str());
-			hists_meta_mpi0[i]->Draw("COLZ");
-			allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/meta_mpi0-"+to_string(i)+".png").c_str());	
-
-			allCanvases->Clear();
-			hists_meta->SetTitle(("max_pi0 was at: "+to_string(max_pi0)).c_str());
 			hists_meta->Draw("E1");
-			//feta_projected->SetParameters(fitPars_projection_eta);
 			feta_projected->SetLineColor(kRed);
 			feta_projected->Draw("SAME");
-			allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/meta-"+to_string(i)+".png").c_str());	
 
-			allCanvases->Clear();
-			hists_mpi0->SetTitle(("max_eta was at: "+to_string(max_eta)).c_str());
+			pad3->cd();
+			gStyle->SetOptStat(0);
 			hists_mpi0->Draw("E1");
-			//fpi0_projected->SetParameters(fitPars_projection_pi0);
 			fpi0_projected->SetLineColor(kRed);
 			fpi0_projected->Draw("SAME");
-			allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/mpi0-"+to_string(i)+".png").c_str());	
 
+			pad4->cd();
+			TPaveText *histID_pt = new TPaveText(0,0,1,1);
+			histID_pt->AddText(("hist id: "+std::to_string(i)).c_str());
+			histID_pt->Draw();
+
+			if ( i == 0 ) {
+				//allCanvases_binChecks->Print(("deckPlots/"+selectionString+"/"+branchName+"/fitDiagnostic.pdf(").c_str(),"pdf");	
+				allCanvases_binChecks->Print(("deckPlots/"+selectionString+"/"+branchName+"/fitDiagnostic.pdf(").c_str(),"pdf");
+				cout << "Starting to fill the pdf" << endl;
+			}
+			else if (i == numHists-1) { 
+				//allCanvases_binChecks->Print(("deckPlots/"+selectionString+"/"+branchName+"/fitDiagnostic.pdf)").c_str(),"pdf");	
+				allCanvases_binChecks->Print(("deckPlots/"+selectionString+"/"+branchName+"/fitDiagnostic.pdf)").c_str(),"pdf");
+				cout << "Finished filling the pdf" << endl;
+			}
+			else {
+				//allCanvases_binChecks->Print(("deckPlots/"+selectionString+"/"+branchName+"/fitDiagnostic.pdf").c_str(),"pdf");	
+				allCanvases_binChecks->Print(("deckPlots/"+selectionString+"/"+branchName+"/fitDiagnostic.pdf").c_str(),"pdf");
+				cout << "Adding to the pdf" << endl;
+			}
 
 			//allCanvases->Clear();
 			//hists_mpi0eta_t[i]->Draw("COLZ");
@@ -515,33 +562,55 @@ void makeDeckPlot(string selectionString){
 			double unscaledYield = differentialArea*fitPars[0];
 			double unscaledYieldError = differentialArea*pointParError[0];
 			double yieldErrorTerm=(unscaledYieldError/unscaledYield)*(unscaledYieldError/unscaledYield);
-			double efficErrorTerm=(efficiencies_error[counter][i]/efficiencies[counter][i])*(efficiencies_error[counter][i]/efficiencies[counter][i]);
-			yields[i]=unscaledYield/efficiencies[counter][i];
-			yieldErrors[i]=abs(yields[i])*sqrt(yieldErrorTerm+efficErrorTerm);
-			unscaledYields[i]=unscaledYield;
-			unscaledYieldErrors[i]=unscaledYieldError;
+			double efficErrorTerm=(efficiencies_error[branchIdx][i]/efficiencies[branchIdx][i])*(efficiencies_error[branchIdx][i]/efficiencies[branchIdx][i]);
+			yields[branchIdx][i]=unscaledYield/efficiencies[branchIdx][i];
+			yieldErrors[branchIdx][i]=abs(yields[branchIdx][i])*sqrt(yieldErrorTerm+efficErrorTerm);
+			unscaledYields[branchIdx][i]=unscaledYield;
+			unscaledYieldErrors[branchIdx][i]=unscaledYieldError;
 
 			cout << "Yield, error = " << fitPars[0] << ", " << pointParError[0];
 			cout << "   Scaled Yield, Scaled error = " << unscaledYield << ", " << unscaledYieldError;
-			cout << "   EffCorrected Yield, Scaled error = " << yields[i] << ", " << yieldErrors[i];
-			if (maxYield<yields[i]){
-				maxYield=yields[i];
+			cout << "   EffCorrected Yield, Scaled error = " << yields[branchIdx][i] << ", " << yieldErrors[branchIdx][i];
+			if (maxYield<yields[branchIdx][i]){
+				maxYield=yields[branchIdx][i];
 			}
-			if (minYield>yields[i]){
-				minYield=yields[i];
+			if (minYield>yields[branchIdx][i]){
+				minYield=yields[branchIdx][i];
 			}
-			if (maxUnscaledYield<unscaledYields[i]){
-				maxUnscaledYield=unscaledYields[i];
+			if (maxUnscaledYield<unscaledYields[branchIdx][i]){
+				maxUnscaledYield=unscaledYields[branchIdx][i];
 			}
+
+			// put this here so we can still properly save the diagnostic plots. Even though we will waste a fit calculation....
+			if ( hists_meta_mpi0[i]->GetEntries() < 75 ) { 
+				yields[branchIdx][i]=0;
+				yieldErrors[branchIdx][i]=0;
+				unscaledYields[branchIdx][i]=0;
+				unscaledYieldErrors[branchIdx][i]=0;
+				logFile << i << ", " << "Not enough events, only: " << hists_meta_mpi0[i]->GetEntries() << endl; 
+				continue;
+			}
+
 		}
 		cout << "    maxYield = " << maxYield << endl;
 		cout << "    minYield = " << minYield << endl;
+		if ( minYield < 0 ) {
+			cout << "NEGATIVE MIN YIELD NOT GOOD. FIX ME" << endl;
+		}
 		cout << "    maxUnscaledYield = " << maxUnscaledYield << endl;
 
 		allCanvases->Clear();
 		chiSqPerDOF->Draw();
 		allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/chiSq.png").c_str());
-
+	}
+	
+	// **************************************************************************************
+	// ********* NOW WE CAN START BUILDING OUT teta/tpi0 MASS HISTOGRAMS *********************
+	// **************************************************************************************
+	branchIdx=-1;
+	int skipLastN=0;
+	for ( string branchName: branchNames ) {
+		++branchIdx;
 		std::vector<string> massBinTitles; 
 		for (Int_t i=0; i<num_massBins; ++i){
 			massBinTitles.push_back( std::to_string( mMin+i*mStep )+" < M(#pi_{0}#eta) < " + std::to_string( mMin+(i+1)*mStep ) );
@@ -551,11 +620,23 @@ void makeDeckPlot(string selectionString){
 		TF1* expFit_t;
 		gStyle->SetErrorX(0.000001); // remove the x-error bars
 
-		for (Int_t iMass=0; iMass<massBinTitles.size(); ++iMass){
+
+		if ( selectionString == "tLT05" ){
+			skipLastN = 0;
+		}	
+
+
+		for (Int_t iMass=0; iMass<massBinTitles.size()-skipLastN; ++iMass){
 			cout << "Plotting histogram for mass bin: " << iMass << endl;
-			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(counter)).c_str(),massBinTitles[iMass].c_str(),num_tBins,tMin,tMax);	
-			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(counter)).c_str(),massBinTitles[iMass].c_str(),num_tBins,tMin,tMax);	
-			massHist->SetAxisRange(minYield*0.9,maxYield*1.1,"Y");
+			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),massBinTitles[iMass].c_str(),num_tBins,tMin,tMax);	
+			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),massBinTitles[iMass].c_str(),num_tBins,tMin,tMax);	
+
+			if (minYield<1) { 
+				massHist->SetAxisRange(1,maxYield*1.1,"Y");
+			}
+			else { 
+				massHist->SetAxisRange(minYield*0.9,maxYield*1.1,"Y");
+			}
 			gStyle->SetTitleSize(0.1,"t");
 			massHist->GetXaxis()->SetLabelSize(0.06);
 			massHist->GetYaxis()->SetLabelSize(0.06);
@@ -566,10 +647,10 @@ void makeDeckPlot(string selectionString){
 			expFit_t = new TF1("expFit_t","expo",tMin+tStep,tMax-2*tStep);//+pol0(2)) ,tMin+tStep,tMax);
 			expFit_t->SetLineStyle(2);
 			for (Int_t i=0; i<num_tBins; ++i){
-				massHist->SetBinContent( i+1, yields[i+num_tBins*iMass]  );
-				massHist->SetBinError( i+1, yieldErrors[i+num_tBins*iMass]  );
-				unscaledMassHist->SetBinContent( i+1, unscaledYields[i+num_tBins*iMass]  );
-				unscaledMassHist->SetBinError( i+1, unscaledYieldErrors[i+num_tBins*iMass]  );
+				massHist->SetBinContent( i+1, yields[branchIdx][i+num_tBins*iMass]  );
+				massHist->SetBinError( i+1, yieldErrors[branchIdx][i+num_tBins*iMass]  );
+				unscaledMassHist->SetBinContent( i+1, unscaledYields[branchIdx][i+num_tBins*iMass]  );
+				unscaledMassHist->SetBinError( i+1, unscaledYieldErrors[branchIdx][i+num_tBins*iMass]  );
 				//cout << "yield in bin: " << i+num_tBins*iMass << " is " << yields[i+num_tBins*iMass] << endl;
 			}
 			massHist->Fit("expFit_t","RBN");
@@ -582,7 +663,7 @@ void makeDeckPlot(string selectionString){
 			double scaleAxis;
 			double scaleUnscaledAxis;
 			double scaleAxisT;
-			if (counter==0){
+			if (branchIdx==0){
 				allCanvases_unscaledYields->cd( iMass+1 );	
 				gStyle->SetOptStat(0);
 				unscaledMassHist->SetMarkerColor(kBlue);
@@ -609,15 +690,6 @@ void makeDeckPlot(string selectionString){
 				hist_efficiencies_eta[iMass]->Draw("E SAME");
 				hist_efficiencies_eta[iMass]->Draw("SAME Lhist");
 
-
-				//scaleAxisT = gPad->GetUymax()/(maxT*1.1);
-				//teta_binnedHists[iMass]->Scale(scaleAxisT); 
-				//teta_binnedHists[iMass]->SetLineColorAlpha(kBlue,0.4);
-				//teta_binnedHists[iMass]->Draw("SAME HIST");
-				//tpi0_binnedHists[iMass]->Scale(scaleAxisT); 
-				//tpi0_binnedHists[iMass]->SetLineColorAlpha(kRed,0.4);
-				//tpi0_binnedHists[iMass]->Draw("SAME HIST");
-				//
 				massHists_eta.push_back(*massHist);
 				expPlusLinFits_eta.push_back(*expFit_t);
 				tSlopes_eta.push_back( abs(expFit_t->GetParameter(1)) );
@@ -657,89 +729,106 @@ void makeDeckPlot(string selectionString){
 			axis->SetLabelSize(0.06);
 			axis->Draw();
 		}
+		//cout << "Initial parameter values: " << endl;
+		//for ( auto parValue: full_initParams ) {
+		//	cout << parValue << endl;
+		//}
+
+		//cout << "ALL THE YIELDS: " <<endl;
+		//for (auto yield : yields ) {
+		//	cout << yield << endl;
+		//}
+	logFile << "\n\n\n======================= END OF THIS ITERATION ===============================\n" << endl;
+    	}
+
+	 TLegend *leg;
+	 for (int iMass=0; iMass<num_massBins-skipLastN; ++iMass){
+	 	allCanvases_tSlope->cd(iMass+1);
+	 	leg = new TLegend(0.1,0.11,0.35,0.35);
+	 	leg->AddEntry(&expPlusLinFits_eta[iMass], ("#eta tSlope = "+to_string(tSlopes_eta[iMass])).c_str(), "l");
+	 	leg->AddEntry(&expPlusLinFits_pi0[iMass], ("#pi^{0} tSlope = "+to_string(tSlopes_pi0[iMass])).c_str(), "l");
+	 	leg->SetBorderSize(0);
+	 	leg->SetFillStyle(0);
+	 	leg->SetTextSize(0.07);
+	 	leg->Draw();
+	 }
+
+	 allCanvases_yields->SaveAs(("deckPlots/"+selectionString+"/yields.png").c_str());
+	 allCanvases_unscaledYields->SaveAs(("deckPlots/"+selectionString+"/unscaledYields.png").c_str());
+	 allCanvases_tSlope->SaveAs(("deckPlots/"+selectionString+"/yields_tSlope.png").c_str());
 
 
-		cout << "Initial parameter values: " << endl;
-		for ( auto parValue: full_initParams ) {
-			cout << parValue << endl;
-		}
+	 allCanvases->Clear();
+	 allCanvases->cd();
+	 TH1F* hist_tSlopes_eta = new TH1F("hist_tSlope_eta","; M(#pi^{0}#eta) (GeV); t-slope",num_massBins,mMin,mMax);
+	 TH1F* hist_tSlopes_pi0 = new TH1F("hist_tSlope_pi0","; M(#pi^{0}#eta) (GeV); t-slope",num_massBins,mMin,mMax);
+	 for ( int iMass=0; iMass < num_massBins-skipLastN; ++iMass ){
+	 	hist_tSlopes_eta->SetBinContent( iMass+1, tSlopes_eta[iMass]);
+	 	hist_tSlopes_pi0->SetBinContent( iMass+1, tSlopes_pi0[iMass]);
+	 	hist_tSlopes_eta->SetBinError( iMass+1, tSlopesError_eta[iMass]);
+	 	hist_tSlopes_pi0->SetBinError( iMass+1, tSlopesError_pi0[iMass]);
+	 }
 
-		cout << "ALL THE YIELDS: " <<endl;
-		for (auto yield : yields ) {
-			cout << yield << endl;
-		}
-	}
+	 hist_tSlopes_eta->SetMarkerStyle(kFullCircle);
+	 hist_tSlopes_eta->SetMarkerSize(1.5);
+	 hist_tSlopes_eta->SetMarkerColor(kBlue);
+	 hist_tSlopes_eta->GetXaxis()->SetLabelSize(0.05);
+	 hist_tSlopes_eta->GetYaxis()->SetLabelSize(0.05);
+	 hist_tSlopes_eta->Draw("E1 PMC");
 
-	TLegend *leg;
-	for (int iMass=0; iMass<num_massBins; ++iMass){
-		allCanvases_tSlope->cd(iMass+1);
-		leg = new TLegend(0.1,0.11,0.35,0.35);
-		leg->AddEntry(&expPlusLinFits_eta[iMass], ("#eta tSlope = "+to_string(tSlopes_eta[iMass])).c_str(), "l");
-		leg->AddEntry(&expPlusLinFits_pi0[iMass], ("#pi^{0} tSlope = "+to_string(tSlopes_pi0[iMass])).c_str(), "l");
-		leg->SetBorderSize(0);
-		leg->SetFillStyle(0);
-		leg->SetTextSize(0.07);
-		leg->Draw();
-	}
+	 hist_tSlopes_pi0->SetMarkerStyle(kFullCircle);
+	 hist_tSlopes_pi0->SetMarkerSize(1.5);
+	 hist_tSlopes_pi0->SetMarkerColor(kRed);
+	 hist_tSlopes_pi0->Draw("E1 PMC SAME");
+	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.png").c_str());
+	 
 
-	allCanvases_yields->SaveAs(("deckPlots/"+selectionString+"/yields.png").c_str());
-	allCanvases_unscaledYields->SaveAs(("deckPlots/"+selectionString+"/unscaledYields.png").c_str());
-	allCanvases_tSlope->SaveAs(("deckPlots/"+selectionString+"/yields_tSlope.png").c_str());
+	 //// Output the tslope for the eta
+	 //allCanvases->Clear(); allCanvases->cd();
+	 //allCanvases->SetLogy(0);
+	 //deckDiagnosticFile->cd();
+	 //for (int iMass=0; iMass<num_massBins-skipLastN; ++iMass){
+	 //	allCanvases->Clear();
+	 //	massHists_eta[iMass].Draw();
+	 //	expPlusLinFits_eta[iMass].SetLineColor(kRed);
+	 //	expPlusLinFits_eta[iMass].SetLineStyle(1);
+	 //	expPlusLinFits_eta[iMass].Draw("SAME");
+	 //	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlope/eta_tSlope_"+to_string(iMass)+".png").c_str());
+	 //	massHists_eta[iMass].Write();
+	 //}
+	 //// Output the tslope for the pi0
+	 //for (int iMass=0; iMass<num_massBins; ++iMass){
+	 //	allCanvases->Clear();
+	 //	massHists_pi0[iMass].Draw();
+	 //	expPlusLinFits_pi0[iMass].SetLineColor(kRed);
+	 //	expPlusLinFits_pi0[iMass].SetLineStyle(1);
+	 //	expPlusLinFits_pi0[iMass].Draw("SAME");
+	 //	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlope/pi0_tSlope_"+to_string(iMass)+".png").c_str());
+	 //	massHists_pi0[iMass].Write();
+	 //}
 
-
-	allCanvases->Clear();
-	allCanvases->cd();
-	TH1F* hist_tSlopes_eta = new TH1F("hist_tSlope_eta","; M(#pi^{0}#eta) (GeV); t-slope",num_massBins,mMin,mMax);
-	TH1F* hist_tSlopes_pi0 = new TH1F("hist_tSlope_pi0","; M(#pi^{0}#eta) (GeV); t-slope",num_massBins,mMin,mMax);
-	for ( int iMass=0; iMass < num_massBins; ++iMass ){
-		hist_tSlopes_eta->SetBinContent( iMass+1, tSlopes_eta[iMass]);
-		hist_tSlopes_pi0->SetBinContent( iMass+1, tSlopes_pi0[iMass]);
-		hist_tSlopes_eta->SetBinError( iMass+1, tSlopesError_eta[iMass]);
-		hist_tSlopes_pi0->SetBinError( iMass+1, tSlopesError_pi0[iMass]);
-	}
-
-	hist_tSlopes_eta->SetMarkerStyle(kFullCircle);
-	hist_tSlopes_eta->SetMarkerSize(1.5);
-	hist_tSlopes_eta->SetMarkerColor(kBlue);
-	hist_tSlopes_eta->GetXaxis()->SetLabelSize(0.05);
-	hist_tSlopes_eta->GetYaxis()->SetLabelSize(0.05);
-	hist_tSlopes_eta->Draw("E1 PMC");
-
-	hist_tSlopes_pi0->SetMarkerStyle(kFullCircle);
-	hist_tSlopes_pi0->SetMarkerSize(1.5);
-	hist_tSlopes_pi0->SetMarkerColor(kRed);
-	hist_tSlopes_pi0->Draw("E1 PMC SAME");
-	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.png").c_str());
-	
-
-	// Output the tslope for the eta
-	allCanvases->Clear(); allCanvases->cd();
-	allCanvases->SetLogy(0);
-	deckDiagnosticFile->cd();
-	for (int iMass=0; iMass<num_massBins; ++iMass){
-		allCanvases->Clear();
-		massHists_eta[iMass].Draw();
-		expPlusLinFits_eta[iMass].SetLineColor(kRed);
-		expPlusLinFits_eta[iMass].SetLineStyle(1);
-		expPlusLinFits_eta[iMass].Draw("SAME");
-		allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlope/eta_tSlope_"+to_string(iMass)+".png").c_str());
-		massHists_eta[iMass].Write();
-	}
-	// Output the tslope for the pi0
-	for (int iMass=0; iMass<num_massBins; ++iMass){
-		allCanvases->Clear();
-		massHists_pi0[iMass].Draw();
-		expPlusLinFits_pi0[iMass].SetLineColor(kRed);
-		expPlusLinFits_pi0[iMass].SetLineStyle(1);
-		expPlusLinFits_pi0[iMass].Draw("SAME");
-		allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlope/pi0_tSlope_"+to_string(iMass)+".png").c_str());
-		massHists_pi0[iMass].Write();
-	}
 }
 
 
 void makeDeckPlots(){
-	makeDeckPlot("tLT1");
-	makeDeckPlot("tLT05");
+	//gSystem->Exec("rm -rf deckPlots");
+	//gSystem->Exec("mkdir -p deckPlots/tAll/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tAll/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tAll/tSlope");
+	//makeDeckPlot("tAll");
+
+	//gSystem->Exec("mkdir -p deckPlots/tLT1/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tLT1/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tLT1/tSlope");
+	//makeDeckPlot("tLT1");
+
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
+	//makeDeckPlot("tLT05");
+
+	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
 	makeDeckPlot("tGT05LT1");
 }
