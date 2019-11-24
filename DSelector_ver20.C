@@ -498,6 +498,20 @@ void DSelector_ver20::Init(TTree *locTree)
         histDef_1D histdef;
         histDef_2D histdef2d;
 
+	// ********************************** DETECTOR SPECIFIC RELATED PLOTS FOR PI0/ETA *****************************************
+        histdef.clear();
+        name="pi0DetectedIn";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;0-FCAL 1-BCAL 2-SPLIT;", 3, 0, 3);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &noWeight;
+        histdef.values.push_back( &pi0DetectedIn );
+        group_12B.insert(histdef); 
+        histdef.clear();
+        name="etaDetectedIn";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;0-FCAL 1-BCAL 2-SPLIT;", 3, 0, 3);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &noWeight;
+        histdef.values.push_back( &etaDetectedIn );
+        group_12B.insert(histdef); 
+
 	// ********************************** DECK REALTED PLOTS *****************************************
         histdef.clear();
         name="mandelstam_t";
@@ -1419,7 +1433,11 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_eta_pi0eta");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0_pi0eta");
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID"); //fundamental = char, int, float, double, etc.
-        
+
+	// introducing variables to show the pi0/eta was detected in
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("pi0DetectedIn"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("etaDetectedIn"); //fundamental = char, int, float, double, etc.
+	
         // Introduce some angles to use in the phase space distance calculation
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm_meas"); //fundamental = char, int, float, double, etc.
@@ -2694,6 +2712,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         pEtaInBCAL = photonDetectedSyss[2]==SYS_BCAL && photonDetectedSyss[3]==SYS_BCAL;
         pEtaInSplit = (photonDetectedSyss[2]==SYS_FCAL && photonDetectedSyss[3]==SYS_BCAL) || (photonDetectedSyss[3]==SYS_FCAL && photonDetectedSyss[2]==SYS_BCAL);
 
+	if ( pPi0InFCAL ) { pi0DetectedIn = 0; } 
+	if ( pPi0InBCAL ) { pi0DetectedIn = 1; } 
+	if ( pPi0InSPLIT ) { pi0DetectedIn = 2; } 
+	if ( pEtaInFCAL ) { etaDetectedIn = 0; } 
+	if ( pEtaInBCAL ) { etaDetectedIn = 1; } 
+	if ( pEtaInSPLIT ) { etaDetectedIn = 2; } 
+
         pPi0InFCAL_mismatch = photonDetectedSyss[0]==SYS_FCAL && photonDetectedSyss[2]==SYS_FCAL;
         pPi0InBCAL_mismatch = photonDetectedSyss[0]==SYS_BCAL && photonDetectedSyss[2]==SYS_BCAL;
         pPi0InSplit_mismatch = (photonDetectedSyss[0]==SYS_FCAL && photonDetectedSyss[2]==SYS_BCAL) || (photonDetectedSyss[2]==SYS_FCAL && photonDetectedSyss[0]==SYS_BCAL);
@@ -2998,9 +3023,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptGT05LT1", ptGT05LT1);
 	if(showOutput){ cout << "Filled some more fundamental branches" << endl; } 
 	
-
-
-
+	// some variables to track uniqueness
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0",isNotRepeated_pi0);
 	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_eta",isNotRepeated_eta);
@@ -3012,7 +3035,10 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID",uniqueSpectroscopicPi0EtaID);
 	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
 
-
+	// some variables to show where the pi0/eta detected
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("pi0DetectedIn",pi0DetectedIn);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("eta0DetectedIn",etaDetectedIn);
+	
         // Introduce some angles to use in the phase space distance calculation
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_X_cm", cosTheta_pi0eta_CM); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_X_cm_meas", cosTheta_pi0eta_CM_meas); //fundamental = char, int, float, double, etc.
