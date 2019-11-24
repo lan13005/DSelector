@@ -45,8 +45,8 @@ void DSelector_thrown::Init(TTree *locTree)
         dHist_genCounts_pi0_tLT05 = new TH1F("tpi0VsMpi0eta_genCounts_tLT05", "genCounts", numHists+1, -1, numHists);
         dHist_genCounts_eta_tGT05LT1 = new TH1F("tetaVsMpi0eta_genCounts_tGT05LT1", "genCounts", numHists+1, -1, numHists);
         dHist_genCounts_pi0_tGT05LT1 = new TH1F("tpi0VsMpi0eta_genCounts_tGT05LT1", "genCounts", numHists+1, -1, numHists);
-        dHist_genCounts_eta_tLT1 = new TH1F("tetaVsMpi0eta_genCounts_tLT1", "genCounts", numHists+1, -1, numHists);
-        dHist_genCounts_pi0_tLT1 = new TH1F("tpi0VsMpi0eta_genCounts_tLT1", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_eta_tGT1 = new TH1F("tetaVsMpi0eta_genCounts_tGT1", "genCounts", numHists+1, -1, numHists);
+        dHist_genCounts_pi0_tGT1 = new TH1F("tpi0VsMpi0eta_genCounts_tGT1", "genCounts", numHists+1, -1, numHists);
         dHist_genCounts_eta_tAll = new TH1F("tetaVsMpi0eta_genCounts_tAll", "genCounts", numHists+1, -1, numHists);
         dHist_genCounts_pi0_tAll = new TH1F("tpi0VsMpi0eta_genCounts_tAll", "genCounts", numHists+1, -1, numHists);
 	
@@ -330,7 +330,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
 			mandelstam_tAll->Fill(mandelstam_abst);
 
-			
 			if (mandelstam_abst<0.5){
 				dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
 				dHist_genCounts_pi0_tLT05->Fill(tpi0_genCounts);
@@ -339,9 +338,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				dHist_genCounts_eta_tGT05LT1->Fill(teta_genCounts);
 				dHist_genCounts_pi0_tGT05LT1->Fill(tpi0_genCounts);
 			}
-			if (mandelstam_abst<1){
-				dHist_genCounts_eta_tLT1->Fill(teta_genCounts);
-				dHist_genCounts_pi0_tLT1->Fill(tpi0_genCounts);
+			if (mandelstam_abst>1){
+				dHist_genCounts_eta_tGT1->Fill(teta_genCounts);
+				dHist_genCounts_pi0_tGT1->Fill(tpi0_genCounts);
 			}
 
 			//if(mandelstam_t < 1){

@@ -523,9 +523,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tetaVsMpi0eta_recCounts_tLT1";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT1;efficiency", numHists+1, -1, numHists);
-        histdef.name = name; histdef.cut=&mEllipse_pre_tLT1; histdef.weights = &weightAS;
+        name="tetaVsMpi0eta_recCounts_tGT1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT1;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tGT1; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
         group_34B_1234B.insert(histdef); 
 
@@ -551,9 +551,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B_1234B.insert(histdef); 
 
         histdef.clear();
-        name="tpi0VsMpi0eta_recCounts_tLT1";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT1;efficiency", numHists+1, -1, numHists);
-        histdef.name = name; histdef.cut=&mEllipse_pre_tLT1; histdef.weights = &weightAS;
+        name="tpi0VsMpi0eta_recCounts_tGT1";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT1;efficiency", numHists+1, -1, numHists);
+        histdef.name = name; histdef.cut=&mEllipse_pre_tGT1; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
         group_34B_1234B.insert(histdef); 
 
@@ -1392,7 +1392,7 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("weightASBS"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("uniqueComboID"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp"); //fundamental = char, int, float, double, etc.
-        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptLT1");
+        dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptGT1");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptLT05");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptGT05LT1");
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("finalStateComboID"); //fundamental = char, int, float, double, etc.
@@ -2709,7 +2709,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         }
 
         ptpLT1 = mandelstam_tp<1; 
-        ptLT1 = mandelstam_abst<1; 
+        ptGT1 = mandelstam_abst>1; 
         ptLT05 = mandelstam_abst<0.5; 
         ptGT05LT1 = mandelstam_abst<1 && mandelstam_abst>0.5; 
 
@@ -2748,7 +2748,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         // ------ 
         mEllipse_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mEllipse_pre_tAll = !pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-	mEllipse_pre_tLT1 = mEllipse_pre_tAll*ptLT1;
+	mEllipse_pre_tGT1 = mEllipse_pre_tAll*ptGT1;
 	mEllipse_pre_tLT05 = mEllipse_pre_tAll*ptLT05;
 	mEllipse_pre_tGT05LT1 = mEllipse_pre_tAll*ptGT05LT1;
 
@@ -2993,7 +2993,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0pi0", locPi0Eta_Kin);
         }
         dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp);
-        dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptLT1", ptLT1);
+        dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptGT1", ptGT1);
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptLT05", ptLT05);
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("ptGT05LT1", ptGT05LT1);
 	if(showOutput){ cout << "Filled some more fundamental branches" << endl; } 
