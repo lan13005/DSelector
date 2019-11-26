@@ -1064,13 +1064,6 @@ void DSelector_ver20::Init(TTree *locTree)
         group_1234B.insert(histdef); 
 
         histdef.clear();
-        name="pi0eta1D_mMandelstamT";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
-
-        histdef.clear();
         name="pi0eta1D_ASBS";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
@@ -1246,72 +1239,72 @@ void DSelector_ver20::Init(TTree *locTree)
 	// mMandelstamT_mdelta = pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
         // mMandelstamT = !pMPi0P14*mMandelstamT_mdelta; // with delta cut applied
 	// mMandelstamT_mdelta_petaProton = pEtaProtonBaryonCut*mMandelstamT_mdelta; 
-	// mMandelstamT_mdelta_pvanHove = pvanHove*mMandelstamT_mdelta; 
-	// mDelta = ptpLT1*mMandelstamT_delta; // t Cut applied
+	// mMandelstamT_mdelta_pVanHove = pVanHove*mMandelstamT_mdelta; 
+	// mDelta = ptpLT1*mMandelstamT_mdelta; // t Cut applied
 
 	// -------------------- SHOW THESE FIRST BEFORE ANY CUTTING ------------------------------
         histdef2d.clear();
-        name="vanHove_mMandelstamT_delta";
-        histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT_delta;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
-        histdef2d.name = name; histdef2d.cut=&mMandelstamT_delta; histdef2d.weights = &weightAS;
+        name="vanHove_mMandelstamT_mdelta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT_mdelta;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
+        histdef2d.name = name; histdef2d.cut=&mMandelstamT_mdelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
         group_1234BP.insert_2D(histdef2d); 
 
         histdef.clear();
-        name="mandelstam_tp_mMandelstamT_delta";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_delta;-t' momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
-        histdef.name = name; histdef.cut=&mMandelstamT_delta; histdef.weights = &weightAS_BS;
+        name="mandelstam_tp_mMandelstamT_mdelta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;-t' momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &mandelstam_tp );
         group_1234B.insert(histdef); 
 
         histdef.clear();
-        name="pi0proton1D_mMandelstamT_delta";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_delta;M(#pi_{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
-        histdef.name = name; histdef.cut=&mMandelstamT_delta; histdef.weights = &weightAS;
+        name="pi0proton1D_mMandelstamT_mdelta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;M(#pi_{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
         group_12PB.insert(histdef); 
 
         histdef.clear();
-        name="etaproton1D_mMandelstamT_delta";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_delta;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
-        histdef.name = name; histdef.cut=&mMandelstamT_delta; histdef.weights = &weightAS;
+        name="etaproton1D_mMandelstamT_mdelta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
         group_34PB.insert(histdef); 
 
         histdef.clear();
-        name="pi0eta1D_mMandelstamT_delta";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_delta;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mMandelstamT_delta; histdef.weights = &weightAS;
+        name="pi0eta1D_mMandelstamT_mdelta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
 	
 	// -------------------- NOW WE USE VANHOVE AS THE PRIMARY ---------------------
         histdef.clear();
-        name="mandelstam_tp_mMandelstamT_mdelta_pvanHove";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pvanHove;-t' momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
-        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pvanHove; histdef.weights = &weightAS;
+        name="mandelstam_tp_mMandelstamT_mdelta_pVanHove";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;-t' momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
         group_1234B.insert(histdef); 
 
         histdef.clear();
         name="pi0proton1D_";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pvanHove;M(#pi_{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
-        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pvanHove; histdef.weights = &weightAS;
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#pi_{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
         group_12PB.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pvanHove;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
-        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pvanHove; histdef.weights = &weightAS;
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
         group_34PB.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pvanHove;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pvanHove; histdef.weights = &weightAS;
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
 	// -------------------- NOW WE USE MANDELSTAM_T AS THE PRIMARY ---------------------
@@ -2873,10 +2866,10 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	if ( pPi0InFCAL ) { pi0DetectedIn = 0; } 
 	if ( pPi0InBCAL ) { pi0DetectedIn = 1; } 
-	if ( pPi0InSPLIT ) { pi0DetectedIn = 2; } 
+	if ( pPi0InSplit ) { pi0DetectedIn = 2; } 
 	if ( pEtaInFCAL ) { etaDetectedIn = 0; } 
 	if ( pEtaInBCAL ) { etaDetectedIn = 1; } 
-	if ( pEtaInSPLIT ) { etaDetectedIn = 2; } 
+	if ( pEtaInSplit ) { etaDetectedIn = 2; } 
 
         pPi0InFCAL_mismatch = photonDetectedSyss[0]==SYS_FCAL && photonDetectedSyss[2]==SYS_FCAL;
         pPi0InBCAL_mismatch = photonDetectedSyss[0]==SYS_BCAL && photonDetectedSyss[2]==SYS_BCAL;
@@ -2920,8 +2913,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	mMandelstamT_mdelta = pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
         mMandelstamT = !pMPi0P14*mMandelstamT_mdelta; // with delta cut applied
 	mMandelstamT_mdelta_petaProton = pEtaProtonBaryonCut*mMandelstamT_mdelta; 
-	mMandelstamT_mdelta_pvanHove = pvanHove*mMandelstamT_mdelta; 
-	mDelta = ptpLT1*mMandelstamT_delta; // t Cut applied
+	mMandelstamT_mdelta_pVanHove = pVanHove*mMandelstamT_mdelta; 
+	mDelta = ptpLT1*mMandelstamT_mdelta; // t Cut applied
 	// -----------------------------------------------------------------------
 	// -----------------------------------------------------------------------
 	

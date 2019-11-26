@@ -765,6 +765,13 @@ class DSelector_ver20 : public DSelector
 		bool inSYS_NULL=true;
 		
 		bool medBool[5]={true,true,true,true,true};
+
+		// baryon cuts
+		bool mMandelstamT_mdelta=true;
+		bool mMandelstamT_mdelta_petaProton=true;
+		bool mMandelstamT_mdelta_pVanHove=true;
+		bool mDelta=true;
+
 		
 		// Various combinations of cuts, the majority of them will be used just for a few histograms like when showing unused energy graph we will use mUE which
 		// removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
@@ -788,10 +795,10 @@ class DSelector_ver20 : public DSelector
 		bool mEllipse = true;
 		bool mEllipse_pre = true;
 		bool mEllipse_pre_tAll = true;
-		bool ptLT1=true;
+		bool ptGT1=true;
 		bool ptLT05=true;
 		bool ptGT05LT1=true;
-		bool mEllipse_pre_tLT1 = true;
+		bool mEllipse_pre_tGT1 = true;
 		bool mEllipse_pre_tGT05LT1 = true;
 		bool mEllipse_pre_tLT05 = true;
 		bool mEllipse_pre_tAll_delta = true;
