@@ -439,8 +439,8 @@ class DSelector_ver20 : public DSelector
 		double locEnergy_BCALPreshower_proton;
 		double locEnergy_BCAL_proton;
 
-		Int_t pi0DetectedIn;
-		Int_t etaDetectedIn;
+		double pi0DetectedIn;
+		double etaDetectedIn;
 
 		//************ Charged Track
 		double locPtProton=1;
