@@ -3,7 +3,7 @@ void makeBaryonPlots(){
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 
 	string baseNames[5] = {"vanHove","mandelstam_tp","pi0proton1D", "etaproton1D", "pi0eta1D"};
-	string cutString="mMandelstamT_delta";
+	string cutString="mMandelstamT_mdelta";
 	
 	TH2F *vanHove;
 	TH1F *mandelstam_t;
@@ -14,9 +14,16 @@ void makeBaryonPlots(){
 
 	// These will be the base histograms with no extra cuts applied only the base
 	for (int iHist=0; iHist< 5; ++iHist){
-		dataFile->GetObject((baseNames[i]+"_"+cutString).c_str(), anyHist);
-		anyHist->Draw("COLZ");
-		allCanvases->SaveAs(("baryonPlots/"+baseNames[i]+"_"+cutString+".pdf").c_str());
+		cout << "Making base hist: " << baseNames[iHist] << "_" << cutString << endl;
+		if ( iHist == 0 ) { 
+			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
+			any2DHist->Draw("COLZ");
+		}
+		else {
+			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
+			anyHist->Draw("HIST");
+		}
+		allCanvases->SaveAs(("baryonPlots/"+baseNames[iHist]+"_"+cutString+".pdf").c_str());
 	}
 
 	// mMandelstamT_mdelta = pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
@@ -32,12 +39,13 @@ void makeBaryonPlots(){
 	ignoreIdx=0;
 	padIdx=1; 
 	allCanvases->cd(padIdx);
-	cutString = "mMandelstamT_mdelta_pvanHove"; 
+	cutString = "mMandelstamT_mdelta_pVanHove"; 
 	for (int iHist=0; iHist<5; ++iHist){
 		if (iHist == ignoreIdx) { continue; } 	
+		cout << "Making hists with vanHove primary: " << baseNames[iHist] << "_" << cutString << endl;
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
-			anyHist->Draw("COLZ");
+			anyHist->Draw("HIST");
 		}
 		else { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);

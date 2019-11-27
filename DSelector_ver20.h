@@ -738,6 +738,8 @@ class DSelector_ver20 : public DSelector
 		bool pEtaInBCAL_mismatch=true; 
 		bool pEtaInSplit_mismatch=true;
 
+		bool detectorCut=true;
+
 		bool ptpLT1=true;
 		// Times it passes a cut
 		int count_ShowerQuality=0;

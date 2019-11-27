@@ -27,6 +27,9 @@ bool outputMassShift=true;
 
 int itersToRun = 0;
 int finalStateComboID=0;
+
+string selectDetector="ALL";
+
 void DSelector_ver20::Init(TTree *locTree)
 {
         cout << "STARTING" << endl;
@@ -1288,21 +1291,21 @@ void DSelector_ver20::Init(TTree *locTree)
         group_1234B.insert(histdef); 
 
         histdef.clear();
-        name="pi0proton1D_";
+        name="pi0proton1D_mMandelstamT_mdelta_pVanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#pi_{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
         group_12PB.insert(histdef); 
 
         histdef.clear();
-        name="etaproton1D_";
+        name="etaproton1D_mMandelstamT_mdelta_pVanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
         group_34PB.insert(histdef); 
 
         histdef.clear();
-        name="pi0eta1D_";
+        name="pi0eta1D_mMandelstamT_mdelta_pVanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
@@ -3093,7 +3096,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	if(showOutput){ cout << "Filling histogram's uniqueness elements" << endl; }
 
-        if (!mEllipse_pre_tAll) { 
+	if ( selectDetector == "FCAL" ) { detectorCut=pEtaInFCAL; }
+	else if ( selectDetector == "BCAL" ) { detectorCut=pEtaInBCAL; }
+	else if ( selectDetector == "SPLIT" ) { detectorCut=pEtaInSplit; }
+	else { detectorCut=true; }
+
+        if (!mEllipse_pre_tAll && !detectorCut) { 
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
