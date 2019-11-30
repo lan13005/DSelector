@@ -1,4 +1,9 @@
 void makeBaryonPlots(){
+        double etaProtonBaryonCut = 1.65;
+        double pi0ProtonBaryonCut = 2;
+	double tCut = 1;
+	TLine *lineCut;
+
 	TFile* dataFile = TFile::Open("pi0eta_data_hists_DSelector.root");
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 
@@ -22,6 +27,21 @@ void makeBaryonPlots(){
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
 			anyHist->Draw("HIST");
+			if ( iHist == 3 ) {
+				lineCut = new TLine(etaProtonBaryonCut,0,etaProtonBaryonCut,4000);
+				lineCut->SetLineColor(kRed);
+				lineCut->Draw();
+			}
+			if ( iHist == 1 ) {
+				lineCut = new TLine(1,0,1,40000);
+				lineCut->SetLineColor(kRed);
+				lineCut->Draw();
+			}
+			if ( iHist == 2 ) {
+				lineCut = new TLine(pi0ProtonBaryonCut,0,pi0ProtonBaryonCut,4000);
+				lineCut->SetLineColor(kRed);
+				lineCut->Draw();
+			}
 		}
 		allCanvases->SaveAs(("baryonPlots/"+baseNames[iHist]+"_"+cutString+".pdf").c_str());
 	}
@@ -31,84 +51,167 @@ void makeBaryonPlots(){
 	// mMandelstamT_mdelta_petaProton = pEtaProtonBaryonCut*mMandelstamT_mdelta; 
 	// mMandelstamT_mdelta_pvanHove = pvanHove*mMandelstamT_mdelta; 
 	// mDelta = ptpLT1*mMandelstamT_delta; // t Cut applied
+	//
+	
+	allCanvases->Clear();
+	TPaveText *pt = new TPaveText(.44,.46,.56,.52,"brNDC");
+	pt->SetFillColor(0);
+	pt->SetBorderSize(0);
+	TText *t1 = pt->AddText("VANHOVE");
+	t1->SetTextColor(kRed);
 	allCanvases->Divide(2,2);
+
 	int ignoreIdx;
 	int padIdx;
 	
 	// First up would be the vanHove as the primary
 	ignoreIdx=0;
 	padIdx=1; 
-	allCanvases->cd(padIdx);
 	cutString = "mMandelstamT_mdelta_pVanHove"; 
 	for (int iHist=0; iHist<5; ++iHist){
+		allCanvases->cd(padIdx);
+		gStyle->SetOptStat(0);
 		if (iHist == ignoreIdx) { continue; } 	
 		cout << "Making hists with vanHove primary: " << baseNames[iHist] << "_" << cutString << endl;
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
+			anyHist->GetXaxis()->SetLabelSize(0.05);
+			anyHist->GetYaxis()->SetLabelSize(0.05);
+			anyHist->GetXaxis()->SetTitleSize(0.05);
+			anyHist->GetYaxis()->SetTitleSize(0.05);
+			anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("HIST");
 		}
 		else { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
+			any2DHist->GetXaxis()->SetLabelSize(0.05);
+			any2DHist->GetYaxis()->SetLabelSize(0.05);
+			any2DHist->GetXaxis()->SetTitleSize(0.05);
+			any2DHist->GetYaxis()->SetTitleSize(0.05);
+			any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
 	}
+	allCanvases->cd();
+	pt->Draw();
 	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 	
 	// mandelstam_tp would be the new primary
+	allCanvases->Clear();
+	pt = new TPaveText(.44,.46,.56,.52,"brNDC");
+	pt->SetFillColor(0);
+	pt->SetBorderSize(0);
+	t1 = pt->AddText("t");
+	t1->SetTextColor(kRed);
+	allCanvases->Divide(2,2);
 	ignoreIdx=1;
 	padIdx=1; 
-	allCanvases->cd(padIdx);
 	cutString = "mDelta"; 
 	for (int iHist=0; iHist<5; ++iHist){
+		allCanvases->cd(padIdx);
+		gStyle->SetOptStat(0);
 		if (iHist == ignoreIdx) { continue; } 	
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
+			anyHist->GetXaxis()->SetLabelSize(0.05);
+			anyHist->GetYaxis()->SetLabelSize(0.05);
+			anyHist->GetXaxis()->SetTitleSize(0.05);
+			anyHist->GetYaxis()->SetTitleSize(0.05);
+			anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("COLZ");
 		}
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
+			any2DHist->GetXaxis()->SetLabelSize(0.05);
+			any2DHist->GetYaxis()->SetLabelSize(0.05);
+			any2DHist->GetXaxis()->SetTitleSize(0.05);
+			any2DHist->GetYaxis()->SetTitleSize(0.05);
+			any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
 	}
+	allCanvases->cd();
+	pt->Draw();
 	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 
 	// pi0proton would be the new primary
+	allCanvases->Clear();
+	pt = new TPaveText(.44,.46,.56,.52,"brNDC");
+	pt->SetFillColor(0);
+	pt->SetBorderSize(0);
+	t1 = pt->AddText("M(#pi_{0} p)");
+	t1->SetTextColor(kRed);
+	allCanvases->Divide(2,2);
 	ignoreIdx=2;
 	padIdx=1; 
-	allCanvases->cd(padIdx);
 	cutString = "mMandelstamT"; 
 	for (int iHist=0; iHist<5; ++iHist){
+		allCanvases->cd(padIdx);
+		gStyle->SetOptStat(0);
 		if (iHist == ignoreIdx) { continue; } 	
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
+			anyHist->GetXaxis()->SetLabelSize(0.05);
+			anyHist->GetYaxis()->SetLabelSize(0.05);
+			anyHist->GetXaxis()->SetTitleSize(0.05);
+			anyHist->GetYaxis()->SetTitleSize(0.05);
+			anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("COLZ");
 		}
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
+			any2DHist->GetXaxis()->SetLabelSize(0.05);
+			any2DHist->GetYaxis()->SetLabelSize(0.05);
+			any2DHist->GetXaxis()->SetTitleSize(0.05);
+			any2DHist->GetYaxis()->SetTitleSize(0.05);
+			any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
 	}
+	allCanvases->cd();
+	pt->Draw();
 	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 
 	// etaproton would be the new primary
+	allCanvases->Clear();
+	pt = new TPaveText(.44,.46,.56,.52,"brNDC");
+	pt->SetFillColor(0);
+	pt->SetBorderSize(0);
+	t1 = pt->AddText("M(#eta p)");
+	t1->SetTextColor(kRed);
+
+	allCanvases->Divide(2,2);
 	ignoreIdx=3;
 	padIdx=1; 
-	allCanvases->cd(padIdx);
 	cutString = "mMandelstamT_mdelta_petaProton"; 
 	for (int iHist=0; iHist<5; ++iHist){
+		allCanvases->cd(padIdx);
+		gStyle->SetOptStat(0);
 		if (iHist == ignoreIdx) { continue; } 	
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
+			anyHist->GetXaxis()->SetLabelSize(0.05);
+			anyHist->GetYaxis()->SetLabelSize(0.05);
+			anyHist->GetXaxis()->SetTitleSize(0.05);
+			anyHist->GetYaxis()->SetTitleSize(0.05);
+			anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("COLZ");
 		}
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
+			any2DHist->GetXaxis()->SetLabelSize(0.05);
+			any2DHist->GetYaxis()->SetLabelSize(0.05);
+			any2DHist->GetXaxis()->SetTitleSize(0.05);
+			any2DHist->GetYaxis()->SetTitleSize(0.05);
+			any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
 	}
+	allCanvases->cd();
+	pt->Draw();
 	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 }
