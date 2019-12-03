@@ -2,6 +2,7 @@
 #include "/d/grid15/ln16/pi0eta/q-values/makeDiagnosticHists.h"
 
 double selectPi0Proton=1.4;
+double selectEtaProton=2;
 
 class overlayPlots{
 	private:
@@ -50,14 +51,14 @@ class overlayPlots{
 			overlayHists[0]->SetLineColor( colors[0] );
 			overlayHists[0]->SetLineWidth( 2 ) ;
 			leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
-			overlayHists[0]->Draw();
+			overlayHists[0]->Draw("HIST");
 			overlayHists[0]->SetAxisRange(minimum1D,maximum1D*1.05,"Y");
 			for (int i=1; i<overlayHists.size(); ++i){
 				cout << "Overlaying hist " << overlayHists[i]->GetName() << endl;
 				overlayHists[i]->Scale(histWeights[i]);
 				overlayHists[i]->SetLineColor( colors[i] );
 				overlayHists[i]->SetLineWidth( 2 ) ;
-				overlayHists[i]->Draw("same");
+				overlayHists[i]->Draw("SAME HIST");
 				leg->AddEntry(overlayHists[i],overlayHists[i]->GetTitle() , "l");
 			}
 			if (b_xCut){
@@ -152,13 +153,15 @@ void makeGraphs(){
 
 		
 	std::map<string, double> trackHists;
-	trackHists = { {"pi0proton1D_Cut_ASBS", 1 } };
-	overlayPlots pi0proton1D_Cut_ASBS(trackHists);
+	trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1 } };
+	overlayPlots pi0proton1D_mMandelstamT_mdelta(trackHists);
+	trackHists = { {"etaproton1D_mMandelstamT_mdelta", 1 } };
+	overlayPlots etaproton1D_mMandelstamT_mdelta(trackHists);
 	trackHists = { {"pi0eta1D_RectSBSubRegion4",  1 },{"pi0eta1D_RectSBSubRegion0268",  0.25 },{"pi0eta1D_RectSBSubRegion17",  0.5 },{"pi0eta1D_RectSBSubRegion35",  0.5 } };
 	overlayPlots pi0eta1D_RectSBSubRegion(trackHists);
 	trackHists = { {"pi0eta_mEllipsePre",1 } };
 	sideBySide2D pi0eta_mEllipsePre(trackHists);	
-	trackHists = { {"pi0eta_Meas_mEllipsePre_showEllipse",1 } };
+	trackHists = { {"pi0eta_Meas_mEllipsePre",1 } };
 	sideBySide2D pi0eta_Meas_mEllipsePre_showEllipse(trackHists);	
         trackHists = { {"pi0Mass_Kin_mEllipsePre",  1 }, {"pi0MassFCAL_Kin_mEllipsePre", 1 }, {"pi0MassBCAL_Kin_mEllipsePre", 1 }, {"pi0MassSPLIT_Kin_mEllipsePre", 1 } };
 	overlayPlots pi0MassDiffSubDetectors(trackHists);
@@ -193,7 +196,8 @@ void makeGraphs(){
 			fileName.append(".png");
    	   		c1->SaveAs((fileName).c_str());
 			// Wait until we have finally used up TH1 object first. Otherwise casting it into TH1F early creates some problems
-			pi0proton1D_Cut_ASBS.fillHist(h);
+			pi0proton1D_mMandelstamT_mdelta.fillHist(h);
+			etaproton1D_mMandelstamT_mdelta.fillHist(h);
 			pi0eta1D_RectSBSubRegion.fillHist(h);
 			pi0MassDiffSubDetectors.fillHist(h);
 			etaMassDiffSubDetectors.fillHist(h);
@@ -210,7 +214,9 @@ void makeGraphs(){
 	pi0eta1DtAlltCut.plot("newGraphs/pi0eta1DtAlltCut.png",false, lineCutThresholds);
 
 	lineCutThresholds={selectPi0Proton};
-	pi0proton1D_Cut_ASBS.plot("newGraphs/pi0proton1D_Cut_ASBS.png",true,lineCutThresholds);
+	pi0proton1D_mMandelstamT_mdelta.plot("newGraphs/pi0proton1D_mMandelstamT_mdelta.png",true,lineCutThresholds);
+	lineCutThresholds={selectEtaProton};
+	etaproton1D_mMandelstamT_mdelta.plot("newGraphs/etaproton1D_mMandelstamT_mdelta.png",true,lineCutThresholds);
 	
 	cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
 	pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);

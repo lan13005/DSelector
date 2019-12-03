@@ -92,8 +92,8 @@ class DSelector_thrown : public DSelector
 		TH1F *dHist_numEventsOnePi0OneEta;
         	TH1F *dHist_genCounts_eta_tAll;
         	TH1F *dHist_genCounts_pi0_tAll;
-        	TH1F *dHist_genCounts_eta_tLT1;
-        	TH1F *dHist_genCounts_pi0_tLT1;
+        	TH1F *dHist_genCounts_eta_tGT1;
+        	TH1F *dHist_genCounts_pi0_tGT1;
         	TH1F *dHist_genCounts_eta_tLT05;
         	TH1F *dHist_genCounts_pi0_tLT05;
         	TH1F *dHist_genCounts_eta_tGT05LT1;
