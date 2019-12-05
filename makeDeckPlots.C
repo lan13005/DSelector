@@ -60,6 +60,14 @@ void makeDeckPlot(string selectionString){
 	TCanvas *allCanvases_tSlope = new TCanvas("anyHists_tSlope","Blue=Eta Red=Pi0 DarkGray=teta Gray=tpi0",1440,900);
 	TCanvas *allCanvases_yields = new TCanvas("anyHists_yields","Blue=Eta Red=Pi0 DarkGray=teta Gray=tpi0",1440,900);
 	TCanvas *allCanvases_unscaledYields = new TCanvas("anyHists_unscaledYields","Blue=Eta Red=Pi0 DarkGray=teta Gray=tpi0",1440,900);
+
+	allCanvases_tSlope->SetLeftMargin(0.15);
+	allCanvases_yields->SetLeftMargin(0.15);
+	allCanvases_unscaledYields->SetLeftMargin(0.15);
+	allCanvases_tSlope->SetBottomMargin(0.2);
+	allCanvases_yields->SetBottomMargin(0.2);
+	allCanvases_unscaledYields->SetBottomMargin(0.2);
+
 	allCanvases_yields->Divide(3,4,0,0);
 	allCanvases_unscaledYields->Divide(3,4,0,0);
 	allCanvases_tSlope->Divide(3,4,0,0);
@@ -88,7 +96,7 @@ void makeDeckPlot(string selectionString){
 	Bool_t isUnique;
 	double new_meta;
 	double new_mpi0;
-	Bool_t new_ptLT1;
+	Bool_t new_ptGT1;
 	Bool_t new_ptLT05;
 	Bool_t new_ptGT05LT1;
         dataTree->SetBranchAddress("AccWeight",&new_accWeight);
@@ -97,7 +105,7 @@ void makeDeckPlot(string selectionString){
 	dataTree->SetBranchAddress("Meta_meas",&new_meta);
 	dataTree->SetBranchAddress("Mpi0_meas",&new_mpi0);
 	dataTree->SetBranchAddress("Mpi0eta_meas",&new_m);
-	dataTree->SetBranchAddress("ptLT1",&new_ptLT1);
+	dataTree->SetBranchAddress("ptGT1",&new_ptGT1);
 	dataTree->SetBranchAddress("ptLT05",&new_ptLT05);
 	dataTree->SetBranchAddress("ptGT05LT1",&new_ptGT05LT1);
 	cout << "Loaded addresses" << endl;
@@ -323,7 +331,7 @@ void makeDeckPlot(string selectionString){
 
 		for (int ientry=0; ientry<nentries; ++ientry){
 			dataTree->GetEntry(ientry);
-			if ( (selectionString == "tLT1" && new_ptLT1) || (selectionString == "tLT05" && new_ptLT05) || (selectionString == "tGT05LT1" && new_ptGT05LT1) || 
+			if ( (selectionString == "tGT1" && new_ptGT1) || (selectionString == "tLT05" && new_ptLT05) || (selectionString == "tGT05LT1" && new_ptGT05LT1) || 
 					selectionString == "tAll" ) {  
 				if (branchIdx==0){ isUnique = new_isUnique34B_1234B; }
 				else { isUnique = new_isUnique12B_1234B; } 
@@ -458,7 +466,7 @@ void makeDeckPlot(string selectionString){
 			//f2->SetParLimits(5,0,scaled_initParams[5]*10);
 			//f2->SetParLimits(6,-scaled_initParams[5]*10,scaled_initParams[5]*10);
 			//f2->SetParLimits(7,-scaled_initParams[6]*10,scaled_initParams[6]*10);
-			cout << "\n\n*******************\nFITTING NEXT BIN************************"<<endl;
+			cout << "\n\n*******************\nFITTING NEXT BIN: " << i << " ************************"<<endl;
 			TCanvas *allCanvases_binChecks = new TCanvas("anyHists_binChecks","",1440,900);
 			allCanvases_binChecks->Divide(3,1);
 			allCanvases_binChecks->cd();
@@ -568,6 +576,16 @@ void makeDeckPlot(string selectionString){
 			unscaledYields[branchIdx][i]=unscaledYield;
 			unscaledYieldErrors[branchIdx][i]=unscaledYieldError;
 
+			// put this here so we can still properly save the diagnostic plots. Even though we will waste a fit calculation....
+			if ( hists_meta_mpi0[i]->GetEntries() < 100 ) { 
+				yields[branchIdx][i]=0;
+				yieldErrors[branchIdx][i]=0;
+				unscaledYields[branchIdx][i]=0;
+				unscaledYieldErrors[branchIdx][i]=0;
+				logFile << i << ", " << "Not enough events, only: " << hists_meta_mpi0[i]->GetEntries() << endl; 
+				continue;
+			}
+
 			cout << "Yield, error = " << fitPars[0] << ", " << pointParError[0];
 			cout << "   Scaled Yield, Scaled error = " << unscaledYield << ", " << unscaledYieldError;
 			cout << "   EffCorrected Yield, Scaled error = " << yields[branchIdx][i] << ", " << yieldErrors[branchIdx][i];
@@ -581,15 +599,6 @@ void makeDeckPlot(string selectionString){
 				maxUnscaledYield=unscaledYields[branchIdx][i];
 			}
 
-			// put this here so we can still properly save the diagnostic plots. Even though we will waste a fit calculation....
-			if ( hists_meta_mpi0[i]->GetEntries() < 75 ) { 
-				yields[branchIdx][i]=0;
-				yieldErrors[branchIdx][i]=0;
-				unscaledYields[branchIdx][i]=0;
-				unscaledYieldErrors[branchIdx][i]=0;
-				logFile << i << ", " << "Not enough events, only: " << hists_meta_mpi0[i]->GetEntries() << endl; 
-				continue;
-			}
 
 		}
 		cout << "    maxYield = " << maxYield << endl;
@@ -628,8 +637,8 @@ void makeDeckPlot(string selectionString){
 
 		for (Int_t iMass=0; iMass<massBinTitles.size()-skipLastN; ++iMass){
 			cout << "Plotting histogram for mass bin: " << iMass << endl;
-			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),massBinTitles[iMass].c_str(),num_tBins,tMin,tMax);	
-			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),massBinTitles[iMass].c_str(),num_tBins,tMin,tMax);	
+			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2};").c_str(),num_tBins,tMin,tMax);	
+			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2};").c_str(),num_tBins,tMin,tMax);	
 
 			if (minYield<1) { 
 				massHist->SetAxisRange(1,maxYield*1.1,"Y");
@@ -668,6 +677,8 @@ void makeDeckPlot(string selectionString){
 				gStyle->SetOptStat(0);
 				unscaledMassHist->SetMarkerColor(kBlue);
 				unscaledMassHist->Draw("E1 PMC");
+				unscaledMassHist->GetXaxis()->SetTitleSize(0.08);
+				unscaledMassHist->GetYaxis()->SetTitleSize(0.08);
 				allCanvases_unscaledYields->Update();
 
 				allCanvases_tSlope->cd( iMass+1 );
@@ -675,6 +686,8 @@ void makeDeckPlot(string selectionString){
 				gStyle->SetOptStat(0);
 				massHist->SetMarkerColor(kBlue);
 				massHist->Draw("E1 PMC");
+				massHist->GetXaxis()->SetTitleSize(0.08);
+				massHist->GetYaxis()->SetTitleSize(0.08);
 				allCanvases_tSlope->Update();
 				expFit_t->SetLineColor(kBlue);
 				expFit_t->Draw("SAME");
@@ -683,6 +696,8 @@ void makeDeckPlot(string selectionString){
 				gStyle->SetOptStat(0);
 				massHist->SetMarkerColor(kBlue);
 				massHist->Draw("E1 PMC");
+				massHist->GetXaxis()->SetTitleSize(0.08);
+				massHist->GetYaxis()->SetTitleSize(0.08);
 				allCanvases_yields->Update();
 				scaleAxis = gPad->GetUymax()/(maxEfficiency*1.1); // this should be the same for all pads since I set the axisRange above
 				hist_efficiencies_eta[iMass]->Scale(scaleAxis);  
@@ -756,6 +771,9 @@ void makeDeckPlot(string selectionString){
 	 allCanvases_yields->SaveAs(("deckPlots/"+selectionString+"/yields.png").c_str());
 	 allCanvases_unscaledYields->SaveAs(("deckPlots/"+selectionString+"/unscaledYields.png").c_str());
 	 allCanvases_tSlope->SaveAs(("deckPlots/"+selectionString+"/yields_tSlope.png").c_str());
+	 allCanvases_yields->SaveAs(("deckPlots/"+selectionString+"/yields.C").c_str());
+	 allCanvases_unscaledYields->SaveAs(("deckPlots/"+selectionString+"/unscaledYields.C").c_str());
+	 allCanvases_tSlope->SaveAs(("deckPlots/"+selectionString+"/yields_tSlope.C").c_str());
 
 
 	 allCanvases->Clear();
@@ -781,6 +799,7 @@ void makeDeckPlot(string selectionString){
 	 hist_tSlopes_pi0->SetMarkerColor(kRed);
 	 hist_tSlopes_pi0->Draw("E1 PMC SAME");
 	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.png").c_str());
+	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.C").c_str());
 	 
 
 	 //// Output the tslope for the eta
@@ -817,18 +836,18 @@ void makeDeckPlots(){
 	//gSystem->Exec("mkdir deckPlots/tAll/tSlope");
 	//makeDeckPlot("tAll");
 
-	//gSystem->Exec("mkdir -p deckPlots/tLT1/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tLT1/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tLT1/tSlope");
-	//makeDeckPlot("tLT1");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tGT1/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tGT1/tSlope");
+	//makeDeckPlot("tGT1");
 
-	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
-	//makeDeckPlot("tLT05");
+	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
+	makeDeckPlot("tLT05");
 
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
-	gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
-	gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
-	makeDeckPlot("tGT05LT1");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
+	//makeDeckPlot("tGT05LT1");
 }

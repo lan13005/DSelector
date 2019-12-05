@@ -470,7 +470,6 @@ class DSelector_ver20 : public DSelector
 		std::vector<double> photonDetectedSyss={1,1,1,1};
 
 
-
 		// distance, angle, Z distance, phi between photon pairs. They must be vectors since we are not sure about the size of them yet so this will allow us to push_back
 		//std::vector<double> dij3Vec;
 		//std::vector<double> angle_ijVec; 
