@@ -1,7 +1,7 @@
 void makeMpi0etaBinnedT(){
 	TFile* dataFile = TFile::Open("pi0eta_data_hists_DSelector.root");
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
-	allCanvases->Divide(3,3,0,0);
+	allCanvases->Divide(3,3);
 	gStyle->SetOptStat(0);
 
 

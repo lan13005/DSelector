@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_flat8GeVPlus";
+string degAngle="pi0eta";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -837,13 +837,29 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.clear();
         name = "eta_cosTheta_GJvsM_mMandelstamT";
         histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS_BS;
+        histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         group_34B_1234B.insert_2D(histdef2d); 
 
+        histdef2d.clear();
+        name = "eta_cosTheta_GJvsMpi0p_mMandelstamT_mdelta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT_mdelta;M(#pi_{0} p)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
+        histdef2d.name = name; histdef2d.cut=&mMandelstamT_mdelta; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &locPi0Proton_Kin );
+        histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
+        group_34B_1234B.insert_2D(histdef2d); 
+
+        histdef2d.clear();
+        name = "eta_cosTheta_GJvsMetap_mMandelstamT_mdelta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT_mdelta;M(#eta p)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",400,0,4,100,-1,1);
+        histdef2d.name = name; histdef2d.cut=&mMandelstamT_mdelta; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &locEtaProton_Kin );
+        histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
+        group_34B_1234B.insert_2D(histdef2d); 
+
         name = "eta_phi_GJvsM_mMandelstamT";
-        histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT;M(#pi_{0}#eta)Events / 0.01 GeV;#phi of #eta Events / 4 degrees",350,0,3.5,90,-180,180);
+        histdef2d.hist = new TH2F(name.c_str(), "Cut=mMandelstamT AS;M(#pi_{0}#eta)Events / 0.01 GeV;#phi of #eta Events / 4 degrees",350,0,3.5,100,-180,180);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &phi_eta_GJ );
@@ -852,7 +868,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.clear();
         name = "eta_cosTheta_GJvsM_Cut";
         histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi_{0}#eta)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.2",350,0,3.5,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS_BS;
+        histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         group_34B_1234B.insert_2D(histdef2d); 
@@ -1379,7 +1395,7 @@ void DSelector_ver20::Init(TTree *locTree)
 
         histdef.clear();
         name="mandelstam_tp_mMandelstamT_mdelta_petaProton";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=;-t' momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_petaProton;-t' momentum transfer of #pi_{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_petaProton; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
         group_1234B.insert(histdef); 
@@ -2076,7 +2092,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
               newPhotonX4Vector = allPhotonX4Vectors_Kin[iPhoton];
               newPhotonVector_Shower = allPhoton4Vectors_Shower[iPhoton];
               newPhotonWrapper = allPhotonWrappers[iPhoton];
-
               photonThetas[iPhoton] = newPhotonP4Vector.Theta()*radToDeg;
               photonPhis[iPhoton] = newPhotonP4Vector.Phi()*radToDeg;
               photonEnergies[iPhoton] = newPhotonP4Vector.E();
@@ -2105,62 +2120,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
               DOCA_FCAL[iPhoton] = newPhotonWrapper->Get_TrackFCAL_DOCA();
         }
 
-
-        if(showOutput) { cout << "Filling photon quantity vectors!" << endl; }
-        // Neutral Track. We define it this way so that we can easily loop through the 4 photons when filling.
-        //photonThetas[0] = locPhoton1P4_Kin.Theta()*radToDeg;
-        //photonThetas[1] = locPhoton2P4_Kin.Theta()*radToDeg;
-        //photonThetas[2] = locPhoton3P4_Kin.Theta()*radToDeg;
-        //photonThetas[3] = locPhoton4P4_Kin.Theta()*radToDeg;
-        //photonEnergies[0] = locPhoton1P4_Kin.E();
-        //photonEnergies[1] = locPhoton2P4_Kin.E();
-        //photonEnergies[2] = locPhoton3P4_Kin.E();
-        //photonEnergies[3] = locPhoton4P4_Kin.E();
-        //photonPhis[0] = locPhoton1P4_Kin.Phi()*radToDeg;
-        //photonPhis[1] = locPhoton2P4_Kin.Phi()*radToDeg;
-        //photonPhis[2] = locPhoton3P4_Kin.Phi()*radToDeg;
-        //photonPhis[3] = locPhoton4P4_Kin.Phi()*radToDeg;
-        //photonXs_Kin[0] = locPhoton1X4_Kin.X();
-        //photonXs_Kin[1] = locPhoton2X4_Kin.X();
-        //photonXs_Kin[2] = locPhoton3X4_Kin.X();
-        //photonXs_Kin[3] = locPhoton4X4_Kin.X();
-        //photonYs_Kin[0] = locPhoton1X4_Kin.Y();
-        //photonYs_Kin[1] = locPhoton2X4_Kin.Y();
-        //photonYs_Kin[2] = locPhoton3X4_Kin.Y();
-        //photonYs_Kin[3] = locPhoton4X4_Kin.Y();
-        //photonZs_Kin[0] = locPhoton1X4_Kin.Z();
-        //photonZs_Kin[1] = locPhoton2X4_Kin.Z();
-        //photonZs_Kin[2] = locPhoton3X4_Kin.Z();
-        //photonZs_Kin[3] = locPhoton4X4_Kin.Z();
-        //photonTs_Kin[0] = locPhoton1X4_Kin.T();
-        //photonTs_Kin[1] = locPhoton2X4_Kin.T();
-        //photonTs_Kin[2] = locPhoton3X4_Kin.T();
-        //photonTs_Kin[3] = locPhoton4X4_Kin.T();
-        //photonXs_Shower[0] = locPhoton1X4_Shower.X();
-        //photonXs_Shower[1] = locPhoton2X4_Shower.X();
-        //photonXs_Shower[2] = locPhoton3X4_Shower.X();
-        //photonXs_Shower[3] = locPhoton4X4_Shower.X();
-        //photonYs_Shower[0] = locPhoton1X4_Shower.Y();
-        //photonYs_Shower[1] = locPhoton2X4_Shower.Y();
-        //photonYs_Shower[2] = locPhoton3X4_Shower.Y();
-        //photonYs_Shower[3] = locPhoton4X4_Shower.Y();
-        //photonZs_Shower[0] = locPhoton1X4_Shower.Z();
-        //photonZs_Shower[1] = locPhoton2X4_Shower.Z();
-        //photonZs_Shower[2] = locPhoton3X4_Shower.Z();
-        //photonZs_Shower[3] = locPhoton4X4_Shower.Z();
-        //photonTs_Shower[0] = locPhoton1X4_Shower.T();
-        //photonTs_Shower[1] = locPhoton2X4_Shower.T();
-        //photonTs_Shower[2] = locPhoton3X4_Shower.T();
-        //photonTs_Shower[3] = locPhoton4X4_Shower.T();
-        //photonDeltaTs[0] = locPhoton1X4_Kin.T()-(dComboWrapper->Get_RFTime() + (locPhoton1X4_Kin.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
-        //photonDeltaTs[1] = locPhoton2X4_Kin.T()-(dComboWrapper->Get_RFTime() + (locPhoton2X4_Kin.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
-        //photonDeltaTs[2] = locPhoton3X4_Kin.T()-(dComboWrapper->Get_RFTime() + (locPhoton3X4_Kin.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
-        //photonDeltaTs[3] = locPhoton4X4_Kin.T()-(dComboWrapper->Get_RFTime() + (locPhoton4X4_Kin.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
-        //photonDetectedSyss[0] = dPhoton1Wrapper->Get_Detector_System_Timing();
-        //photonDetectedSyss[1] = dPhoton2Wrapper->Get_Detector_System_Timing();
-        //photonDetectedSyss[2] = dPhoton3Wrapper->Get_Detector_System_Timing();
-        //photonDetectedSyss[3] = dPhoton4Wrapper->Get_Detector_System_Timing();
-
         if(showOutput) { cout << "Getting some combo specific variables like CL" << endl; }
         //Kinematic fit variables
         locCLKinFit = dComboWrapper->Get_ConfidenceLevel_KinFit("");
@@ -2170,65 +2129,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         locChiSqKinFit = dComboWrapper->Get_ChiSq_KinFit("");
         //TString DOF; DOF.Form("%d", dComboWrapper->Get_NDF_KinFit(""));
         //TString title = "Num DOF: "; title+=DOF.Data();
-
-        // // Shower shape variables
-        // if(showOutput) { cout << "Getting photon shower variables" << endl; }
-        //E1E9_FCAL[0] = dPhoton1Wrapper->Get_E1E9_FCAL();
-        //E1E9_FCAL[1] = dPhoton2Wrapper->Get_E1E9_FCAL();
-        //E1E9_FCAL[2] = dPhoton3Wrapper->Get_E1E9_FCAL();
-        //E1E9_FCAL[3] = dPhoton4Wrapper->Get_E1E9_FCAL();
-        //E9E25_FCAL[0] = dPhoton1Wrapper->Get_E9E25_FCAL();
-        //E9E25_FCAL[1] = dPhoton2Wrapper->Get_E9E25_FCAL();
-        //E9E25_FCAL[2] = dPhoton2Wrapper->Get_E9E25_FCAL();
-        //E9E25_FCAL[3] = dPhoton3Wrapper->Get_E9E25_FCAL();
-        //SumU_FCAL[0] = dPhoton1Wrapper->Get_SumU_FCAL();
-        //SumU_FCAL[1] = dPhoton2Wrapper->Get_SumU_FCAL();
-        //SumU_FCAL[2] = dPhoton3Wrapper->Get_SumU_FCAL();
-        //SumU_FCAL[3] = dPhoton4Wrapper->Get_SumU_FCAL();
-        //SumV_FCAL[0] = dPhoton1Wrapper->Get_SumV_FCAL();
-        //SumV_FCAL[1] = dPhoton2Wrapper->Get_SumV_FCAL();
-        //SumV_FCAL[2] = dPhoton3Wrapper->Get_SumV_FCAL();
-        //SumV_FCAL[3] = dPhoton4Wrapper->Get_SumV_FCAL();
-        //Energy_BCALPreshower[0] = dPhoton1Wrapper->Get_Energy_BCALPreshower();
-        //Energy_BCALPreshower[1] = dPhoton2Wrapper->Get_Energy_BCALPreshower();
-        //Energy_BCALPreshower[2] = dPhoton3Wrapper->Get_Energy_BCALPreshower();
-        //Energy_BCALPreshower[3] = dPhoton4Wrapper->Get_Energy_BCALPreshower();
-        //Energy_BCAL[0] = dPhoton1Wrapper->Get_Energy_BCAL();
-        //Energy_BCAL[1] = dPhoton2Wrapper->Get_Energy_BCAL();
-        //Energy_BCAL[2] = dPhoton3Wrapper->Get_Energy_BCAL();
-        //Energy_BCAL[3] = dPhoton4Wrapper->Get_Energy_BCAL();
-        //SigLong_BCAL[0] = dPhoton1Wrapper->Get_SigLong_BCAL();
-        //SigLong_BCAL[1] = dPhoton2Wrapper->Get_SigLong_BCAL();
-        //SigLong_BCAL[2] = dPhoton3Wrapper->Get_SigLong_BCAL();
-        //SigLong_BCAL[3] = dPhoton4Wrapper->Get_SigLong_BCAL();
-        //SigTheta_BCAL[0] = dPhoton1Wrapper->Get_SigTheta_BCAL();
-        //SigTheta_BCAL[1] = dPhoton2Wrapper->Get_SigTheta_BCAL();
-        //SigTheta_BCAL[2] = dPhoton3Wrapper->Get_SigTheta_BCAL();
-        //SigTheta_BCAL[3] = dPhoton4Wrapper->Get_SigTheta_BCAL();
-        // We will grab the quality values first and then apply a cut to allow just the FCAL photons in.
-        if(showOutput) { cout << "Getting photon shower quality" << endl; }
-        //showerQuality_FCAL[0] = dPhoton1Wrapper->Get_Shower_Quality();
-        //showerQuality_FCAL[1] = dPhoton2Wrapper->Get_Shower_Quality();
-        //showerQuality_FCAL[2] = dPhoton3Wrapper->Get_Shower_Quality();
-        //showerQuality_FCAL[3] = dPhoton4Wrapper->Get_Shower_Quality();
-        //pShowerQuality = pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3;
-        //SigTrans_BCAL[0] = dPhoton1Wrapper->Get_SigTrans_BCAL();
-        //SigTrans_BCAL[1] = dPhoton2Wrapper->Get_SigTrans_BCAL();
-        //SigTrans_BCAL[2] = dPhoton3Wrapper->Get_SigTrans_BCAL();
-        //SigTrans_BCAL[3] = dPhoton4Wrapper->Get_SigTrans_BCAL();
-        //DeltaPhi_BCAL[0] = dPhoton1Wrapper->Get_TrackBCAL_DeltaPhi();
-        //DeltaPhi_BCAL[1] = dPhoton1Wrapper->Get_TrackBCAL_DeltaPhi();
-        //DeltaPhi_BCAL[2] = dPhoton2Wrapper->Get_TrackBCAL_DeltaPhi();
-        //DeltaPhi_BCAL[3] = dPhoton3Wrapper->Get_TrackBCAL_DeltaPhi();
-        //DeltaZ_BCAL[0] = dPhoton1Wrapper->Get_TrackBCAL_DeltaZ();
-        //DeltaZ_BCAL[1] = dPhoton1Wrapper->Get_TrackBCAL_DeltaZ();
-        //DeltaZ_BCAL[2] = dPhoton2Wrapper->Get_TrackBCAL_DeltaZ();
-        //DeltaZ_BCAL[3] = dPhoton3Wrapper->Get_TrackBCAL_DeltaZ();
-        //DOCA_FCAL[0] = dPhoton1Wrapper->Get_TrackFCAL_DOCA();
-        //DOCA_FCAL[1] = dPhoton1Wrapper->Get_TrackFCAL_DOCA();
-        //DOCA_FCAL[2] = dPhoton2Wrapper->Get_TrackFCAL_DOCA();
-        //DOCA_FCAL[3] = dPhoton3Wrapper->Get_TrackFCAL_DOCA();
-
 
         if(showOutput) { cout << "Getting some shower variables" << endl; }
         locE1E9_FCAL_proton = dProtonWrapper->Get_E1E9_FCAL();
@@ -2240,10 +2140,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         locSigTheta_BCAL_proton = dProtonWrapper->Get_SigTheta_BCAL();
         locSigTrans_BCAL_proton = dProtonWrapper->Get_SigTrans_BCAL();;
         locSigLong_BCAL_proton = dProtonWrapper->Get_SigLong_BCAL();;
-
-
-
-
 
         // Timing variables, first section is about the proton
         // Get_RFTime is quoted at the center of the target. We have to shift it outwards.

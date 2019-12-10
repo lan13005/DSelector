@@ -61,7 +61,7 @@ void makeDeckPlot(string selectionString){
 	TCanvas *allCanvases_yields = new TCanvas("anyHists_yields","Blue=Eta Red=Pi0 DarkGray=teta Gray=tpi0",1440,900);
 	TCanvas *allCanvases_unscaledYields = new TCanvas("anyHists_unscaledYields","Blue=Eta Red=Pi0 DarkGray=teta Gray=tpi0",1440,900);
 
-	allCanvases_tSlope->SetLeftMargin(0.15);
+	//allCanvases_tSlope->SetLeftMargin(0.15);
 	allCanvases_yields->SetLeftMargin(0.15);
 	allCanvases_unscaledYields->SetLeftMargin(0.15);
 	allCanvases_tSlope->SetBottomMargin(0.2);
@@ -79,7 +79,7 @@ void makeDeckPlot(string selectionString){
 	int num_tBins=14;
 	double tMin=0;
 	double tMax=2.8;
-	int num_massBins=12;
+	const int num_massBins=12;
 	double mMin=1.7;
 	double mMax=2.9;
 	double tStep=(tMax-tMin)/num_tBins;
@@ -228,11 +228,11 @@ void makeDeckPlot(string selectionString){
 	//for (int iMass=0; iMass<num_massBins; ++iMass){
 	//	dataHists->GetObject(("tetaMassBinned"+to_string(iMass)).c_str(),teta_binnedHists[iMass]);
 	//	dataHists->GetObject(("tpi0MassBinned"+to_string(iMass)).c_str(),tpi0_binnedHists[iMass]);
-	//	if ( maxT < teta_binnedHists[iMass]->GetMaximum() ) { 
-	//		maxT = teta_binnedHists[iMass]->GetMaximum(); 
+	//	if ( maxT < teta_binnedHists[iMass]->GetMaxmum() ) { 
+	//		maxT = teta_binnedHists[iMass]->GetMaxmum(); 
 	//	}
-	//	if ( maxT < tpi0_binnedHists[iMass]->GetMaximum() ) { 
-	//		maxT = tpi0_binnedHists[iMass]->GetMaximum(); 
+	//	if ( maxT < tpi0_binnedHists[iMass]->GetMaxmum() ) { 
+	//		maxT = tpi0_binnedHists[iMass]->GetMaxmum(); 
 	//	}
 	//	teta_binnedHists[iMass]->Divide(hist_efficiencies_eta[iMass]);
 	//	teta_binnedHists[iMass]->Fit("linFit_eta","Q");
@@ -617,7 +617,40 @@ void makeDeckPlot(string selectionString){
 	// ********* NOW WE CAN START BUILDING OUT teta/tpi0 MASS HISTOGRAMS *********************
 	// **************************************************************************************
 	branchIdx=-1;
-	int skipLastN=0;
+	int skipLastN;
+
+
+	//std::vector<double> etaFitMin;
+	//std::vector<double> etaFitMax;
+	//std::vector<double> pi0FitMin;
+	//std::vector<double> pi0FitMax; 
+
+	//// ranges for t<0.5
+	//if (selectionString == "tLT05") {
+	//double etaFitMin[num_massBins] = {tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin};
+	//double etaFitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-6*tStep,tMax-4*tStep,tMax-5*tStep,tMax-7*tStep,tMax-8*tStep,tMax-9*tStep,tMax-10*tStep,tMax-11*tStep,tMin};
+	//double pi0FitMin[num_massBins] = {tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin,tMin};
+	//double pi0FitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax,tMax,tMax-4*tStep,tMax-7*tStep,tMax-8*tStep,tMax-7*tStep,tMax-9*tStep,tMax-11*tStep,tMin};
+	//}
+	//// ranges for 0.5<t<1
+	//else if (selectionString == "tGT05LT1") { 
+	double etaFitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	double etaFitMax[num_massBins] = {tMax,tMax,tMax,tMax,tMax,tMax-4*tStep,tMax-5*tStep,tMax-5*tStep,tMax-5*tStep,tMax-7*tStep,tMax-8*tStep,tMax-8*tStep};
+	double pi0FitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	double pi0FitMax[num_massBins] = {tMax,tMax,tMax-2*tStep,tMax,tMax,tMax-2*tStep,tMax-3*tStep,tMax-3*tStep,tMax-5*tStep,tMax-5*tStep,tMax-5*tStep,tMax-6*tStep};
+	//}
+	//// ranges for all
+	//else if ( selectionString == "tAll"){
+	//	etaFitMin = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	//	etaFitMax = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
+	//	pi0FitMin = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	//	pi0FitMax = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
+	//}
+	//double etaFitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	//double etaFitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
+	//double pi0FitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	//double pi0FitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
+
 	for ( string branchName: branchNames ) {
 		++branchIdx;
 		std::vector<string> massBinTitles; 
@@ -631,14 +664,16 @@ void makeDeckPlot(string selectionString){
 
 
 		if ( selectionString == "tLT05" ){
+			skipLastN = 1;
+		}	
+		else if ( selectionString == "tGT05LT1" ){
 			skipLastN = 0;
 		}	
 
-
-		for (Int_t iMass=0; iMass<massBinTitles.size()-skipLastN; ++iMass){
+		for (Int_t iMass=0; iMass<massBinTitles.size(); ++iMass){
 			cout << "Plotting histogram for mass bin: " << iMass << endl;
-			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2};").c_str(),num_tBins,tMin,tMax);	
-			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2};").c_str(),num_tBins,tMin,tMax);	
+			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
+			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
 
 			if (minYield<1) { 
 				massHist->SetAxisRange(1,maxYield*1.1,"Y");
@@ -653,7 +688,12 @@ void makeDeckPlot(string selectionString){
 			unscaledMassHist->SetTitleSize(1,"t");
 			unscaledMassHist->GetXaxis()->SetLabelSize(0.06);
 			unscaledMassHist->GetYaxis()->SetLabelSize(0.06);
-			expFit_t = new TF1("expFit_t","expo",tMin+tStep,tMax-2*tStep);//+pol0(2)) ,tMin+tStep,tMax);
+			if ( branchName == "mandelstam_teta_meas") { 
+				expFit_t = new TF1("expFit_t","expo",etaFitMin[iMass],etaFitMax[iMass]);//+pol0(2)) ,tMin+tStep,tMax);
+			}
+			else if ( branchName == "mandelstam_tpi0_meas") { 
+				expFit_t = new TF1("expFit_t","expo",pi0FitMin[iMass],pi0FitMax[iMass]);//+pol0(2)) ,tMin+tStep,tMax);
+			}
 			expFit_t->SetLineStyle(2);
 			for (Int_t i=0; i<num_tBins; ++i){
 				massHist->SetBinContent( i+1, yields[branchIdx][i+num_tBins*iMass]  );
@@ -759,7 +799,12 @@ void makeDeckPlot(string selectionString){
 	 TLegend *leg;
 	 for (int iMass=0; iMass<num_massBins-skipLastN; ++iMass){
 	 	allCanvases_tSlope->cd(iMass+1);
-	 	leg = new TLegend(0.1,0.11,0.35,0.35);
+		if ( selectionString == "tLT05" ) {
+	 		leg = new TLegend(0.65,0.11,0.9,0.35);
+		}
+		else{
+	 		leg = new TLegend(0.1,0.11,0.35,0.35);
+		}
 	 	leg->AddEntry(&expPlusLinFits_eta[iMass], ("#eta tSlope = "+to_string(tSlopes_eta[iMass])).c_str(), "l");
 	 	leg->AddEntry(&expPlusLinFits_pi0[iMass], ("#pi^{0} tSlope = "+to_string(tSlopes_pi0[iMass])).c_str(), "l");
 	 	leg->SetBorderSize(0);
@@ -801,6 +846,9 @@ void makeDeckPlot(string selectionString){
 	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.png").c_str());
 	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.C").c_str());
 	 
+	 TFile *tSlopesFile = new TFile(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.root").c_str(),"RECREATE");
+	 allCanvases->Write();
+	 
 
 	 //// Output the tslope for the eta
 	 //allCanvases->Clear(); allCanvases->cd();
@@ -841,13 +889,13 @@ void makeDeckPlots(){
 	//gSystem->Exec("mkdir deckPlots/tGT1/tSlope");
 	//makeDeckPlot("tGT1");
 
-	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
-	gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
-	gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
-	makeDeckPlot("tLT05");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
+	//makeDeckPlot("tLT05");
 
-	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
-	//makeDeckPlot("tGT05LT1");
+	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
+	makeDeckPlot("tGT05LT1");
 }
