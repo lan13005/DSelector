@@ -1670,7 +1670,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     set< map<Particle_t, set<Int_t> > > used1234B;
     set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used12B_1234B;
     set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used34B_1234B;
-    set< map<Particle_t, set<Int_t> > > used1234;
+    set< map<Particle_t, set<Int_t> > > uniqueSpectroscopicID;
     set< map<Particle_t, set<Int_t> > > used12B;
     set< map<Particle_t, set<Int_t> > > used34B;
 
@@ -3105,8 +3105,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             }
             else { isNotRepeated_eta=false; } 
 
-            if ( used1234.find(using34)==used1234.end() ){
-                used1234.insert(using34);
+            if ( uniqueSpectroscopicID.find(using1234)==uniqueSpectroscopicID.end() ){
+                uniqueSpectroscopicID.insert(using1234);
                 ++uniqueSpectroscopicPi0EtaID;
                 //notRepeatedSpectroscopicPi0Eta=true;
             }

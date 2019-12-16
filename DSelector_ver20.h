@@ -307,6 +307,8 @@ class DSelector_ver20 : public DSelector
                 bool isNotRepeated_pi0_pi0eta=true;
                 bool isNotRepeated_eta_pi0eta=true;
                 Int_t uniqueSpectroscopicPi0EtaID=0;
+                Int_t uniqueSpectroscopicEtaID=0;
+                Int_t uniqueSpectroscopicPi0ID=0;
 
 		Int_t uniqueComboID=0;
 
