@@ -116,6 +116,8 @@ void makeDeckPlot(string selectionString){
 	 // For the efficiency plots
 	TFile* genFile = TFile::Open("flatUpTo3GeVResMass_gen_hists_DSelector_pi0eta.root");
 	TFile* recFile = TFile::Open("pi0eta_flat8GeVPlus_hists_DSelector.root");
+	//TFile* genFile = TFile::Open("flat_deft_gen_hists_DSelector_pi0eta.root");
+	//TFile* recFile = TFile::Open("pi0eta_flat_21t_hists_DSelector.root");
 	TH1F *tetaVsMpi0eta_genCounts;
 	TH1F *tpi0VsMpi0eta_genCounts;
 	TH1F *tetaVsMpi0eta_recCounts;
@@ -124,18 +126,19 @@ void makeDeckPlot(string selectionString){
 	genFile->GetObject( ("tpi0VsMpi0eta_genCounts_"+selectionString).c_str(),tpi0VsMpi0eta_genCounts);
 	recFile->GetObject( ("tetaVsMpi0eta_recCounts_"+selectionString).c_str(),tetaVsMpi0eta_recCounts);
 	recFile->GetObject( ("tpi0VsMpi0eta_recCounts_"+selectionString).c_str(),tpi0VsMpi0eta_recCounts);
+
 	allCanvases->cd(); allCanvases->Clear(); allCanvases->SetLogy(); 
 	tetaVsMpi0eta_genCounts->Draw();
-	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tetaVsMpi0eta_genCounts.png").c_str());
+	tetaVsMpi0eta_genCounts->SetAxisRange(tetaVsMpi0eta_recCounts->GetMinimum()*0.8, tetaVsMpi0eta_genCounts->GetMaximum(),"Y");
+	tetaVsMpi0eta_recCounts->SetLineColor(kRed);
+	tetaVsMpi0eta_recCounts->Draw("same hist");
+	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tetaVsMpi0eta.png").c_str());
 	allCanvases->Clear();allCanvases->SetLogy();
 	tpi0VsMpi0eta_genCounts->Draw();
-	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tpi0VsMpi0eta_genCounts.png").c_str());
-	allCanvases->Clear();allCanvases->SetLogy();
-	tetaVsMpi0eta_recCounts->Draw();
-	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tetaVsMpi0eta_recCounts.png").c_str());
-	allCanvases->Clear();allCanvases->SetLogy();
-	tpi0VsMpi0eta_recCounts->Draw();
-	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tpi0VsMpi0eta_recCounts.png").c_str());
+	tpi0VsMpi0eta_genCounts->SetAxisRange(tpi0VsMpi0eta_recCounts->GetMinimum()*0.8, tpi0VsMpi0eta_genCounts->GetMaximum(),"Y");
+	tpi0VsMpi0eta_recCounts->SetLineColor(kRed);
+	tpi0VsMpi0eta_recCounts->Draw("same hist");
+	allCanvases->SaveAs(("deckPlots/"+selectionString+"/tpi0VsMpi0eta.png").c_str());
 
 	allCanvases->SetLogy(0);
 
@@ -190,11 +193,12 @@ void makeDeckPlot(string selectionString){
 		int massBin = j/num_tBins;
 		int tBin = j%num_tBins;
 		cout << "\tETA - Filling Mass Bin: " << massBin << " at t Bin: " << tBin << " with efficiency,error: " << efficiencies_eta[j] << "," << efficiencies_error_eta[j] << endl;
-		cout << "\tPI0 -Filling Mass Bin: " << massBin << " at t Bin: " << tBin << " with efficiency,error: " << efficiencies_pi0[j] << "," << efficiencies_error_pi0[j] << endl;
+		cout << "\tPI0 - Filling Mass Bin: " << massBin << " at t Bin: " << tBin << " with efficiency,error: " << efficiencies_pi0[j] << "," << efficiencies_error_pi0[j] << endl;
 		hist_efficiencies_pi0[massBin]->SetBinContent( tBin+1, efficiencies_pi0[j]);
 		hist_efficiencies_pi0[massBin]->SetBinError( tBin+1, efficiencies_error_pi0[j]);
 		hist_efficiencies_eta[massBin]->SetBinContent( tBin+1,  efficiencies_eta[j]);
 		hist_efficiencies_eta[massBin]->SetBinError( tBin+1, efficiencies_error_eta[j]);
+		cout << "Max Efficiency is: " << maxEfficiency << endl;
 	}
 	efficiencies.push_back(efficiencies_eta);
 	efficiencies.push_back(efficiencies_pi0);
@@ -589,6 +593,7 @@ void makeDeckPlot(string selectionString){
 			cout << "Yield, error = " << fitPars[0] << ", " << pointParError[0];
 			cout << "   Scaled Yield, Scaled error = " << unscaledYield << ", " << unscaledYieldError;
 			cout << "   EffCorrected Yield, Scaled error = " << yields[branchIdx][i] << ", " << yieldErrors[branchIdx][i];
+			cout << "   Efficiency was = " << efficiencies[branchIdx][i] << endl;
 			if (maxYield<yields[branchIdx][i]){
 				maxYield=yields[branchIdx][i];
 			}
@@ -634,10 +639,10 @@ void makeDeckPlot(string selectionString){
 	//}
 	//// ranges for 0.5<t<1
 	//else if (selectionString == "tGT05LT1") { 
-	double etaFitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
-	double etaFitMax[num_massBins] = {tMax,tMax,tMax,tMax,tMax,tMax-4*tStep,tMax-5*tStep,tMax-5*tStep,tMax-5*tStep,tMax-7*tStep,tMax-8*tStep,tMax-8*tStep};
-	double pi0FitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
-	double pi0FitMax[num_massBins] = {tMax,tMax,tMax-2*tStep,tMax,tMax,tMax-2*tStep,tMax-3*tStep,tMax-3*tStep,tMax-5*tStep,tMax-5*tStep,tMax-5*tStep,tMax-6*tStep};
+	//double etaFitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	//double etaFitMax[num_massBins] = {tMax,tMax,tMax,tMax,tMax,tMax-4*tStep,tMax-5*tStep,tMax-5*tStep,tMax-5*tStep,tMax-7*tStep,tMax-8*tStep,tMax-8*tStep};
+	//double pi0FitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	//double pi0FitMax[num_massBins] = {tMax,tMax,tMax-2*tStep,tMax,tMax,tMax-2*tStep,tMax-3*tStep,tMax-3*tStep,tMax-5*tStep,tMax-5*tStep,tMax-5*tStep,tMax-6*tStep};
 	//}
 	//// ranges for all
 	//else if ( selectionString == "tAll"){
@@ -646,10 +651,10 @@ void makeDeckPlot(string selectionString){
 	//	pi0FitMin = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
 	//	pi0FitMax = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
 	//}
-	//double etaFitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
-	//double etaFitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
-	//double pi0FitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
-	//double pi0FitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
+	double etaFitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	double etaFitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
+	double pi0FitMin[num_massBins] = {tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep,tMin+tStep};
+	double pi0FitMax[num_massBins] = {tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep,tMax-2*tStep};
 
 	for ( string branchName: branchNames ) {
 		++branchIdx;
@@ -666,21 +671,26 @@ void makeDeckPlot(string selectionString){
 		if ( selectionString == "tLT05" ){
 			skipLastN = 1;
 		}	
-		else if ( selectionString == "tGT05LT1" ){
+		else {
 			skipLastN = 0;
 		}	
+		
 
 		for (Int_t iMass=0; iMass<massBinTitles.size(); ++iMass){
 			cout << "Plotting histogram for mass bin: " << iMass << endl;
 			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
 			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi_{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
+			//if (minYield<1) { 
+			//	massHist->SetAxisRange(1,maxYield*1.1,"Y");
+			//}
+			//else { 
+			//	massHist->SetAxisRange(minYield*0.9,maxYield*1.1,"Y");
+			//}
+			// I think we have to zero suppress our graphs to make the scaling on the second axis to make sense
+			massHist->SetAxisRange(1,maxYield*1.1,"Y");
 
-			if (minYield<1) { 
-				massHist->SetAxisRange(1,maxYield*1.1,"Y");
-			}
-			else { 
-				massHist->SetAxisRange(minYield*0.9,maxYield*1.1,"Y");
-			}
+
+
 			gStyle->SetTitleSize(0.1,"t");
 			massHist->GetXaxis()->SetLabelSize(0.06);
 			massHist->GetYaxis()->SetLabelSize(0.06);
@@ -777,6 +787,13 @@ void makeDeckPlot(string selectionString){
 				tSlopesError_pi0.push_back( abs(expFit_t->GetParError(1)) );
 			}
 
+			///cout << "Printing out all the efficiencies" << endl;
+			///for ( int iMass=0; iMass<num_massBins; ++iMass ){
+			///	cout << "scaled efficiency of teta at massBin " << to_string(iMass) << " is " << hist_efficiencies_eta[iMass] << endl;
+			///	cout << "scaled efficiency of tpi0 at massBin " << to_string(iMass) << " is " << hist_efficiencies_pi0[iMass] << endl;
+			///}
+
+
 			TGaxis *axis = new TGaxis(gPad->GetUxmax(),gPad->GetUymin(),
 					            gPad->GetUxmax(), gPad->GetUymax(),0,maxEfficiency*1.1,510,"+L");
 			axis->SetLineColor(kRed);
@@ -826,6 +843,8 @@ void makeDeckPlot(string selectionString){
 	 TH1F* hist_tSlopes_eta = new TH1F("hist_tSlope_eta","; M(#pi^{0}#eta) (GeV); t-slope",num_massBins,mMin,mMax);
 	 TH1F* hist_tSlopes_pi0 = new TH1F("hist_tSlope_pi0","; M(#pi^{0}#eta) (GeV); t-slope",num_massBins,mMin,mMax);
 	 for ( int iMass=0; iMass < num_massBins-skipLastN; ++iMass ){
+		cout << "tSlope_eta for massBin " << to_string(iMass) << " is: " << tSlopes_eta[iMass] << endl;
+		cout << "tSlope_pi0 for massBin " << to_string(iMass) << " is: " << tSlopes_pi0[iMass] << endl;
 	 	hist_tSlopes_eta->SetBinContent( iMass+1, tSlopes_eta[iMass]);
 	 	hist_tSlopes_pi0->SetBinContent( iMass+1, tSlopes_pi0[iMass]);
 	 	hist_tSlopes_eta->SetBinError( iMass+1, tSlopesError_eta[iMass]);
@@ -878,11 +897,11 @@ void makeDeckPlot(string selectionString){
 
 
 void makeDeckPlots(){
-	//gSystem->Exec("rm -rf deckPlots");
-	//gSystem->Exec("mkdir -p deckPlots/tAll/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tAll/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tAll/tSlope");
-	//makeDeckPlot("tAll");
+	gSystem->Exec("rm -rf deckPlots");
+	gSystem->Exec("mkdir -p deckPlots/tAll/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tAll/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tAll/tSlope");
+	makeDeckPlot("tAll");
 
 	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas");
 	//gSystem->Exec("mkdir deckPlots/tGT1/mandelstam_tpi0_meas");
@@ -894,8 +913,8 @@ void makeDeckPlots(){
 	//gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
 	//makeDeckPlot("tLT05");
 
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
-	gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
-	gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
-	makeDeckPlot("tGT05LT1");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
+	//gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
+	//gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
+	//makeDeckPlot("tGT05LT1");
 }

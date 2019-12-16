@@ -37,8 +37,8 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 
 	// Flat
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_thrown.root");
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_thrown.root");
-	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_thrown.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_thrown.root");
+	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_thrown.root");
 
 
 	// test
@@ -49,8 +49,10 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	//string options = sample;
 	string options = "";
 	if(proof) { // add TTree to chain and use PROOFLiteManager
-		string outputHistFileName = Form("flatUpTo3GeVResMass_gen_hists_DSelector_pi0eta.root");//_GEANT4.root");
-                string outputTreeFileName = Form("flatUpTo3GeVResMass_gen_trees_DSelector_pi0eta.root");//_GEANT4.root");
+		string outputHistFileName = Form("flatUpTo3GeVResMass_2_gen_hists_DSelector_pi0eta.root");//_GEANT4.root");
+                string outputTreeFileName = Form("flatUpTo3GeVResMass_2_gen_trees_DSelector_pi0eta.root");//_GEANT4.root");
+		//string outputHistFileName = Form("flat_deft_gen_hists_DSelector_pi0eta.root");//_GEANT4.root");
+                //string outputTreeFileName = Form("flat_deft_gen_trees_DSelector_pi0eta.root");//_GEANT4.root");
 		DPROOFLiteManager::Process_Chain(chain, "DSelector_thrown.C+",  proof_Nthreads, outputHistFileName, outputTreeFileName, options);
 	}
 	else { // get TTree and use standard TTree::Process

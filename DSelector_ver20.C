@@ -3,8 +3,8 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta";
-bool showOutput = false;
+string degAngle="pi0eta_2018_8";
+bool showOutput = true;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -3068,7 +3068,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	else if ( selectDetector == "SPLIT" ) { detectorCut=pEtaInSplit; }
 	else { detectorCut=true; }
 
-        if (!mEllipse_pre_tAll || !detectorCut) { 
+        if (!mEllipse_pre || !detectorCut) {
+        //if (baseCuts) { 
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
@@ -3289,7 +3290,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the //if(itersToRun) condition
+    //}//closes the if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 

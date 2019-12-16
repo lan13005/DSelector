@@ -64,13 +64,13 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//
 	// 2018 DATA
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-01/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/*");
-	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-08/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/*");
+	chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-08/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_*");
 
 // ********************* USING THIS FOR Q-values so far *********		
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/boolSpectPi0EtaSelectedFiles/pi0eta_data_tree_DSelector.root");
 
 // ********************** BASE CUTS APPLIED ONLY ********************
- 	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+ 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 
 	// **********************************************************************************	
 	// ************************** ------ PI0PI0 BELOW ---------**************************	
@@ -86,7 +86,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	TString degAngle = "deg000";
 	// should change the name below from data to reco when running over MC
-	degAngle="pi0eta_data";
+	degAngle="pi0eta_2018_8";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 
