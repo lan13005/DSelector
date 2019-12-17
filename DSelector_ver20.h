@@ -316,6 +316,9 @@ class DSelector_ver20 : public DSelector
                 // // Automatically makes mass histograms where one cut is missing
                 DHistogramAction_AnalyzeCutActions* dAnalyzeCutActions;
 
+		TH1F* dHistThrownTopologies;
+		map<TString, TH1I*> dHistInvariantMass_ThrownTopology;
+
                 //CREATE REACTION-SPECIFIC PARTICLE ARRAYS
 
                 //Step 0

@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_2018_8";
+string degAngle="pi0eta_gen_amp";
 bool showOutput = true;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -139,6 +139,24 @@ void DSelector_ver20::Init(TTree *locTree)
 	//If you create any actions that you want to run manually (i.e. don't add to dAnalysisActions), be sure to initialize them here as well
 	Initialize_Actions();
 	// dAnalyzeCutActions->Initialize(); // manual action, must call Initialize()
+
+	dHistThrownTopologies = new TH1F("hThrownTopologies","hThrownTopologies", 10, -0.5, 9.5);
+
+	vector<TString> locThrownTopologies;
+	locThrownTopologies.push_back("4#gammap[#pi^{0},#eta]");
+	locThrownTopologies.push_back("6#gammap[3#pi^{0}]");		
+	locThrownTopologies.push_back("5#gammap[2#pi^{0},#omega]");
+	locThrownTopologies.push_back("6#gammap[2#pi^{0},#eta]");
+	locThrownTopologies.push_back("4#gammap[2#pi^{0}]");
+	locThrownTopologies.push_back("8#gammap[4#pi^{0},#eta]");
+	locThrownTopologies.push_back("6#gamma#pi^{#plus}#pi^{#minus}p[3#pi^{0}]");		
+	locThrownTopologies.push_back("4#gamma#pi^{#plus}#pi^{#minus}p[2#pi^{0}]");
+	locThrownTopologies.push_back("4#gamma#pi^{#plus}#pi^{#minus}p[#pi^{0},#eta]");		
+	locThrownTopologies.push_back("8#gammap[3#pi^{0},#eta]");
+	locThrownTopologies.push_back("3#gammap[#pi^{0},#omega]");
+	for(uint i=0; i<locThrownTopologies.size(); i++) {
+		dHistInvariantMass_ThrownTopology[locThrownTopologies[i]] = new TH1I(Form("hInvariantMass_ThrownTopology_%d", i),Form("Invariant Mass Topology: %s", locThrownTopologies[i].Data()), 1000, 0.5, 2.0);
+	}
 
 	/******************************** EXAMPLE USER INITIALIZATION: STAND-ALONE HISTOGRAMS *******************************/		
 
@@ -1696,6 +1714,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	std::vector<int> parentArray;
 	std::vector<int> pids;
 	int locNumThrown = Get_NumThrown();
+
+	/************************************************* PARSE THROWN TOPOLOGY ***************************************/
+	TString locThrownTopology = Get_ThrownTopologyString();
+
+
+
 	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
 	if (Get_NumThrown() != 0 ) {
 		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
@@ -1968,6 +1992,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         //if you manually execute any actions, and it fails a cut, be sure to call:
         //dComboWrapper->Set_IsComboCut(true);
+
+	// Fill histogram of thrown topologies
+	dHistThrownTopologies->Fill(locThrownTopology.Data(),1);
+
+	TLorentzVector locPi0EtaP4 = locPhoton1P4 + locPhoton2P4 + locPhoton3P4 + locPhoton4P4;
+	if(dHistInvariantMass_ThrownTopology.find(locThrownTopology) != dHistInvariantMass_ThrownTopology.end())
+		dHistInvariantMass_ThrownTopology[locThrownTopology]->Fill(locPi0EtaP4.M());
 
         /**************************************** EXAMPLE: FILL CUSTOM OUTPUT BRANCHES **************************************/
 
