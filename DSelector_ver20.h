@@ -16,6 +16,7 @@
 #include "TCanvas.h"
 
 bool is_pi0eta=true;
+bool showThrownTopology=false;
 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
         for ( auto parent=0; parent<(int)parentArray.size(); ++parent ){

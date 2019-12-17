@@ -4,7 +4,7 @@ bool NoCut=0;
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
 string degAngle="pi0eta_gen_amp";
-bool showOutput = true;
+bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -1767,7 +1767,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 				cout << pid << " ";
 			}
 			cout << endl;
-        		dComboWrapper->Set_IsComboCut(true); return kTRUE;
+			if (!showThrownTopology) { 
+        			dComboWrapper->Set_IsComboCut(true); return kTRUE;
+			}
 		}
 	}
 
@@ -1990,15 +1992,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         if(!Execute_Actions()) //if the active combo fails a cut, IsComboCutFlag automatically set
             continue;
 
+
         //if you manually execute any actions, and it fails a cut, be sure to call:
         //dComboWrapper->Set_IsComboCut(true);
 
-	// Fill histogram of thrown topologies
-	dHistThrownTopologies->Fill(locThrownTopology.Data(),1);
-
 	TLorentzVector locPi0EtaP4 = locPhoton1P4 + locPhoton2P4 + locPhoton3P4 + locPhoton4P4;
-	if(dHistInvariantMass_ThrownTopology.find(locThrownTopology) != dHistInvariantMass_ThrownTopology.end())
-		dHistInvariantMass_ThrownTopology[locThrownTopology]->Fill(locPi0EtaP4.M());
 
         /**************************************** EXAMPLE: FILL CUSTOM OUTPUT BRANCHES **************************************/
 
@@ -3099,11 +3097,22 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	else if ( selectDetector == "SPLIT" ) { detectorCut=pEtaInSplit; }
 	else { detectorCut=true; }
 
+        /****************************************** DO NOT CUT - FILL THROWN TOPLOGY (IF DESIRED) ******************************************/
+	// Fill histogram of thrown topologies
+	//if (showThrownTopology){
+	//	if(dHistInvariantMass_ThrownTopology.find(locThrownTopology) != dHistInvariantMass_ThrownTopology.end()) {
+	//		dHistInvariantMass_ThrownTopology[locThrownTopology]->Fill(locPi0EtaP4.M());
+	//		dHistThrownTopologies->Fill(locThrownTopology.Data(),1);
+	//	}
+	//}
+
+	/******************************************* CUT ON THE COMBINATION *********************************************************/
         if (!mEllipse_pre || !detectorCut) {
         //if (baseCuts) { 
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
+
         else { 
 	    if (showOutput) { cout << "Passed cut, continuing.... " << endl; }  
 	    if (used1234B.find(using1234B)==used1234B.end()){
@@ -3144,6 +3153,19 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         }
 	if (showOutput){ cout << "Calculated uniqueness booleans" << endl; } 
+
+
+
+
+        /****************************************** CUT - FILL THROWN TOPLOGY (IF DESIRED) ******************************************/
+	// Fill histogram of thrown topologies
+	//if(showThrownTopology){
+	//	if(dHistInvariantMass_ThrownTopology.find(locThrownTopology) != dHistInvariantMass_ThrownTopology.end()) {
+	//		dHistInvariantMass_ThrownTopology[locThrownTopology]->Fill(locPi0EtaP4.M());
+	//		dHistThrownTopologies->Fill(locThrownTopology.Data(),1);
+	//	}
+	//}
+
 
         /****************************************** FILL FLAT TREE (IF DESIRED) ******************************************/
 
@@ -3321,7 +3343,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the if(itersToRun) condition
+    //}//closes the //if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 
