@@ -28,7 +28,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	// open ROOT files and TTree
 	//TString nameOfTree = "pi0eta__B3_F1_M7_M17_Tree"; // pi0eta__B4_Tree is the old one
-	TString nameOfTree = "pi0eta__B4_M17_M7_Tree"; // pi0eta__B4_Tree is the old one
+	TString nameOfTree = "pi0eta__eta_pi0pi0pi0__B4_M17_M7_Tree"; // pi0eta__B4_Tree is the old one
 	//TString nameOfTree = "pi0pi0__B3_F1_U1_M7_Tree";
 	TChain *chain = new TChain(nameOfTree);
 	
@@ -53,7 +53,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30461_withP/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30730_withP/tree_pi0eta__B4_M17_M7.root");
 
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a2_noPlugin_Geant4_30730/eta3pi0/tree_pi0eta__eta_pi0pi0pi0__B4_M17_M7.root");
+	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M/eta3pi/tree_pi0eta__eta_pi0pi0pi0__B4_M17_M7.root");
 
 
 	// 2017 DATA
@@ -87,7 +87,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	TString degAngle = "deg000";
 	// should change the name below from data to reco when running over MC
-	degAngle="pi0eta_eta3pi";
+	degAngle="pi0eta_eta3pi0";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 

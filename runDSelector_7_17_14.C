@@ -60,11 +60,11 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver20/tree_pi0eta__B3_F1_M7_M17/merged/tree_pi0eta__B3_F1_M7_M17_03*.root");
 	// This one contains the showerQuality variables
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03028*");
-	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7*");
+	chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7*");
 	//
 	// 2018 DATA
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-01/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/*");
-	chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-08/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_*");
+	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-08/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_*");
 
 // ********************* USING THIS FOR Q-values so far *********		
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/boolSpectPi0EtaSelectedFiles/pi0eta_data_tree_DSelector.root");
@@ -86,7 +86,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	TString degAngle = "deg000";
 	// should change the name below from data to reco when running over MC
-	degAngle="pi0eta_2018_8";
+	degAngle="pi0eta_mEllipseUEChiSq_pre";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 

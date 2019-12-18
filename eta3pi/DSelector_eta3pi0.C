@@ -4,7 +4,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_eta3pi";
+string degAngle="pi0eta_eta3pi0";
 bool showOutput = true;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -30,9 +30,8 @@ int itersToRun = 0;
 int finalStateComboID=0;
 
 string selectDetector="ALL";
-int nPhotons=8;
 
-void DSelector_ver20::Init(TTree *locTree)
+void DSelector_eta3pi0::Init(TTree *locTree)
 {
         cout << "STARTING" << endl;
 	targetCenter = {0,0,65};
@@ -1681,7 +1680,7 @@ void DSelector_ver20::Init(TTree *locTree)
 
 } // end of initialization
 
-Bool_t DSelector_ver20::Process(Long64_t locEntry)
+Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
 {
     group_PB.clear_tracking();
     group_12B_1234B.clear_tracking();
@@ -1709,7 +1708,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     set< map<Particle_t, set<Int_t> > > used34B;
 
 
-    //if(itersToRun<20){ ++itersToRun; //so we can just try to show the outut of one event 
+    //if(itersToRun<2000){ ++itersToRun; //so we can just try to show the outut of one event 
     if(showOutput){cout << "Starting next process looping" << endl;}
     // The Process() function is called for each entry in the tree. The entry argument
     // specifies which entry in the currently loaded tree is to be processed.
@@ -1732,6 +1731,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	int locNumThrown = Get_NumThrown();
 	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
 	if (Get_NumThrown() != 0 ) {
+		cout << "Num Thrown = " << Get_NumThrown() << endl;
 		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 		{	
 			//Set branch array indices corresponding to this particle
@@ -1749,7 +1749,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		findParents(parentArray,parents);
 		//cout << "\nTHESE ARE THE PARENTS" << endl;
 		for ( auto parent=0; parent < (int)parents.size(); ++parent){
-			//cout << parents[parent] << endl;
+			cout << parents[parent] << endl;
 		}
 
 		int pi0ToNGamma=0;
@@ -2227,7 +2227,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         //Kinematic fit variables
         locCLKinFit = dComboWrapper->Get_ConfidenceLevel_KinFit("");
         locUnusedEnergy = dComboWrapper->Get_Energy_UnusedShowers();
-        locNumExtraNeutralShowers = Get_NumNeutralHypos()-4;
+        locNumExtraNeutralShowers = Get_NumNeutralHypos()-8;
         locDOFKinFit = dComboWrapper->Get_NDF_KinFit("");
         locChiSqKinFit = dComboWrapper->Get_ChiSq_KinFit("");
         //TString DOF; DOF.Form("%d", dComboWrapper->Get_NDF_KinFit(""));
@@ -2962,7 +2962,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         pReg4 = locPzProton>Reg4Xmin && locPtProton>Reg4Ymin && locPzProton<Reg4Xmax && locPtProton<Reg4Ymax;
 
         // locWherePhoton will be set equal to photonDetectedSyss[N] 
-        for (int i = 0; i<nPhoton; ++i){
+        for (int i = 0; i<nPhotons; ++i){
             pPhotonInFCAL[i] = photonDetectedSyss[i] == SYS_FCAL;
             pPhotonInBCAL[i] = photonDetectedSyss[i] == SYS_BCAL;
         }
@@ -3427,11 +3427,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the if(itersToRun) condition
+    //}//closes the //if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 
-void DSelector_ver20::Finalize(void)
+void DSelector_eta3pi0::Finalize(void)
 {
     //group_PhNB.drawHistograms();
     //group_PB.drawHistograms();

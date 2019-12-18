@@ -4,7 +4,7 @@ bool NoCut=0;
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
 string degAngle="pi0eta_2018_8";
-bool showOutput = true;
+bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -1581,6 +1581,8 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptLT05");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptGT05LT1");
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("finalStateComboID"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("chiSq"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("unusedEnergy"); //fundamental = char, int, float, double, etc.
         if (is_pi0eta){
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0"); //fundamental = char, int, float, double, etc.
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Meta"); //fundamental = char, int, float, double, etc.
@@ -3068,7 +3070,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	else if ( selectDetector == "SPLIT" ) { detectorCut=pEtaInSplit; }
 	else { detectorCut=true; }
 
-        if (!mEllipse_pre || !detectorCut) {
+        if (!mEllipseUEChiSq_pre || !detectorCut) {
         //if (baseCuts) { 
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
@@ -3136,6 +3138,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("weightASBS", weightAS_BS);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("uniqueComboID", uniqueComboID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("finalStateComboID", finalStateComboID);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("chiSq", locChiSqKinFit);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("unusedEnergy", locUnusedEnergy);
 
 	if(showOutput){ cout << "Filled some fundamental branches" << endl; } 
 
@@ -3290,7 +3294,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the if(itersToRun) condition
+    //}//closes the //if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 

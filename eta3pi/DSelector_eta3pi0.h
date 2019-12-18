@@ -1,5 +1,5 @@
-#ifndef DSelector_eta3pi_h
-#define DSelector_eta3pi_h
+#ifndef DSelector_eta3pi0_h
+#define DSelector_eta3pi0_h
 
 #include <iostream>
 
@@ -16,6 +16,7 @@
 #include "TCanvas.h"
 
 bool is_pi0eta=true;
+int nPhotons=8;
 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
         for ( auto parent=0; parent<(int)parentArray.size(); ++parent ){
@@ -240,12 +241,12 @@ class trackingGroup{
     
         
 
-class DSelector_eta3pi : public DSelector
+class DSelector_eta3pi0 : public DSelector
 {
 	public:
-		DSelector_eta3pi(TTree* locTree = NULL) : DSelector(locTree){
+		DSelector_eta3pi0(TTree* locTree = NULL) : DSelector(locTree){
                 }
-		virtual ~DSelector_eta3pi(){}
+		virtual ~DSelector_eta3pi0(){}
 
 		void Init(TTree *tree);
 		Bool_t Process(Long64_t entry);
@@ -427,19 +428,19 @@ class DSelector_eta3pi : public DSelector
 		double locEtaMass=1;
 		double locPi0Mass=1;
 		//************ Shower shape variables
-		std::vector<double> E1E9_FCAL={1,1,1,1};
-		std::vector<double> E9E25_FCAL={1,1,1,1};
-		std::vector<double> SumU_FCAL={1,1,1,1};
-		std::vector<double> SumV_FCAL={1,1,1,1};
-		std::vector<double> Energy_BCALPreshower={1,1,1,1};
-		std::vector<double> Energy_BCAL={1,1,1,1};
-		std::vector<double> SigLong_BCAL={1,1,1,1};
-		std::vector<double> SigTrans_BCAL={1,1,1,1};
-		std::vector<double> SigTheta_BCAL={1,1,1,1};
-		std::vector<double> DeltaPhi_BCAL={1,1,1,1};
-		std::vector<double> DeltaZ_BCAL={1,1,1,1};
-		std::vector<double> showerQuality_FCAL={1,1,1,1};
-		std::vector<double> DOCA_FCAL={1,1,1,1};
+		std::vector<double> E1E9_FCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> E9E25_FCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> SumU_FCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> SumV_FCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> Energy_BCALPreshower={1,1,1,1,1,1,1,1};
+		std::vector<double> Energy_BCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> SigLong_BCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> SigTrans_BCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> SigTheta_BCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> DeltaPhi_BCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> DeltaZ_BCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> showerQuality_FCAL={1,1,1,1,1,1,1,1};
+		std::vector<double> DOCA_FCAL={1,1,1,1,1,1,1,1};
 		double locSigTheta_BCAL_proton;
 		double locSigTrans_BCAL_proton;
 		double locSigLong_BCAL_proton;
@@ -466,19 +467,19 @@ class DSelector_eta3pi : public DSelector
 		double locMagP3Proton=1;
 
 		//************ Neutral Track
-		std::vector<double> photonThetas={1,1,1,1};
-		std::vector<double> photonEnergies={1,1,1,1};
-		std::vector<double> photonPhis={1,1,1,1};
-		std::vector<double> photonXs_Kin={1,1,1,1};
-		std::vector<double> photonYs_Kin={1,1,1,1};
-		std::vector<double> photonZs_Kin={1,1,1,1};
-		std::vector<double> photonTs_Kin={1,1,1,1};
-		std::vector<double> photonXs_Shower={1,1,1,1};
-		std::vector<double> photonYs_Shower={1,1,1,1};
-		std::vector<double> photonZs_Shower={1,1,1,1};
-		std::vector<double> photonTs_Shower={1,1,1,1};
-		std::vector<double> photonDeltaTs={1,1,1,1};
-		std::vector<double> photonDetectedSyss={1,1,1,1};
+		std::vector<double> photonThetas={1,1,1,1,1,1,1,1};
+		std::vector<double> photonEnergies={1,1,1,1,1,1,1,1};
+		std::vector<double> photonPhis={1,1,1,1,1,1,1,1};
+		std::vector<double> photonXs_Kin={1,1,1,1,1,1,1,1};
+		std::vector<double> photonYs_Kin={1,1,1,1,1,1,1,1};
+		std::vector<double> photonZs_Kin={1,1,1,1,1,1,1,1};
+		std::vector<double> photonTs_Kin={1,1,1,1,1,1,1,1};
+		std::vector<double> photonXs_Shower={1,1,1,1,1,1,1,1};
+		std::vector<double> photonYs_Shower={1,1,1,1,1,1,1,1};
+		std::vector<double> photonZs_Shower={1,1,1,1,1,1,1,1};
+		std::vector<double> photonTs_Shower={1,1,1,1,1,1,1,1};
+		std::vector<double> photonDeltaTs={1,1,1,1,1,1,1,1};
+		std::vector<double> photonDetectedSyss={1,1,1,1,1,1,1,1};
 
 
 		// distance, angle, Z distance, phi between photon pairs. They must be vectors since we are not sure about the size of them yet so this will allow us to push_back
@@ -706,11 +707,19 @@ class DSelector_eta3pi : public DSelector
 		bool pPhoton2E=true;
 		bool pPhoton3E=true;
 		bool pPhoton4E=true;
+		bool pPhoton5E=true;
+		bool pPhoton6E=true;
+		bool pPhoton7E=true;
+		bool pPhoton8E=true;
 		bool pPhotonE=true ;
 		bool pPhoton1Theta=true;
 		bool pPhoton2Theta=true;
 		bool pPhoton3Theta=true;
 		bool pPhoton4Theta=true;
+		bool pPhoton5Theta=true;
+		bool pPhoton6Theta=true;
+		bool pPhoton7Theta=true;
+		bool pPhoton8Theta=true;
 		bool pPhotonTheta=true;
 		
 		// Charged Cuts
@@ -728,13 +737,17 @@ class DSelector_eta3pi : public DSelector
 		bool pShowerQuality1 = true;
 		bool pShowerQuality2 = true;
 		bool pShowerQuality3 = true;
+		bool pShowerQuality4 = true;
+		bool pShowerQuality5 = true;
+		bool pShowerQuality6 = true;
+		bool pShowerQuality7 = true;
 		bool pShowerQuality = true;
 
 
 		// locWherePhoton will be set equal to photonDetectedSyss[N] 
-		bool pPhotonInBCALorFCAL[4];
-		bool pPhotonInFCAL[4];
-		bool pPhotonInBCAL[4];
+		bool pPhotonInBCALorFCAL[8];
+		bool pPhotonInFCAL[8];
+		bool pPhotonInBCAL[8];
 		bool pPi0InFCAL=true;
 		bool pPi0InBCAL=true;
 		bool pPi0InSplit=true;
@@ -857,10 +870,11 @@ class DSelector_eta3pi : public DSelector
                 TH1F* dHist_all1DHists[800];
                 TH2F* dHist_all2DHists[800];
 
-	ClassDef(DSelector_eta3pi, 0);
+	ClassDef(DSelector_eta3pi0, 0);
 };
 
-void DSelector_eta3pi::Get_ComboWrappers(void)
+
+void DSelector_eta3pi0::Get_ComboWrappers(void)
 {
 	//Step 0
 	dStep0Wrapper = dComboWrapper->Get_ParticleComboStep(0);
@@ -891,6 +905,6 @@ void DSelector_eta3pi::Get_ComboWrappers(void)
         dPhoton8Wrapper = static_cast<DNeutralParticleHypothesis*>(dStep5Wrapper->Get_FinalParticle(1));
 }
 
-#endif // DSelector_eta3pi_h
+#endif // DSelector_eta3pi0_h
 
 
