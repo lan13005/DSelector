@@ -16,6 +16,7 @@
 #include "TCanvas.h"
 
 bool is_pi0eta=true;
+bool showThrownTopology=false;
 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
         for ( auto parent=0; parent<(int)parentArray.size(); ++parent ){
@@ -317,6 +318,9 @@ class DSelector_ver20 : public DSelector
                 // ANALYZE CUT ACTIONS
                 // // Automatically makes mass histograms where one cut is missing
                 DHistogramAction_AnalyzeCutActions* dAnalyzeCutActions;
+
+		TH1F* dHistThrownTopologies;
+		map<TString, TH1I*> dHistInvariantMass_ThrownTopology;
 
                 //CREATE REACTION-SPECIFIC PARTICLE ARRAYS
 

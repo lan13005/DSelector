@@ -14,16 +14,19 @@
 
 
 //R__LOAD_LIBRARY(/d/grid15/ln16/gluex_top/gluex_root_analysis/gluex_root_analysis-0.5/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so) 
-R__LOAD_LIBRARY(/d/grid13/gluex/gluex_top/gluex_root_analysis/gluex_root_analysis-1.3.0^rec1701v03/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so)
+//R__LOAD_LIBRARY(/d/grid13/gluex/gluex_top/gluex_root_analysis/gluex_root_analysis-1.3.0^rec1701v03/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so)
+//R__LOAD_LIBRARY(/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5/gluex_root_analysis/gluex_root_analysis-0.5/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so)
+//
+R__LOAD_LIBRARY(libDSelector) 
    
 void runDSelector_7_17_14(bool useproof = 1, string path = "") 
 {
 	cout << "Loaded using R__LOAD_LIBRARY" << endl;
 	// Load DSelector library
-	gROOT->ProcessLine(".x $ROOT_ANALYSIS_HOME/scripts/Load_DSelector.C");
+	gROOT->ProcessLine(".x $(ROOT_ANALYSIS_HOME)/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 36;
+	int proof_Nthreads = 24;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
@@ -40,6 +43,9 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
+	//
+	// ON THE JLAB FARM
+	chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
 	
 	// a0a2 recon_2017
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
@@ -86,7 +92,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	TString degAngle = "deg000";
 	// should change the name below from data to reco when running over MC
-	degAngle="pi0eta_mEllipseUEChiSq_pre";
+	degAngle="pi0eta_gen_amp";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 
