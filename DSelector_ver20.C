@@ -3,8 +3,8 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_gen_amp";
-bool showOutput = false;
+string degAngle="pi0eta_data";
+bool showOutput = true;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -1623,7 +1623,7 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0eta");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_eta_pi0eta");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0_pi0eta");
-        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<ULong64_t>("spectroscopicComboID"); //fundamental = char, int, float, double, etc.
 
 	// introducing variables to show the pi0/eta was detected in
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pi0DetectedIn"); //fundamental = char, int, float, double, etc.
@@ -1669,49 +1669,61 @@ void DSelector_ver20::Init(TTree *locTree)
 
 Bool_t DSelector_ver20::Process(Long64_t locEntry)
 {
-    group_PB.clear_tracking();
-    group_12B_1234B.clear_tracking();
-    group_34B_1234B.clear_tracking();
-    group_12B.clear_tracking();  
-    group_34B.clear_tracking();  
-    group_12B_34B.clear_tracking();
-    group_1234B.clear_tracking();
-    group_PhNB.clear_tracking();
-    group_pairFCAL.clear_tracking();
-    group_pairBCAL.clear_tracking();
-    group_1234BP.clear_tracking();
-    group_12PB.clear_tracking();       
-    group_34PB.clear_tracking();       
-    group_B.clear_tracking();
-    group_1234B_12PB.clear_tracking();
-    group_1234B_34PB.clear_tracking();
+    	group_PB.clear_tracking();
+    	group_12B_1234B.clear_tracking();
+    	group_34B_1234B.clear_tracking();
+    	group_12B.clear_tracking();  
+    	group_34B.clear_tracking();  
+    	group_12B_34B.clear_tracking();
+    	group_1234B.clear_tracking();
+    	group_PhNB.clear_tracking();
+    	group_pairFCAL.clear_tracking();
+    	group_pairBCAL.clear_tracking();
+    	group_1234BP.clear_tracking();
+    	group_12PB.clear_tracking();       
+    	group_34PB.clear_tracking();       
+    	group_B.clear_tracking();
+    	group_1234B_12PB.clear_tracking();
+    	group_1234B_34PB.clear_tracking();
 
-    // everytime we start a new event we have to reset the tracking
-    set< map<Particle_t, set<Int_t> > > used1234B;
-    set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used12B_1234B;
-    set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used34B_1234B;
-    set< map<Particle_t, set<Int_t> > > uniqueSpectroscopicID;
-    set< map<Particle_t, set<Int_t> > > used12B;
-    set< map<Particle_t, set<Int_t> > > used34B;
+    	// everytime we start a new event we have to reset the tracking
+    	set< map<Particle_t, set<Int_t> > > used1234B;
+    	set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used12B_1234B;
+    	set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > used34B_1234B;
+    	set< map<Particle_t, set<Int_t> > > uniqueSpectroscopicID;
+    	map< map<Particle_t, set<Int_t> >, Int_t > map_uniqueSpectroscopicID;
+    	set< map<Particle_t, set<Int_t> > > used12B;
+    	set< map<Particle_t, set<Int_t> > > used34B;
 
 
-    //if(itersToRun<20){ ++itersToRun; //so we can just try to show the outut of one event 
-    if(showOutput){cout << "Starting next process looping" << endl;}
-    // The Process() function is called for each entry in the tree. The entry argument
-    // specifies which entry in the currently loaded tree is to be processed.
-    //
-    // This function should contain the "body" of the analysis. It can contain
-    // simple or elaborate selection criteria, run algorithms on the data
-    // of the event and typically fill histograms.
-    //
-    // The processing can be stopped by calling Abort().
-    // Use fStatus to set the return value of TTree::Process().
-    // The return value is currently not used.
+    	//if(itersToRun<2000000){ ++itersToRun; //so we can just try to show the outut of one event 
+    	if(showOutput){cout << "Starting next process looping" << endl;}
+    	// The Process() function is called for each entry in the tree. The entry argument
+    	// specifies which entry in the currently loaded tree is to be processed.
+    	//
+    	// This function should contain the "body" of the analysis. It can contain
+    	// simple or elaborate selection criteria, run algorithms on the data
+    	// of the event and typically fill histograms.
+    	//
+    	// The processing can be stopped by calling Abort().
+    	// Use fStatus to set the return value of TTree::Process().
+    	// The return value is currently not used.
 
-    //CALL THIS FIRST
-    DSelector::Process(locEntry); //Gets the data from the tree for the entry
-    //cout << "RUN " << Get_RunNumber() << ", EVENT " << Get_EventNumber() << endl;
-    //TLorentzVector locProductionX4 = Get_X4_Production();
+    	//CALL THIS FIRST
+    	DSelector::Process(locEntry); //Gets the data from the tree for the entry
+    	//cout << "RUN " << Get_RunNumber() << ", EVENT " << Get_EventNumber() << endl;
+    	//TLorentzVector locProductionX4 = Get_X4_Production();
+    	//
+	paddedRun=to_string(Get_RunNumber());
+	digitsInRun=paddedRun.length();
+	for ( int idigit=0; idigit < maxDigitsInRun-digitsInRun; ++idigit){
+		paddedRun = "0" + paddedRun;
+	}
+	paddedEvent=to_string(Get_EventNumber());
+	digitsInEvent=paddedEvent.length();
+	for ( int idigit=0; idigit < maxDigitsInEvent-digitsInEvent; ++idigit){
+		paddedEvent = "0" + paddedEvent;
+	}
 
 	std::vector<int> parentArray;
 	std::vector<int> pids;
@@ -3099,9 +3111,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	else if ( selectDetector == "SPLIT" ) { detectorCut=pEtaInSplit; }
 	else { detectorCut=true; }
 
-<<<<<<< HEAD
-        if (!mEllipseUEChiSq_pre || !detectorCut) {
-=======
         /****************************************** DO NOT CUT - FILL THROWN TOPLOGY (IF DESIRED) ******************************************/
 	// Fill histogram of thrown topologies
 	//if (showThrownTopology){
@@ -3112,51 +3121,72 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	//}
 
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
+
         if (!mEllipse_pre || !detectorCut) {
-        //if (baseCuts) { 
+        //if (!mEllipseUEChiSq_pre || !detectorCut) {
+	//if (false){
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
 
         else { 
-	    if (showOutput) { cout << "Passed cut, continuing.... " << endl; }  
-	    if (used1234B.find(using1234B)==used1234B.end()){
-                used1234B.insert(using1234B);
-                isNotRepeated_pi0eta=true;
-            }
-            else { isNotRepeated_pi0eta=false; } 
+		if (showOutput) { cout << "Passed cut, continuing.... " << endl; }  
+	    	if (used1234B.find(using1234B)==used1234B.end()){
+            	    used1234B.insert(using1234B);
+            	    isNotRepeated_pi0eta=true;
+            	}
+            	else { isNotRepeated_pi0eta=false; } 
 
-	    if (used12B_1234B.find(using12B_1234B)==used12B_1234B.end()){
-                used12B_1234B.insert(using12B_1234B);
-                isNotRepeated_pi0_pi0eta=true;
-            }
-            else { isNotRepeated_pi0_pi0eta=false; } 
+	    	if (used12B_1234B.find(using12B_1234B)==used12B_1234B.end()){
+            	    used12B_1234B.insert(using12B_1234B);
+            	    isNotRepeated_pi0_pi0eta=true;
+            	}
+            	else { isNotRepeated_pi0_pi0eta=false; } 
 
-	    if (used34B_1234B.find(using34B_1234B)==used34B_1234B.end()){
-                used34B_1234B.insert(using34B_1234B);
-                isNotRepeated_eta_pi0eta=true;
-            }
-            else { isNotRepeated_eta_pi0eta=false; } 
+	    	if (used34B_1234B.find(using34B_1234B)==used34B_1234B.end()){
+            	    used34B_1234B.insert(using34B_1234B);
+            	    isNotRepeated_eta_pi0eta=true;
+            	}
+            	else { isNotRepeated_eta_pi0eta=false; } 
 
-	    if (used12B.find(using12B)==used12B.end()){
-                used12B.insert(using12B);
-                isNotRepeated_pi0=true;
-            }
-            else { isNotRepeated_pi0=false; } 
+	    	if (used12B.find(using12B)==used12B.end()){
+            	    used12B.insert(using12B);
+            	    isNotRepeated_pi0=true;
+            	}
+            	else { isNotRepeated_pi0=false; } 
 
-	    if (used34B.find(using34B)==used34B.end()){
-                used34B.insert(using34B);
-                isNotRepeated_eta=true;
-            }
-            else { isNotRepeated_eta=false; } 
+	    	if (used34B.find(using34B)==used34B.end()){
+            	    used34B.insert(using34B);
+            	    isNotRepeated_eta=true;
+            	}
+            	else { isNotRepeated_eta=false; } 
 
-            if ( uniqueSpectroscopicID.find(using1234)==uniqueSpectroscopicID.end() ){
-                uniqueSpectroscopicID.insert(using1234);
-                ++uniqueSpectroscopicPi0EtaID;
-                //notRepeatedSpectroscopicPi0Eta=true;
-            }
+            	if ( uniqueSpectroscopicID.find(using1234)==uniqueSpectroscopicID.end() ){
+            		uniqueSpectroscopicID.insert(using1234);
+			// might be able to get rid of the use of both a set (to find) and a map to track. I think map would implement a find key also
+			// problem for another time
+			map_uniqueSpectroscopicID[using1234] = comboNumber;
+			++comboNumber;
+            	}
+    			
+		
+		paddedCombo=to_string(map_uniqueSpectroscopicID[using1234]);
+		cout << "Before paddedCombo: " << paddedCombo << endl;
+		digitsInCombo=paddedCombo.length();
+		cout << "digitsInCombo: " << digitsInCombo << endl;
+		cout << "maxDigitsInCombo: " << maxDigitsInCombo << endl;
+		cout << "maxDigitsInCombo-digitsInCombo: " << maxDigitsInCombo-digitsInCombo << endl;
+		for ( int idigit=0; idigit < maxDigitsInCombo-digitsInCombo; ++idigit){
+			paddedCombo = "0" + paddedCombo;
+		}
+		cout << "Final paddedCombo: " << paddedCombo << endl;
+		string s_spectroscopicComboID = "1"+paddedRun+paddedEvent+paddedCombo;
+		cout << "1+paddedRun+paddedEvent+paddedCombo: " << s_spectroscopicComboID << endl;
+		spectroscopicComboID = (ULong64_t)stoll(s_spectroscopicComboID);
+		cout << "spectroscopicComboID: " << spectroscopicComboID << endl;
 
         }
+
 	if (showOutput){ cout << "Calculated uniqueness booleans" << endl; } 
 
 
@@ -3232,7 +3262,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_eta_pi0eta",isNotRepeated_eta_pi0eta);
         dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0_pi0eta",isNotRepeated_pi0_pi0eta);
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("uniqueSpectroscopicPi0EtaID",uniqueSpectroscopicPi0EtaID);
+        dFlatTreeInterface->Fill_Fundamental<ULong64_t>("spectroscopicComboID",spectroscopicComboID);
 	if(showOutput){ cout << "Filled even more fundamental branches" << endl; } 
 
 	// some variables to show where the pi0/eta detected
@@ -3350,7 +3380,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the //if(itersToRun) condition
+    //}//closes the if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 

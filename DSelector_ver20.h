@@ -307,9 +307,22 @@ class DSelector_ver20 : public DSelector
                 bool isNotRepeated_pi0eta=true;
                 bool isNotRepeated_pi0_pi0eta=true;
                 bool isNotRepeated_eta_pi0eta=true;
-                Int_t uniqueSpectroscopicPi0EtaID=0;
-                Int_t uniqueSpectroscopicEtaID=0;
-                Int_t uniqueSpectroscopicPi0ID=0;
+		
+                string uniqueSpectroscopicPi0EtaID;
+                string uniqueSpectroscopicEtaID;
+                string uniqueSpectroscopicPi0ID;
+		ULong64_t spectroscopicComboID=0;
+		int comboNumber=0;
+		int digitsInEvent=0;
+		int digitsInCombo=0;
+		int digitsInRun=0;
+		int maxDigitsInEvent=7;
+		int maxDigitsInCombo=3;
+		int maxDigitsInRun=5;
+		string paddedCombo="";
+		string paddedEvent="";
+		string paddedRun="";
+
 
 		Int_t uniqueComboID=0;
 
