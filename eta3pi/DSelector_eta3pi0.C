@@ -5,7 +5,7 @@ bool NoCut=0;
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
 string degAngle="pi0eta_eta3pi0";
-bool showOutput = true;
+bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -1108,6 +1108,13 @@ void DSelector_eta3pi0::Init(TTree *locTree)
         group_pairBCAL.insert(histdef); 
 
         // *********************** PI0ETA MASS PLOTS ******************************
+        histdef.clear();
+        name="pi0eta1D_mMandelstamT_mBeamE8GeVPlus";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
+
         histdef.clear();
         name="pi0eta1D_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=allGeneralCutsPassed;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
@@ -3014,6 +3021,8 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
 	
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+	mMandelstamT_mBeamE8GeVPlus = !pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+
 	// -----------------------------------------------------------------------
 	// This will be the basis of the cuts for the baryon rejection histograms
 	// -----------------------------------------------------------------------

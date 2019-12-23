@@ -3,8 +3,8 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_data";
-bool showOutput = true;
+string degAngle="pi0eta_mEllipseLooseUEChiSq";
+bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -1599,8 +1599,8 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptLT05");
         dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("ptGT05LT1");
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("finalStateComboID"); //fundamental = char, int, float, double, etc.
-        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("chiSq"); //fundamental = char, int, float, double, etc.
-        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("unusedEnergy"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("chiSq"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("unusedEnergy"); //fundamental = char, int, float, double, etc.
         if (is_pi0eta){
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0"); //fundamental = char, int, float, double, etc.
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Meta"); //fundamental = char, int, float, double, etc.
@@ -1696,7 +1696,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     	set< map<Particle_t, set<Int_t> > > used34B;
 
 
-    	//if(itersToRun<2000000){ ++itersToRun; //so we can just try to show the outut of one event 
+    	//if(itersToRun<200){ ++itersToRun; //so we can just try to show the outut of one event 
     	if(showOutput){cout << "Starting next process looping" << endl;}
     	// The Process() function is called for each entry in the tree. The entry argument
     	// specifies which entry in the currently loaded tree is to be processed.
@@ -2815,9 +2815,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         // General Cuts
         pUnusedEnergy = locUnusedEnergy <= unusedEnergyCut;
+	pLooseUnusedEnergy = locUnusedEnergy <= 0.5;
         //pCLKinFit1 = locCLKinFit >= CLCut1;
         //pCLKinFit = locChiSqKinFit <= ChiSqCut;	
         pChiSq = locChiSqKinFit <= ChiSqCut;	
+	pLooseChiSq = locChiSqKinFit <= 500;
         chiSq100 = locChiSqKinFit <= 100;
         //pCLKinFit3 = locCLKinFit >= CLCut3;
         //pCLKinFit4 = locCLKinFit >= CLCut4;
@@ -2960,6 +2962,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	}
         mEllipseUE_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mEllipseUEChiSq_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+        mEllipseLooseUEChiSq_pre = pLooseUnusedEnergy*pLooseChiSq*ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mEllipseChiSq_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         // ------ Rejects the 0-weight region since that would mess with the uniqueness tracking. We use the OR logic to sum the subsets of the yellow and the red region.
         mEllipse = mEllipse_pre*pYellowBKG || allGeneralCutsPassed;
@@ -3122,8 +3125,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
-        if (!mEllipse_pre || !detectorCut) {
-        //if (!mEllipseUEChiSq_pre || !detectorCut) {
+        //if (!mEllipse_pre || !detectorCut) {
+        if (!mEllipseLooseUEChiSq_pre || !detectorCut) {
 	//if (false){
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
@@ -3180,9 +3183,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			paddedCombo = "0" + paddedCombo;
 		}
 		cout << "Final paddedCombo: " << paddedCombo << endl;
+		cout << "Final paddedEvent: " << paddedEvent << endl;
+		cout << "Final paddedRun: " << paddedRun << endl;
 		string s_spectroscopicComboID = "1"+paddedRun+paddedEvent+paddedCombo;
 		cout << "1+paddedRun+paddedEvent+paddedCombo: " << s_spectroscopicComboID << endl;
-		spectroscopicComboID = (ULong64_t)stoll(s_spectroscopicComboID);
+		spectroscopicComboID = (ULong64_t)stoull(s_spectroscopicComboID);
+		//digitsInSpectroscopicComboID = (int)log10(spectroscopicComboID);
 		cout << "spectroscopicComboID: " << spectroscopicComboID << endl;
 
         }
@@ -3380,7 +3386,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the if(itersToRun) condition
+    //}//closes the //if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 

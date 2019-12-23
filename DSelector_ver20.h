@@ -312,12 +312,13 @@ class DSelector_ver20 : public DSelector
                 string uniqueSpectroscopicEtaID;
                 string uniqueSpectroscopicPi0ID;
 		ULong64_t spectroscopicComboID=0;
+		int digitsInSpectroscopicComboID;
 		int comboNumber=0;
 		int digitsInEvent=0;
 		int digitsInCombo=0;
 		int digitsInRun=0;
 		int maxDigitsInEvent=7;
-		int maxDigitsInCombo=3;
+		int maxDigitsInCombo=2;
 		int maxDigitsInRun=5;
 		string paddedCombo="";
 		string paddedEvent="";
@@ -676,6 +677,8 @@ class DSelector_ver20 : public DSelector
 		bool mBeamE=true;
 		bool pUnusedEnergy=true;
 		bool pChiSq=true;
+		bool pLooseChiSq=true;
+		bool pLooseUnusedEnergy=true;
 		//bool pCLKinFit1=true;
 		//bool pCLKinFit=true ;
 		//bool pCLKinFit3=true;
@@ -826,6 +829,7 @@ class DSelector_ver20 : public DSelector
 		bool mEllipseUE_pre = true;
 		bool mEllipseUEChiSq = true;
 		bool mEllipseUEChiSq_pre = true;
+		bool mEllipseLooseUEChiSq_pre = true;
 		bool mEllipseChiSq = true;
 		bool mEllipseChiSq_pre = true;
 		bool pMPi0P14=true;

@@ -1,6 +1,7 @@
 #include "/d/grid15/ln16/pi0eta/q-values/main.h"
+#include "calcSigEfficiency.h"
 
-double calculateEfficiency( double var1s[], Long64_t nentries, double chiSqs[], double unusedEnergies[], int iter ) {
+double calculateEfficiency( vector<double> var1s, Long64_t nentries, vector<double> chiSqs, vector<double> unusedEnergies, int iter ) {
 	TH1F *hist_var;
 	TCanvas *canvas = new TCanvas("","",1440,900);
         double binRange[3] = {100,0.35,0.8};
@@ -40,24 +41,27 @@ double calculateEfficiency( double var1s[], Long64_t nentries, double chiSqs[], 
 
 	canvas->SaveAs(("/d/grid15/ln16/pi0eta/chiSqUEplots/fit"+to_string(iter)+".png").c_str());
 
+	cout << "nSig/nBkg: " << nSig/nBkg;
 	return nSig/nBkg; 
 }
 
 
 void calcSigEfficiency(){
 	cout << "Initializing" << endl;
-	TFile* dataFile=new TFile("/d/grid15/ln16/pi0eta/092419/zSelectedmEllipseUEChiSq/pi0eta_mEllipseUEChiSq_pretreeFlat_DSelector.root");
+	TFile* dataFile=new TFile("/d/grid15/ln16/pi0eta/092419/zSelectedmEllipseUEChiSq/pi0eta_mEllipseUEChiSqtreeFlat_DSelector.root");
 	TTree *dataTree;
-	dataFile->GetObject("pi0eta_mEllipseUEChiSq_pretree_flat",dataTree);
+	dataFile->GetObject("pi0eta_mEllipseUEChiSqtree_flat",dataTree);
 
 	Long64_t nentries=dataTree->GetEntries();
 	cout << "There are " << nentries << " nentries" << endl;
-	double Metas[nentries];
-	double chiSqs[nentries];
-	double unusedEnergies[nentries];
+
+	std::vector<double> Metas; Metas.reserve(nentries);
+	std::vector<double> chiSqs; chiSqs.reserve(nentries);
+	std::vector<double> unusedEnergies; unusedEnergies.reserve(nentries);
 	double Meta;
 	double chiSq;
 	double unusedEnergy;
+	cout << "Defined some variables" << endl;
 	dataTree->SetBranchAddress("Meta",&Meta);
 	dataTree->SetBranchAddress("chiSq",&chiSq);
 	dataTree->SetBranchAddress("unusedEnergy",&unusedEnergy);
@@ -66,9 +70,9 @@ void calcSigEfficiency(){
 	for (Long64_t ientry=0; ientry<nentries; ientry++)
 	{
         	dataTree->GetEntry(ientry);
-		Metas[ientry] = Meta;
-		unusedEnergies[ientry] = unusedEnergy;
-		chiSqs[ientry] = chiSq;
+		Metas.push_back(Meta);
+		unusedEnergies.push_back(unusedEnergy);
+		chiSqs.push_back(chiSq);
 	}
 
 	cout << "Doing the fit" << endl;

@@ -802,6 +802,7 @@ class DSelector_eta3pi0 : public DSelector
 		// removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
 		bool allGeneralCutsPassed=true;
 		bool mMandelstamT=true;
+		bool mMandelstamT_mBeamE8GeVPlus=true;
 		//bool pDiffCL=true; 
 		bool pDiffUE=true; 
 		bool mRProton=true;
