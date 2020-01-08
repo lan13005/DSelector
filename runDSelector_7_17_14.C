@@ -13,11 +13,9 @@
 
 
 
-//R__LOAD_LIBRARY(/d/grid15/ln16/gluex_top/gluex_root_analysis/gluex_root_analysis-0.5/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so) 
-//R__LOAD_LIBRARY(/d/grid13/gluex/gluex_top/gluex_root_analysis/gluex_root_analysis-1.3.0^rec1701v03/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so)
 //R__LOAD_LIBRARY(/group/halld/Software/builds/Linux_CentOS7-x86_64-gcc4.8.5/gluex_root_analysis/gluex_root_analysis-0.5/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so)
-//
-R__LOAD_LIBRARY(libDSelector) 
+R__LOAD_LIBRARY(/d/home/ln16/gluex_top/gluex_root_analysis/gluex_root_analysis_1.7.0/Linux_CentOS7-x86_64-gcc4.8.5/lib/libDSelector.so) 
+R__LOAD_LIBRARY(libDSelector.so)
    
 void runDSelector_7_17_14(bool useproof = 1, string path = "") 
 {
@@ -26,12 +24,13 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	gROOT->ProcessLine(".x $(ROOT_ANALYSIS_HOME)/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 24;
+	int proof_Nthreads = 36;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
 	//TString nameOfTree = "pi0eta__B3_F1_M7_M17_Tree"; // pi0eta__B4_Tree is the old one
-	TString nameOfTree = "pi0eta__B4_M17_M7_Tree"; // pi0eta__B4_Tree is the old one
+	//TString nameOfTree = "pi0eta__B4_F1_M7_M17_Tree"; // pi0eta__B4_Tree is the old one
+	TString nameOfTree = "pi0eta__B4_M17_M7_Tree"; 
 	//TString nameOfTree = "pi0pi0__B3_F1_U1_M7_Tree";
 	TChain *chain = new TChain(nameOfTree);
 	
@@ -58,15 +57,19 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30461_withP/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30730_withP/tree_pi0eta__B4_M17_M7.root");
-
-
+	//
+	// sean resolution test
+	//chain->Add("/d/home/sdobbs/grid13/MCtest/pi0eta_a2/hddm/tree_pi0eta__B4_F1_M7_M17_00*");
+	// sean new resolution test
+	//chain->Add("/d/home/sdobbs/grid13/MCtest/71001_0/tree_pi0eta__B4_F1_M7_M17.root");
+	//chain->Add("/d/home/sdobbs/grid13/MCtest/71001_3.save/tree_pi0eta__B4_F1_M7_M17.root");
 
 	// 2017 DATA
 	// allData
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver20/tree_pi0eta__B3_F1_M7_M17/merged/tree_pi0eta__B3_F1_M7_M17_03*.root");
 	// This one contains the showerQuality variables
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_030281*");
-	chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7*");
+	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7*");
 	//
 	// 2018 DATA
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-01/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/*");
@@ -76,7 +79,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/boolSpectPi0EtaSelectedFiles/pi0eta_data_tree_DSelector.root");
 
 // ********************** BASE CUTS APPLIED ONLY ********************
- 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+ 	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 
 	// **********************************************************************************	
 	// ************************** ------ PI0PI0 BELOW ---------**************************	
@@ -92,7 +95,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	TString degAngle = "deg000";
 	// should change the name below from data to reco when running over MC
-	degAngle="pi0eta_mEllipseLooseUEChiSq";
+	degAngle="pi0eta_bcal";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 

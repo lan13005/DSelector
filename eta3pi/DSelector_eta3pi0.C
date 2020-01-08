@@ -4,7 +4,8 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_eta3pi0";
+string degAngle="pi0eta_seanResoution_reco_3pi0";
+//string degAngle="pi0eta_reco_3pi0_new";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -48,14 +49,17 @@ void DSelector_eta3pi0::Init(TTree *locTree)
 
                 //ellipseX = 0.134547; ellipseY = 0.541950; ellipseXr = 0.025449; ellipseYr = 0.069267;
 
-                //using the kin data
-                ellipseX = 0.135881; ellipseY = 0.548625; ellipseXr = 0.0160375; ellipseYr = 0.025671;
+                //using the kin data // was for the eta->gg
+                //ellipseX = 0.135881; ellipseY = 0.548625; ellipseXr = 0.0160375; ellipseYr = 0.025671;
 //                ellipseXBS1 = 0.135881; ellipseYBS1 = 0.548625; ellipseXrBS1 = 0.022; ellipseYrBS1 = 0.06;
 //                ellipseXBS2 = 0.135881; ellipseYBS2 = 0.548625; ellipseXrBS2 = 0.045; ellipseYrBS2 = 0.165;
 //		//ellipseXr_loose=0.0391; ellipseYr_loose=0.131;
 //		//ellipseXr_loose=0.0391; ellipseYr_loose=0.14;
 //		ellipseXr_loose=0.02; ellipseYr_loose=100;
 //		areaRatio = 0.067; //double checked these values;
+//
+//		// KinFit values, eta->3pi0
+                ellipseX = 0.13381; ellipseY = 0.5388; ellipseXr = 3.5*0.0066; ellipseYr = 3.5*0.0214;
 
 		ellipseYr += 0.02;
 		double ellipseXYratio = ellipseYr/ellipseXr;
@@ -155,7 +159,7 @@ void DSelector_eta3pi0::Init(TTree *locTree)
 
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,0,180);
         dHist_BeamAngle->SetYTitle("Events / Degree");
-	dHist_Cuts = new TH1F("CutsPassed", "Number of times a cut has been passed", 15,0,15);
+	dHist_Cuts = new TH1F("CutsPassed", "Number of times a cut has been passed", 16,0,16);
 	for (int i =0; i<3; ++i){
 		if (is_pi0eta){
 			dHist_checkEllipseBS[i] = new TH2F(("checkEllipseBS"+std::to_string(i)+"noCutOnlyRegionSelected").c_str(), ";#pi_{0} Mass (GeV) with Events / 0.001 GeV;#eta Mass (GeV) with Events / 0.0025 GeV", atof(pi0BinRange[0].c_str()), atof(pi0BinRange[1].c_str()), atof(pi0BinRange[2].c_str()), atof(etaBinRange[0].c_str()), atof(etaBinRange[1].c_str()), atof(etaBinRange[2].c_str()));
@@ -501,6 +505,20 @@ void DSelector_eta3pi0::Init(TTree *locTree)
         string name;
         histDef_1D histdef;
         histDef_2D histdef2d;
+	// ********************************** Kinematics related *********************************************
+        histdef.clear();
+        name="P4ChiSqKinFit_mChiSq";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mChiSq;Chi Squared; Entries / 2", 150, 0, 300);
+        histdef.name = name; histdef.cut=&mChiSq; histdef.weights = &weightAS;
+        histdef.values.push_back( &locChiSqKinFit );
+        group_1234BP.insert(histdef); 
+
+        histdef.clear();
+        name="UnusedEnergy_mUE";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=noCut;Chi Squared;Entries / 0.01 GeV", 100, 0, 1);
+        histdef.name = name; histdef.cut=&noCut; histdef.weights = &weightAS;
+        histdef.values.push_back( &locUnusedEnergy );
+        group_1234BP.insert(histdef); 
 
 	// ********************************** DETECTOR SPECIFIC RELATED PLOTS FOR PI0/ETA *****************************************
         histdef.clear();
@@ -1070,7 +1088,7 @@ void DSelector_eta3pi0::Init(TTree *locTree)
 
         histdef2d.clear();
         name="pi0eta_mEllipsePre";
-        histdef2d.hist = new TH2F(name.c_str(), "Cuts=mEllipse_pre;#pi_{0} Mass (GeV) with Events / 0.001 GeV;#eta Mass (GeV) with Events / 0.0025 GeV",200,0.05,0.25,300,0.25,0.85);
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=mEllipse_pre;#pi_{0} Mass (GeV) with Events / 0.002 GeV;#eta Mass (GeV) with Events / 0.005 GeV",100,0.05,0.25,150,0.25,0.85);
         histdef2d.name = name; histdef2d.cut=&mEllipse_pre; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_Kin );
         histdef2d.valuesY.push_back( &locEtaMass_Kin );
@@ -1113,6 +1131,20 @@ void DSelector_eta3pi0::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="pi0eta1D_thrown_mMandelstamT_mBeamE8GeVPlus";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Eta_thrown );
+        group_1234B.insert(histdef); 
+
+        histdef.clear();
+        name="pi0eta1D_res_mMandelstamT_mBeamE8GeVPlus";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi_{0}#eta) (GeV);Events / 0.01 GeV", 100, -0.5, 0.5);
+        histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Eta_resolution );
         group_1234B.insert(histdef); 
 
         histdef.clear();
@@ -1689,6 +1721,9 @@ void DSelector_eta3pi0::Init(TTree *locTree)
 
 Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
 {
+
+	++count_events;
+
     group_PB.clear_tracking();
     group_12B_1234B.clear_tracking();
     group_34B_1234B.clear_tracking();
@@ -1735,6 +1770,9 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
 
 	std::vector<int> parentArray;
 	std::vector<int> pids;
+	TLorentzVector etaP4;
+	TLorentzVector pi0P4;
+	TLorentzVector pi0etaP4;
 	int locNumThrown = Get_NumThrown();
 	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
 	if (Get_NumThrown() != 0 ) {
@@ -1750,6 +1788,8 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
 
 			parentArray.push_back(locParentPID);
 			pids.push_back(locPID);
+			if (locPID==7 && locParentPID==-1) { pi0P4 = dThrownWrapper->Get_P4(); } 
+			if (locPID==17 && locParentPID==-1) { etaP4 = dThrownWrapper->Get_P4(); } 
 		}
 
 		std::vector<int> parents;
@@ -1774,6 +1814,9 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
 		if ( pi0ToNGamma==2 && etaToNPi0==3) {
 			//correctFinalState=true;
 			//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
+			pi0etaP4 = pi0P4+etaP4;
+			locPi0Eta_thrown = pi0etaP4.M();
+			++count_correctTopology;
 		}
 		else { 
         		if(showOutput) { cout << "\n\n\n*********************************************************\n**************************************************\n########    EventIdx: " << (eventIdx) << "    #############" << endl; }
@@ -2081,6 +2124,10 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
         locEtaProton_Kin = mixingEtaProton_Kin.M();
         locPi0Proton_Kin = mixingPi0Proton_Kin.M();
         locPi0Eta_Kin = mixingPi0Eta_Kin.M();
+	locPi0Eta_resolution = locPi0Eta_Kin-locPi0Eta_thrown;
+	cout << "locPi0Eta_Kin: " << locPi0Eta_Kin << endl;
+	cout << "locPi0Eta_thrown: " << locPi0Eta_thrown << endl;
+	cout << "locPi0Eta_resolution: " << locPi0Eta_resolution << endl;
         locPi0Eta = mixingPi0Eta.M();
 
         // IN THE FOLLOWING SECTION WE WILL CALCUALTE BY OURSELVES THE MASS OF THE PI0 AND THE ETA WITH DIFFERENT STARTING POINTS ( USING THE PROTON X3 VS USING THE TARGET CENTER)
@@ -3017,7 +3064,8 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
         dzRP = pMagP3Proton*pzCutmin*pRProton;
         dzR = pzCutmin*pRProton;
 
-        pShowerQuality=pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3*pShowerQuality4*pShowerQuality5*pShowerQuality6*pShowerQuality7;
+        //pShowerQuality=pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3*pShowerQuality4*pShowerQuality5*pShowerQuality6*pShowerQuality7;
+	pShowerQuality=true;
 	
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
@@ -3128,6 +3176,7 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
         if (allGeneralCutsPassed*withinCone[1]) {
             if(showOutput){ cout << "$$$Checking Angles of the combo in GJ!!!\n" << angles_pi0.X() << ","<< angles_pi0.Y() << ","<< angles_pi0.Z() << "," << angles_eta.X() << ","<< angles_eta.Y() << ","<< angles_eta.Z() << endl;}
         }
+	++count_combos;
         if(pShowerQuality){ ++count_ShowerQuality; dHist_Cuts->Fill(cutNames[0],1);}
         if(pBeamE8GeVPlus){ ++count_BeamE8GeVPlus; dHist_Cuts->Fill(cutNames[1],1);} 
         if(pUnusedEnergy){ ++count_UnusedEnergy;dHist_Cuts->Fill(cutNames[2],1);}
@@ -3143,6 +3192,7 @@ Bool_t DSelector_eta3pi0::Process(Long64_t locEntry)
         if(pdEdxCDCProton){ ++count_dEdxCDCProton;dHist_Cuts->Fill(cutNames[12],1);}
         if(pinsideEllipse){ ++count_insideEllipse;dHist_Cuts->Fill(cutNames[13],1);}
         if(allGeneralCutsPassed){ ++count_allGeneralCutsPassed;dHist_Cuts->Fill(cutNames[14],1);}
+	if(!pMPi0P14) { ++count_MPi0P14; dHist_Cuts->Fill(cutNames[15],1);}
 
 
         if(showOutput) {cout << "Start Filling histVals and histCuts" << endl;}
@@ -3472,26 +3522,28 @@ void DSelector_eta3pi0::Finalize(void)
     //if(showOutput){cout << "Num passed MissingMassSquared: " << std::to_string(count_MissingMassSquared)<<endl;}
     //if(showOutput){cout << "Num passed dEdxCDCProton: " << std::to_string(count_dEdxCDCProton)<<endl;}
     //if(showOutput){cout << "Num passed insideEllipse: " << std::to_string(count_insideEllipse)<<endl;}
-    //if(showOutput){cout << "The next two show how the numbers are reduced when doing uniqueness tracking" << endl;}
     //if(showOutput){cout << "Num passed allGeneralCutsPassed: " << std::to_string(count_allGeneralCutsPassed)<<endl;}
     ////if(showOutput){cout << "Num passed allGeneralCutsPassedPlusTracked: " << std::to_string(count_allGeneralCutsPassedPlusTracked)<<endl;}
 
-    if(true){cout << "Num passed ShowerQuality: " << std::to_string(count_ShowerQuality)<<endl; }
-    if(true){cout << "Num passed BeamE8GeVPlus: " << std::to_string(count_BeamE8GeVPlus)<<endl; }
-    if(true){cout << "Num passed UnusedEnergy: " << std::to_string(count_UnusedEnergy)<<endl;}
-    if(true){cout << "Num passed CLKinFit: " << std::to_string(count_ChiSq)<<endl;}
-    if(true){cout << "Num passed DeltaTRF: " << std::to_string(count_DeltaTRF)<<endl;}
-    if(true){cout << "Num passed dij3pass: " << std::to_string(count_dij3pass)<<endl;}
-    if(true){cout << "Num passed PhotonE: " << std::to_string(count_PhotonE)<<endl;}
-    if(true){cout << "Num passed PhotonTheta: " << std::to_string(count_PhotonTheta)<<endl;}
-    if(true){cout << "Num passed MagP3Proton: " << std::to_string(count_MagP3Proton)<<endl;}
-    if(true){cout << "Num passed zCutmin: " << std::to_string(count_zCutmin)<<endl;}
-    if(true){cout << "Num passed RProton: " << std::to_string(count_RProton)<<endl;}
-    if(true){cout << "Num passed MissingMassSquared: " << std::to_string(count_MissingMassSquared)<<endl;}
-    if(true){cout << "Num passed dEdxCDCProton: " << std::to_string(count_dEdxCDCProton)<<endl;}
-    if(true){cout << "Num passed insideEllipse: " << std::to_string(count_insideEllipse)<<endl;}
-    if(true){cout << "The next two show how the numbers are reduced when doing uniqueness tracking" << endl;}
-    if(true){cout << "Num passed allGeneralCutsPassed: " << std::to_string(count_allGeneralCutsPassed)<<endl;}
+    if(true){cout << "Count combos: " << std::to_string(count_combos) << endl;} 
+    if(true){cout << "Count events: " << std::to_string(count_events) << endl;} 
+    if(true){cout << "Percent passed ShowerQuality: " << std::to_string((double)count_ShowerQuality/count_combos)<<endl; }
+    if(true){cout << "Percent passed BeamE8GeVPlus: " << std::to_string((double)count_BeamE8GeVPlus/count_combos)<<endl; }
+    if(true){cout << "Percent passed UnusedEnergy: " << std::to_string((double)count_UnusedEnergy/count_combos)<<endl;}
+    if(true){cout << "Percent passed CLKinFit: " << std::to_string((double)count_ChiSq/count_combos)<<endl;}
+    if(true){cout << "Percent passed DeltaTRF: " << std::to_string((double)count_DeltaTRF/count_combos)<<endl;}
+    if(true){cout << "Percent passed dij3pass: " << std::to_string((double)count_dij3pass/count_combos)<<endl;}
+    if(true){cout << "Percent passed PhotonE: " << std::to_string((double)count_PhotonE/count_combos)<<endl;}
+    if(true){cout << "Percent passed PhotonTheta: " << std::to_string((double)count_PhotonTheta/count_combos)<<endl;}
+    if(true){cout << "Percent passed MagP3Proton: " << std::to_string((double)count_MagP3Proton/count_combos)<<endl;}
+    if(true){cout << "Percent passed zCutmin: " << std::to_string((double)count_zCutmin/count_combos)<<endl;}
+    if(true){cout << "Percent passed RProton: " << std::to_string((double)count_RProton/count_combos)<<endl;}
+    if(true){cout << "Percent passed MissingMassSquared: " << std::to_string((double)count_MissingMassSquared/count_combos)<<endl;}
+    if(true){cout << "Percent passed dEdxCDCProton: " << std::to_string((double)count_dEdxCDCProton/count_combos)<<endl;}
+    if(true){cout << "Percent passed insideEllipse: " << std::to_string((double)count_insideEllipse/count_combos)<<endl;}
+    if(true){cout << "Percent passed allGeneralCutsPassed: " << std::to_string((double)count_allGeneralCutsPassed/count_combos)<<endl;}
+    if(true){cout << "Percent passed mMPi0P14: " << std::to_string((double)count_MPi0P14/count_combos)<<endl;}
+    if(true){cout << "Percent correct topology: " << std::to_string((double)count_correctTopology/count_events) << endl; }
     // we can only use the below code when we are using setupTest.sh. DOesnt work with proof since it will probably try to do this for every thread...
     //dHist_Cuts->SetStats(0);
     //dHist_Cuts->SetCanExtend(TH1::kAllAxes);

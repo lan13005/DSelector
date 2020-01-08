@@ -361,7 +361,7 @@ class DSelector_eta3pi0 : public DSelector
                 TH1F* dHist_BeamAngle;
 		TH1F* dHist_Cuts;
 		TH2F* dHist_checkEllipseBS[3];
-		const char *cutNames[15] = {"pShowerQuality","pBeamE8GeVPlus","pUnusedEnergy","pChiSq" ,"pDeltaTRF","pdij3pass","pPhotonE","pPhotonTheta","pMagP3Proton","pzCutmin","pRProton","pMissingMassSquared","pdEdxCDCProton","pinsideEllipse", "allGeneralCutsPassed"};
+		const char *cutNames[16] = {"pShowerQuality","pBeamE8GeVPlus","pUnusedEnergy","pChiSq" ,"pDeltaTRF","pdij3pass","pPhotonE","pPhotonTheta","pMagP3Proton","pzCutmin","pRProton","pMissingMassSquared","pdEdxCDCProton","pinsideEllipse", "allGeneralCutsPassed", "mMPi0P14"};
 
 
 // **************************************** START INITIALZING VARIABLES TO USE WITH HISTO BUILDING ********************************************//
@@ -423,6 +423,8 @@ class DSelector_eta3pi0 : public DSelector
 		double locEtaProton_Kin=1;
 		double locPi0Proton_Kin=1;
 		double locPi0Eta_Kin=1;
+		double locPi0Eta_thrown=1;
+		double locPi0Eta_resolution=1;
 		double locPi0Eta=1;
 
 		double locEtaMass=1;
@@ -596,11 +598,11 @@ class DSelector_eta3pi0 : public DSelector
 		double thetaCutMin = 2.5; double thetaCutMax1 = 10.3; double thetaCutMax2 = 11.5;
 		double dijCut = 12.5;
 		///////////// General ///////////////////
-		double unusedEnergyCut = 0.010;
-		double MMsqCut = 0.05;
+		double unusedEnergyCut = 0.5; // 0.01 
+		double MMsqCut = 0.075; // 0.05
 		//double CLCut1 = 0.1;
 		//double CLCut = 0.01; // CLCut is the cut we want to uses for all other cuts, these others ones are for the RFTime graph
-		double ChiSqCut = 13.277;
+		double ChiSqCut = 300;//13.277;
 		double chiSq100 = 100;
 		//double CLCut3 = 0.001;
 		//double CLCut4 = 0.0001;
@@ -765,6 +767,10 @@ class DSelector_eta3pi0 : public DSelector
 
 		bool ptpLT1=true;
 		// Times it passes a cut
+		int count_events=0;
+		int count_combos=0;
+		int count_correctTopology=0;
+		int count_MPi0P14=0;
 		int count_ShowerQuality=0;
 		int count_BeamE8GeVPlus=0;
 		int count_UnusedEnergy=0;
