@@ -605,11 +605,11 @@ class DSelector_ver20 : public DSelector
 		double thetaCutMin = 2.5; double thetaCutMax1 = 10.3; double thetaCutMax2 = 11.5;
 		double dijCut = 12.5;
 		///////////// General ///////////////////
-		double unusedEnergyCut = 1;//0.010;
+		double unusedEnergyCut = 0.010;
 		double MMsqCut = 0.05;
 		//double CLCut1 = 0.1;
 		//double CLCut = 0.01; // CLCut is the cut we want to uses for all other cuts, these others ones are for the RFTime graph
-		double ChiSqCut = 300; //13.277;
+		double ChiSqCut = 13.277;
 		double chiSq100 = 100;
 		//double CLCut3 = 0.001;
 		//double CLCut4 = 0.0001;

@@ -170,6 +170,8 @@ void makeGraphs(){
 	overlayPlots etaMassDiffSubDetectors(trackHists);
 	trackHists = { {"pi0eta1D_mMandelstamT", 1}, {"pi0eta1D_Cut", 1} };
 	overlayPlots pi0eta1DtAlltCut(trackHists);
+	trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1}, {"pi0proton1D_mDelta", 1} };
+	overlayPlots pi0proton1D_beforeAfterT(trackHists);
 
 	TCanvas *c1 = new TCanvas("c1","",1440,900);
 	int i=0;
@@ -203,6 +205,7 @@ void makeGraphs(){
 			pi0MassDiffSubDetectors.fillHist(h);
 			etaMassDiffSubDetectors.fillHist(h);
 			pi0eta1DtAlltCut.fillHist(h);
+			pi0proton1D_beforeAfterT.fillHist(h);
 		}
    	}
 
@@ -213,6 +216,7 @@ void makeGraphs(){
 	pi0MassDiffSubDetectors.plot("newGraphs/pi0MassDiffSubDetectors.png",false,lineCutThresholds);
 	etaMassDiffSubDetectors.plot("newGraphs/etaMassDiffSubDetectors.png",false,lineCutThresholds);
 	pi0eta1DtAlltCut.plot("newGraphs/pi0eta1DtAlltCut.png",false, lineCutThresholds);
+	pi0proton1D_beforeAfterT.plot("newGraphs/pi0proton1D_beforeAfterT.png",false, lineCutThresholds);
 
 	lineCutThresholds={selectPi0Proton};
 	pi0proton1D_mMandelstamT_mdelta.plot("newGraphs/pi0proton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);

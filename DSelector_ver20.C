@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_bcal";
+string degAngle="pi0eta_fcal";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -28,7 +28,7 @@ bool outputMassShift=true;
 int itersToRun = 0;
 int finalStateComboID=0;
 
-string selectDetector="BCAL";
+string selectDetector="FCAL";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -3220,15 +3220,15 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             	}
             	else { isNotRepeated_eta=false; } 
 
-            	if ( uniqueSpectroscopicID.find(using1234)==uniqueSpectroscopicID.end() ){
-            		uniqueSpectroscopicID.insert(using1234);
+            	if ( uniqueSpectroscopicID.find(using1234B)==uniqueSpectroscopicID.end() ){
+            		uniqueSpectroscopicID.insert(using1234B);
 			// might be able to get rid of the use of both a set (to find) and a map to track. I think map would implement a find key also
 			// problem for another time
-			map_uniqueSpectroscopicID[using1234] = loc_i;
+			map_uniqueSpectroscopicID[using1234B] = loc_i;
             	}
     			
 		
-		paddedCombo=to_string(map_uniqueSpectroscopicID[using1234]);
+		paddedCombo=to_string(map_uniqueSpectroscopicID[using1234B]);
 		if(showOutput){ cout << "Before paddedCombo: " << paddedCombo << endl; }
 		digitsInCombo=paddedCombo.length();
 		if(showOutput){ cout << "digitsInCombo: " << digitsInCombo << endl; }
