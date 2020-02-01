@@ -13,6 +13,7 @@ void drawRectSB(double xmin, double xmax, double ymin, double ymax, double xskip
         double ylength = ymax-ymin;
 	TBox *box = new TBox(xmin,ymin,xmax,ymax);
 	box->SetFillStyle(0);	
+	box->SetLineWidth(2);
 	box->SetLineColor(kRed);
 	box->Draw(); // 4 
 	box->DrawBox(xmax+xskip,ymin,xmax+xskip+xlength/2,ymax); // 5

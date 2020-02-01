@@ -9,7 +9,7 @@ class overlayPlots{
 		std::vector<TH1F*> overlayHists;
 		std::vector<double> histWeights;
 		std::vector<int> histFillColors;
-        	TLegend *leg = new TLegend(0.7,0.8,0.9,0.9);
+        	TLegend *leg = new TLegend(0.6,0.7,0.9,0.9);
 		int colors[10] = {4, 6, 8, 7, 9, 30, 27, 46, 41};
 		TLine* cutLine;
 		int numberHists=0;
@@ -67,7 +67,7 @@ class overlayPlots{
 				}
 			}			
 
-			//leg->Draw();
+			leg->Draw();
 			//fileName.append(overlayHists[0]->GetName());
 			//fileName.append("_overlaid.png");
 			overlayCanvas->SaveAs( (fileName).c_str() );
@@ -138,7 +138,7 @@ class sideBySide2D{
 
 void makeGraphs(){
 	gStyle->SetOptStat(0);
-	TFile* file = TFile::Open("pi0eta_data_hists_DSelector.root");
+	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/pi0eta_all_tLT1_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/eta3pi/pi0eta_seanResoution_reco_3pi0_hists_DSelector.root");
 	TIter keyList(file->GetListOfKeys());
 	TKey *key;
@@ -160,8 +160,8 @@ void makeGraphs(){
 	overlayPlots etaproton1D_mMandelstamT_mdelta(trackHists);
 	trackHists = { {"pi0eta1D_RectSBSubRegion4",  1 },{"pi0eta1D_RectSBSubRegion0268",  0.25 },{"pi0eta1D_RectSBSubRegion17",  0.5 },{"pi0eta1D_RectSBSubRegion35",  0.5 } };
 	overlayPlots pi0eta1D_RectSBSubRegion(trackHists);
-	trackHists = { {"pi0eta_mEllipsePre",1 } };
-	sideBySide2D pi0eta_mEllipsePre(trackHists);	
+	//trackHists = { {"pi0eta_mEllipsePre",1 } };
+	//sideBySide2D pi0eta_mEllipsePre(trackHists);	
 	trackHists = { {"pi0eta_Meas_mEllipsePre",1 } };
 	sideBySide2D pi0eta_Meas_mEllipsePre_showEllipse(trackHists);	
         trackHists = { {"pi0Mass_Kin_mEllipsePre",  1 }, {"pi0MassFCAL_Kin_mEllipsePre", 1 }, {"pi0MassBCAL_Kin_mEllipsePre", 1 }, {"pi0MassSPLIT_Kin_mEllipsePre", 1 } };
@@ -181,14 +181,14 @@ void makeGraphs(){
 			string fileName="newGraphs/";
    	   		TH2F *h = (TH2F*)key->ReadObj();
    	   		h->Draw("COLZ HIST");
-			if ( strcmp(h->GetName(),"pi0eta_Meas_mEllipsePre")==0 || strcmp(h->GetName(),"pi0eta_mEllipsePre_rectSBregions_meas")==0){
+			if ( strcmp(h->GetName(),"pi0eta_mEllipsePre_rectSBregions_kin")==0 || strcmp(h->GetName(),"pi0eta_mEllipsePre")==0){
 				cout << "DRAWING RECTANGULAR SIDEBANDS" << endl;
-				drawRectSB(0.134285-2*0.00769639, 0.134285+2*0.00769639, 0.540383-2*0.0233172, 0.540383+2*0.0233172, 0.01, 0.02);
+				drawRectSB(0.135881-2*0.0076, 0.135881+2*0.0076, 0.548625-2*0.0191, 0.548625+2*0.0191, 0.01, 0.02);
 			}	
 			fileName.append(h->GetName());
 			fileName.append(".png");
    	   		c1->SaveAs((fileName).c_str());
-			pi0eta_mEllipsePre.fillHist(h);
+			//pi0eta_mEllipsePre.fillHist(h);
 			pi0eta_Meas_mEllipsePre_showEllipse.fillHist(h);
 		}
 		else if (cl->InheritsFrom("TH1")){
@@ -223,11 +223,10 @@ void makeGraphs(){
 	lineCutThresholds={selectEtaProton};
 	etaproton1D_mMandelstamT_mdelta.plot("newGraphs/etaproton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
 	
-	cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
-	pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
+	//cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
+	//pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
 	
-	cutThreshold2D = { {0.134285, 0.540383, 0.02308917, 0.0699516 } }; //meas
-	cutThreshold2D = { {0.135881, 0.548625, 0.0160375, 0.025671 } }; // kinFit
-	cutThreshold2D = { {0.13381, 0.5388, 3*0.006, 3*0.0264 } };//eta3pi
-	pi0eta_mEllipsePre.plot("newGraphs/pi0eta_mEllipsePre_withCut.png","ellipse",cutThreshold2D);
+	cutThreshold2D = { {0.135881, 0.548625, 0.0076, 0.0191 } }; // kinFit
+	//cutThreshold2D = { {0.13381, 0.5388, 3*0.006, 3*0.0264 } };//eta3pi
+	//pi0eta_mEllipsePre.plot("newGraphs/pi0eta_mEllipsePre_withCut.png","ellipse",cutThreshold2D);
 }

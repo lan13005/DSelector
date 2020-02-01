@@ -4,7 +4,7 @@ void plotTopology() {
 	gStyle->SetPaintTextFormat("4.3f"); // set precision for histogram text
 	gStyle->SetLegendBorderSize(0);
 
-	TFile *f = TFile::Open("pi0eta_gen_amp_hists_DSelector.root");
+	TFile *f = TFile::Open("bggen_pi0eta_hists_DSelector.root");
 
 	// plot percentages for different thrown topologies
 	TCanvas *bb = new TCanvas("bb","bb",600,400);

@@ -903,18 +903,18 @@ void makeDeckPlots(){
 	gSystem->Exec("mkdir deckPlots/tAll/tSlope");
 	makeDeckPlot("tAll");
 
-	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tGT1/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tGT1/tSlope");
-	//makeDeckPlot("tGT1");
+	gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tGT1/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tGT1/tSlope");
+	makeDeckPlot("tGT1");
 
-	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
-	//makeDeckPlot("tLT05");
+	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tLT05/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tLT05/tSlope");
+	makeDeckPlot("tLT05");
 
-	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
-	//gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
-	//gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
-	//makeDeckPlot("tGT05LT1");
+	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas");
+	gSystem->Exec("mkdir deckPlots/tGT05LT1/mandelstam_tpi0_meas");
+	gSystem->Exec("mkdir deckPlots/tGT05LT1/tSlope");
+	makeDeckPlot("tGT05LT1");
 }

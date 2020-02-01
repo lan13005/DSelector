@@ -44,7 +44,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
 	//
 	// ON THE JLAB FARM
-	//chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
+	chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
 	
 	// a0a2 recon_2017
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
@@ -79,7 +79,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/boolSpectPi0EtaSelectedFiles/pi0eta_data_tree_DSelector.root");
 
 // ********************** BASE CUTS APPLIED ONLY ********************
- 	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+ 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 
 	// **********************************************************************************	
 	// ************************** ------ PI0PI0 BELOW ---------**************************	
@@ -95,7 +95,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	TString degAngle = "deg000";
 	// should change the name below from data to reco when running over MC
-	degAngle="pi0eta_fcal";
+	degAngle="bggen_pi0eta";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 
