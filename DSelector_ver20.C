@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="bggen_pi0eta";
+string degAngle="pi0eta_data";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -88,10 +88,10 @@ void DSelector_ver20::Init(TTree *locTree)
 	// Init() will be called many times when running on PROOF (once per file to be processed).
 
         //USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
-        dOutputFileName = degAngle+"DSelector_output.root"; //"" for none
-        dOutputTreeFileName = degAngle+"tree_DSelector.root"; //"" for none
-        dFlatTreeFileName = degAngle+"treeFlat_DSelector.root"; //output flat tree (one combo per tree entry), "" for none
-        dFlatTreeName = degAngle+"tree_flat"; //if blank, default name will be chosen
+        dOutputFileName = degAngle+"_DSelector_output.root"; //"" for none
+        dOutputTreeFileName = degAngle+"_tree_DSelector.root"; //"" for none
+        dFlatTreeFileName = degAngle+"_treeFlat_DSelector.root"; //output flat tree (one combo per tree entry), "" for none
+        dFlatTreeName = degAngle+"_tree_flat"; //if blank, default name will be chosen
 
 	//Because this function gets called for each TTree in the TChain, we must be careful:
 		//We need to re-initialize the tree interface & branch wrappers, but don't want to recreate histograms
@@ -722,6 +722,24 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &(photonTs_Shower[2]) );
         histdef.values.push_back( &(photonTs_Shower[3]) );
         group_PhNB.insert(histdef);
+
+        histdef.clear();
+        histdef.hist = new TH1F("pi0gamma","Cuts=mEllipse_pre; Mass GeV;Events / 0.01 cm", 350, 0, 3.5);
+        histdef.name = "pi0gamma";
+        histdef.cut = &mEllipse_pre;
+        histdef.weights = &weightAS;
+        histdef.values.push_back( &( massGammaPi0[0]) );
+        histdef.values.push_back( &( massGammaPi0[1]) );
+        group_12PhNB.insert(histdef);
+
+        histdef.clear();
+        histdef.hist = new TH1F("etagamma","Cuts=mEllipse_pre; Mass GeV;Events / 0.01 cm", 350, 0, 3.5);
+        histdef.name = "etagamma";
+        histdef.cut = &mEllipse_pre;
+        histdef.weights = &weightAS;
+        histdef.values.push_back( &( massGammaEta[0]) );
+        histdef.values.push_back( &( massGammaEta[1]) );
+        group_34PhNB.insert(histdef);
 
         // ************************** PROTON RELATED HISTS ***********************
         histdef.clear();
@@ -1637,6 +1655,11 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("chiSq"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("unusedEnergy"); //fundamental = char, int, float, double, etc.
         if (is_pi0eta){
+        	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0g1"); //fundamental = char, int, float, double, etc.
+        	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0g2"); //fundamental = char, int, float, double, etc.
+        	dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0g1");
+        	dFlatTreeInterface->Create_Branch_Fundamental<Bool_t>("isNotRepeated_pi0g2");
+
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0"); //fundamental = char, int, float, double, etc.
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Meta"); //fundamental = char, int, float, double, etc.
         	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0eta"); //fundamental = char, int, float, double, etc.
@@ -1713,6 +1736,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     	group_12B_34B.clear_tracking();
     	group_1234B.clear_tracking();
     	group_PhNB.clear_tracking();
+    	group_12PhNB.clear_tracking();
+    	group_34PhNB.clear_tracking();
     	group_pairFCAL.clear_tracking();
     	group_pairBCAL.clear_tracking();
     	group_1234BP.clear_tracking();
@@ -1731,6 +1756,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     	set< map<Particle_t, set<Int_t> > > used12B;
     	set< map<Particle_t, set<Int_t> > > used34B;
 
+    	set< map<Particle_t, set<Int_t> > > used123B;
+    	set< map<Particle_t, set<Int_t> > > used124B;
 
     	//if(itersToRun<1000000){ ++itersToRun; //so we can just try to show the outut of one event 
 	++count_events;
@@ -1870,8 +1897,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     //Sometimes, some content is the exact same between one combo and the next
     //e.g. maybe two combos have different beam particles, but the same data for the final-state
     //When histogramming, you don't want to double-count when this happens: artificially inflates your signal (or background)
-    //So, for each quantity you histogram, keep track of what particles you used (for a given combo)
-    //Then for each combo, just compare to what you used before, and make sure it's unique
+    //So, for each quantity you histogram, keep track of what particles you used (for a givMpi0g2//Then for each combo, just compare to what you used before, and make sure it's unique
 
 
     //EXmap<Particle_t, AMPLE 2: Combo-specific info:
@@ -2037,6 +2063,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         TLorentzVector mixingPi0Eta = locPi0P4 + locEtaP4;
         TLorentzVector mixingEtaProton_Kin = locEtaP4_Kin+locProtonP4_Kin;
         TLorentzVector mixingPi0Proton_Kin = locPi0P4_Kin+locProtonP4_Kin;
+
+	massGammaPi0[0] = (locPhoton1P4_Kin + locPhoton2P4_Kin + locPhoton3P4_Kin).M();
+	massGammaPi0[1] = (locPhoton1P4_Kin + locPhoton2P4_Kin + locPhoton4P4_Kin).M();
+	massGammaEta[0] = (locPhoton3P4_Kin + locPhoton4P4_Kin + locPhoton1P4_Kin).M();
+	massGammaEta[1] = (locPhoton3P4_Kin + locPhoton4P4_Kin + locPhoton2P4_Kin).M();
+
 
         if(showOutput){cout << "Combined 4-vectors" << endl;}
 
@@ -2740,6 +2772,34 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         usingPhB[Gamma].insert(locPhoton4NeutralID);
         beingUsedNeutralIds.push_back( usingPhB );
 
+	std::vector< map<Particle_t, set<Int_t>> > using12PhNBs;
+	map<Particle_t, set<Int_t>> using12PhNB;
+	using12PhNB[Unknown].insert(locBeamID);
+	using12PhNB[Gamma].insert(locPhoton1NeutralID);
+	using12PhNB[Gamma].insert(locPhoton2NeutralID);
+	using12PhNB[Gamma].insert(locPhoton3NeutralID);
+	using12PhNBs.push_back(using12PhNB);
+	using12PhNB.clear();
+	using12PhNB[Unknown].insert(locBeamID);
+	using12PhNB[Gamma].insert(locPhoton1NeutralID);
+	using12PhNB[Gamma].insert(locPhoton2NeutralID);
+	using12PhNB[Gamma].insert(locPhoton4NeutralID);
+	using12PhNBs.push_back(using12PhNB);
+
+	std::vector< map<Particle_t, set<Int_t>> > using34PhNBs;
+	map<Particle_t, set<Int_t>> using34PhNB;
+	using34PhNB[Unknown].insert(locBeamID);
+	using34PhNB[Gamma].insert(locPhoton3NeutralID);
+	using34PhNB[Gamma].insert(locPhoton4NeutralID);
+	using34PhNB[Gamma].insert(locPhoton1NeutralID);
+	using34PhNBs.push_back(using34PhNB);
+	using34PhNB.clear();
+	using34PhNB[Unknown].insert(locBeamID);
+	using34PhNB[Gamma].insert(locPhoton3NeutralID);
+	using34PhNB[Gamma].insert(locPhoton4NeutralID);
+	using34PhNB[Gamma].insert(locPhoton2NeutralID);
+	using34PhNBs.push_back(using34PhNB);
+
         pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using12B_1234B = make_pair(using12B,using1234B);
         pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using34B_1234B = make_pair(using34B,using1234B);
         pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > using1234B_12PB = make_pair(using1234B,using12PB);
@@ -3155,6 +3215,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         group_12B_34B.fillHistograms_pairMap( using12B_34B );
         group_1234B.fillHistograms_Map( using1234B );
         group_PhNB.fillHistograms_vectorMap(beingUsedNeutralIds);
+        group_12PhNB.fillHistograms_vectorMap( using12PhNBs );
+        group_34PhNB.fillHistograms_vectorMap( using34PhNBs );
         group_pairFCAL.fillHistograms_vectorMap(usedPairIdsFCAL);
         group_pairBCAL.fillHistograms_vectorMap(usedPairIdsBCAL);
         group_1234BP.fillHistograms_Map( usingCombo );
@@ -3222,6 +3284,18 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             	    isNotRepeated_eta=true;
             	}
             	else { isNotRepeated_eta=false; } 
+
+	    	if (used123B.find(using12PhNBs[0])==used123B.end()){
+            	    used123B.insert(using12PhNBs[0]);
+            	    isNotRepeated_pi0g1=true;
+            	}
+            	else { isNotRepeated_pi0g1=false; } 
+	    	if (used124B.find(using34PhNBs[1])==used124B.end()){
+            	    used124B.insert(using34PhNBs[1]);
+            	    isNotRepeated_pi0g2=true;
+            	}
+            	else { isNotRepeated_pi0g2=false; } 
+
 
             	if ( uniqueSpectroscopicID.find(using34B)==uniqueSpectroscopicID.end() ){
             		uniqueSpectroscopicID.insert(using34B);
@@ -3295,6 +3369,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         ++uniqueComboID;
         if (is_pi0eta){
+        	dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0g1", massGammaPi0[0]);
+        	dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0g2", massGammaPi0[1]);
+        	dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0g1",isNotRepeated_pi0g1);
+        	dFlatTreeInterface->Fill_Fundamental<Bool_t>("isNotRepeated_pi0g2",isNotRepeated_pi0g2);
+
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0", locPi0Mass_Kin);
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("Meta", locEtaMass_Kin);
         	dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0eta", locPi0Eta_Kin);

@@ -253,6 +253,8 @@ class DSelector_ver20 : public DSelector
 
 	private:
                 trackingGroup group_PhNB;
+		trackingGroup group_12PhNB;
+		trackingGroup group_34PhNB;
                 trackingGroup group_PB;
                 trackingGroup group_12B_1234B;
                 trackingGroup group_34B_1234B;
@@ -304,6 +306,8 @@ class DSelector_ver20 : public DSelector
                 Int_t eventIdx=0;
                 bool isNotRepeated_eta=true;
                 bool isNotRepeated_pi0=true;
+                bool isNotRepeated_pi0g1=true;
+                bool isNotRepeated_pi0g2=true;
                 bool isNotRepeated_pi0eta=true;
                 bool isNotRepeated_pi0_pi0eta=true;
                 bool isNotRepeated_eta_pi0eta=true;
@@ -474,6 +478,9 @@ class DSelector_ver20 : public DSelector
 		double locdEdxCDCProton=1;
 		double locdEdxFDCProton=1;
 		double locMagP3Proton=1;
+
+		std::vector<double> massGammaPi0={1,1};
+		std::vector<double> massGammaEta={1,1};
 
 		//************ Neutral Track
 		std::vector<double> photonThetas={1,1,1,1};
