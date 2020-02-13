@@ -7,7 +7,7 @@ void plotTopology() {
 	TFile *f = TFile::Open("bggen_pi0eta_hists_DSelector.root");
 
 	// plot percentages for different thrown topologies
-	TCanvas *bb = new TCanvas("bb","bb",600,400);
+	TCanvas *bb = new TCanvas("bb","bb",1440,900);
 	TH1F *hThrownTopologies = (TH1F*)f->Get("hThrownTopologies");
 	hThrownTopologies->GetXaxis()->LabelsOption(">"); // order by most common topology
 	hThrownTopologies->GetXaxis()->SetRangeUser(0, 10); // only plot first 20 topologies
@@ -16,7 +16,7 @@ void plotTopology() {
 	hThrownTopologies->Draw("htext");
 
 	// draw invariant mass histograms for different thrown topologies
-	TCanvas *cc = new TCanvas("cc","cc",600,400);
+	TCanvas *cc = new TCanvas("cc","cc",1440,900);
 	TLegend *leg = new TLegend(0.12,0.65,0.35,0.89);
 	leg->SetNColumns(2);
 	THStack *hStack = new THStack("hstack","");
@@ -44,12 +44,12 @@ void plotTopology() {
 
 	leg->Draw("same");
 
-	TCanvas *dd = new TCanvas("dd","dd",600,400);
+	TCanvas *dd = new TCanvas("dd","dd",1440,900);
 	hStack->Draw();
 	leg->Draw("same");
 
-	bb->Print("TopologyPercentage.pdf");
-	cc->Print("TopologyInvariantMass.pdf");
+	bb->Print("TopologyPercentage.png");
+	cc->Print("TopologyInvariantMass.png");
 
 	return;
 }

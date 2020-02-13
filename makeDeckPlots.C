@@ -335,6 +335,7 @@ void makeDeckPlot(string selectionString){
 
 		for (int ientry=0; ientry<nentries; ++ientry){
 			dataTree->GetEntry(ientry);
+			// here is where we decide whether or not we are going to fill a histogram. If it matches the selection string and satisfies the corresponding bool then fill.
 			if ( (selectionString == "tGT1" && new_ptGT1) || (selectionString == "tLT05" && new_ptLT05) || (selectionString == "tGT05LT1" && new_ptGT05LT1) || 
 					selectionString == "tAll" ) {  
 				if (branchIdx==0){ isUnique = new_isUnique34B_1234B; }
@@ -851,19 +852,26 @@ void makeDeckPlot(string selectionString){
 	 	hist_tSlopes_pi0->SetBinError( iMass+1, tSlopesError_pi0[iMass]);
 	 }
 
+	 leg = new TLegend(0.1,0.11,0.35,0.35);
+	 leg->AddEntry(hist_tSlopes_eta,"t_{#eta}");
 	 hist_tSlopes_eta->SetMarkerStyle(kFullCircle);
 	 hist_tSlopes_eta->SetMarkerSize(1.5);
 	 hist_tSlopes_eta->SetMarkerColor(kBlue);
 	 hist_tSlopes_eta->GetXaxis()->SetLabelSize(0.05);
 	 hist_tSlopes_eta->GetYaxis()->SetLabelSize(0.05);
+	 hist_tSlopes_eta->SetMinimum(0);
 	 hist_tSlopes_eta->Draw("E1 PMC");
 
 	 hist_tSlopes_pi0->SetMarkerStyle(kFullCircle);
+	 leg->AddEntry(hist_tSlopes_pi0,"t_{#pi^{0})");
 	 hist_tSlopes_pi0->SetMarkerSize(1.5);
 	 hist_tSlopes_pi0->SetMarkerColor(kRed);
+	 hist_tSlopes_pi0->SetMinimum(0);
 	 hist_tSlopes_pi0->Draw("E1 PMC SAME");
+	 leg->Draw();
 	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.png").c_str());
 	 allCanvases->SaveAs(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.C").c_str());
+
 	 
 	 TFile *tSlopesFile = new TFile(("deckPlots/"+selectionString+"/tSlopesVsMpi0eta.root").c_str(),"RECREATE");
 	 allCanvases->Write();

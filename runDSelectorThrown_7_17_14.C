@@ -17,7 +17,7 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 {
 	// Load DSelector library
 	gROOT->ProcessLine(".x $ROOT_ANALYSIS_HOME/scripts/Load_DSelector.C");
-	int proof_Nthreads = 12;
+	int proof_Nthreads = 24;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree

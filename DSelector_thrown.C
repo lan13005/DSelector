@@ -32,13 +32,13 @@ void DSelector_thrown::Init(TTree *locTree)
 	mandelstam_tpLT1 = new TH1F("mandelstam_tpLT1","tprime<1",100,0,6);
 	mandelstam_tpLT06 = new TH1F("mandelstam_tpLT06","tprime<0.6",100,0,6);
 	mandelstam_tpGT05LT1 = new TH1F("mandelstam_tpGT05LT1","0.5<tprime<1",100,0,6);
-	dHist_cosThetaVsMass_tpAll = new TH2F("cosThetaVsMass_tpAll","cosTheta vs Mass",150,0,3.5,60,-1,1);
-	dHist_cosThetaVsMass_tpLT1 = new TH2F("cosThetaVsMass_tpLT1","cosTheta vs Mass",150,0,3.5,60,-1,1);
-	dHist_cosThetaVsMass_tpLT06 = new TH2F("cosThetaVsMass_tpLT06","cosTheta vs Mass",150,0,3.5,60,-1,1);
-	dHist_cosThetaVsMass_tpGT05LT1 = new TH2F("cosThetaVsMasstpGT05LT1","cosTheta vs Mass",150,0,3.5,60,-1,1);
+	dHist_cosThetaVsMass_tpAll = new TH2F("cosThetaVsMass_tpAll","cosTheta vs Mass",175,0,3.5,100,-1,1);
+	dHist_cosThetaVsMass_tpLT1 = new TH2F("cosThetaVsMass_tpLT1","cosTheta vs Mass",175,0,3.5,100,-1,1);
+	dHist_cosThetaVsMass_tpLT06 = new TH2F("cosThetaVsMass_tpLT06","cosTheta vs Mass",175,0,3.5,100,-1,1);
+	dHist_cosThetaVsMass_tpGT05LT1 = new TH2F("cosThetaVsMasstpGT05LT1","cosTheta vs Mass",175,0,3.5,100,-1,1);
 	dHist_phiVsMass = new TH2F("phiVsMass","phi vs mass", 150,0,3.5,60,-180,180);
 	dHist_phi = new TH1F("phi","phi GJ",60,-180,180);
-	dHist_cosTheta = new TH1F("cosTheta","cosTheta GJ",60,-1,1);
+	dHist_cosTheta = new TH1F("cosTheta","cosTheta GJ",100,-1,1);
 
 	dHist_numEventsOnePi0OneEta = new TH1F( "onePi0oneEta", "", 2,0,1);
         dHist_genCounts_eta_tLT05 = new TH1F("tetaVsMpi0eta_genCounts_tLT05", "genCounts", numHists+1, -1, numHists);
@@ -284,7 +284,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 		
 		dHist_NumThrown->Fill(locNumThrown);
-		dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
 		dHist_phi->Fill(phi_pi0_GJ);
 		dHist_cosTheta->Fill(cosTheta_pi0_GJ);
@@ -320,6 +319,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 
 		if (correctFinalState){
+			dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 			dHist_genCounts_eta_tAll->Fill(teta_genCounts);
 			dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
 
@@ -343,20 +343,20 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				dHist_genCounts_pi0_tGT1->Fill(tpi0_genCounts);
 			}
 
-			//if(mandelstam_t < 1){
-			//	//dHist_genCounts_eta->Fill(teta_genCounts);
-			//	//dHist_genCounts_pi0->Fill(tpi0_genCounts);
-			//	mandelstam_tpLT1->Fill(mandelstam_tp);
-			//	dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-			//	//Fill_OutputTree("selected_tLT1"); //your user-defined key
-			//}
+			if(mandelstam_t < 1){
+				//dHist_genCounts_eta->Fill(teta_genCounts);
+				//dHist_genCounts_pi0->Fill(tpi0_genCounts);
+				mandelstam_tpLT1->Fill(mandelstam_tp);
+				dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+				//Fill_OutputTree("selected_tLT1"); //your user-defined key
+			}
 			//if(mandelstam_tp < 0.6){
-			//	Fill_OutputTree("selected_tLT06"); //your user-defined key
+			//	//Fill_OutputTree("selected_tLT06"); //your user-defined key
 			//	mandelstam_tpLT06->Fill(mandelstam_tp);
 			//	dHist_cosThetaVsMass_tpLT06->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 			//}
 			//if((mandelstam_tp >= 0.5) && (mandelstam_tp < 1)) {
-			//	Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
+			//	//Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
 			//	mandelstam_tpGT05LT1->Fill(mandelstam_tp);
 			//	dHist_cosThetaVsMass_tpGT05LT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 			//}

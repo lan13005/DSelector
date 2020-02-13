@@ -16,7 +16,7 @@
 #include "TCanvas.h"
 
 bool is_pi0eta=true;
-bool showThrownTopology=true;
+bool showThrownTopology=false;
 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
         for ( auto parent=0; parent<(int)parentArray.size(); ++parent ){
@@ -718,6 +718,12 @@ class DSelector_ver20 : public DSelector
 		
 		bool inBox[13]={0,0,0,0,0,0,0,0,0,0,0,0,0};
 		bool inBox_noOtherCuts[13]={0,0,0,0,0,0,0,0,0,0,0,0,0};
+		TLorentzVector pi0Momentum;
+		TLorentzVector etaMomentum;
+		double Mpi0eta_4;
+		double Mpi0eta_10;
+		double Mpi0eta_11;
+		double Mpi0eta_12;
 
 		bool pYellowBKG=true;
 		bool pdij3pass=true;

@@ -39,5 +39,5 @@ void makeMpi0etaBinnedT(){
 		anyHist->Draw("HIST");
 	}
 
-	allCanvases->SaveAs("Mpi0etaBinnedT/Mpi0etaBinnedT.pdf");
+	allCanvases->SaveAs("newGraphs/Mpi0etaBinnedT.pdf");
 }
