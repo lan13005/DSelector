@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_test";
+string degAngle="pi0eta_deg000";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -29,6 +29,7 @@ int itersToRun = 0;
 int finalStateComboID=0;
 
 string selectDetector="ALL";
+string polarization="deg000";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -160,6 +161,9 @@ void DSelector_ver20::Init(TTree *locTree)
 
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
         dHist_BeamAngle->SetYTitle("Events / Degree");
+	// MPE = multiple photons per event. So instead of just filling the beam angle once per run we will fill it per combo.
+        dHist_BeamAngleMPE = new TH1F("BeamAngleMPE", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
+        dHist_BeamAngleMPE->SetYTitle("Events / Degree");
 	dHist_Cuts = new TH1F("CutsPassed", "Number of times a cut has been passed", 17,0,17);
 	for (int i =0; i<3; ++i){
 		if (is_pi0eta){
@@ -2039,10 +2043,22 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             if (hasPolarizationAngle) {
                 dHist_BeamAngle->Fill(locPolarizationAngle);
             }
+	    else {
+		dHist_BeamAngle->Fill(-1);
+	    }
+
             usedRuns.insert(locRunNumber);
         }
+	// Making a cut on the polarization angle to split the dataset up
         dPreviousRunNumber = locRunNumber;
     }
+    keepPolarization=false;
+    if (polarization=="ALL"){ keepPolarization=true; }
+    if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
+    if (locPolarizationAngle==45 && polarization=="deg045") { keepPolarization=true; }
+    if (locPolarizationAngle==90 && polarization=="deg090") { keepPolarization=true; }
+    if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
+    if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
 
 
     /********************************************* SETUP UNIQUENESS TRACKING ********************************************/
@@ -2090,7 +2106,14 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     //Loop over combos
     for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
     {
+
         if(showOutput) { cout << "\n\n\n*********************************************************\n**************************************************\n########    EventIdx, ComboIdx: " << (eventIdx) << ", " << loc_i << "    #############" << endl; }
+
+	// Fill the polarization angle MPE = multiple photons per event or for all combinations. We will do this instead of filling per event just in case there was for whatever reason a photon in a combo can be matched with a tagged photon with a different beam polarization
+	if (keepPolarization) {
+    		dHist_BeamAngleMPE->Fill(locPolarizationAngle);
+    	}
+
         //Set branch array indices for combo and all combo particles
         dComboWrapper->Set_ComboIndex(loc_i);
 
@@ -2585,7 +2608,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         else if (deg == "090") { polarizationAngle = 90; }
         // there is uniqueness in the second digit. By the construction of using the last two characters in the string we have to ignmore 1 in 135 but it is unambiguous.
         else if (deg == "135") { polarizationAngle = 135; }
-        // if it isnt one of the above then degAngle must be deg000
         else { polarizationAngle = -999; } // just wanted a number negative enough to make locPhi, no matter the value, always negative so there is some indication to look for.
         locPhi = polarizationAngle - prodPlanePhi;
 

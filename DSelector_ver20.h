@@ -280,6 +280,7 @@ class DSelector_ver20 : public DSelector
                 bool dIsPARAFlag; //else is PERP or AMO
                 bool hasPolarizationAngle; // true if is polarized but false if through deg5ous radiator or no data. Under what cicumstances is the second one true.
                 int locPolarizationAngle; // actual polarization angle
+		bool keepPolarization;
                 set<UInt_t> usedRuns; //think we are over counting our filling of beam angles since the below condition only checks against previous run, doesn't work for recurrences.
 
 
@@ -374,6 +375,7 @@ class DSelector_ver20 : public DSelector
 
 
                 TH1F* dHist_BeamAngle;
+                TH1F* dHist_BeamAngleMPE;
 		TH1F* dHist_Cuts;
 		TH2F* dHist_checkEllipseBS[3];
 		const char *cutNames[17] = {"pShowerQuality","pBeamE8GeVPlus","pUnusedEnergy","pChiSq" ,"pDeltaTRF","pdij3pass","pPhotonE","pPhotonTheta","pMagP3Proton","pzCutmin","pRProton","pMissingMassSquared","pdEdxCDCProton","pinsideEllipse", "allGeneralCutsPassed", "mMPi0P14","mMandelstamT_mBeamE8GeVPlus"};
@@ -623,7 +625,7 @@ class DSelector_ver20 : public DSelector
 		double MMsqCut = 0.05;
 		//double CLCut1 = 0.1;
 		//double CLCut = 0.01; // CLCut is the cut we want to uses for all other cuts, these others ones are for the RFTime graph
-		double ChiSqCut = 13.277;
+		double ChiSqCut = 5;//13.277;
 		double chiSq100 = 100;
 		//double CLCut3 = 0.001;
 		//double CLCut4 = 0.0001;

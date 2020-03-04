@@ -55,6 +55,7 @@ void makeMassVaryChiSq(){
 	double chiSqs[2][numRegions_ChiSq*numMpi0etaBins]; // from the individual fits
 	double integralBKG;
 	double integralSIG;
+	double integralSIG_full;
 	double purity;
 	int cumulativeBinNum;
 	double chiSq;
@@ -149,10 +150,12 @@ void makeMassVaryChiSq(){
 					if(particleCounter==0){
 						integralBKG = bkgFit->Integral(par[1+numDOFbkg]-nSig*weightedSigma,par[1+numDOFbkg]+nSig*weightedSigma);
 						integralSIG = sigFit->Integral(par[1+numDOFbkg]-nSig*weightedSigma,par[1+numDOFbkg]+nSig*weightedSigma);
+						integralSIG_full = sigFit->Integral(0,1);
 					}
 					else {
 						integralBKG = bkgFit->Integral(par[1+numDOFbkg]-nSig*weightedSigma,par[1+numDOFbkg]+nSig*weightedSigma);
 						integralSIG = sigFit->Integral(par[1+numDOFbkg]-nSig*weightedSigma,par[1+numDOFbkg]+nSig*weightedSigma);
+						integralSIG_full = sigFit->Integral(0,1);
 					}
 
 					purity = integralSIG/(integralBKG+integralSIG);			
@@ -206,6 +209,8 @@ void makeMassVaryChiSq(){
 				TPaveText *histID_pt = new TPaveText(0.7,0.7,0.9,0.9,"trNDC");
 				histID_pt->AddText(("IntegralBKG="+std::to_string(integralBKG)).c_str());
 				histID_pt->AddText(("IntegralSIG="+std::to_string(integralSIG)).c_str());
+				histID_pt->AddText(("IntegralSIG_ful="+std::to_string(integralSIG_full)).c_str());
+				histID_pt->AddText(("PercentCovered="+std::to_string(integralSIG/integralSIG_full)).c_str());
 				histID_pt->AddText(("purity="+std::to_string(purity)).c_str());
 				histID_pt->AddText(("chiSq="+std::to_string(chiSq)).c_str());
 				histID_pt->Draw();

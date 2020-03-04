@@ -54,7 +54,7 @@ Double_t doubleGaus(Double_t *x, Double_t *par){
 
 }
 
-// asymmetric gaussian
+// skew gaussian
 Double_t skewGaus(Double_t *x, Double_t *par){
 	return par[4]+par[5]*(x[0]-par[1])+par[0]*exp(-0.5*TMath::Power((x[0]-par[1])/(par[2]+(x[0]<par[1])*par[3]*(x[0]-par[1])),2));
 }
@@ -67,6 +67,14 @@ Double_t gaus(Double_t *x, Double_t *par){
 	return par[3]+par[4]*(x[0]-par[1])+par[0]/sqrt(2*TMath::Pi())/par[2]*TMath::Exp(-0.5*r1*r1 );
 }
 
+// asymmetric gaus
+Double_t asymGaus(Double_t *x, Double_t *par){
+	double sigma;
+	if (x[0] < par[1] ) { sigma = par[2]; }
+	else { sigma = par[3]; }
+	Double_t r1 = Double_t((x[0]-par[1])/sigma);
+	return par[4]+par[5]*(x[0]-par[1])+par[0]/sqrt(2*TMath::Pi())/par[2]*TMath::Exp(-0.5*r1*r1 );
+}
 
 void makeDeckPlot(string selectionString){
 	cout << " --------------------------------------------------------------------------------------------------------------------------" << endl;
@@ -257,8 +265,8 @@ void makeDeckPlot(string selectionString){
 			int fit_nentries=full_meta_mpi0->GetEntries();
 			cout << "TOTAL ENTRIES: " << fit_nentries << endl;
 			//gStyle->SetOptFit();
-			TF1 * feta = new TF1("meta_fit",gaus,yfitMin,yfitMax,numDOFsig1D_eta); 
-			TF1 * feta_before = new TF1("meta_fit_before",gaus,yfitMin,yfitMax,numDOFsig1D_eta); 
+			TF1 * feta = new TF1("meta_fit",asymGaus,yfitMin,yfitMax,numDOFsig1D_eta); 
+			TF1 * feta_before = new TF1("meta_fit_before",asymGaus,yfitMin,yfitMax,numDOFsig1D_eta); 
 			// FIT PARAMS FOR SKEW GAUSSIAN
 			// 15299.2, 0.5506, 0.0123107, -0.142242, 513.223, 1421.38, 0
 			//feta->SetParameters(19000,0.55,0.01,-0.2,300,1000);
@@ -266,11 +274,11 @@ void makeDeckPlot(string selectionString){
 			// FIT PARAMS FOR DOUBLE GAUSSIAN
 			//feta->SetParameters(800,0.541,0.02,0.4,2.5,300,0);
 			// FIT PARAMS FOR GAUSSIAN
-			feta->SetParameters(2000,0.55,0.025,0, 0);
-			feta->SetParLimits(0,0,5000);
-			feta->SetParLimits(1,0.52,0.585);
-			feta->SetParLimits(2,0,0.1);
-			feta->SetParLimits(4,0,1000); 
+			feta->SetParameters(2000, 0.55,0.025, 0.015, 0, 0);
+			feta->SetParLimits(0, 0, 5000);
+			feta->SetParLimits(1, 0.52, 0.585);
+			feta->SetParLimits(2, 0, 0.1);
+			feta->SetParLimits(4, 0, 1000); 
 			feta->SetLineColor(kRed);
 			Int_t fitStatus_eta = full_meta->Fit(feta,"RLQ");
 			full_meta->SetTitle(("ChiSqPerDOF: "+to_string(feta->GetChisquare()/feta->GetNDF())).c_str());
