@@ -89,6 +89,7 @@ class DSelector_thrown : public DSelector
 		TH1F *dHist_phi;
 		TH1F *dHist_cosTheta;
 		TH1F *dHist_beamE;
+		TH1F *dHist_beamECut;
 		TH1F *dHist_numEventsOnePi0OneEta;
         	TH1F *dHist_genCounts_eta_tAll;
         	TH1F *dHist_genCounts_pi0_tAll;

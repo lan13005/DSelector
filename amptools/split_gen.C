@@ -31,7 +31,7 @@ void split_gen::Loop()
 //by  b_branchname->GetEntry(ientry); //read only this branch
    if (fChain == 0) return;
 
-   outFile = new TFile("thrown_a0a2_pi0eta_nameAffix.root", "RECREATE");
+   outFile = new TFile("gen_pi0eta_tLT1.root", "RECREATE");
    m_OutTree = new TTree("Thrown_Tree", "kin2");
 
    m_OutTree->Branch("Weight", new Float_t, "Weight/F");

@@ -302,6 +302,10 @@ class DSelector_ver20 : public DSelector
 		bool passMassBin_tpi0Integrated[num_massBins];
 
 
+		// Variables are for binning Meta in terms of Mpi0. Hopefully to understand Q-values more
+		static const int num_mpi0Bins=10;
+		bool passMpi0Bin[num_mpi0Bins];
+
 
                 Int_t eventIdx=0;
                 bool isNotRepeated_eta=true;
@@ -550,6 +554,7 @@ class DSelector_ver20 : public DSelector
 		double cosTheta_eta_GJ=1;
 		double cosTheta_eta_GJ_meas=1;
 		double phi_pi0eta_GJ=1;
+		double phi_X_relativeToBeamPol=1;
 
 		double vanHove_x;
 		double vanHove_y;
@@ -582,10 +587,12 @@ class DSelector_ver20 : public DSelector
 		//*********** Timing variables, first section is about the proton
 		// shifted relative to the beam
 		double RFtime=1;
+		double RFtime_meas=1;
 		double RFtimeProton=1;
 		// Might not make sense to shift relative to the BeamX4.Z since we cant really track the photon in the detector. Use Protons maybe
 		//double locDeltaTRF = locBeamX4.T() - (dComboWrapper->Get_RFTime() + (locBeamX4.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
 		double locDeltaTRF=1;
+		double locDeltaTRF_meas=1;
 		
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -666,10 +673,15 @@ class DSelector_ver20 : public DSelector
 
 		bool p_massTBinned[10];
 
+		// SOME VARIABLES FOR PURITY STUDY BY BINNING ON CHISQ AND MPI0ETA. WILL USE TO PLOT META AND MPI0
+		double minMpi0eta = 0.6;	
+		double maxMpi0eta = 2.2;
+		static const int numMpi0etaBins = 8;
+		double binStepMpi0eta = (maxMpi0eta-minMpi0eta)/numMpi0etaBins;
 		static const int numRegions_UE=10;
-		static const int numRegions_ChiSq=10;
+		static const int numRegions_ChiSq=7;
 		bool p_pi0MassEtaMassUEregion[numRegions_UE]; 
-		bool p_pi0MassEtaMassChiSqregion[numRegions_ChiSq]; 
+		bool p_pi0MassEtaMassChiSqregion[numRegions_ChiSq*numMpi0etaBins]; 
 		double iUpUE;
 		double iUpChiSq;
 		
@@ -856,6 +868,9 @@ class DSelector_ver20 : public DSelector
 		bool pMPi0P14=true;
 		bool mMPi0P14_ellipse=true;
 		bool baseCuts=true;
+		bool baseCuts_mChiUE=true;
+		bool looseCuts=true;
+		bool pBase_pT_pIE_pBE89_pMPi0P_pDelta = true;
                 bool noCut=true;
 
                 bool dzRP=true;
@@ -887,8 +902,8 @@ class DSelector_ver20 : public DSelector
 
 
 		// Now lets make the array of histograms to fill
-                TH1F* dHist_all1DHists[800];
-                TH2F* dHist_all2DHists[800];
+                //TH1F* dHist_all1DHists[800];
+                //TH2F* dHist_all2DHists[800];
 
 	ClassDef(DSelector_ver20, 0);
 };

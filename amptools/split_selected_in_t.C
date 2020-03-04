@@ -72,11 +72,12 @@ void split_selected_in_t::Loop()
 
 
 
-   outFile_tLT1 = new TFile("tag_pi0eta_tLT1.root", "RECREATE");
+   string fileNameTag = "acc";
+   outFile_tLT1 = new TFile((fileNameTag+"_pi0eta_tLT1.root").c_str(), "RECREATE");
    m_OutTree_tLT1 = new TTree("tLT1", "kin2");
-   outFile_tLT06 = new TFile("tag_pi0eta_tLT06.root", "RECREATE");
+   outFile_tLT06 = new TFile((fileNameTag+"_pi0eta_tLT06.root").c_str(), "RECREATE");
    m_OutTree_tLT06 = new TTree("tLT06", "kin2");
-   outFile_tGT05LT1 = new TFile("tag_pi0eta_tGT05LT1.root", "RECREATE");
+   outFile_tGT05LT1 = new TFile((fileNameTag+"_pi0eta_tGT05LT1.root").c_str(), "RECREATE");
    m_OutTree_tGT05LT1 = new TTree("tGT05LT1", "kin2");
 
    // Not so much diagnostic tree but rather allows me to grab the  for mandelstam_tp

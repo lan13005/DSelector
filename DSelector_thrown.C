@@ -11,7 +11,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	//dOutputTreeFileNameMap["selected_tLT1"] = "thrownNotAmptoolsReady_flat_tLT1.root"; //key is user-defined, value is output file name
+	dOutputTreeFileNameMap["selected_tpLT1"] = "thrownNotAmptoolsReady_flat_tLT1.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
@@ -27,6 +27,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_PID = new TH1I("PID","",50,0,50);
 	dHist_NumThrown = new TH1I("NumThrown","",10,0,10);
 	dHist_beamE = new TH1F("beamE","Beam Energy", 100,0,15);
+	dHist_beamECut = new TH1F("beamECut","Beam Energy", 100,0,15);
 	mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime",100,0,6);
 	mandelstam_tAll = new TH1F("mandelstam_tAll","tprime",100,0,6);
 	mandelstam_tpLT1 = new TH1F("mandelstam_tpLT1","tprime<1",100,0,6);
@@ -41,6 +42,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_cosTheta = new TH1F("cosTheta","cosTheta GJ",100,-1,1);
 
 	dHist_numEventsOnePi0OneEta = new TH1F( "onePi0oneEta", "", 2,0,1);
+	// included the -1 for underflow maybe?
         dHist_genCounts_eta_tLT05 = new TH1F("tetaVsMpi0eta_genCounts_tLT05", "genCounts", numHists+1, -1, numHists);
         dHist_genCounts_pi0_tLT05 = new TH1F("tpi0VsMpi0eta_genCounts_tLT05", "genCounts", numHists+1, -1, numHists);
         dHist_genCounts_eta_tGT05LT1 = new TH1F("tetaVsMpi0eta_genCounts_tGT05LT1", "genCounts", numHists+1, -1, numHists);
@@ -318,7 +320,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		cout << "Determined teta and tpi0 bins" << endl;
 
 
-		if (correctFinalState){
+		bool pBeamE8GeV = locBeamP4.E() > 8;
+		if (correctFinalState*pBeamE8GeV){
+			dHist_beamECut->Fill(locBeamP4.E());
 			dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 			dHist_genCounts_eta_tAll->Fill(teta_genCounts);
 			dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
@@ -360,8 +364,12 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			//	mandelstam_tpGT05LT1->Fill(mandelstam_tp);
 			//	dHist_cosThetaVsMass_tpGT05LT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 			//}
+			if(mandelstam_tp < 1){
+				// using this section to select out EBeam [8,9] and t'<1 for use in the delta+ asymmetry measurement
+				Fill_OutputTree("selected_tpLT1"); //your user-defined key
+			}
 			pass += 1;
-			Fill_OutputTree();
+			//Fill_OutputTree();
 		}
 		cout << "Filling the rest of the histograms" << endl;
 

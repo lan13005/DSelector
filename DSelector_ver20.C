@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_all_tLT1_2018_8";
+string degAngle="pi0eta_test";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -55,18 +55,6 @@ void DSelector_ver20::Init(TTree *locTree)
 //		//ellipseXr_loose=0.0391; ellipseYr_loose=0.14;
 //		ellipseXr_loose=0.02; ellipseYr_loose=100;
 //		areaRatio = 0.067; //double checked these values;
-
-		ellipseYr += 0.02;
-		double ellipseXYratio = ellipseYr/ellipseXr;
-		double scaleUp = 3;
-		ellipseXBS1 = 0.135881; ellipseYBS1 = 0.548625; ellipseXrBS1 = 2*0.0076; ellipseYrBS1 = 2*0.0076*ellipseXYratio;	
-		double outerXVal = TMath::Sqrt( scaleUp*ellipseXr*ellipseXr + ellipseXrBS1*ellipseXrBS1 );
-		ellipseXBS2 = 0.135881; ellipseYBS2 = 0.548625; ellipseXrBS2 = outerXVal ; ellipseYrBS2 = outerXVal*ellipseXYratio;	
-		areaRatio=1/scaleUp;
-
-		skipY = ellipseYrBS1 - ellipseYr;
-		skipX = ellipseXrBS1 - ellipseXr;
-
         }
         else {
                 lowMass = 0.3;
@@ -170,7 +158,7 @@ void DSelector_ver20::Init(TTree *locTree)
 
         cout << "INITILIZED ACTIONS" << endl;
 
-        dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,0,180);
+        dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
         dHist_BeamAngle->SetYTitle("Events / Degree");
 	dHist_Cuts = new TH1F("CutsPassed", "Number of times a cut has been passed", 17,0,17);
 	for (int i =0; i<3; ++i){
@@ -514,10 +502,44 @@ void DSelector_ver20::Init(TTree *locTree)
 
 
 
-
         string name;
         histDef_1D histdef;
         histDef_2D histdef2d;
+	// ******************************** Checking ChiSq **************************************************
+	double currentMin;
+	double currentMax;
+	int cumulativeBinNum;
+	for (int bin_Mpi0eta=0; bin_Mpi0eta<numMpi0etaBins; ++ bin_Mpi0eta){
+        	iUpChiSq = 1; 
+        	for (int bin=0; bin<numRegions_ChiSq; ++bin){
+        		histdef.clear();
+			cumulativeBinNum = bin_Mpi0eta*numRegions_ChiSq+bin;
+			currentMin = minMpi0eta+bin_Mpi0eta*binStepMpi0eta;
+			currentMax = minMpi0eta+(bin_Mpi0eta+1)*binStepMpi0eta;
+        		name="pi0Mass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
+        		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#pi^{0}) (GeV);Events / 0.001 GeV").c_str(),200,0.05,0.25);
+        		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
+        		histdef.values.push_back( &locPi0Mass_Kin );
+        		group_12B.insert(histdef); 
+
+        		histdef.clear();
+        		name="etaMass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
+        		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#eta) (GeV);Events / 0.002 GeV").c_str(),300,0.25,0.85);
+        		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
+        		histdef.values.push_back( &locEtaMass_Kin );
+        		group_34B.insert(histdef); 
+		
+        		//histdef2d.clear();
+        		//name = "eta_cosTheta_GJvsM_mEllipsePre";
+        		//histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi^{0}#eta)Events / 0.02 GeV;Cos(#theta) of #eta Events / 0.02",175,0,3.5,100,-1,1);
+        		//histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
+        		//histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        		//histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
+        		//group_34B_1234B.insert_2D(histdef2d); 
+        		//histdef2d.clear();
+        	    	iUpChiSq+=2;
+        	}
+	}
 	// ********************************** Kinematics related *********************************************
         histdef.clear();
         name="P4ChiSqKinFit_mChiSq";
@@ -746,6 +768,15 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = "pi0gamma_mEllipse_pre";
         histdef.cut = &mEllipse_pre;
         histdef.weights = &weightAS;
+        histdef.values.push_back( &( massGammaPi0[0]) );
+        histdef.values.push_back( &( massGammaPi0[1]) );
+        group_12PhNB.insert(histdef);
+
+        histdef.clear();
+        histdef.hist = new TH1F("pi0gamma_mEllipse_pre_ASBS","Cuts=mEllipse_pre; M(#gamma#pi^{0})GeV;Events / 0.01 GeV", 250, 0, 2.5);
+        histdef.name = "pi0gamma_mEllipse_pre_ASBS";
+        histdef.cut = &mEllipse_pre;
+        histdef.weights = &weightAS_BS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
         group_12PhNB.insert(histdef);
@@ -1073,12 +1104,36 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &locPi0Mass_Kin );
         group_12B.insert(histdef); 
 
+	histdef2d.clear();
+        name="tetaVsMeta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=mEllipse_pre_tAll;M(#eta) (GeV);t_{#eta} (GeV^2)", 300, 0.25, 0.85, 80,0,8);
+        histdef2d.name = name; histdef2d.cut=&mEllipse_pre_tAll; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &locEtaMass_Kin );
+        histdef2d.valuesY.push_back( &mandelstam_teta_Kin );
+        group_12B.insert_2D(histdef2d); 
+
         histdef.clear();
         name="etaMass_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_Kin );
         group_34B.insert(histdef); 
+
+        histdef.clear();
+        name="etaMass_Kin_mEllipsePre_ASBS";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
+        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
+        histdef.values.push_back( &locEtaMass_Kin );
+        group_34B.insert(histdef); 
+
+	for (int iMpi0Bin=0; iMpi0Bin < num_mpi0Bins; ++iMpi0Bin){
+        	histdef.clear();
+        	name="etaMass_Kin_mEllipsePre_Mpi0Bin"+to_string(iMpi0Bin);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
+        	histdef.name = name; histdef.cut=&passMpi0Bin[iMpi0Bin]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locEtaMass_Kin );
+        	group_34B.insert(histdef); 
+	}
 
         histdef.clear();
         name="etaMass_Meas_mEllipsePre";
@@ -1200,6 +1255,13 @@ void DSelector_ver20::Init(TTree *locTree)
         group_1234B.insert(histdef); 
 
         histdef.clear();
+        name="pi0eta1D_AS";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
+
+        histdef.clear();
         name="pi0eta1D_ASBS";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
@@ -1217,7 +1279,7 @@ void DSelector_ver20::Init(TTree *locTree)
         	histdef.clear();
         	name="pi0eta1D_Cut_tBin"+to_string(iTBin);
         	histdef.hist = new TH1F(name.c_str(), ("Cuts=mMandelstamT*p_massTBinned["+to_string(iTBin)+"];M(#pi^{0}#eta) (GeV);Events / 0.02 GeV").c_str(), 125, 0, 3.5);
-        	histdef.name = name; histdef.cut=&p_massTBinned[iTBin]; histdef.weights = &weightAS_BS;
+        	histdef.name = name; histdef.cut=&p_massTBinned[iTBin]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
         	group_1234B.insert(histdef); 
 	}
@@ -1225,7 +1287,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.clear();
         name="pi0eta1D_Cut_tAll";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS_BS;
+        histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
         histdef.clear();
@@ -1245,25 +1307,25 @@ void DSelector_ver20::Init(TTree *locTree)
         
         histdef.clear();
         // so in side band subraction we have 4 regions. 1=circular signal. 2=disc skip region. 3=disc bkg region. 4=large disc reject region. 
-        name="pi0eta1D_0_1_1pR_1";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 0_1_1+R_1;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_B;
-        histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        //name="pi0eta1D_0_1_1pR_1";
+        //histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 0_1_1+R_1;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        //histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_B;
+        //histdef.values.push_back( &locPi0Eta_Kin );
+        //group_1234B.insert(histdef); 
 
-        histdef.clear();
-        name="pi0eta1D_1_0_mR_0";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_0_-R_0;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
-        histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        //histdef.clear();
+        //name="pi0eta1D_1_0_mR_0";
+        //histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_0_-R_0;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        //histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
+        //histdef.values.push_back( &locPi0Eta_Kin );
+        //group_1234B.insert(histdef); 
 
-        histdef.clear();
-        name="pi0eta1D_1_1_1_1";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_1_1_1;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        //histdef.clear();
+        //name="pi0eta1D_1_1_1_1";
+        //histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_1_1_1;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        //histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
+        //histdef.values.push_back( &locPi0Eta_Kin );
+        //group_1234B.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion4";
@@ -1336,7 +1398,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.clear();
         name="mandelstam_tp";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
-        histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS_BS;
+        histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
         group_1234B.insert(histdef); 
 
@@ -1353,6 +1415,23 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&noCut; histdef.weights = &weightAS;
         histdef.values.push_back( &locBeamE );
         group_B.insert(histdef); 
+
+        histdef.clear();
+        name="RFTime_meas";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=noCut; t_{#gamma}-t_{rf} (ns);Events / 0.2 GeV",120,-12,12);
+        histdef.name = name; histdef.cut=&noCut; histdef.weights = &noWeight;
+        histdef.values.push_back( &locDeltaTRF_meas );
+        group_B.insert(histdef); 
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//WE WILL CUT OUT THE DELTA WITH T CUT AND ELLIPTICAL CUT. BUT ONE WITH BEAME>8 AND ONE WITHOUT
+        histdef.clear();
+        name="pi0proton1D_pBase_pT_pIE_pBE89_pMPi0P_pDelta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=pBase_pT_pIE_pBE89_pMPi0P_pDelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
+        histdef.name = name; histdef.cut=&pBase_pT_pIE_pBE89_pMPi0P_pDelta; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Proton_Kin);
+        group_12PB.insert(histdef); 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         histdef.clear();
         name="pi0proton1D_Cut";
@@ -1414,7 +1493,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.clear();
         name="mandelstam_tp_mMandelstamT_mdelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
-        histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS_BS;
+        histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
         group_1234B.insert(histdef); 
 
@@ -1560,7 +1639,7 @@ void DSelector_ver20::Init(TTree *locTree)
 
 	// To show the t' distribution as a function of M(pi0eta)
         histdef2d.clear();
-        name="mandelstam_tpVspi0etaMass_Cut";
+        name="mandelstam_tpVspi0etaMass_mMandestamT";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi^{0}#eta) with Events / 0.02  GeV;-t' momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",85,0.8,2.5,100,0,4);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
@@ -1570,7 +1649,7 @@ void DSelector_ver20::Init(TTree *locTree)
 
 	// To show the t distribution as a function of M(pi0eta)
         histdef2d.clear();
-        name="mandelstam_tVspi0etaMass_Cut";
+        name="mandelstam_tVspi0etaMass_mMandestamT";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi^{0}#eta) with Events / 0.02  GeV;-t momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",100,0.8,2.5,100,0,4);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
@@ -1578,6 +1657,25 @@ void DSelector_ver20::Init(TTree *locTree)
 		// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
         group_1234B.insert_2D(histdef2d); 
 
+	//// To show the t' distribution as a function of M(pi0eta)
+        //histdef2d.clear();
+        //name="mandelstam_tpVspi0etaMass_Cut";
+        //histdef2d.hist = new TH2F(name.c_str(), "Cuts=allGeneralCutsPassed;M(#pi^{0}#eta) with Events / 0.02  GeV;-t' momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",85,0.8,2.5,100,0,4);
+        //histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
+        //histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        //histdef2d.valuesY.push_back( &mandelstam_tp );
+	//	// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
+        //group_1234B.insert_2D(histdef2d); 
+
+	//// To show the t distribution as a function of M(pi0eta)
+        //histdef2d.clear();
+        //name="mandelstam_tVspi0etaMass_Cut";
+        //histdef2d.hist = new TH2F(name.c_str(), "Cuts=allGeneralCutsPassed;M(#pi^{0}#eta) with Events / 0.02  GeV;-t momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",100,0.8,2.5,100,0,4);
+        //histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
+        //histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        //histdef2d.valuesY.push_back( &mandelstam_abst );
+	//	// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
+        //group_1234B.insert_2D(histdef2d); 
 
 
         //name;
@@ -1756,6 +1854,7 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_X_cm_meas"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("phi_X_cm"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("phi_X_relativeToBeamPol"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_eta_gj"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_eta_gj_meas"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("phi_eta_gj"); //fundamental = char, int, float, double, etc.
@@ -2033,6 +2132,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         TLorentzVector locBeamX4 = dComboBeamWrapper->Get_X4_Measured();
         //if(showOutput){cout << "Got kin fitted beam x4 P4" << endl;}
         TLorentzVector locProtonP4 = dProtonWrapper->Get_P4_Measured();
+        TLorentzVector locProtonX4 = dProtonWrapper->Get_X4_Measured();
         //Step 1
         // using dDecayingPi0/EtaWrapper->Get_P4 no longer works, gives me an error now, luckily we don't use it anyways
         //TLorentzVector locDecayingPi0P4 = dDecayingPi0Wrapper->Get_P4();
@@ -2333,11 +2433,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         // Get_RFTime is quoted at the center of the target. We have to shift it outwards.
         // We shift it  by the time it takes for light to travel between the initial target and the recoiled target.  
         RFtime = dComboWrapper->Get_RFTime() + (locProtonX4_Kin.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458;
+        RFtime_meas = dComboWrapper->Get_RFTime() + (locProtonX4.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458;
         RFtimeProton = locProtonX4_Kin.T() - RFtime;
 
         // Might not make sense to shift relative to the BeamX4.Z since we cant really track the photon in the detector. Use Protons maybe
         //double locDeltaTRF = locBeamX4.T() - (dComboWrapper->Get_RFTime() + (locBeamX4.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
         locDeltaTRF = locBeamX4_Kin.T() - RFtime;
+        locDeltaTRF_meas = locBeamX4.T() - RFtime;
 
         // Accidental Subtracting we do a weighted histogram. Where we scale the increment to our histogram by the weight. The weight is 1 for in central beam bunch RF time and -0.5 for off central.
         weightAS = 1;
@@ -2564,6 +2666,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
         mandelstam_tp_pe = abs(mandelstam_t_pe-mandelstam_t0);
 
+
+
+	
+	// -----------------------------------------------------------
+	// -------------------- DEFINING SOME ANGLES ------------------
+	// -----------------------------------------------------------
+	phi_X_relativeToBeamPol = mixingPi0Eta_Kin.Phi()*radToDeg-locPolarizationAngle;
         // Calculate cosTheta, phi in maybe the helicity axes.
         TVector3 z = mixingPi0Eta_cm.Vect().Unit();
         // this y should be the normal of the production plane. If we do a boost in a direction in the production plane the perp direction doesn't change. We could use the beam and the recoiled proton to define the
@@ -2916,16 +3025,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
             iLowMass_t+=binScale_t;
             iUpMass_t+=binScale_t;
         }
-        iUpUE = 0.1; // such that after running through 20 bins we will reach a UE cut of 1GeV.
-        for (int bin=0; bin<numRegions_UE; ++bin){
-            p_pi0MassEtaMassUEregion[bin] = locUnusedEnergy<iUpUE;
-            iUpUE+=0.1;
-        }
-        iUpChiSq = 5; 
-        for (int bin=0; bin<numRegions_ChiSq; ++bin){
-            p_pi0MassEtaMassChiSqregion[bin] = locChiSqKinFit<iUpChiSq;
-            iUpChiSq+=5;
-        }
         // THIS IS FOR THE pi0Mass binned in E(pi0) selecting out the f2 peak
         for (int bin=0; bin<numRegions_E; ++bin){
             p_pi0MassPi0Eregion_1[bin] = locPi0E_Kin<iUpE[bin] && locPi0E_Kin>iLowE[bin];
@@ -2944,47 +3043,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         ellipseDeltaY = TMath::Sqrt((1 - TMath::Power((locPi0Mass_Kin-ellipseX)/ellipseXr,2))*TMath::Power(ellipseYr,2));
         if (locEtaMass_Kin>=(ellipseDeltaY+ellipseY) || locEtaMass_Kin<=(-ellipseDeltaY+ellipseY)){ outsideEllipse = 1; }
         pinsideEllipse = !outsideEllipse;
-
-        outsideEllipseBS1 = 0;
-        if (locPi0Mass_Kin<=(ellipseXBS1-ellipseXrBS1) || locPi0Mass_Kin>=(ellipseXBS1+ellipseXrBS1)){ outsideEllipseBS1 = 1;}
-        double ellipseDeltaYBS1 = TMath::Sqrt((1 - TMath::Power((locPi0Mass_Kin-ellipseXBS1)/ellipseXrBS1,2))*TMath::Power(ellipseYrBS1,2));
-        if (locEtaMass_Kin>=(ellipseDeltaYBS1+ellipseYBS1) || locEtaMass_Kin<=(-ellipseDeltaYBS1+ellipseYBS1)){ outsideEllipseBS1 = 1; }
-        pinsideEllipseBS1 = !outsideEllipseBS1;
-
-        outsideEllipseBS2 = 0;
-        if (locPi0Mass_Kin<=(ellipseXBS2-ellipseXrBS2) || locPi0Mass_Kin>=(ellipseXBS2+ellipseXrBS2)){ outsideEllipseBS2 = 1;}
-        double ellipseDeltaYBS2 = TMath::Sqrt((1 - TMath::Power((locPi0Mass_Kin-ellipseXBS2)/ellipseXrBS2,2))*TMath::Power(ellipseYrBS2,2));
-        if (locEtaMass_Kin>=(ellipseDeltaYBS2+ellipseYBS2) || locEtaMass_Kin<=(-ellipseDeltaYBS2+ellipseYBS2)){ outsideEllipseBS2 = 1; }
-        pinsideEllipseBS2 = !outsideEllipseBS2;
-
-        pYellowBKG=pinsideEllipseBS2*outsideEllipseBS1;
-
-        // The sharp transition in the weights would only be reflected in the hists using kin values!
-        if(pYellowBKG){ 
-            // this histogram is just to check if the region I am selecting is good
-            dHist_checkEllipseBS[0]->Fill(locPi0Mass_Kin, locEtaMass_Kin);
-            weightBS = -areaRatio; 
-            weightB = 1+areaRatio;
-        } 
-        else if (pinsideEllipse){
-            dHist_checkEllipseBS[1]->Fill(locPi0Mass_Kin, locEtaMass_Kin);
-            weightBS=1;
-            weightB=0;
-        }
-        else { 
-            weightBS=0;
-            weightB=1;
-            dHist_checkEllipseBS[2]->Fill(locPi0Mass_Kin, locEtaMass_Kin);
-        }
-
-        // now that we have defined both the weights we can multiply them together
-        //weight = weightAS*weightBS;
-        weightAS_BS = weightAS*weightBS;
-	if ( abs(weightAS_BS)>1){
-		cout << "weightBS,weightAS: " << weightBS << ", " << weightAS << endl;
-	}
-	// weightB would be the conjugate of the weight such that weightB+weightBS=(1,1,1,1)
-        weightAS_B = weightAS*weightB;
 
         // General Cuts
         pUnusedEnergy = locUnusedEnergy <= unusedEnergyCut;
@@ -3083,6 +3141,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         // cut to accept the delta peak in M(pi0proton)
         // we will actually use it to reject the delta peak in the cuts. pi0pi0 should also have this resonance right?
         pMPi0P14 = locPi0Proton_Kin<1.4;
+        bool pMPi0P155 = locPi0Proton_Kin<1.55;
 
         // Various combinations of cuts, the majority of them will be used just for a few histograms like when showing unused energy graph we will use mUE which
         // removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
@@ -3097,9 +3156,18 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 
 	
+	/////////////////////// ************ BASE CUTS *********************
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+	baseCuts_mChiUE = pShowerQuality*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+	/////////////////////// 
+	looseCuts = baseCuts_mChiUE*chiSq100*pLooseUnusedEnergy;
+
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+	
 	mMandelstamT_mBeamE8GeVPlus = !pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+	//
+	pBase_pT_pIE_pBE89_pMPi0P_pDelta = pMPi0P155*baseCuts*ptpLT1*pinsideEllipse*pBeamE8to9;
+	//
 
 	// -----------------------------------------------------------------------
 	// This will be the basis of the cuts for the baryon rejection histograms
@@ -3143,11 +3211,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         mEllipseUEChiSq_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mEllipseLooseUEChiSq_pre = pLooseUnusedEnergy*pLooseChiSq*ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
         mEllipseChiSq_pre = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-        // ------ Rejects the 0-weight region since that would mess with the uniqueness tracking. We use the OR logic to sum the subsets of the yellow and the red region.
-        mEllipse = mEllipse_pre*pYellowBKG || allGeneralCutsPassed;
-        mEllipseUE = mEllipseUE_pre*pYellowBKG || mEllipseUE_pre*pinsideEllipse;
-        mEllipseUEChiSq = mEllipseUEChiSq_pre*pYellowBKG || mEllipseUEChiSq_pre*pinsideEllipse;
-        mEllipseChiSq = mEllipseChiSq_pre*pYellowBKG || mEllipseChiSq_pre*pinsideEllipse;
 
         mEllipse_pre_pi0BCAL = mEllipse_pre*pPi0InBCAL;
         mEllipse_pre_pi0FCAL = mEllipse_pre*pPi0InFCAL;
@@ -3160,6 +3223,30 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         allGen_vanHove=allGeneralCutsPassed*pVanHove;
 
 
+	// Here we ill incorporate some selection of cuts then apply out UE or chiSq cut so we can see how the bkg changes
+        iUpUE = 0.1; // such that after running through 20 bins we will reach a UE cut of 1GeV.
+        for (int bin=0; bin<numRegions_UE; ++bin){
+            p_pi0MassEtaMassUEregion[bin] = locUnusedEnergy<iUpUE;
+            iUpUE+=0.1;
+        }
+
+	// DOING SOME PURITY STUDIES BY LOOKING AT Mpi0 and Meta in bins of chiSq and Mpi0eta
+	double currentMin;
+	double currentMax;
+	int cumulativeBinNum;
+	bool basicSelections = baseCuts_mChiUE*pUnusedEnergy*ptpLT1*!pMPi0P14*pBeamE8GeVPlus;
+	for (int bin_Mpi0eta=0; bin_Mpi0eta<numMpi0etaBins; ++ bin_Mpi0eta){
+        	iUpChiSq = 1; 
+        	for (int bin=0; bin<numRegions_ChiSq; ++bin){
+			cumulativeBinNum = bin_Mpi0eta*numRegions_ChiSq+bin;
+			currentMin = minMpi0eta+bin_Mpi0eta*binStepMpi0eta;
+			currentMax = minMpi0eta+(bin_Mpi0eta+1)*binStepMpi0eta;
+            		p_pi0MassEtaMassChiSqregion[cumulativeBinNum] = locChiSqKinFit<iUpChiSq;
+            		p_pi0MassEtaMassChiSqregion[cumulativeBinNum] *= (locPi0Eta_Kin>currentMin && locPi0Eta_Kin<currentMax) ;
+	    		p_pi0MassEtaMassChiSqregion[cumulativeBinNum] *= basicSelections;
+            		iUpChiSq+=2;
+		}
+        }
 
 	// SOME MORE BOOLS FOR THE DECK PLOTS. 
 	for ( int iMass=0; iMass < num_massBins; ++iMass){
@@ -3178,6 +3265,15 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			else { passMassBin_tpi0Integrated[iMass] = false; } 
 		}
 		else { passMassBin_tpi0Integrated[iMass] = false; } 
+	}
+
+
+	double minPi0Mass = 0.085;
+	double maxPi0Mass = 0.185;
+	double stepSize = (maxPi0Mass-minPi0Mass)/num_mpi0Bins;
+	for (int iMpi0Bin=0; iMpi0Bin<num_mpi0Bins; ++iMpi0Bin){
+		passMpi0Bin[iMpi0Bin] = locPi0Mass_Kin > minPi0Mass+iMpi0Bin*stepSize && locPi0Mass_Kin < minPi0Mass+(iMpi0Bin+1)*stepSize;
+		passMpi0Bin[iMpi0Bin] = passMpi0Bin[iMpi0Bin]*mEllipse_pre;
 	}
 
 		// Full rect
@@ -3220,13 +3316,42 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	}
 	else { Mpi0eta_12 = locPi0Eta_Kin; } 
 
+	// USING THE RECTANGULAR SB
 	if ( inBox_noOtherCuts[10] ) { weightBS = 0.25; weightB = -1.25; }
 	else if ( inBox_noOtherCuts[11] ) { weightBS = -0.5; weightB = 1.5; }
 	else if ( inBox_noOtherCuts[12] ) { weightBS = -0.5; weightB = 1.5; }
 	else if ( inBox_noOtherCuts[4] ) { weightBS = 1; weightB = 0; }
 	else { weightBS=0; weightB=1; }
 
-        //weightAS_BS = weightBS;//weightAS*weightBS;
+	// Sideband subtraction on just the eta
+	double weightBSeta;
+	//if ( locEtaMass_Kin > 0.510425 && locEtaMass_Kin < 0.586825) { weightBSeta = 1; }
+	//else if ( locEtaMass_Kin > 0.414025 && locEtaMass_Kin < 0.490425) { weightBSeta = -0.5; }
+	//else if ( locEtaMass_Kin > 0.606825 && locEtaMass_Kin < 0.683225) { weightBSeta = -0.5; }
+	//else { weightBSeta = 0; }
+	//if ( locEtaMass_Kin > 0.46 && locEtaMass_Kin < 0.62) { weightBSeta = 1; }
+	//else if ( locEtaMass_Kin > 0.38 && locEtaMass_Kin < 0.44) { weightBSeta = -1.333; }
+	//else if ( locEtaMass_Kin > 0.64 && locEtaMass_Kin < 0.70) { weightBSeta = -1.333; }
+	//else { weightBSeta = 0; }
+
+	// Sideband subtraction on just the pi0
+	double weightBSpi0;
+	//if ( locPi0Mass_Kin > 0.120681 && locPi0Mass_Kin < 0.151081) { weightBSpi0 = 1; }
+	//else if ( locPi0Mass_Kin > 0.095481 && locPi0Mass_Kin < 0.110681) { weightBSpi0 = -1; }
+	//else if ( locPi0Mass_Kin > 0.161081 && locPi0Mass_Kin < 0.176281) { weightBSpi0 = -1; }
+	//else { weightBSpi0 = 0; }
+	//if ( locPi0Mass_Kin > 0.12 && locPi0Mass_Kin < 0.15) { weightBSpi0 = 1; }
+	//else if ( locPi0Mass_Kin > 0.09 && locPi0Mass_Kin < 0.105) { weightBSpi0 = -1; }
+	//else if ( locPi0Mass_Kin > 0.165 && locPi0Mass_Kin < 0.18) { weightBSpi0 = -1; }
+	//else { weightBSpi0 = 0; }
+
+        // now that we have defined both the weights we can multiply them together
+	//weightBS = weightBSeta*weightBSpi0;
+        weightAS_BS = weightAS*weightBS;
+	if ( abs(weightAS_BS)>1){
+		cout << "weightBS,weightAS: " << weightBS << ", " << weightAS << endl;
+	}
+	// weightB would be the conjugate of the weight such that weightB+weightBS=(1,1,1,1)
         weightAS_B = weightAS*weightB;
 
 	++count_combos;
@@ -3335,10 +3460,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
-        if (!mEllipse_pre_tAll || !detectorCut) {
-        //if (!mEllipse_pre || !detectorCut) {
+        //if (!mEllipse_pre_tAll || !detectorCut) {
+        if (!mEllipse_pre || !detectorCut) {
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
-	//if (!baseCuts || !detectorCut ){
+	//if (!looseCuts || !detectorCut ){
+	//if (!allGeneralCutsPassed || !detectorCut){
+	//if (!pBase_pT_pIE_pBE89_pMPi0P_pDelta || !detectorCut){
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
@@ -3506,6 +3633,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_X_cm", cosTheta_pi0eta_CM); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_X_cm_meas", cosTheta_pi0eta_CM_meas); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Fill_Fundamental<Double_t>("phi_X_cm", phi_pi0eta_CM); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("phi_X_relativeToBeamPol", phi_X_relativeToBeamPol); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_eta_gj", cosTheta_eta_GJ); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Fill_Fundamental<Double_t>("cosTheta_eta_gj_meas", cosTheta_eta_GJ_meas); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Fill_Fundamental<Double_t>("phi_eta_gj", phi_eta_GJ); //fundamental = char, int, float, double, etc.
