@@ -280,7 +280,12 @@ class DSelector_ver20 : public DSelector
                 bool dIsPARAFlag; //else is PERP or AMO
                 bool hasPolarizationAngle; // true if is polarized but false if through deg5ous radiator or no data. Under what cicumstances is the second one true.
                 int locPolarizationAngle; // actual polarization angle
-		bool keepPolarization;
+		bool keepPolarization=true;
+		bool keepPolarization000=true;
+		bool keepPolarization045=true;
+		bool keepPolarization090=true;
+		bool keepPolarization135=true;
+		bool keepPolarizationAMO=true;
                 set<UInt_t> usedRuns; //think we are over counting our filling of beam angles since the below condition only checks against previous run, doesn't work for recurrences.
 
 
@@ -660,7 +665,11 @@ class DSelector_ver20 : public DSelector
 		bool pBeamE78to94=true;
 		bool pBeamE94to11=true;
 		bool pBeamE8GeVPlus=true;
-		bool pBeamE8to9=true;
+		// For the Deck beam asymmetry
+		bool pBeamE82to88=true;
+		bool pMpi0etaGT19=true;
+		bool ptEtaLT1=true;
+
 		
 		// pi0Eta specifc cuts
 		bool pEtaProtonBaryonCut=true;
@@ -833,6 +842,8 @@ class DSelector_ver20 : public DSelector
 		// Various combinations of cuts, the majority of them will be used just for a few histograms like when showing unused energy graph we will use mUE which
 		// removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
 		bool allGeneralCutsPassed=true;
+		bool allGeneralCutsSinglePolarization=true;
+		bool ptEtaBeamAsym[5]={true,true,true,true,true};
 		bool mMandelstamT=true;
 		bool mMandelstamT_mBeamE8GeVPlus=true;
 		//bool pDiffCL=true; 
@@ -872,7 +883,7 @@ class DSelector_ver20 : public DSelector
 		bool baseCuts=true;
 		bool baseCuts_mChiUE=true;
 		bool looseCuts=true;
-		bool pBase_pT_pIE_pBE89_pMPi0P_pDelta = true;
+		bool pBase_pT_pIE_pBE8288_pMPi0P_pDelta = true;
                 bool noCut=true;
 
                 bool dzRP=true;

@@ -23,24 +23,37 @@ echo "with the degAngle related code. If ready ... type anything"
 read noUse
 
 
+sed -i 's@degAngle="deg*"@degAngle="deg000"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="deg*"@polarization="deg000"@g' DSelector_ver20.C
+sed -i 's@degAngle="deg*"@degAngle="deg000"@g' DSelector_ver20.C
 root -l -q -b runDSelector_7_17_14.C 
 
-sed -i "s@deg000@deg045@g" runDSelector_7_17_14.C
-sed -i "s@deg000@deg045@g" DSelector_ver20.C
+sed -i 's@degAngle="deg000"@degAngle="deg045"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="deg000"@polarization="deg045"@g' DSelector_ver20.C
+sed -i 's@degAngle="deg000"@degAngle="deg045"@g' DSelector_ver20.C
 root -l -q -b runDSelector_7_17_14.C 
 
-sed -i "s@deg045@deg090@g" runDSelector_7_17_14.C
-sed -i "s@deg045@deg090@g" DSelector_ver20.C
+sed -i 's@degAngle="deg045"@degAngle="deg090"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="deg045"@polarization="deg090"@g' DSelector_ver20.C
+sed -i 's@degAngle="deg045"@degAngle="deg090"@g' DSelector_ver20.C
 root -l -q -b runDSelector_7_17_14.C 
 
-sed -i "s@deg090@deg135@g" runDSelector_7_17_14.C
-sed -i "s@deg090@deg135@g" DSelector_ver20.C
+sed -i 's@degAngle="deg090"@degAngle="deg135"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="deg090"@polarization="deg135"@g' DSelector_ver20.C
+sed -i 's@degAngle="deg090"@degAngle="deg135"@g' DSelector_ver20.C
 root -l -q -b runDSelector_7_17_14.C 
 
-sed -i "s@deg135@degAMO@g" runDSelector_7_17_14.C
-sed -i "s@deg135@degAMO@g" DSelector_ver20.C
+sed -i 's@degAngle="deg135"@degAngle="degAMO"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="deg135"@polarization="degAMO"@g' DSelector_ver20.C
+sed -i 's@degAngle="deg135"@degAngle="degAMO"@g' DSelector_ver20.C
 root -l -q -b runDSelector_7_17_14.C 
 
-sed -i "s@degAMO@deg000@g" runDSelector_7_17_14.C
-sed -i "s@degAMO@deg000@g" DSelector_ver20.C
+sed -i 's@degAngle="degAMO"@degAngle="degALL"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="degAMO"@polarization="degALL"@g' DSelector_ver20.C
+sed -i 's@degAngle="degAMO"@degAngle="degALL"@g' DSelector_ver20.C
+root -l -q -b runDSelector_7_17_14.C 
+
+sed -i 's@degAngle="degALL"@degAngle="deg000"@g' runDSelector_7_17_14.C
+sed -i 's@polarization="degALL"@polarization="deg000"@g' DSelector_ver20.C
+sed -i 's@degAngle="degALL"@degAngle="deg000"@g' DSelector_ver20.C
 

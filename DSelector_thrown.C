@@ -1,4 +1,5 @@
 #include "DSelector_thrown.h"
+string polarization="deg000";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
@@ -11,7 +12,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	dOutputTreeFileNameMap["selected_tpLT1"] = "thrownNotAmptoolsReady_flat_tLT1.root"; //key is user-defined, value is output file name
+	dOutputTreeFileNameMap["selected_tpLT1"] = polarization+"_gen_treeFlat_DSelector.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
@@ -24,6 +25,8 @@ void DSelector_thrown::Init(TTree *locTree)
 		return; //have already created histograms, etc. below: exit
 
 	dPreviousRunNumber = 0;
+        dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV);Events / 2 Degree", 180,-180,180);
+        dHist_SelectedBeamAngle = new TH1F("SelectedBeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV);Events / 2 Degree", 180,-180,180);
 	dHist_PID = new TH1I("PID","",50,0,50);
 	dHist_NumThrown = new TH1I("NumThrown","",10,0,10);
 	dHist_beamE = new TH1F("beamE","Beam Energy", 100,0,15);
@@ -77,6 +80,7 @@ void DSelector_thrown::Init(TTree *locTree)
 
 Bool_t DSelector_thrown::Process(Long64_t locEntry)
 {
+	//if (ievent > maxevent) { return true; } 
 	// The Process() function is called for each entry in the tree. The entry argument
 	// specifies which entry in the currently loaded tree is to be processed.
 	//
@@ -90,7 +94,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 	//CALL THIS FIRST
 	//
-	//if ( ievent<maxevent ){
 	DSelector::Process(locEntry); //Gets the data from the tree for the entry
 	//cout << "RUN " << Get_RunNumber() << ", EVENT " << Get_EventNumber() << endl;
 	//
@@ -101,11 +104,31 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 	//Only if the run number changes
 	//RCDB environment must be setup in order for this to work! (Will return false otherwise)
 	UInt_t locRunNumber = Get_RunNumber();
+	cout << "RunNumber = " << locRunNumber << endl;
 	if(locRunNumber != dPreviousRunNumber)
 	{
 		dIsPolarizedFlag = dAnalysisUtilities.Get_IsPolarizedBeam(locRunNumber, dIsPARAFlag);
+        	hasPolarizationAngle = dAnalysisUtilities.Get_PolarizationAngle(locRunNumber, locPolarizationAngle);
 		dPreviousRunNumber = locRunNumber;
+        	cout << "Getting beam polarization and filling used runs" << endl;
+        	if (hasPolarizationAngle) {
+        	    dHist_BeamAngle->Fill(locPolarizationAngle);
+        	}
+		else {
+		    dHist_BeamAngle->Fill(-1);
+		}
 	}
+    	keepPolarization=false;
+    	if (polarization=="degALL"){ keepPolarization=true; }
+    	else if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
+    	else if (locPolarizationAngle==45 && polarization=="deg045") { keepPolarization=true; }
+    	else if (locPolarizationAngle==90 && polarization=="deg090") { keepPolarization=true; }
+    	else if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
+    	else if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
+    	else {  cout << "FUDGE! THERE IS AN UNEXPECTED OUTCOME FROM THE POLARIZATION CHECK" << endl; } 
+
+	// Making a cut on the polarization angle to split the dataset up
+        dPreviousRunNumber = locRunNumber;
 
 	/********************************************* SETUP UNIQUENESS TRACKING ********************************************/
 	//INSERT USER ANALYSIS UNIQUENESS TRACKING HERE
@@ -321,7 +344,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 
 		bool pBeamE8GeV = locBeamP4.E() > 8;
-		if (correctFinalState*pBeamE8GeV){
+		if (correctFinalState*pBeamE8GeV*keepPolarization){
+			dHist_SelectedBeamAngle->Fill(locPolarizationAngle);
+
 			dHist_beamECut->Fill(locBeamP4.E());
 			dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
 			dHist_genCounts_eta_tAll->Fill(teta_genCounts);
@@ -408,7 +433,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 	else if((locBeamEnergyUsedForBinning >= 10.0) && (locBeamEnergyUsedForBinning < 11.0))
 		Fill_OutputTree("Bin3"); //your user-defined key
 */
-	//}
 	ievent++;
 	return kTRUE;
 }

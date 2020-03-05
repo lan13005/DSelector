@@ -62,6 +62,12 @@ class DSelector_thrown : public DSelector
 		UInt_t dPreviousRunNumber;
 		bool dIsPolarizedFlag; //else is AMO
 		bool dIsPARAFlag; //else is PERP or AMO
+                bool hasPolarizationAngle; // true if is polarized but false if through deg5ous radiator or no data. Under what cicumstances is the second one true.
+                int locPolarizationAngle; // actual polarization angle
+		bool keepPolarization;
+                TH1F* dHist_BeamAngle;
+                TH1F* dHist_SelectedBeamAngle;
+
                 int equal=0;
                 int notEqual=0;
                 int notPass=0;

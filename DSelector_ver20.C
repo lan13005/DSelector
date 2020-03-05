@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="pi0eta_deg000";
+string degAngle="deg000";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -30,6 +30,7 @@ int finalStateComboID=0;
 
 string selectDetector="ALL";
 string polarization="deg000";
+string tag="_data";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -77,10 +78,10 @@ void DSelector_ver20::Init(TTree *locTree)
 	// Init() will be called many times when running on PROOF (once per file to be processed).
 
         //USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
-        dOutputFileName = degAngle+"_DSelector_output.root"; //"" for none
-        dOutputTreeFileName = degAngle+"_tree_DSelector.root"; //"" for none
-        dFlatTreeFileName = degAngle+"_treeFlat_DSelector.root"; //output flat tree (one combo per tree entry), "" for none
-        dFlatTreeName = degAngle+"_tree_flat"; //if blank, default name will be chosen
+        dOutputFileName = degAngle+tag+"_DSelector_output.root"; //"" for none
+        dOutputTreeFileName = degAngle+tag+"_tree_DSelector.root"; //"" for none
+        dFlatTreeFileName = degAngle+tag+"_treeFlat_DSelector.root"; //output flat tree (one combo per tree entry), "" for none
+        dFlatTreeName = degAngle+tag+"_tree_flat"; //if blank, default name will be chosen
 
 	//Because this function gets called for each TTree in the TChain, we must be careful:
 		//We need to re-initialize the tree interface & branch wrappers, but don't want to recreate histograms
@@ -160,10 +161,10 @@ void DSelector_ver20::Init(TTree *locTree)
         cout << "INITILIZED ACTIONS" << endl;
 
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
-        dHist_BeamAngle->SetYTitle("Events / Degree");
+        dHist_BeamAngle->SetYTitle("Events / 2 Degree");
 	// MPE = multiple photons per event. So instead of just filling the beam angle once per run we will fill it per combo.
         dHist_BeamAngleMPE = new TH1F("BeamAngleMPE", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
-        dHist_BeamAngleMPE->SetYTitle("Events / Degree");
+        dHist_BeamAngleMPE->SetYTitle("Events / 2 Degree");
 	dHist_Cuts = new TH1F("CutsPassed", "Number of times a cut has been passed", 17,0,17);
 	for (int i =0; i<3; ++i){
 		if (is_pi0eta){
@@ -207,9 +208,6 @@ void DSelector_ver20::Init(TTree *locTree)
 	//	}
 
 	//       // Kinematic Hists
-	//       ++id; histVals[id] = {8, applyAccSub, locPhi}; 
-	//       histList[id] = {("prodPlanePSphi"+cutString).c_str(), ("Cuts="+cutsApplied+";#phi").c_str(), "180", "-540", "540", "Events / 6 degrees"};
-	//       histCuts[id] = cutsToApply;
 	//       //++id; histVals[id] = {8, applyAccSub, cosTheta_decayPlane_hel};
 	//       //histList[id] = {("decayPlane_cosTheta_hel"+cutString).c_str(), ("Cuts="+cutsApplied+";cos(#theta) of decay plane").c_str(), "100","-1","1", "Events / 0.02"};
 	//       //histCuts[id] = cutsToApply;
@@ -509,6 +507,45 @@ void DSelector_ver20::Init(TTree *locTree)
         string name;
         histDef_1D histdef;
         histDef_2D histdef2d;
+
+	// *************************** CHECKING HOW MANY BEAM BUNCHES ********************
+        histdef.clear();
+        name="rfTiming_noCut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=allGeneralCutsPassed;RF Time (ns);Entries / 0.02 ns", 200, -20, 20);
+        histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &noWeight;
+        histdef.values.push_back( &locDeltaTRF );
+        group_1234BP.insert(histdef); 
+	// **************************** BEAM ASYMMETRY STUFF ***************************
+        histdef.clear();
+        name="prodPlanePSphi_000_cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.name = name; histdef.cut=&ptEtaBeamAsym[0]; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPhi );
+        group_1234BP.insert(histdef); 
+        histdef.clear();
+        name="prodPlanePSphi_045_cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.name = name; histdef.cut=&ptEtaBeamAsym[1]; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPhi );
+        group_1234BP.insert(histdef); 
+        histdef.clear();
+        name="prodPlanePSphi_090_cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.name = name; histdef.cut=&ptEtaBeamAsym[2]; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPhi );
+        group_1234BP.insert(histdef); 
+        histdef.clear();
+        name="prodPlanePSphi_135_cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.name = name; histdef.cut=&ptEtaBeamAsym[3]; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPhi );
+        group_1234BP.insert(histdef); 
+        histdef.clear();
+        name="prodPlanePSphi_AMO_cut";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.name = name; histdef.cut=&ptEtaBeamAsym[4]; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPhi );
+        group_1234BP.insert(histdef); 
 	// ******************************** Checking ChiSq **************************************************
 	double currentMin;
 	double currentMax;
@@ -1430,9 +1467,9 @@ void DSelector_ver20::Init(TTree *locTree)
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//WE WILL CUT OUT THE DELTA WITH T CUT AND ELLIPTICAL CUT. BUT ONE WITH BEAME>8 AND ONE WITHOUT
         histdef.clear();
-        name="pi0proton1D_pBase_pT_pIE_pBE89_pMPi0P_pDelta";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=pBase_pT_pIE_pBE89_pMPi0P_pDelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
-        histdef.name = name; histdef.cut=&pBase_pT_pIE_pBE89_pMPi0P_pDelta; histdef.weights = &weightAS;
+        name="pi0proton1D_pBase_pT_pIE_pBE8288_pMPi0P_pDelta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=pBase_pT_pIE_pBE8288_pMPi0P_pDelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
+        histdef.name = name; histdef.cut=&pBase_pT_pIE_pBE8288_pMPi0P_pDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
         group_12PB.insert(histdef); 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1812,6 +1849,7 @@ void DSelector_ver20::Init(TTree *locTree)
            */
 
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("AccWeight"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("BeamAngle"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("weightASBS"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("uniqueComboID"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp"); //fundamental = char, int, float, double, etc.
@@ -2053,12 +2091,25 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dPreviousRunNumber = locRunNumber;
     }
     keepPolarization=false;
-    if (polarization=="ALL"){ keepPolarization=true; }
-    if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
-    if (locPolarizationAngle==45 && polarization=="deg045") { keepPolarization=true; }
-    if (locPolarizationAngle==90 && polarization=="deg090") { keepPolarization=true; }
-    if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
-    if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
+    if (polarization=="degALL"){ keepPolarization=true; }
+    else if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
+    else if (locPolarizationAngle==45 && polarization=="deg045") { keepPolarization=true; }
+    else if (locPolarizationAngle==90 && polarization=="deg090") { keepPolarization=true; }
+    else if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
+    else if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
+    else {  cout << "FUDGE! THERE IS AN UNEXPECTED OUTCOME FROM THE POLARIZATION CHECK" << endl; } 
+
+    keepPolarization000=false;
+    keepPolarization045=false;
+    keepPolarization090=false;
+    keepPolarization135=false;
+    keepPolarizationAMO=false;
+    if ( locPolarizationAngle==0 ) { keepPolarization000=true; }
+    if ( locPolarizationAngle==45 ) { keepPolarization045=true; }
+    if ( locPolarizationAngle==90 ) { keepPolarization090=true; }
+    if ( locPolarizationAngle==135 ) { keepPolarization135=true; }
+    if ( !hasPolarizationAngle ) { keepPolarizationAMO=true; }
+    
 
 
     /********************************************* SETUP UNIQUENESS TRACKING ********************************************/
@@ -2466,7 +2517,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         // Accidental Subtracting we do a weighted histogram. Where we scale the increment to our histogram by the weight. The weight is 1 for in central beam bunch RF time and -0.5 for off central.
         weightAS = 1;
-        if (14>abs(locDeltaTRF) && abs(locDeltaTRF) >2){ weightAS = -0.16667;} //about 1/6 since we capture a sample of 3 outside peaks
+        if (14>abs(locDeltaTRF) && abs(locDeltaTRF) >2){ weightAS = -0.125;} //about 1/8 since we capture a sample of 8 outside peaks
         // Shifted realtive to the proton
         inBCAL = 0; inTOF = 0; inFCAL = 0; inSTART = 0; inSYS_NULL = 0;
         if (dProtonWrapper->Get_Detector_System_Timing() == SYS_BCAL){ inBCAL = 1;}
@@ -2599,17 +2650,17 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         if(showOutput){ cout << "Calculating prodplanephi and cosTheta in different system" << endl;}
         // calculating phi
         //double decayPlanePhi = dAnalysisUtilities.Calc_DecayPlanePsi_Vector_3BodyDecay(locBeamE, Proton, locProtonP4_Kin, mixingPi0Eta_Kin, locPi0P4_Kin, locEtaP4_Kin, locDecayPlaneTheta);
-        double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamE, Proton, mixingPi0Eta_Kin);
-        double polarizationAngle;
+        double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamE, Proton, locEtaP4_Kin);
+        double locPolarizationAngle;
         // we kind of have to do this since we use sed to search and replace locDegAngle/45/90/135...
         string deg = degAngle.substr(degAngle.length()-3);
-        if (deg == "000") { polarizationAngle = 0; }
-        else if (deg == "045") { polarizationAngle = 45; }
-        else if (deg == "090") { polarizationAngle = 90; }
+        if (deg == "000") { locPolarizationAngle = 0; }
+        else if (deg == "045") { locPolarizationAngle = 45; }
+        else if (deg == "090") { locPolarizationAngle = 90; }
         // there is uniqueness in the second digit. By the construction of using the last two characters in the string we have to ignmore 1 in 135 but it is unambiguous.
-        else if (deg == "135") { polarizationAngle = 135; }
-        else { polarizationAngle = -999; } // just wanted a number negative enough to make locPhi, no matter the value, always negative so there is some indication to look for.
-        locPhi = polarizationAngle - prodPlanePhi;
+        else if (deg == "135") { locPolarizationAngle = 135; }
+        else { locPolarizationAngle = -999; } // just wanted a number negative enough to make locPhi, no matter the value, always negative so there is some indication to look for.
+        locPhi = locPolarizationAngle - prodPlanePhi;
 
         // Calculating kinematic variables like t and cosTheta
         mandelstam_t = (locProtonP4_Kin-dTargetP4).M2();
@@ -3024,7 +3075,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         pBeamE78to94 = locBeamE > 7.8 && locBeamE < 9.4;
         pBeamE94to11 = locBeamE > 9.4 && locBeamE < 11.0;
         pBeamE8GeVPlus = locBeamE > 8.0;
-        pBeamE8to9 = locBeamE > 8.0 && locBeamE< 9.0;
+        pBeamE82to88 = locBeamE > 8.2 && locBeamE< 8.8;
 
         dEdxCut = TMath::Power(10,-6)*(0.9+TMath::Exp(3.0-3.5*(locMagP3Proton+0.05)/.93827)); // The bigger then number multiplying MagP3 the sharper the cut.
         // pi0Eta specifc cuts
@@ -3177,6 +3228,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	pUnusedEnergy=true;
 
 
+	pMpi0etaGT19=locPi0Eta_Kin>1.9;
+	ptEtaLT1=mandelstam_teta<1;
 	
 	/////////////////////// ************ BASE CUTS *********************
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
@@ -3185,10 +3238,17 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	looseCuts = baseCuts_mChiUE*chiSq100*pLooseUnusedEnergy;
 
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+	allGeneralCutsSinglePolarization = allGeneralCutsPassed*keepPolarization;	
+	// same cuts as allGenearlCuts without the t' < 1 since we will use teta < 1. We will also choose a beam asym that John used and select out the Deck region with Mpi0eta > 1.9
+	ptEtaBeamAsym[0] = keepPolarization000*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
+	ptEtaBeamAsym[1] = keepPolarization045*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
+	ptEtaBeamAsym[2] = keepPolarization090*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
+	ptEtaBeamAsym[3] = keepPolarization135*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
+	ptEtaBeamAsym[4] = keepPolarizationAMO*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
 	
 	mMandelstamT_mBeamE8GeVPlus = !pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
 	//
-	pBase_pT_pIE_pBE89_pMPi0P_pDelta = pMPi0P155*baseCuts*ptpLT1*pinsideEllipse*pBeamE8to9;
+	pBase_pT_pIE_pBE8288_pMPi0P_pDelta = pMPi0P155*baseCuts*ptpLT1*pinsideEllipse*pBeamE82to88;
 	//
 
 	// -----------------------------------------------------------------------
@@ -3483,11 +3543,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
         //if (!mEllipse_pre_tAll || !detectorCut) {
-        if (!mEllipse_pre || !detectorCut) {
+        //if (!mEllipse_pre || !detectorCut) {
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
 	//if (!looseCuts || !detectorCut ){
-	//if (!allGeneralCutsPassed || !detectorCut){
-	//if (!pBase_pT_pIE_pBE89_pMPi0P_pDelta || !detectorCut){
+	if (!allGeneralCutsSinglePolarization || !detectorCut){
+	//if (!pBase_pT_pIE_pBE8288_pMPi0P_pDelta || !detectorCut){
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
@@ -3598,6 +3658,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         */
 
         dFlatTreeInterface->Fill_Fundamental<Double_t>("AccWeight", weightAS);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("BeamAngle", locPolarizationAngle);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("weightASBS", weightAS_BS);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("uniqueComboID", uniqueComboID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("finalStateComboID", finalStateComboID);
