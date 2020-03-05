@@ -99,7 +99,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 
 	// should change the name below from data to reco when running over MC
-	string degAngle="deg000";
+	string degAngle="degALL";
+	string tag="_data";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 
@@ -132,8 +133,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	if(useproof) { // add TTree to chain and use PROOFLiteManager
 		string outputHistFileName;
                 string outputTreeFileName;
-		outputHistFileName = degAngle+"_hists_DSelector.root";
-		outputTreeFileName = degAngle+"_tree_DSelector.root"; 
+		outputHistFileName = degAngle+tag+"_hists_DSelector.root";
+		outputTreeFileName = degAngle+tag+"_tree_DSelector.root"; 
 	
 		DPROOFLiteManager::Process_Chain(chain, "DSelector_ver20.C+",  proof_Nthreads, outputHistFileName, outputTreeFileName, options);
 	}

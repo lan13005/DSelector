@@ -3,7 +3,7 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="deg000";
+string degAngle="degALL";
 bool showOutput = false;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -29,7 +29,7 @@ int itersToRun = 0;
 int finalStateComboID=0;
 
 string selectDetector="ALL";
-string polarization="deg000";
+string polarization="degALL";
 string tag="_data";
 
 void DSelector_ver20::Init(TTree *locTree)
@@ -518,31 +518,31 @@ void DSelector_ver20::Init(TTree *locTree)
 	// **************************** BEAM ASYMMETRY STUFF ***************************
         histdef.clear();
         name="prodPlanePSphi_000_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
         histdef.name = name; histdef.cut=&ptEtaBeamAsym[0]; histdef.weights = &weightAS;
         histdef.values.push_back( &locPhi );
         group_1234BP.insert(histdef); 
         histdef.clear();
         name="prodPlanePSphi_045_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
         histdef.name = name; histdef.cut=&ptEtaBeamAsym[1]; histdef.weights = &weightAS;
         histdef.values.push_back( &locPhi );
         group_1234BP.insert(histdef); 
         histdef.clear();
         name="prodPlanePSphi_090_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
         histdef.name = name; histdef.cut=&ptEtaBeamAsym[2]; histdef.weights = &weightAS;
         histdef.values.push_back( &locPhi );
         group_1234BP.insert(histdef); 
         histdef.clear();
         name="prodPlanePSphi_135_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
         histdef.name = name; histdef.cut=&ptEtaBeamAsym[3]; histdef.weights = &weightAS;
         histdef.values.push_back( &locPhi );
         group_1234BP.insert(histdef); 
         histdef.clear();
         name="prodPlanePSphi_AMO_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -180, 180);
+        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
         histdef.name = name; histdef.cut=&ptEtaBeamAsym[4]; histdef.weights = &weightAS;
         histdef.values.push_back( &locPhi );
         group_1234BP.insert(histdef); 
@@ -2661,6 +2661,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         else if (deg == "135") { locPolarizationAngle = 135; }
         else { locPolarizationAngle = -999; } // just wanted a number negative enough to make locPhi, no matter the value, always negative so there is some indication to look for.
         locPhi = locPolarizationAngle - prodPlanePhi;
+	locPhi = locPhi/radToDeg;
 
         // Calculating kinematic variables like t and cosTheta
         mandelstam_t = (locProtonP4_Kin-dTargetP4).M2();
