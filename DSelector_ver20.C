@@ -167,11 +167,11 @@ void DSelector_ver20::Init(TTree *locTree)
         dHist_prodPlanePS_090 = new TH1F("prodPlanePS_090", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_prodPlanePS_135 = new TH1F("prodPlanePS_135", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_prodPlanePS_AMO = new TH1F("prodPlanePS_AM0", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_000_rejSamp = new TH1F("prodPlanePS_000_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_045_rejSamp = new TH1F("prodPlanePS_045_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_090_rejSamp = new TH1F("prodPlanePS_090_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_135_rejSamp = new TH1F("prodPlanePS_135_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_AMO_rejSamp = new TH1F("prodPlanePS_AM0_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_000_rejSamp = new TH1F("prodPlanePS_000_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_045_rejSamp = new TH1F("prodPlanePS_045_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_090_rejSamp = new TH1F("prodPlanePS_090_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_135_rejSamp = new TH1F("prodPlanePS_135_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_AMO_rejSamp = new TH1F("prodPlanePS_AM0_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
 
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
         dHist_BeamAngle->SetYTitle("Events / 2 Degree");
@@ -2115,12 +2115,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
 	bool correctFinalState=false;
 	if (Get_NumThrown() != 0 ) {
-		TLorentzVector etaP4_thrown;
-		TLorentzVector pi0P4_thrown;
-		TLorentzVector locTargetP4 = {0,0,0,0.938};
-		TLorentzVector locProtonP4_thrown;
-		TLorentzVector beamP4_thrown = dThrownBeam->Get_P4();
-		double locBeamE_thrown = beamP4_thrown.E();
+		//TLorentzVector etaP4_thrown;
+		//TLorentzVector pi0P4_thrown;
+		//TLorentzVector locTargetP4 = {0,0,0,0.938};
+		//TLorentzVector locProtonP4_thrown;
+		//TLorentzVector beamP4_thrown = dThrownBeam->Get_P4();
+		//double locBeamE_thrown = beamP4_thrown.E();
 
 		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 		{	
@@ -2184,27 +2184,28 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////// THIS SECTION WAS USED TO LOOK AT THE THROWN VARIABLES AND MAKE SELECTIONS ON THEM
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		TLorentzVector pi0EtaP4_thrown = pi0P4_thrown+etaP4_thrown;
-        	TLorentzVector cm_vec = beamP4_thrown+locTargetP4;
-        	TLorentzVector pi0EtaP4_thrown_cm = pi0EtaP4_thrown;
-        	TLorentzVector beamP4_thrown_cm = beamP4_thrown;
-        	pi0EtaP4_thrown_cm.Boost(-cm_vec.BoostVector());
-        	beamP4_thrown_cm.Boost(-cm_vec.BoostVector());
-		mandelstam_t_thrown = -(locProtonP4_thrown-locTargetP4).M2();
-		//double mandelstam_t0 = (locProtonP4_thrown.M2()-pi0EtaP4_thrown.M2()-locTargetP4.M2())/(2*(beamP4_thrown+locTargetP4).M())-(beamP4_thrown_cm-pi0EtaP4_thrown_cm).M2();
-		// The above formulation is in Hussein's thesis. Units dont match and doesnt agree with pdg. 
-		mandelstam_t0_thrown = -(TMath::Power(-pi0EtaP4_thrown.M2()/(2*(beamP4_thrown+locTargetP4).M()),2)-TMath::Power(beamP4_thrown_cm.Vect().Mag()-pi0EtaP4_thrown_cm.Vect().Mag(),2));
-		mandelstam_tp_thrown = mandelstam_t_thrown-mandelstam_t0_thrown;
-		dHist_mandelstam_t_thrown->Fill(mandelstam_t_thrown);
-		dHist_mandelstam_t0_thrown->Fill(mandelstam_t0_thrown);
-		dHist_mandelstam_tp_thrown->Fill(mandelstam_tp_thrown);
-        	double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(beamP4_thrown.E(), Proton, etaP4_thrown);
-		cout << "Calculated thrown variables to be used for selection matching to thrown MC" << endl;
-		bool pBeamE_thrown = locBeamE_thrown > 8;
-		if(correctFinalState){
-			dHist_thrown_tp->Fill(mandelstam_tp_thrown);
-		}
-		if (correctFinalState*pBeamE_thrown*keepPolarization*(mandelstam_tp_thrown<1)){
+		//TLorentzVector pi0EtaP4_thrown = pi0P4_thrown+etaP4_thrown;
+        	//TLorentzVector cm_vec = beamP4_thrown+locTargetP4;
+        	//TLorentzVector pi0EtaP4_thrown_cm = pi0EtaP4_thrown;
+        	//TLorentzVector beamP4_thrown_cm = beamP4_thrown;
+        	//pi0EtaP4_thrown_cm.Boost(-cm_vec.BoostVector());
+        	//beamP4_thrown_cm.Boost(-cm_vec.BoostVector());
+		//mandelstam_t_thrown = -(locProtonP4_thrown-locTargetP4).M2();
+		////double mandelstam_t0 = (locProtonP4_thrown.M2()-pi0EtaP4_thrown.M2()-locTargetP4.M2())/(2*(beamP4_thrown+locTargetP4).M())-(beamP4_thrown_cm-pi0EtaP4_thrown_cm).M2();
+		//// The above formulation is in Hussein's thesis. Units dont match and doesnt agree with pdg. 
+		//mandelstam_t0_thrown = -(TMath::Power(-pi0EtaP4_thrown.M2()/(2*(beamP4_thrown+locTargetP4).M()),2)-TMath::Power(beamP4_thrown_cm.Vect().Mag()-pi0EtaP4_thrown_cm.Vect().Mag(),2));
+		//mandelstam_tp_thrown = mandelstam_t_thrown-mandelstam_t0_thrown;
+		//dHist_mandelstam_t_thrown->Fill(mandelstam_t_thrown);
+		//dHist_mandelstam_t0_thrown->Fill(mandelstam_t0_thrown);
+		//dHist_mandelstam_tp_thrown->Fill(mandelstam_tp_thrown);
+        	//double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(beamP4_thrown.E(), Proton, etaP4_thrown);
+		//cout << "Calculated thrown variables to be used for selection matching to thrown MC" << endl;
+		//bool pBeamE_thrown = locBeamE_thrown > 8;
+		//if(correctFinalState){
+		//	dHist_thrown_tp->Fill(mandelstam_tp_thrown);
+		//}
+		//if (correctFinalState*pBeamE_thrown*keepPolarization*(mandelstam_tp_thrown<1)){
+		if (correctFinalState*keepPolarization){
 			dHist_thrown_tp_selected->Fill(mandelstam_tp_thrown);
 			if ( locPolarizationAngle == 0 ) { 
 				dHist_prodPlanePS_000->Fill(prodPlanePhi);
@@ -2220,33 +2221,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			}
 			if ( !hasPolarizationAngle ) { 
 				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
-			}
-			double degToRad = TMath::Pi()/180;
-			double p2 = 0.25;
-			double p1 = 0;
-			double p0 = 0.7;
-			double randomY = rgen->Uniform(0,1);
-			if ( randomY < p2*TMath::Cos(2*(prodPlanePhi-p1)*degToRad)+p0){
-				if ( locPolarizationAngle == 0 ) { 
-					dHist_prodPlanePS_000_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( locPolarizationAngle == 45 ) { 
-					dHist_prodPlanePS_045_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( locPolarizationAngle == 90 ) { 
-					dHist_prodPlanePS_090_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( locPolarizationAngle == 135 ) { 
-					dHist_prodPlanePS_135_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( !hasPolarizationAngle ) { 
-					dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
-				}
-			}	
-			// So if rejected by the rejection sampling then we just return the function here.
-			else {
-        			//dComboWrapper->Set_IsComboCut(true); 
-				return kTRUE;
 			}
 		}
 		// If the thrown variables do not pass our selections (on beam energy, or t' or w.e) we return the function also.
