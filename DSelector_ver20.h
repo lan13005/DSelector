@@ -14,6 +14,7 @@
 #include "TVector3.h"
 #include "THStack.h"
 #include "TCanvas.h"
+#include "TRandom.h"
 
 bool is_pi0eta=true;
 bool showThrownTopology=false;
@@ -378,7 +379,28 @@ class DSelector_ver20 : public DSelector
 		double locEtaMass_target=1;
 		double locPi0Mass_target=1;
 
+		TH1F* dHist_mandelstam_t_thrown;
+		TH1F* dHist_mandelstam_t0_thrown;
+		TH1F* dHist_mandelstam_tp_thrown;
+		double mandelstam_t_thrown;
+		double mandelstam_t0_thrown;
+		double mandelstam_tp_thrown;
+		double mandelstam_t0_oldForm;
+		double mandelstam_tp_oldForm;
 
+		TH1F* countThrownEvents;
+		TH1F* dHist_thrown_tp;
+		TH1F* dHist_thrown_tp_selected;
+        	TH1F* dHist_prodPlanePS_000; 
+        	TH1F* dHist_prodPlanePS_045; 
+        	TH1F* dHist_prodPlanePS_090; 
+        	TH1F* dHist_prodPlanePS_135; 
+        	TH1F* dHist_prodPlanePS_AMO; 
+        	TH1F* dHist_prodPlanePS_000_rejSamp;
+        	TH1F* dHist_prodPlanePS_045_rejSamp;
+        	TH1F* dHist_prodPlanePS_090_rejSamp;
+        	TH1F* dHist_prodPlanePS_135_rejSamp;
+        	TH1F* dHist_prodPlanePS_AMO_rejSamp;
                 TH1F* dHist_BeamAngle;
                 TH1F* dHist_BeamAngleMPE;
 		TH1F* dHist_Cuts;
@@ -610,6 +632,7 @@ class DSelector_ver20 : public DSelector
 		// Beam asymmetry stuff
 		double Emin = 8.2;
 		double Emax = 8.8;
+		TRandom* rgen = new TRandom(1992);
 		
 		/////////////// Charged Track Cuts/////////
 		double Rcut = 2;
@@ -630,7 +653,8 @@ class DSelector_ver20 : public DSelector
 		double MMsqCut = 0.05;
 		//double CLCut1 = 0.1;
 		//double CLCut = 0.01; // CLCut is the cut we want to uses for all other cuts, these others ones are for the RFTime graph
-		double ChiSqCut = 5;//13.277;
+		double ChiSqCut = 5;
+		double originalChiSqCut = 13.277;
 		double chiSq100 = 100;
 		//double CLCut3 = 0.001;
 		//double CLCut4 = 0.0001;
@@ -668,7 +692,6 @@ class DSelector_ver20 : public DSelector
 		// For the Deck beam asymmetry
 		bool pBeamE82to88=true;
 		bool pMpi0etaGT19=true;
-		bool ptEtaLT1=true;
 
 		
 		// pi0Eta specifc cuts
@@ -843,7 +866,12 @@ class DSelector_ver20 : public DSelector
 		// removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
 		bool allGeneralCutsPassed=true;
 		bool allGeneralCutsSinglePolarization=true;
-		bool ptEtaBeamAsym[5]={true,true,true,true,true};
+		//bool binteta[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_000[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_045[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_090[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_135[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_AMO[5]={true,true,true,true,true};
 		bool mMandelstamT=true;
 		bool mMandelstamT_mBeamE8GeVPlus=true;
 		//bool pDiffCL=true; 
@@ -882,6 +910,7 @@ class DSelector_ver20 : public DSelector
 		bool mMPi0P14_ellipse=true;
 		bool baseCuts=true;
 		bool baseCuts_mChiUE=true;
+		bool baseAsymCut_teta=true;
 		bool looseCuts=true;
 		bool pBase_pT_pIE_pBE8288_pMPi0P_pDelta = true;
                 bool noCut=true;

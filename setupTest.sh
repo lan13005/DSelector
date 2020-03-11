@@ -12,7 +12,7 @@ echo "*****************************"
 
 sed -i "s@showOutput\ =\ false@showOutput\ =\ true@g" DSelector_ver20.C
 sed -i "s@//if(itersToRun@if(itersToRun@g" DSelector_ver20.C
-sed -i "s@//}//closes@}//closes@g" DSelector_ver20.C
+#sed -i "s@//}//closes@}//closes@g" DSelector_ver20.C
 sed -i "s@useproof\ =\ 1@useproof\ =\ 0@g" runDSelector_7_17_14.C
 
 rm -f logTest.txt
@@ -20,7 +20,7 @@ root -l -b -q runDSelector_7_17_14.C > logTest.txt
 
 sed -i "s@showOutput\ =\ true@showOutput\ =\ false@g" DSelector_ver20.C
 sed -i "s@if(itersToRun@//if(itersToRun@g" DSelector_ver20.C
-sed -i "s@}//closes@//}//closes@g" DSelector_ver20.C
+#sed -i "s@}//closes@//}//closes@g" DSelector_ver20.C
 sed -i "s@useproof\ =\ 0@useproof\ =\ 1@g" runDSelector_7_17_14.C
 
 

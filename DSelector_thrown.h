@@ -7,6 +7,7 @@
 
 #include "TH1I.h"
 #include "TH2I.h"
+#include "TRandom.h"
 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
 	cout << "Finding daughters of parent " << selfLoc << endl;
@@ -80,11 +81,24 @@ class DSelector_thrown : public DSelector
                 vector<Int_t> vecHasSecondaryDaughters;
                 vector<Int_t> vecNumThrownNot7;
                 Int_t eventIdx=0;
+		TRandom* rgen = new TRandom(1992);
+		TH1F* countThrownEvents;
+		TH1F* dHist_prodPlanePS_000;
+		TH1F* dHist_prodPlanePS_045;
+		TH1F* dHist_prodPlanePS_090;
+		TH1F* dHist_prodPlanePS_135;
+		TH1F* dHist_prodPlanePS_AMO;
+		TH1F* dHist_prodPlanePS_000_rejSamp;
+		TH1F* dHist_prodPlanePS_045_rejSamp;
+		TH1F* dHist_prodPlanePS_090_rejSamp;
+		TH1F* dHist_prodPlanePS_135_rejSamp;
+		TH1F* dHist_prodPlanePS_AMO_rejSamp;
                 TH1I* dHist_PID;
                 TH1I* dHist_NumThrown;
 		TH1F *mandelstam_tpAll; 
+		TH1F *mandelstam_tpAll_selected;
 		TH1F *mandelstam_tAll; 
-		TH1F *mandelstam_tpLT1 ;
+		TH1F *mandelstam_tpLT1;
 		TH1F *mandelstam_tpLT06;
 		TH1F *mandelstam_tpGT05LT1;
 		TH2F *dHist_cosThetaVsMass_tpAll;

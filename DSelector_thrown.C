@@ -1,4 +1,5 @@
 #include "DSelector_thrown.h"
+#include "TRandom.h"
 string polarization="deg000";
 
 void DSelector_thrown::Init(TTree *locTree)
@@ -25,13 +26,25 @@ void DSelector_thrown::Init(TTree *locTree)
 		return; //have already created histograms, etc. below: exit
 
 	dPreviousRunNumber = 0;
+        countThrownEvents = new TH1F("count thrown events", "Cuts=noCut;counts", 1, 0, 1);
+        dHist_prodPlanePS_000 = new TH1F("prodPlanePS_000", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_045 = new TH1F("prodPlanePS_045", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_090 = new TH1F("prodPlanePS_090", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_135 = new TH1F("prodPlanePS_135", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_AMO = new TH1F("prodPlanePS_AM0", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_000_rejSamp = new TH1F("prodPlanePS_000_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_045_rejSamp = new TH1F("prodPlanePS_045_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_090_rejSamp = new TH1F("prodPlanePS_090_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_135_rejSamp = new TH1F("prodPlanePS_135_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_AMO_rejSamp = new TH1F("prodPlanePS_AM0_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV);Events / 2 Degree", 180,-180,180);
         dHist_SelectedBeamAngle = new TH1F("SelectedBeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV);Events / 2 Degree", 180,-180,180);
 	dHist_PID = new TH1I("PID","",50,0,50);
 	dHist_NumThrown = new TH1I("NumThrown","",10,0,10);
 	dHist_beamE = new TH1F("beamE","Beam Energy", 100,0,15);
 	dHist_beamECut = new TH1F("beamECut","Beam Energy", 100,0,15);
-	mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime",100,0,6);
+	mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime no cut",100,0,6);
+	mandelstam_tpAll_selected = new TH1F("mandelstam_tpAll_selected","tprime selected",100,0,6);
 	mandelstam_tAll = new TH1F("mandelstam_tAll","tprime",100,0,6);
 	mandelstam_tpLT1 = new TH1F("mandelstam_tpLT1","tprime<1",100,0,6);
 	mandelstam_tpLT06 = new TH1F("mandelstam_tpLT06","tprime<0.6",100,0,6);
@@ -118,6 +131,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		    dHist_BeamAngle->Fill(-1);
 		}
 	}
+
+	countThrownEvents->Fill(1);
+
     	keepPolarization=false;
     	if (polarization=="degALL"){ keepPolarization=true; }
     	else if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
@@ -178,7 +194,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 		if (locParentPID==-1 && locPID==7) { ++countPrimaryPi0; locPi0P4 = dThrownWrapper->Get_P4(); } 
 		if (locParentPID==-1 && locPID==17) { ++countPrimaryEta; locEtaP4 = dThrownWrapper->Get_P4(); } 
-
 		if(locParentPID==-1 && locPID==14) { locProtonP4 = dThrownWrapper->Get_P4(); } 
 
 		//Some verbal confirmation checking
@@ -202,7 +217,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 	}
 
 
-	if ( !notCorrectTopology ) { // if it doesn't have 1 pi0 and eta parent
+	if ( !notCorrectTopology ) { // if it has 1 pi0 and eta parent then we see if the daughters are both photons
 		std::vector<int> parents;
 		findParents(parentArray,parents);
 		cout << "\nTHESE ARE THE PARENTS" << endl;
@@ -232,8 +247,12 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		}
 		if ( pi0ToNGamma==2 && etaToNGamma==2) {
 			correctFinalState=true;
-			//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
-		}
+                        cout << "(Correct topology)" << endl;
+                }
+                else {
+                        cout << "(Incorrect topology) Some histograms will still be filled without the correct final state! FYI" << endl;
+                }
+
 
 		cout << "Found all the daughters" << endl;
 
@@ -252,6 +271,8 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		}
 		cout << "Calculated EBeam bins" << endl;
 
+        	double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamP4.E(), Proton, locEtaP4);
+		
 		TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
 
         	TLorentzVector cm_vec = locBeamP4+locTargetP4;
@@ -304,9 +325,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		double locPi0EtaMass = locPi0EtaP4.M();
 		double mandelstam_t = (locProtonP4-locTargetP4).M2();
 		double mandelstam_abst = abs(mandelstam_t);
-		double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
+		double mandelstam_t0 = (locProtonP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2())/(2*(locBeamP4+locTargetP4).M())-(locBeamP4_cm-locPi0EtaP4_cm).M2();
+		//double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
 		double mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
-
 		
 		dHist_NumThrown->Fill(locNumThrown);
 		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
@@ -344,7 +365,11 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 
 		bool pBeamE8GeV = locBeamP4.E() > 8;
-		if (correctFinalState*pBeamE8GeV*keepPolarization){
+		if(correctFinalState){
+			mandelstam_tpAll->Fill(mandelstam_tp);	
+			mandelstam_tAll->Fill(mandelstam_abst);
+		}
+		if(correctFinalState*pBeamE8GeV*keepPolarization){
 			dHist_SelectedBeamAngle->Fill(locPolarizationAngle);
 
 			dHist_beamECut->Fill(locBeamP4.E());
@@ -353,11 +378,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
 
 			//Fill_OutputTree must be run with proof!
-			mandelstam_tpAll->Fill(mandelstam_tp);
 			dHist_pi0eta1D->Fill(locPi0EtaMass);
 			dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
 			dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
-			mandelstam_tAll->Fill(mandelstam_abst);
 
 			if (mandelstam_abst<0.5){
 				dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
@@ -391,12 +414,55 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			//}
 			if(mandelstam_tp < 1){
 				// using this section to select out EBeam [8,9] and t'<1 for use in the delta+ asymmetry measurement
-				Fill_OutputTree("selected_tpLT1"); //your user-defined key
+				//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 			}
 			pass += 1;
 			//Fill_OutputTree();
 		}
-		cout << "Filling the rest of the histograms" << endl;
+
+
+
+		if (correctFinalState*pBeamE8GeV*keepPolarization*(mandelstam_tp<1)){
+			mandelstam_tpAll_selected->Fill(mandelstam_tp);
+			if ( locPolarizationAngle == 0 ) { 
+				dHist_prodPlanePS_000->Fill(prodPlanePhi);
+			}
+			if ( locPolarizationAngle == 45 ) { 
+				dHist_prodPlanePS_045->Fill(prodPlanePhi);
+			}
+			if ( locPolarizationAngle == 90 ) { 
+				dHist_prodPlanePS_090->Fill(prodPlanePhi);
+			}
+			if ( locPolarizationAngle == 135 ) { 
+				dHist_prodPlanePS_135->Fill(prodPlanePhi);
+			}
+			if ( !hasPolarizationAngle ) { 
+				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
+			}
+			double degToRad = TMath::Pi()/180;
+			double p2 = 0.25;
+			double p1 = 0;
+			double p0 = 0.7;
+			double randomY = rgen->Uniform(0,1);
+			if ( randomY < p2*TMath::Cos(2*(prodPlanePhi-p1)*degToRad)+p0){
+				if ( locPolarizationAngle == 0 ) { 
+					dHist_prodPlanePS_000_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( locPolarizationAngle == 45 ) { 
+					dHist_prodPlanePS_045_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( locPolarizationAngle == 90 ) { 
+					dHist_prodPlanePS_090_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( locPolarizationAngle == 135 ) { 
+					dHist_prodPlanePS_135_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( !hasPolarizationAngle ) { 
+					dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
+				}
+				Fill_OutputTree("selected_tpLT1"); //your user-defined key
+			}	
+		}
 
 	}
 

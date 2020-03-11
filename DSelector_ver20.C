@@ -3,8 +3,8 @@ bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
 //string degAngle = "a0a2a2pi1_";
-string degAngle="degALL";
-bool showOutput = false;
+string degAngle="deg000";
+bool showOutput = true;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
 
@@ -29,8 +29,8 @@ int itersToRun = 0;
 int finalStateComboID=0;
 
 string selectDetector="ALL";
-string polarization="degALL";
-string tag="_data";
+string polarization="deg000";
+string tag="_test";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -159,6 +159,19 @@ void DSelector_ver20::Init(TTree *locTree)
 	std::string massBin;   
 
         cout << "INITILIZED ACTIONS" << endl;
+        countThrownEvents = new TH1F("count thrown events", "Cuts=noCut;counts", 1, 0, 1);
+        dHist_thrown_tp = new TH1F("Thrown tp", "Cuts=noCut;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        dHist_thrown_tp_selected = new TH1F("Thrown tp selected", "Cuts=noCut;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        dHist_prodPlanePS_000 = new TH1F("prodPlanePS_000", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_045 = new TH1F("prodPlanePS_045", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_090 = new TH1F("prodPlanePS_090", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_135 = new TH1F("prodPlanePS_135", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_AMO = new TH1F("prodPlanePS_AM0", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_000_rejSamp = new TH1F("prodPlanePS_000_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_045_rejSamp = new TH1F("prodPlanePS_045_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_090_rejSamp = new TH1F("prodPlanePS_090_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_135_rejSamp = new TH1F("prodPlanePS_135_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
+        dHist_prodPlanePS_AMO_rejSamp = new TH1F("prodPlanePS_AM0_rejSamp", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
 
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
         dHist_BeamAngle->SetYTitle("Events / 2 Degree");
@@ -516,71 +529,79 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &locDeltaTRF );
         group_1234BP.insert(histdef); 
 	// **************************** BEAM ASYMMETRY STUFF ***************************
-        histdef.clear();
-        name="prodPlanePSphi_000_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
-        histdef.name = name; histdef.cut=&ptEtaBeamAsym[0]; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPhi );
-        group_1234BP.insert(histdef); 
-        histdef.clear();
-        name="prodPlanePSphi_045_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
-        histdef.name = name; histdef.cut=&ptEtaBeamAsym[1]; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPhi );
-        group_1234BP.insert(histdef); 
-        histdef.clear();
-        name="prodPlanePSphi_090_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
-        histdef.name = name; histdef.cut=&ptEtaBeamAsym[2]; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPhi );
-        group_1234BP.insert(histdef); 
-        histdef.clear();
-        name="prodPlanePSphi_135_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
-        histdef.name = name; histdef.cut=&ptEtaBeamAsym[3]; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPhi );
-        group_1234BP.insert(histdef); 
-        histdef.clear();
-        name="prodPlanePSphi_AMO_cut";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 7.2 degrees", 50, -3.14, 3.14);
-        histdef.name = name; histdef.cut=&ptEtaBeamAsym[4]; histdef.weights = &weightAS;
-        histdef.values.push_back( &locPhi );
-        group_1234BP.insert(histdef); 
-	// ******************************** Checking ChiSq **************************************************
-	double currentMin;
-	double currentMax;
-	int cumulativeBinNum;
-	for (int bin_Mpi0eta=0; bin_Mpi0eta<numMpi0etaBins; ++ bin_Mpi0eta){
-        	iUpChiSq = 1; 
-        	for (int bin=0; bin<numRegions_ChiSq; ++bin){
-        		histdef.clear();
-			cumulativeBinNum = bin_Mpi0eta*numRegions_ChiSq+bin;
-			currentMin = minMpi0eta+bin_Mpi0eta*binStepMpi0eta;
-			currentMax = minMpi0eta+(bin_Mpi0eta+1)*binStepMpi0eta;
-        		name="pi0Mass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
-        		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#pi^{0}) (GeV);Events / 0.001 GeV").c_str(),200,0.05,0.25);
-        		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPi0Mass_Kin );
-        		group_12B.insert(histdef); 
-
-        		histdef.clear();
-        		name="etaMass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
-        		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#eta) (GeV);Events / 0.002 GeV").c_str(),300,0.25,0.85);
-        		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locEtaMass_Kin );
-        		group_34B.insert(histdef); 
-		
-        		//histdef2d.clear();
-        		//name = "eta_cosTheta_GJvsM_mEllipsePre";
-        		//histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi^{0}#eta)Events / 0.02 GeV;Cos(#theta) of #eta Events / 0.02",175,0,3.5,100,-1,1);
-        		//histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
-        		//histdef2d.valuesX.push_back( &locPi0Eta_Kin );
-        		//histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        		//group_34B_1234B.insert_2D(histdef2d); 
-        		//histdef2d.clear();
-        	    	iUpChiSq+=2;
-        	}
+        //histdef.clear();
+        //name="prodPlanePSphi";
+        //histdef.hist = new TH1F(name.c_str(), "Cuts=noCut;#phi; Entries / 9 degrees", 40, -180, 180);
+        //histdef.name = name; histdef.cut=&noCut; histdef.weights = &noWeight;
+        //histdef.values.push_back( &locPhi );
+        //group_1234BP.insert(histdef); 
+	for (int iteta=0; iteta<5; ++iteta){
+        	histdef.clear();
+        	name="prodPlanePSphi_000_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_000[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_045_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_045[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_090_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_090[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_135_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_135[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_AMO_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_AMO[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi );
+        	group_1234BP.insert(histdef); 
 	}
+	// ******************************** Checking ChiSq Cut for Matt **************************************************
+	//double currentMin;
+	//double currentMax;
+	//int cumulativeBinNum;
+	//for (int bin_Mpi0eta=0; bin_Mpi0eta<numMpi0etaBins; ++ bin_Mpi0eta){
+        //	iUpChiSq = 1; 
+        //	for (int bin=0; bin<numRegions_ChiSq; ++bin){
+        //		histdef.clear();
+	//		cumulativeBinNum = bin_Mpi0eta*numRegions_ChiSq+bin;
+	//		currentMin = minMpi0eta+bin_Mpi0eta*binStepMpi0eta;
+	//		currentMax = minMpi0eta+(bin_Mpi0eta+1)*binStepMpi0eta;
+        //		name="pi0Mass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
+        //		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#pi^{0}) (GeV);Events / 0.001 GeV").c_str(),200,0.05,0.25);
+        //		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPi0Mass_Kin );
+        //		group_12B.insert(histdef); 
+
+        //		histdef.clear();
+        //		name="etaMass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
+        //		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#eta) (GeV);Events / 0.002 GeV").c_str(),300,0.25,0.85);
+        //		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locEtaMass_Kin );
+        //		group_34B.insert(histdef); 
+	//	
+        //		//histdef2d.clear();
+        //		//name = "eta_cosTheta_GJvsM_mEllipsePre";
+        //		//histdef2d.hist = new TH2F(name.c_str(), "Cut=GeneralCuts;M(#pi^{0}#eta)Events / 0.02 GeV;Cos(#theta) of #eta Events / 0.02",175,0,3.5,100,-1,1);
+        //		//histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
+        //		//histdef2d.valuesX.push_back( &locPi0Eta_Kin );
+        //		//histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
+        //		//group_34B_1234B.insert_2D(histdef2d); 
+        //		//histdef2d.clear();
+        //	    	iUpChiSq+=2;
+        //	}
+	//}
 	// ********************************** Kinematics related *********************************************
         histdef.clear();
         name="P4ChiSqKinFit_mChiSq";
@@ -615,7 +636,7 @@ void DSelector_ver20::Init(TTree *locTree)
         name="mandelstam_t";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
-        histdef.values.push_back( &mandelstam_abst );
+        histdef.values.push_back( &mandelstam_t );
         group_1234B.insert(histdef); 
 
 	// Will leave bin to contain all the bad regions
@@ -1145,13 +1166,42 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.values.push_back( &locPi0Mass_Kin );
         group_12B.insert(histdef); 
 
+	histdef.clear();
+        name="mandelstam_teta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_teta;t_{#eta} (GeV^2)", 80,0,8);
+        histdef.name = name; histdef.cut=&baseAsymCut_teta; histdef.weights = &weightAS;
+        histdef.values.push_back( &mandelstam_teta );
+        group_34B.insert(histdef); 
+
+	histdef.clear();
+        name="mandelstam_teta_Kin";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_teta;t_{#eta} (GeV^2)", 80,0,8);
+        histdef.name = name; histdef.cut=&baseAsymCut_teta; histdef.weights = &weightAS;
+        histdef.values.push_back( &mandelstam_teta_Kin );
+        group_34B.insert(histdef); 
+	//for (int iteta=0; iteta<5; ++iteta){
+	//	histdef.clear();
+        //	name="mandelstam_teta"+to_string(iteta);
+        //	histdef.hist = new TH1F(name.c_str(), "Cuts=binteta;t_{#eta} (GeV^2)", 80,0,8);
+        //	histdef.name = name; histdef.cut=&binteta[iteta]; histdef.weights = &weightAS;
+        //	histdef.values.push_back( &mandelstam_teta );
+        //	group_34B.insert(histdef); 
+
+	//	histdef.clear();
+        //	name="mandelstam_teta_Kin"+to_string(iteta);
+        //	histdef.hist = new TH1F(name.c_str(), "Cuts=binteta;t_{#eta} (GeV^2)", 80,0,8);
+        //	histdef.name = name; histdef.cut=&binteta[iteta]; histdef.weights = &weightAS;
+        //	histdef.values.push_back( &mandelstam_teta_Kin );
+        //	group_34B.insert(histdef); 
+	//}
+
 	histdef2d.clear();
         name="tetaVsMeta";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mEllipse_pre_tAll;M(#eta) (GeV);t_{#eta} (GeV^2)", 300, 0.25, 0.85, 80,0,8);
         histdef2d.name = name; histdef2d.cut=&mEllipse_pre_tAll; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaMass_Kin );
         histdef2d.valuesY.push_back( &mandelstam_teta_Kin );
-        group_12B.insert_2D(histdef2d); 
+        group_34B.insert_2D(histdef2d); 
 
         histdef.clear();
         name="etaMass_Kin_mEllipsePre";
@@ -1436,6 +1486,17 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.valuesY.push_back( &mandelstam_tpi0_Kin );
         group_34B_1234B.insert_2D(histdef2d); 
 
+        dHist_mandelstam_t_thrown = new TH1F("dHist_mandelstam_t_thrown", "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        dHist_mandelstam_t0_thrown = new TH1F("dHist_mandelstam_t0_thrown", "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        dHist_mandelstam_tp_thrown = new TH1F("dHist_mandelstam_tp_thrown", "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+
+        histdef.clear();
+        name="mandelstam_tp_oldForm";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
+        histdef.values.push_back( &mandelstam_tp_oldForm );
+        group_1234B.insert(histdef); 
+
         histdef.clear();
         name="mandelstam_tp";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
@@ -1694,7 +1755,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=mMandelstamT;M(#pi^{0}#eta) with Events / 0.02  GeV;-t momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",100,0.8,2.5,100,0,4);
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
-        histdef2d.valuesY.push_back( &mandelstam_abst );
+        histdef2d.valuesY.push_back( &mandelstam_t );
 		// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
         group_1234B.insert_2D(histdef2d); 
 
@@ -1714,7 +1775,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef2d.hist = new TH2F(name.c_str(), "Cuts=allGeneralCutsPassed;M(#pi^{0}#eta) with Events / 0.02  GeV;-t momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",100,0.8,2.5,100,0,4);
         //histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         //histdef2d.valuesX.push_back( &locPi0Eta_Kin );
-        //histdef2d.valuesY.push_back( &mandelstam_abst );
+        //histdef2d.valuesY.push_back( &mandelstam_t );
 	//	// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
         //group_1234B.insert_2D(histdef2d); 
 
@@ -1965,7 +2026,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     	set< map<Particle_t, set<Int_t> > > used123B;
     	set< map<Particle_t, set<Int_t> > > used124B;
 
-    	//if(itersToRun<1000000){ ++itersToRun; //so we can just try to show the outut of one event 
+    	//if(itersToRun>100){ return kTRUE; }// ++itersToRun; //so we can just try to show the outut of one event 
 	++count_events;
     	if(showOutput){cout << "Starting next process looping" << endl;}
     	// The Process() function is called for each entry in the tree. The entry argument
@@ -1995,18 +2056,72 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		paddedEvent = "0" + paddedEvent;
 	}
 
+    	/******************************************** GET POLARIZATION ORIENTATION ******************************************/
+
+    	//Only if the run number change
+    	//RCDB environment must be setup in order for this to work! (Will return false otherwise)
+    	UInt_t locRunNumber = Get_RunNumber();
+    	// we must have the following condition or else we run into errors, or maybe rcdb hangs due to the amount of querries or something. Anyways, it wouldn't work. 
+    	if(locRunNumber != dPreviousRunNumber)
+    	{
+    	    dIsPolarizedFlag = dAnalysisUtilities.Get_IsPolarizedBeam(locRunNumber, dIsPARAFlag);
+    	    hasPolarizationAngle = dAnalysisUtilities.Get_PolarizationAngle(locRunNumber, locPolarizationAngle);
+    	    if(showOutput){cout << "Getting beam polarization and filling used runs" << endl;}
+    	    if (usedRuns.find(locRunNumber)==usedRuns.end()){
+    	        if (hasPolarizationAngle) {
+    	            dHist_BeamAngle->Fill(locPolarizationAngle);
+    	        }
+    	        else {
+    	    	dHist_BeamAngle->Fill(-1);
+    	        }
+
+    	        usedRuns.insert(locRunNumber);
+    	    }
+    	    // Making a cut on the polarization angle to split the dataset up
+    	    dPreviousRunNumber = locRunNumber;
+    	}
+
+
+    	keepPolarization=false;
+    	if (polarization=="degALL"){ keepPolarization=true; }
+    	if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
+    	if (locPolarizationAngle==45 && polarization=="deg045") { keepPolarization=true; }
+    	if (locPolarizationAngle==90 && polarization=="deg090") { keepPolarization=true; }
+    	if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
+    	if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
+	if (!keepPolarization) { cout << "Throwing out the event since locPolarizationAngle is " << locPolarizationAngle << " and our selection criteria requires " << polarization << endl; }
+
+    	keepPolarization000=false;
+    	keepPolarization045=false;
+    	keepPolarization090=false;
+    	keepPolarization135=false;
+    	keepPolarizationAMO=false;
+    	if ( locPolarizationAngle==0 ) { keepPolarization000=true; }
+    	if ( locPolarizationAngle==45 ) { keepPolarization045=true; }
+    	if ( locPolarizationAngle==90 ) { keepPolarization090=true; }
+    	if ( locPolarizationAngle==135 ) { keepPolarization135=true; }
+    	if ( !hasPolarizationAngle ) { keepPolarizationAMO=true; }
 	std::vector<int> parentArray;
-	TLorentzVector etaP4;
-	TLorentzVector pi0P4;
-	TLorentzVector pi0etaP4;
+	cout << "Defined thrown P4s so we can use them to match with our selections from the thrown dselector" << endl;
+
+
 	std::vector<int> pids;
 	int locNumThrown = Get_NumThrown();
 
 	/************************************************* PARSE THROWN TOPOLOGY ***************************************/
 	TString locThrownTopology = Get_ThrownTopologyString();
+	countThrownEvents->Fill(1);
 
 	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
+	bool correctFinalState=false;
 	if (Get_NumThrown() != 0 ) {
+		TLorentzVector etaP4_thrown;
+		TLorentzVector pi0P4_thrown;
+		TLorentzVector locTargetP4 = {0,0,0,0.938};
+		TLorentzVector locProtonP4_thrown;
+		TLorentzVector beamP4_thrown = dThrownBeam->Get_P4();
+		double locBeamE_thrown = beamP4_thrown.E();
+
 		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 		{	
 			//Set branch array indices corresponding to this particle
@@ -2018,8 +2133,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 			parentArray.push_back(locParentPID);
 			pids.push_back(locPID);
-			if (locPID==7 && locParentPID==-1) { pi0P4 = dThrownWrapper->Get_P4(); } 
-			if (locPID==17 && locParentPID==-1) { etaP4 = dThrownWrapper->Get_P4(); } 
+			if (locPID==7 && locParentPID==-1) { cout << "Found thrown pi0" << endl; pi0P4_thrown = dThrownWrapper->Get_P4(); } 
+			if (locPID==17 && locParentPID==-1) { cout << "Found thrown eta" << endl; etaP4_thrown = dThrownWrapper->Get_P4(); } 
+			if(locParentPID==-1 && locPID==14) { cout << "Found thrown proton" << endl; locProtonP4_thrown = dThrownWrapper->Get_P4(); } 
 		}
 
 		std::vector<int> parents;
@@ -2031,7 +2147,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 		int pi0ToNGamma=0;
 		int etaToNGamma=0;
-		bool correctFinalState=false;
 		for (auto parent : parents){
 			std::vector<int> daughters;
 			cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
@@ -2042,74 +2157,110 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			}
 		}
 		if ( pi0ToNGamma==2 && etaToNGamma==2) {
-			//correctFinalState=true;
+			correctFinalState=true;
 			//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
-			pi0etaP4 = pi0P4+etaP4;
-			locPi0Eta_thrown = pi0etaP4.M();
 			++count_correctTopology;
+			cout << "(Correct topology)" << endl;
 		}
-		else { 
-        		if(showOutput) { cout << "\n\n\n*********************************************************\n**************************************************\n########    EventIdx: " << (eventIdx) << "    #############" << endl; }
-			++eventIdx;
-			cout << "SKIPPING THIS COMBO SINCE IT DOESN'T HAVE THE 4 GAMMA TOPOLOGY" << endl;
-			cout << "THESE ARE THE PARTICLES:" << endl;
-			for ( auto pid : pids ) {
-				cout << pid << " ";
+		else {
+			cout << "(Incorrect topology)" << endl;
+		}
+		// This section of the code will no longer be used since we have to do more than just have the 4 gamma topology. We must enforce other cuts like BeamE or mandelstam_t cut to match thrown
+		//else { 
+        	//	if(showOutput) { cout << "\n\n\n*********************************************************\n**************************************************\n########    EventIdx: " << (eventIdx) << "    #############" << endl; }
+		//	++eventIdx;
+		//	cout << "SKIPPING THIS COMBO SINCE IT DOESN'T HAVE THE 4 GAMMA TOPOLOGY" << endl;
+		//	cout << "THESE ARE THE PARTICLES:" << endl;
+		//	for ( auto pid : pids ) {
+		//		cout << pid << " ";
+		//	}
+		//	cout << endl;
+		//	if (!showThrownTopology) { 
+        	//		dComboWrapper->Set_IsComboCut(true); return kTRUE;
+		//	}
+		//}
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////// THIS SECTION WAS USED TO LOOK AT THE THROWN VARIABLES AND MAKE SELECTIONS ON THEM
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		TLorentzVector pi0EtaP4_thrown = pi0P4_thrown+etaP4_thrown;
+        	TLorentzVector cm_vec = beamP4_thrown+locTargetP4;
+        	TLorentzVector pi0EtaP4_thrown_cm = pi0EtaP4_thrown;
+        	TLorentzVector beamP4_thrown_cm = beamP4_thrown;
+        	pi0EtaP4_thrown_cm.Boost(-cm_vec.BoostVector());
+        	beamP4_thrown_cm.Boost(-cm_vec.BoostVector());
+		mandelstam_t_thrown = -(locProtonP4_thrown-locTargetP4).M2();
+		//double mandelstam_t0 = (locProtonP4_thrown.M2()-pi0EtaP4_thrown.M2()-locTargetP4.M2())/(2*(beamP4_thrown+locTargetP4).M())-(beamP4_thrown_cm-pi0EtaP4_thrown_cm).M2();
+		// The above formulation is in Hussein's thesis. Units dont match and doesnt agree with pdg. 
+		mandelstam_t0_thrown = -(TMath::Power(-pi0EtaP4_thrown.M2()/(2*(beamP4_thrown+locTargetP4).M()),2)-TMath::Power(beamP4_thrown_cm.Vect().Mag()-pi0EtaP4_thrown_cm.Vect().Mag(),2));
+		mandelstam_tp_thrown = mandelstam_t_thrown-mandelstam_t0_thrown;
+		dHist_mandelstam_t_thrown->Fill(mandelstam_t_thrown);
+		dHist_mandelstam_t0_thrown->Fill(mandelstam_t0_thrown);
+		dHist_mandelstam_tp_thrown->Fill(mandelstam_tp_thrown);
+        	double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(beamP4_thrown.E(), Proton, etaP4_thrown);
+		cout << "Calculated thrown variables to be used for selection matching to thrown MC" << endl;
+		bool pBeamE_thrown = locBeamE_thrown > 8;
+		if(correctFinalState){
+			dHist_thrown_tp->Fill(mandelstam_tp_thrown);
+		}
+		if (correctFinalState*pBeamE_thrown*keepPolarization*(mandelstam_tp_thrown<1)){
+			dHist_thrown_tp_selected->Fill(mandelstam_tp_thrown);
+			if ( locPolarizationAngle == 0 ) { 
+				dHist_prodPlanePS_000->Fill(prodPlanePhi);
 			}
-			cout << endl;
-			if (!showThrownTopology) { 
-        			dComboWrapper->Set_IsComboCut(true); return kTRUE;
+			if ( locPolarizationAngle == 45 ) { 
+				dHist_prodPlanePS_045->Fill(prodPlanePhi);
+			}
+			if ( locPolarizationAngle == 90 ) { 
+				dHist_prodPlanePS_090->Fill(prodPlanePhi);
+			}
+			if ( locPolarizationAngle == 135 ) { 
+				dHist_prodPlanePS_135->Fill(prodPlanePhi);
+			}
+			if ( !hasPolarizationAngle ) { 
+				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
+			}
+			double degToRad = TMath::Pi()/180;
+			double p2 = 0.25;
+			double p1 = 0;
+			double p0 = 0.7;
+			double randomY = rgen->Uniform(0,1);
+			if ( randomY < p2*TMath::Cos(2*(prodPlanePhi-p1)*degToRad)+p0){
+				if ( locPolarizationAngle == 0 ) { 
+					dHist_prodPlanePS_000_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( locPolarizationAngle == 45 ) { 
+					dHist_prodPlanePS_045_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( locPolarizationAngle == 90 ) { 
+					dHist_prodPlanePS_090_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( locPolarizationAngle == 135 ) { 
+					dHist_prodPlanePS_135_rejSamp->Fill(prodPlanePhi);
+				}
+				if ( !hasPolarizationAngle ) { 
+					dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
+				}
+			}	
+			// So if rejected by the rejection sampling then we just return the function here.
+			else {
+        			//dComboWrapper->Set_IsComboCut(true); 
+				return kTRUE;
 			}
 		}
+		// If the thrown variables do not pass our selections (on beam energy, or t' or w.e) we return the function also.
+		else {
+			return kTRUE;
+		}
+		// SO THE COMBINATION OF THE ABOVE RETURN COMMANDS SHOULD MAKE IT SUCH THAT ONLY EVENTS WITH THROWN VALUES THAT PASS THE SELECTIONS AND ARE SELECTED BY THE REJECTION SAMPLING 
+		// MOVE ON TO THE NEXT STEP OF THE PROCESS FUNCTION WHERE COMBOS ARE LOOPED OVER. THE EVENT IS SAVED IF THESE EVENTS HAVE AT LEAST ONE COMBO THAT PASSED THE SELECTION, THAT DID
+		// NOT SET SETCOMBOISCUT TO TRUE.
+		cout << "Filled all this histograms" << endl;
 	}
-
-
-
-
-    /******************************************** GET POLARIZATION ORIENTATION ******************************************/
-
-    //Only if the run number change
-    //RCDB environment must be setup in order for this to work! (Will return false otherwise)
-    UInt_t locRunNumber = Get_RunNumber();
-    // we must have the following condition or else we run into errors, or maybe rcdb hangs due to the amount of querries or something. Anyways, it wouldn't work. 
-    if(locRunNumber != dPreviousRunNumber)
-    {
-        dIsPolarizedFlag = dAnalysisUtilities.Get_IsPolarizedBeam(locRunNumber, dIsPARAFlag);
-        hasPolarizationAngle = dAnalysisUtilities.Get_PolarizationAngle(locRunNumber, locPolarizationAngle);
-        if(showOutput){cout << "Getting beam polarization and filling used runs" << endl;}
-        if (usedRuns.find(locRunNumber)==usedRuns.end()){
-            if (hasPolarizationAngle) {
-                dHist_BeamAngle->Fill(locPolarizationAngle);
-            }
-	    else {
-		dHist_BeamAngle->Fill(-1);
-	    }
-
-            usedRuns.insert(locRunNumber);
-        }
-	// Making a cut on the polarization angle to split the dataset up
-        dPreviousRunNumber = locRunNumber;
-    }
-    keepPolarization=false;
-    if (polarization=="degALL"){ keepPolarization=true; }
-    else if (locPolarizationAngle==0 && polarization=="deg000") { keepPolarization=true; }
-    else if (locPolarizationAngle==45 && polarization=="deg045") { keepPolarization=true; }
-    else if (locPolarizationAngle==90 && polarization=="deg090") { keepPolarization=true; }
-    else if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
-    else if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
-    else {  cout << "FUDGE! THERE IS AN UNEXPECTED OUTCOME FROM THE POLARIZATION CHECK" << endl; } 
-
-    keepPolarization000=false;
-    keepPolarization045=false;
-    keepPolarization090=false;
-    keepPolarization135=false;
-    keepPolarizationAMO=false;
-    if ( locPolarizationAngle==0 ) { keepPolarization000=true; }
-    if ( locPolarizationAngle==45 ) { keepPolarization045=true; }
-    if ( locPolarizationAngle==90 ) { keepPolarization090=true; }
-    if ( locPolarizationAngle==135 ) { keepPolarization135=true; }
-    if ( !hasPolarizationAngle ) { keepPolarizationAMO=true; }
-    
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     /********************************************* SETUP UNIQUENESS TRACKING ********************************************/
@@ -2661,12 +2812,10 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         else if (deg == "135") { locPolarizationAngle = 135; }
         else { locPolarizationAngle = -999; } // just wanted a number negative enough to make locPhi, no matter the value, always negative so there is some indication to look for.
         locPhi = locPolarizationAngle - prodPlanePhi;
-	locPhi = locPhi/radToDeg;
 
         // Calculating kinematic variables like t and cosTheta
-        mandelstam_t = (locProtonP4_Kin-dTargetP4).M2();
-	mandelstam_abst = abs(mandelstam_t);
-        mandelstam_t_pe = (locBeamP4_Kin-mixingPi0Eta).M2();
+        mandelstam_t = -(dTargetP4-locProtonP4_Kin).M2();
+        mandelstam_t_pe = -(locBeamP4_Kin-mixingPi0Eta).M2();
         mandelstam_teta = -(locBeamP4-locEtaP4).M2();
         mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
         mandelstam_teta_Kin = -(locBeamP4_Kin-locEtaP4_Kin).M2();
@@ -2735,11 +2884,21 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         phi_pi0_CM = pi0_cm.Phi()*radToDeg;
         phi_eta_CM = eta_cm.Phi()*radToDeg;
 
-        //mandelstam_t0 = TMath::Power((locProtonP4_Kin.M2()-mixingPi0Eta_Kin.M2()-dTargetP4.M2())/(2*(locBeamP4_Kin+dTargetP4).M()),2)-(beam_cm-mixingPi0Eta_cm).M2();
-        mandelstam_t0 = TMath::Power((locBeamP4_Kin.M2()-mixingPi0Eta_Kin.M2()-dTargetP4.M2()+locProtonP4_Kin.M2())/(2*(locBeamP4_Kin+dTargetP4).M()),2)-(beam_cm-mixingPi0Eta_cm).M2();
-        mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
-        mandelstam_tp_pe = abs(mandelstam_t_pe-mandelstam_t0);
+        mandelstam_t0_oldForm = -(TMath::Power(-mixingPi0Eta_Kin.M2()/(2*(locBeamP4_Kin+dTargetP4).M()),2)-(beam_cm-mixingPi0Eta_cm).M2());
+	double term1 = -mixingPi0Eta_Kin.M2()/2/cm_vec.M();
+	double shift = (beam_cm.Vect().Mag()-mixingPi0Eta_cm.Vect().Mag())*(beam_cm.Vect().Mag()-mixingPi0Eta_cm.Vect().Mag());
+        mandelstam_t0 = -(TMath::Power(-mixingPi0Eta_Kin.M2()/(2*(locBeamP4_Kin+dTargetP4).M()),2)-TMath::Power(beam_cm.Vect().Mag()-mixingPi0Eta_cm.Vect().Mag(),2));
+        mandelstam_tp = mandelstam_t-mandelstam_t0;
+        mandelstam_tp_pe = mandelstam_t_pe-mandelstam_t0;
+	mandelstam_tp_oldForm = mandelstam_t-mandelstam_t0_oldForm;
 
+
+	double PBeam_cm = locBeamP4_Kin.Vect().Mag()*dTargetP4.M()/cm_vec.M();
+	double EX_cm = (cm_vec.M2()+mixingPi0Eta_cm.M2()-locProtonP4_Kin.M2())/2/cm_vec.M();
+	double PX_cm = sqrt(EX_cm*EX_cm-mixingPi0Eta_Kin.M2());
+	double shiftFromEqn = (PBeam_cm-PX_cm)*(PBeam_cm-PX_cm);
+	cout << "Shift, Shift from eqn = " << shift << ", " << shiftFromEqn << endl;
+	cout << "Mandelstam_t = " << mandelstam_t << endl;
 
 
 	
@@ -3206,9 +3365,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         }
 
         ptpLT1 = mandelstam_tp<1; 
-        ptGT1 = mandelstam_abst>1; 
-        ptLT05 = mandelstam_abst<0.5; 
-        ptGT05LT1 = mandelstam_abst<1 && mandelstam_abst>0.5; 
+        ptGT1 = mandelstam_t>1; 
+        ptLT05 = mandelstam_t<0.5; 
+        ptGT05LT1 = mandelstam_t<1 && mandelstam_t>0.5; 
 
 
 
@@ -3230,7 +3389,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 
 	pMpi0etaGT19=locPi0Eta_Kin>1.9;
-	ptEtaLT1=mandelstam_teta<1;
 	
 	/////////////////////// ************ BASE CUTS *********************
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
@@ -3241,11 +3399,17 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
 	allGeneralCutsSinglePolarization = allGeneralCutsPassed*keepPolarization;	
 	// same cuts as allGenearlCuts without the t' < 1 since we will use teta < 1. We will also choose a beam asym that John used and select out the Deck region with Mpi0eta > 1.9
-	ptEtaBeamAsym[0] = keepPolarization000*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
-	ptEtaBeamAsym[1] = keepPolarization045*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
-	ptEtaBeamAsym[2] = keepPolarization090*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
-	ptEtaBeamAsym[3] = keepPolarization135*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
-	ptEtaBeamAsym[4] = keepPolarizationAMO*mMandelstamT*pBeamE82to88*pMpi0etaGT19*ptEtaLT1;
+	baseAsymCut_teta = !pMPi0P14*pBeamE82to88*pMpi0etaGT19*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+	for (int iteta=0; iteta<5; ++iteta){
+		cout << "Requring mandelstam_teta to be betweem " << iteta*0.2 << " and " << (iteta+1)*0.2 << endl;
+		bool select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
+		ptEtaBeamAsym_000[iteta] = keepPolarization000*baseAsymCut_teta*select_teta_bin;
+		ptEtaBeamAsym_045[iteta] = keepPolarization045*baseAsymCut_teta*select_teta_bin;
+		ptEtaBeamAsym_090[iteta] = keepPolarization090*baseAsymCut_teta*select_teta_bin;
+		ptEtaBeamAsym_135[iteta] = keepPolarization135*baseAsymCut_teta*select_teta_bin;
+		ptEtaBeamAsym_AMO[iteta] = keepPolarizationAMO*baseAsymCut_teta*select_teta_bin;
+		//binteta[iteta] = baseAsymCut_teta*select_teta_bin;
+	}
 	
 	mMandelstamT_mBeamE8GeVPlus = !pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
 	//
@@ -3543,12 +3707,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
-        //if (!mEllipse_pre_tAll || !detectorCut) {
-        //if (!mEllipse_pre || !detectorCut) {
+        //if (!mEllipse_pre_tAll || !detectorCut) 
+        //if (!mEllipse_pre || !detectorCut) 
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
-	//if (!looseCuts || !detectorCut ){
+	//if (!looseCuts || !detectorCut )
 	if (!allGeneralCutsSinglePolarization || !detectorCut){
-	//if (!pBase_pT_pIE_pBE8288_pMPi0P_pDelta || !detectorCut){
+	//if (!pBase_pT_pIE_pBE8288_pMPi0P_pDelta || !detectorCut)
 	    if (showOutput) { cout << "Did not pass cut, moving on.... " << endl; }  
             dComboWrapper->Set_IsComboCut(true); continue; 
         }
@@ -3825,7 +3989,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	    Fill_OutputTree(); 
     }
 
-    //}//closes the //if(itersToRun) condition
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.
 }// end of process loop
 

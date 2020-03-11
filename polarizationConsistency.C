@@ -1,6 +1,6 @@
 void polarizationConsistency(){
-	string beamAngles[6] = {"deg000","deg045","deg090","deg135","degAMO","degALL"};
-	string dataTypes[1] = {"gen"}; //{"data","acc","gen"};
+	string beamAngles[1] = {"deg000"};//,"deg045","deg090","deg135","degAMO","degALL"};
+	string dataTypes[1] = {"data"};//,"acc","gen"};
 	TFile* newFile;
 	TTree* newTree;
 	int sumEvents=0;

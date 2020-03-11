@@ -99,8 +99,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 
 	// should change the name below from data to reco when running over MC
-	string degAngle="degALL";
-	string tag="_data";
+	string degAngle="deg000";
+	string tag="_test";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 
