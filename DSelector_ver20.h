@@ -387,6 +387,7 @@ class DSelector_ver20 : public DSelector
 		double mandelstam_tp_thrown;
 		double mandelstam_t0_oldForm;
 		double mandelstam_tp_oldForm;
+		double Ebeam_thrown;
 
 		TH1F* countThrownEvents;
 		TH1F* dHist_thrown_tp;
@@ -545,7 +546,8 @@ class DSelector_ver20 : public DSelector
 		
 		//*********** Kinematic variables
 		double locDecayPlaneTheta=1;
-		double locPhi=1;
+		double locPhi_eta=1;
+		double locPhi_pi0=1;
 		// Calculating kinematic variables like t and cosTheta
 		double mandelstam_teta=1;
 		double mandelstam_teta_Kin=1;
@@ -691,7 +693,7 @@ class DSelector_ver20 : public DSelector
 		bool pBeamE8GeVPlus=true;
 		// For the Deck beam asymmetry
 		bool pBeamE82to88=true;
-		bool pMpi0etaGT19=true;
+		bool pMpi0etaGT17LT29=true;
 
 		
 		// pi0Eta specifc cuts
@@ -872,6 +874,21 @@ class DSelector_ver20 : public DSelector
 		bool ptEtaBeamAsym_090[5]={true,true,true,true,true};
 		bool ptEtaBeamAsym_135[5]={true,true,true,true,true};
 		bool ptEtaBeamAsym_AMO[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_backwardPi0P_000[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_backwardPi0P_045[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_backwardPi0P_090[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_backwardPi0P_135[5]={true,true,true,true,true};
+		bool ptEtaBeamAsym_backwardPi0P_AMO[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_000[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_045[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_090[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_135[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_AMO[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_backwardEtaP_000[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_backwardEtaP_045[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_backwardEtaP_090[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_backwardEtaP_135[5]={true,true,true,true,true};
+		bool ptPi0BeamAsym_backwardEtaP_AMO[5]={true,true,true,true,true};
 		bool mMandelstamT=true;
 		bool mMandelstamT_mBeamE8GeVPlus=true;
 		//bool pDiffCL=true; 
@@ -911,6 +928,9 @@ class DSelector_ver20 : public DSelector
 		bool baseCuts=true;
 		bool baseCuts_mChiUE=true;
 		bool baseAsymCut_teta=true;
+		bool baseAsymCut_teta_mMpi0etaGT17LT29=true;
+		bool baseAsymCut_backwardPi0P=true;
+		bool baseAsymCut_backwardEtaP=true;
 		bool looseCuts=true;
 		bool pBase_pT_pIE_pBE8288_pMPi0P_pDelta = true;
                 bool noCut=true;

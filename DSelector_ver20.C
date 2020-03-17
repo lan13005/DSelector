@@ -2,8 +2,7 @@
 bool NoCut=0;
 // degXXX where XXX = {000,045,090,135,All} where All is polarization independent. Actually anything other than the first 4 cases work but
 // MUST BE ATLEAST 3 CHARACTERS LONG.
-//string degAngle = "a0a2a2pi1_";
-string degAngle="deg000";
+//string polarization = "a0a2a2pi1_";
 bool showOutput = true;
 bool showMassCalc = false;
 bool onlyNamesPi0_1 = true; // true if we want to show only the histograms with _1 in their names so we can merge them with _2
@@ -29,8 +28,8 @@ int itersToRun = 0;
 int finalStateComboID=0;
 
 string selectDetector="ALL";
-string polarization="deg000";
-string tag="_test";
+string polarization="degALL";
+string tag="_data_2017";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -78,10 +77,10 @@ void DSelector_ver20::Init(TTree *locTree)
 	// Init() will be called many times when running on PROOF (once per file to be processed).
 
         //USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
-        dOutputFileName = degAngle+tag+"_DSelector_output.root"; //"" for none
-        dOutputTreeFileName = degAngle+tag+"_tree_DSelector.root"; //"" for none
-        dFlatTreeFileName = degAngle+tag+"_treeFlat_DSelector.root"; //output flat tree (one combo per tree entry), "" for none
-        dFlatTreeName = degAngle+tag+"_tree_flat"; //if blank, default name will be chosen
+        dOutputFileName = polarization+tag+"_DSelector_output.root"; //"" for none
+        dOutputTreeFileName = polarization+tag+"_tree_DSelector.root"; //"" for none
+        dFlatTreeFileName = polarization+tag+"_treeFlat_DSelector.root"; //output flat tree (one combo per tree entry), "" for none
+        dFlatTreeName = polarization+tag+"_tree_flat"; //if blank, default name will be chosen
 
 	//Because this function gets called for each TTree in the TChain, we must be careful:
 		//We need to re-initialize the tree interface & branch wrappers, but don't want to recreate histograms
@@ -160,8 +159,8 @@ void DSelector_ver20::Init(TTree *locTree)
 
         cout << "INITILIZED ACTIONS" << endl;
         countThrownEvents = new TH1F("count thrown events", "Cuts=noCut;counts", 1, 0, 1);
-        dHist_thrown_tp = new TH1F("Thrown tp", "Cuts=noCut;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
-        dHist_thrown_tp_selected = new TH1F("Thrown tp selected", "Cuts=noCut;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        //dHist_thrown_tp = new TH1F("Thrown tp", "Cuts=noCut;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
+        //dHist_thrown_tp_selected = new TH1F("Thrown tp selected", "Cuts=noCut;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         dHist_prodPlanePS_000 = new TH1F("prodPlanePS_000", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_prodPlanePS_045 = new TH1F("prodPlanePS_045", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_prodPlanePS_090 = new TH1F("prodPlanePS_090", "Cuts=hopefully same cuts as thrown;#phi; Entries / 9 degrees", 40, -180, 180);
@@ -535,36 +534,160 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef.name = name; histdef.cut=&noCut; histdef.weights = &noWeight;
         //histdef.values.push_back( &locPhi );
         //group_1234BP.insert(histdef); 
+	
+        histdef2d.clear();
+        name="vanHove_baseAsymCut_teta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_teta;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_teta; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &vanHove_x );
+        histdef2d.valuesY.push_back( &vanHove_y );
+        group_1234BP.insert_2D(histdef2d); 
+        histdef2d.clear();
+        name="vanHove_baseAsymCut_teta_mMpi0etaGT17LT29";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_teta_mMpi0etaGT17LT29;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_teta_mMpi0etaGT17LT29; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &vanHove_x );
+        histdef2d.valuesY.push_back( &vanHove_y );
+        group_1234BP.insert_2D(histdef2d); 
+        histdef2d.clear();
+        name="vanHove_backwardPi0P";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_backwardPi0P;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardPi0P; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &vanHove_x );
+        histdef2d.valuesY.push_back( &vanHove_y );
+        group_1234BP.insert_2D(histdef2d); 
+        histdef2d.clear();
+        name="vanHove_backwardEtaP";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_backwardEtaP;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardEtaP; histdef2d.weights = &weightAS;
+        histdef2d.valuesX.push_back( &vanHove_x );
+        histdef2d.valuesY.push_back( &vanHove_y );
+        group_1234BP.insert_2D(histdef2d); 
 	for (int iteta=0; iteta<5; ++iteta){
         	histdef.clear();
         	name="prodPlanePSphi_000_tetaBin"+to_string(iteta);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         	histdef.name = name; histdef.cut=&ptEtaBeamAsym_000[iteta]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &locPhi );
+        	histdef.values.push_back( &locPhi_eta );
         	group_1234BP.insert(histdef); 
         	histdef.clear();
         	name="prodPlanePSphi_045_tetaBin"+to_string(iteta);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         	histdef.name = name; histdef.cut=&ptEtaBeamAsym_045[iteta]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &locPhi );
+        	histdef.values.push_back( &locPhi_eta );
         	group_1234BP.insert(histdef); 
         	histdef.clear();
         	name="prodPlanePSphi_090_tetaBin"+to_string(iteta);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         	histdef.name = name; histdef.cut=&ptEtaBeamAsym_090[iteta]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &locPhi );
+        	histdef.values.push_back( &locPhi_eta );
         	group_1234BP.insert(histdef); 
         	histdef.clear();
         	name="prodPlanePSphi_135_tetaBin"+to_string(iteta);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         	histdef.name = name; histdef.cut=&ptEtaBeamAsym_135[iteta]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &locPhi );
+        	histdef.values.push_back( &locPhi_eta );
         	group_1234BP.insert(histdef); 
         	histdef.clear();
         	name="prodPlanePSphi_AMO_tetaBin"+to_string(iteta);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         	histdef.name = name; histdef.cut=&ptEtaBeamAsym_AMO[iteta]; histdef.weights = &weightAS;
-        	histdef.values.push_back( &locPhi );
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+		// ** With vanhove selection
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardPi0P_000_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym_backwardPi0P;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_000[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardPi0P_045_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym_backwardPi0P;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_045[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardPi0P_090_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym_backwardPi0P;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_090[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardPi0P_135_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym_backwardPi0P;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_135[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardPi0P_AMO_tetaBin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym_backwardPi0P;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_AMO[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+
+		// We have to recalculate locPhi to use pi0P4 and fix our cut to selection on the tpi0 bin
+        	name="prodPlanePSphi_000_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_000[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_045_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_045[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_090_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_090[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_135_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_135[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_AMO_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_AMO[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+		// ** With vanhove selection pi0
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardEtaP_000_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym_backwardEtaP;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_000[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardEtaP_045_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym_backwardEtaP;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_045[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardEtaP_090_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym_backwardEtaP;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_090[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardEtaP_135_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym_backwardEtaP;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_135[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_backwardEtaP_AMO_tpi0Bin"+to_string(iteta);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=ptPi0BeamAsym_backwardEtaP;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_AMO[iteta]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
         	group_1234BP.insert(histdef); 
 	}
 	// ******************************** Checking ChiSq Cut for Matt **************************************************
@@ -1572,6 +1695,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &locEtaProton_Kin );
         group_1234B_34PB.insert_2D(histdef2d); 
+
+	// part of the deck analysis. Fast eta looks like a baryon(proton) + meson(pi0) system where Deltas might populate it
+	// We will use the same cut as when we were showing the vanHove selections. Basically the same cuts as the phi phi distributions but without a selection on teta nor tpi or the polarizations
+        histdef2d.clear();
+        name="pi0proton1D_fastEta_Vs_tp";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_backwardPi0P;M(#pi^{0}proton) (GeV) Events / 0.033 GeV; -t' momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV", 120,0,4, 100,0,4);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardPi0P; histdef2d.weights = &weightAS;
+        histdef2d.values.push_back( &locPi0Proton_Kin);
+        group_1234PB.insert_2D(histdef2d); 
+
+        name="etaproton1D_fastPi0_Vs_tp";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_backwardEtaP;M(#etaproton) (GeV);Events / 0.03 GeV; -t' momentum transfer of #pi^{0}+#eta with Events / 0.04 GeV",150,0,4.5, 100,0,4);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardEtaP; histdef2d.weights = &weightAS;
+        histdef2d.values.push_back( &locEtaProton_Kin );
+        group_1234PB.insert_2D(histdef2d); 
         
         // *************** BARYON BACKGROUND HISTOGRAMS ***********************
 	// The goal of this section is to show how the 4 bkg rejection histograms work. { M(pi0proton), M(etaproton), vanHove, t } 
@@ -1909,6 +2047,14 @@ void DSelector_ver20::Init(TTree *locTree)
            dFlatTreeInterface->Create_Branch_ClonesArray<TLorentzVector>("flat_my_p4_array");
            */
 
+	
+
+	// *** SOME THROWN VARIABLE CHECK
+        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp_thrown"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Ebeam_thrown"); //fundamental = char, int, float, double, etc.
+	// **************************
+
+
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("AccWeight"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("BeamAngle"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("weightASBS"); //fundamental = char, int, float, double, etc.
@@ -2115,12 +2261,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	 // WE HAVE TO CHECK IF THERE IS THROWN DATA FIRST. I USE THIS CONDITION TO DETERMINE IF THE TREE IS MC OR DATA
 	bool correctFinalState=false;
 	if (Get_NumThrown() != 0 ) {
-		//TLorentzVector etaP4_thrown;
-		//TLorentzVector pi0P4_thrown;
-		//TLorentzVector locTargetP4 = {0,0,0,0.938};
-		//TLorentzVector locProtonP4_thrown;
-		//TLorentzVector beamP4_thrown = dThrownBeam->Get_P4();
-		//double locBeamE_thrown = beamP4_thrown.E();
+		TLorentzVector etaP4_thrown;
+		TLorentzVector pi0P4_thrown;
+		TLorentzVector locTargetP4 = {0,0,0,0.938};
+		TLorentzVector locProtonP4_thrown;
+		TLorentzVector beamP4_thrown = dThrownBeam->Get_P4();
+		Ebeam_thrown = beamP4_thrown.E();
 
 		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 		{	
@@ -2133,9 +2279,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 			parentArray.push_back(locParentPID);
 			pids.push_back(locPID);
-			if (locPID==7 && locParentPID==-1) { cout << "Found thrown pi0" << endl; pi0P4_thrown = dThrownWrapper->Get_P4(); } 
-			if (locPID==17 && locParentPID==-1) { cout << "Found thrown eta" << endl; etaP4_thrown = dThrownWrapper->Get_P4(); } 
-			if(locParentPID==-1 && locPID==14) { cout << "Found thrown proton" << endl; locProtonP4_thrown = dThrownWrapper->Get_P4(); } 
+                        if (locPID==7 && locParentPID==-1) { cout << "Found thrown pi0" << endl; pi0P4_thrown = dThrownWrapper->Get_P4(); }
+                        if (locPID==17 && locParentPID==-1) { cout << "Found thrown eta" << endl; etaP4_thrown = dThrownWrapper->Get_P4(); }
+                        if(locParentPID==-1 && locPID==14) { cout << "Found thrown proton" << endl; locProtonP4_thrown = dThrownWrapper->Get_P4(); }
 		}
 
 		std::vector<int> parents;
@@ -2184,47 +2330,51 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////// THIS SECTION WAS USED TO LOOK AT THE THROWN VARIABLES AND MAKE SELECTIONS ON THEM
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//TLorentzVector pi0EtaP4_thrown = pi0P4_thrown+etaP4_thrown;
-        	//TLorentzVector cm_vec = beamP4_thrown+locTargetP4;
-        	//TLorentzVector pi0EtaP4_thrown_cm = pi0EtaP4_thrown;
-        	//TLorentzVector beamP4_thrown_cm = beamP4_thrown;
-        	//pi0EtaP4_thrown_cm.Boost(-cm_vec.BoostVector());
-        	//beamP4_thrown_cm.Boost(-cm_vec.BoostVector());
-		//mandelstam_t_thrown = -(locProtonP4_thrown-locTargetP4).M2();
-		////double mandelstam_t0 = (locProtonP4_thrown.M2()-pi0EtaP4_thrown.M2()-locTargetP4.M2())/(2*(beamP4_thrown+locTargetP4).M())-(beamP4_thrown_cm-pi0EtaP4_thrown_cm).M2();
-		//// The above formulation is in Hussein's thesis. Units dont match and doesnt agree with pdg. 
-		//mandelstam_t0_thrown = -(TMath::Power(-pi0EtaP4_thrown.M2()/(2*(beamP4_thrown+locTargetP4).M()),2)-TMath::Power(beamP4_thrown_cm.Vect().Mag()-pi0EtaP4_thrown_cm.Vect().Mag(),2));
-		//mandelstam_tp_thrown = mandelstam_t_thrown-mandelstam_t0_thrown;
-		//dHist_mandelstam_t_thrown->Fill(mandelstam_t_thrown);
-		//dHist_mandelstam_t0_thrown->Fill(mandelstam_t0_thrown);
-		//dHist_mandelstam_tp_thrown->Fill(mandelstam_tp_thrown);
+		TLorentzVector pi0EtaP4_thrown = pi0P4_thrown+etaP4_thrown;
+        	TLorentzVector cm_vec = beamP4_thrown+locTargetP4;
+        	TLorentzVector pi0EtaP4_thrown_cm = pi0EtaP4_thrown;
+        	TLorentzVector beamP4_thrown_cm = beamP4_thrown;
+        	pi0EtaP4_thrown_cm.Boost(-cm_vec.BoostVector());
+        	beamP4_thrown_cm.Boost(-cm_vec.BoostVector());
+		mandelstam_t_thrown = -(locProtonP4_thrown-locTargetP4).M2();
+		//double mandelstam_t0 = (locProtonP4_thrown.M2()-pi0EtaP4_thrown.M2()-locTargetP4.M2())/(2*(beamP4_thrown+locTargetP4).M())-(beamP4_thrown_cm-pi0EtaP4_thrown_cm).M2();
+		// The above formulation is in Hussein's thesis. Units dont match and doesnt agree with pdg. 
+		mandelstam_t0_thrown = -(TMath::Power(-pi0EtaP4_thrown.M2()/(2*(beamP4_thrown+locTargetP4).M()),2)-TMath::Power(beamP4_thrown_cm.Vect().Mag()-pi0EtaP4_thrown_cm.Vect().Mag(),2));
+		mandelstam_tp_thrown = mandelstam_t_thrown-mandelstam_t0_thrown;
+		dHist_mandelstam_t_thrown->Fill(mandelstam_t_thrown);
+		dHist_mandelstam_t0_thrown->Fill(mandelstam_t0_thrown);
+		dHist_mandelstam_tp_thrown->Fill(mandelstam_tp_thrown);
         	//double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(beamP4_thrown.E(), Proton, etaP4_thrown);
 		//cout << "Calculated thrown variables to be used for selection matching to thrown MC" << endl;
-		//bool pBeamE_thrown = locBeamE_thrown > 8;
+		bool pBeamE_thrown = Ebeam_thrown > 8;
+		bool pMandelstam_tp_thrown = mandelstam_tp_thrown < 1;
 		//if(correctFinalState){
 		//	dHist_thrown_tp->Fill(mandelstam_tp_thrown);
 		//}
-		//if (correctFinalState*pBeamE_thrown*keepPolarization*(mandelstam_tp_thrown<1)){
-		if (correctFinalState*keepPolarization){
-			dHist_thrown_tp_selected->Fill(mandelstam_tp_thrown);
-			if ( locPolarizationAngle == 0 ) { 
-				dHist_prodPlanePS_000->Fill(prodPlanePhi);
-			}
-			if ( locPolarizationAngle == 45 ) { 
-				dHist_prodPlanePS_045->Fill(prodPlanePhi);
-			}
-			if ( locPolarizationAngle == 90 ) { 
-				dHist_prodPlanePS_090->Fill(prodPlanePhi);
-			}
-			if ( locPolarizationAngle == 135 ) { 
-				dHist_prodPlanePS_135->Fill(prodPlanePhi);
-			}
-			if ( !hasPolarizationAngle ) { 
-				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
-			}
+		cout << "mandelstam_tp_thrown: " << mandelstam_tp_thrown << endl;
+		cout << "Ebeam_thrown: " << Ebeam_thrown << endl;
+		if (correctFinalState*pBeamE_thrown*keepPolarization*(mandelstam_tp_thrown<1)){
+			cout << "** GOOD THROWN EVENT, CONTINUE WITH COMBO LOOP" << endl;
+			//dHist_thrown_tp_selected->Fill(mandelstam_tp_thrown);
+			//if ( locPolarizationAngle == 0 ) { 
+			//	dHist_prodPlanePS_000->Fill(prodPlanePhi);
+			//}
+			//if ( locPolarizationAngle == 45 ) { 
+			//	dHist_prodPlanePS_045->Fill(prodPlanePhi);
+			//}
+			//if ( locPolarizationAngle == 90 ) { 
+			//	dHist_prodPlanePS_090->Fill(prodPlanePhi);
+			//}
+			//if ( locPolarizationAngle == 135 ) { 
+			//	dHist_prodPlanePS_135->Fill(prodPlanePhi);
+			//}
+			//if ( !hasPolarizationAngle ) { 
+			//	dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
+			//}
 		}
 		// If the thrown variables do not pass our selections (on beam energy, or t' or w.e) we return the function also.
 		else {
+			cout << "-- BAD EVENT, GOING TO NEXT EVENT" << endl;
 			return kTRUE;
 		}
 		// SO THE COMBINATION OF THE ABOVE RETURN COMMANDS SHOULD MAKE IT SUCH THAT ONLY EVENTS WITH THROWN VALUES THAT PASS THE SELECTIONS AND ARE SELECTED BY THE REJECTION SAMPLING 
@@ -2775,17 +2925,19 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         if(showOutput){ cout << "Calculating prodplanephi and cosTheta in different system" << endl;}
         // calculating phi
         //double decayPlanePhi = dAnalysisUtilities.Calc_DecayPlanePsi_Vector_3BodyDecay(locBeamE, Proton, locProtonP4_Kin, mixingPi0Eta_Kin, locPi0P4_Kin, locEtaP4_Kin, locDecayPlaneTheta);
-        double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamE, Proton, locEtaP4_Kin);
+        double prodPlanePhi_eta = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamE, Proton, locEtaP4_Kin);
+        double prodPlanePhi_pi0 = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamE, Proton, locPi0P4_Kin);
         double locPolarizationAngle;
         // we kind of have to do this since we use sed to search and replace locDegAngle/45/90/135...
-        string deg = degAngle.substr(degAngle.length()-3);
+        string deg = polarization.substr(polarization.length()-3);
         if (deg == "000") { locPolarizationAngle = 0; }
         else if (deg == "045") { locPolarizationAngle = 45; }
         else if (deg == "090") { locPolarizationAngle = 90; }
         // there is uniqueness in the second digit. By the construction of using the last two characters in the string we have to ignmore 1 in 135 but it is unambiguous.
         else if (deg == "135") { locPolarizationAngle = 135; }
         else { locPolarizationAngle = -999; } // just wanted a number negative enough to make locPhi, no matter the value, always negative so there is some indication to look for.
-        locPhi = locPolarizationAngle - prodPlanePhi;
+        locPhi_eta = locPolarizationAngle - prodPlanePhi_eta;
+        locPhi_pi0 = locPolarizationAngle - prodPlanePhi_pi0;
 
         // Calculating kinematic variables like t and cosTheta
         mandelstam_t = -(dTargetP4-locProtonP4_Kin).M2();
@@ -3026,29 +3178,32 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         eta_cmZ = eta_cm.Pz();
         recoil_cmZ = recoil_cm.Pz();
         omega = 0;
+	// the orientation is the same as defined in https://www.dropbox.com/s/iunmarm97zd8yvu/JLab-cake-Feb19.pdf?dl=0
         if(recoil_cmZ > 0 && pi0_cmZ < 0 && eta_cmZ > 0) {
             // in quadrant I, so asin returns correct answer
             omega = asin(sqrt(3/2.)*recoil_cmZ/q);
         }
         if(recoil_cmZ > 0 && pi0_cmZ < 0 && eta_cmZ < 0) {
+	    // quadrant II 
             // use pi0_cmZ as X-axis since gives simpler quadrant definition
             omega = asin(sqrt(3/2.)*pi0_cmZ/q) + 2*TMath::Pi()/3;
         }
         if(recoil_cmZ > 0 && pi0_cmZ > 0 && eta_cmZ < 0) {
-            // in quadrant II, so need to subtract asin from PI to get correct angle
-            omega = TMath::Pi() - asin(sqrt(3/2.)*recoil_cmZ/q);
-        }
-        if(recoil_cmZ < 0 && pi0_cmZ > 0 && eta_cmZ < 0) {
             // in quadrant III, so need to subtract asin from PI to get correct angle
             omega = TMath::Pi() - asin(sqrt(3/2.)*recoil_cmZ/q);
         }
+        if(recoil_cmZ < 0 && pi0_cmZ > 0 && eta_cmZ < 0) {
+            // in quadrant IV, so need to subtract asin from PI to get correct angle
+            omega = TMath::Pi() - asin(sqrt(3/2.)*recoil_cmZ/q);
+        }
         if(recoil_cmZ < 0 && pi0_cmZ > 0 && eta_cmZ > 0) {
+	    // quardrant V
             // use pi0_cmZ as X-axis since gives simpler quadrant definition
             omega = (TMath::Pi() - asin(sqrt(3/2.)*pi0_cmZ/q)) + 2*TMath::Pi()/3;
         }
         if(recoil_cmZ < 0 && pi0_cmZ < 0 && eta_cmZ > 0) {
-            // in quadrant IV, so asin returns the correct answer
-            omega = asin(sqrt(3/2.)*recoil_cmZ/q);
+            // in quadrant VI, so asin returns the correct answer but we dont want negative numbers. arcsin would return [-90,90]. Lets add 360 to this
+            omega = asin(sqrt(3/2.)*recoil_cmZ/q)+2*TMath::Pi();
         }
 
         // compute vanHove_x and y before changing omega from rad to degrees
@@ -3362,7 +3517,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	pUnusedEnergy=true;
 
 
-	pMpi0etaGT19=locPi0Eta_Kin>1.9;
+	pMpi0etaGT17LT29=locPi0Eta_Kin>1.7 && locPi0Eta_Kin<2.9;
 	
 	/////////////////////// ************ BASE CUTS *********************
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
@@ -3373,16 +3528,37 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
 	allGeneralCutsSinglePolarization = allGeneralCutsPassed*keepPolarization;	
 	// same cuts as allGenearlCuts without the t' < 1 since we will use teta < 1. We will also choose a beam asym that John used and select out the Deck region with Mpi0eta > 1.9
-	baseAsymCut_teta = !pMPi0P14*pBeamE82to88*pMpi0etaGT19*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+	baseAsymCut_teta_mMpi0etaGT17LT29 = !pMPi0P14*pBeamE82to88*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
+	baseAsymCut_teta = pMpi0etaGT17LT29*baseAsymCut_teta_mMpi0etaGT17LT29;
+	bool pBackwardPi0P = omega>300 && omega<360;
+	bool pBackwardEtaP = omega>180 && omega<240;
+	baseAsymCut_backwardPi0P = baseAsymCut_teta*pBackwardPi0P;
+	baseAsymCut_backwardEtaP = baseAsymCut_teta*pBackwardEtaP;
 	for (int iteta=0; iteta<5; ++iteta){
 		cout << "Requring mandelstam_teta to be betweem " << iteta*0.2 << " and " << (iteta+1)*0.2 << endl;
 		bool select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
+		bool select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
 		ptEtaBeamAsym_000[iteta] = keepPolarization000*baseAsymCut_teta*select_teta_bin;
 		ptEtaBeamAsym_045[iteta] = keepPolarization045*baseAsymCut_teta*select_teta_bin;
 		ptEtaBeamAsym_090[iteta] = keepPolarization090*baseAsymCut_teta*select_teta_bin;
 		ptEtaBeamAsym_135[iteta] = keepPolarization135*baseAsymCut_teta*select_teta_bin;
 		ptEtaBeamAsym_AMO[iteta] = keepPolarizationAMO*baseAsymCut_teta*select_teta_bin;
-		//binteta[iteta] = baseAsymCut_teta*select_teta_bin;
+		ptEtaBeamAsym_backwardPi0P_000[iteta] = keepPolarization000*baseAsymCut_backwardPi0P*select_teta_bin;
+		ptEtaBeamAsym_backwardPi0P_045[iteta] = keepPolarization045*baseAsymCut_backwardPi0P*select_teta_bin;
+		ptEtaBeamAsym_backwardPi0P_090[iteta] = keepPolarization090*baseAsymCut_backwardPi0P*select_teta_bin;
+		ptEtaBeamAsym_backwardPi0P_135[iteta] = keepPolarization135*baseAsymCut_backwardPi0P*select_teta_bin;
+		ptEtaBeamAsym_backwardPi0P_AMO[iteta] = keepPolarizationAMO*baseAsymCut_backwardPi0P*select_teta_bin;
+
+		ptPi0BeamAsym_000[iteta] = keepPolarization000*baseAsymCut_teta*select_tpi0_bin;
+		ptPi0BeamAsym_045[iteta] = keepPolarization045*baseAsymCut_teta*select_tpi0_bin;
+		ptPi0BeamAsym_090[iteta] = keepPolarization090*baseAsymCut_teta*select_tpi0_bin;
+		ptPi0BeamAsym_135[iteta] = keepPolarization135*baseAsymCut_teta*select_tpi0_bin;
+		ptPi0BeamAsym_AMO[iteta] = keepPolarizationAMO*baseAsymCut_teta*select_tpi0_bin;
+		ptPi0BeamAsym_backwardEtaP_000[iteta] = keepPolarization000*baseAsymCut_backwardEtaP*select_tpi0_bin;
+		ptPi0BeamAsym_backwardEtaP_045[iteta] = keepPolarization045*baseAsymCut_backwardEtaP*select_tpi0_bin;
+		ptPi0BeamAsym_backwardEtaP_090[iteta] = keepPolarization090*baseAsymCut_backwardEtaP*select_tpi0_bin;
+		ptPi0BeamAsym_backwardEtaP_135[iteta] = keepPolarization135*baseAsymCut_backwardEtaP*select_tpi0_bin;
+		ptPi0BeamAsym_backwardEtaP_AMO[iteta] = keepPolarizationAMO*baseAsymCut_backwardEtaP*select_tpi0_bin;
 	}
 	
 	mMandelstamT_mBeamE8GeVPlus = !pMPi0P14*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
@@ -3398,6 +3574,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	mMandelstamT_mdelta_petaProton = pEtaProtonBaryonCut*mMandelstamT_mdelta; 
 	mMandelstamT_mdelta_pVanHove = pVanHove*mMandelstamT_mdelta; 
 	mDelta = ptpLT1*mMandelstamT_mdelta; // t Cut applied
+	baseAsymCut_teta_mMpi0etaGT17LT29 = !pMPi0P14*pBeamE82to88*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
 	// -----------------------------------------------------------------------
 	// -----------------------------------------------------------------------
 	
@@ -3795,6 +3972,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("flat_my_p4_array", locMyComboP4_Flat, loc_j);
         }
         */
+
+	// ** SOME THROWN VARIBLES **
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp_thrown", mandelstam_tp_thrown); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("Ebeam_thrown", Ebeam_thrown); //fundamental = char, int, float, double, etc.
+	// **************************
 
         dFlatTreeInterface->Fill_Fundamental<Double_t>("AccWeight", weightAS);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("BeamAngle", locPolarizationAngle);

@@ -43,7 +43,8 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_NumThrown = new TH1I("NumThrown","",10,0,10);
 	dHist_beamE = new TH1F("beamE","Beam Energy", 100,0,15);
 	dHist_beamECut = new TH1F("beamECut","Beam Energy", 100,0,15);
-	mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime no cut",100,0,6);
+	mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime no cut",100,0,1.1);
+	//mandelstam_tpAll = new TH1F("mandelstam_tpAll","tprime no cut",100,0,6);
 	mandelstam_tpAll_selected = new TH1F("mandelstam_tpAll_selected","tprime selected",100,0,6);
 	mandelstam_tAll = new TH1F("mandelstam_tAll","tprime",100,0,6);
 	mandelstam_tpLT1 = new TH1F("mandelstam_tpLT1","tprime<1",100,0,6);
@@ -323,11 +324,12 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		cout << "Calculated the kinematic angles" << endl;
 
 		double locPi0EtaMass = locPi0EtaP4.M();
-		double mandelstam_t = (locProtonP4-locTargetP4).M2();
+		double mandelstam_t = -(locProtonP4-locTargetP4).M2();
 		double mandelstam_abst = abs(mandelstam_t);
-		double mandelstam_t0 = (locProtonP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2())/(2*(locBeamP4+locTargetP4).M())-(locBeamP4_cm-locPi0EtaP4_cm).M2();
-		//double mandelstam_t0 = TMath::Power((locBeamP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2()+locProtonP4.M2())/(2*(locBeamP4+locTargetP4).M()),2)-(locBeamP4_cm-locPi0EtaP4_cm).M2();
-		double mandelstam_tp = abs(mandelstam_t-mandelstam_t0);
+		//double mandelstam_t0 = -((locProtonP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2())/(2*(locBeamP4+locTargetP4).M())-(locBeamP4_cm-locPi0EtaP4_cm).M2());
+		//above formulation is wrong. the last term uses magnitue, not p4
+		double mandelstam_t0 = -(TMath::Power(-locPi0EtaP4.M2()/(2*(locBeamP4+locTargetP4).M()),2)-TMath::Power(locBeamP4_cm.Vect().Mag()-locPi0EtaP4_cm.Vect().Mag(),2));
+		double mandelstam_tp = mandelstam_t-mandelstam_t0;
 		
 		dHist_NumThrown->Fill(locNumThrown);
 		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
@@ -365,11 +367,11 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 
 		bool pBeamE8GeV = locBeamP4.E() > 8;
-		if(correctFinalState){
+		bool pMandelstam_tpAll = mandelstam_tp < 1;
+		if(correctFinalState*pBeamE8GeV*keepPolarization*pMandelstam_tpAll){
 			mandelstam_tpAll->Fill(mandelstam_tp);	
 			mandelstam_tAll->Fill(mandelstam_abst);
-		}
-		if(correctFinalState*pBeamE8GeV*keepPolarization){
+
 			dHist_SelectedBeamAngle->Fill(locPolarizationAngle);
 
 			dHist_beamECut->Fill(locBeamP4.E());
@@ -460,8 +462,8 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				if ( !hasPolarizationAngle ) { 
 					dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
 				}
-				Fill_OutputTree("selected_tpLT1"); //your user-defined key
 			}	
+			Fill_OutputTree("selected_tpLT1"); //your user-defined key
 		}
 
 	}

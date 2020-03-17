@@ -125,7 +125,7 @@ void makeDeckPlot(string selectionString){
 	// *********************************************
 	// *********** CALCULATE YIELDS IN BINS  ***************
 	// *********************************************
-	string dataFileLoc[2] = {"pi0eta_datatreeFlat_DSelector.root","pi0eta_flat_21ttreeFlat_DSelector.root"}; 
+	string dataFileLoc[2] = {"pi0eta_data_treeFlat_DSelector.root","pi0eta_flat_21t_treeFlat_DSelector.root"}; 
 	string dataTreeName[2] = {"pi0eta_datatree_flat","pi0eta_flat_21ttree_flat"}; 
 	string dataTypes[2]={"data","reco"};
 	string branchNames[2]={"mandelstam_teta_meas","mandelstam_tpi0_meas"};
