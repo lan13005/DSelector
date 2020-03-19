@@ -1,7 +1,8 @@
 double degToRad=TMath::Pi()/180;
-int numDOFsig_sc = 3;
+// par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
+int numDOFsig_sc = 4;
 Double_t shiftedCos(Double_t *x, Double_t *par){
-	return par[0]*(1.0 + par[1]*TMath::Cos(2*degToRad*(x[0]-par[2])));
+	return par[0]*(1.0 - par[1]*TMath::Cos(2*degToRad*(x[0]-par[2]-par[3])));
 }
 
 int numDOFsig_flat = 1;
@@ -11,7 +12,7 @@ Double_t flat(Double_t *x, Double_t *par){
 
 int numDOFsig_asym=4;
 Double_t asymmetry(Double_t *x, Double_t *par){
-	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3])))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3])));
+	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))));
 }
 
 void fitAsymmetryPlots(){
@@ -44,8 +45,10 @@ void fitAsymmetryPlots(){
 	// *****************************
 	// Loading histograms for  2017, 2018_1, 2018_2, then scaling yield by the flux ratio. Then we can finally add the data sets together
 	// *****************************
+	//
+	//  ************* these are not really used, only as a place holder before scaling them to get the total *************
 	TH1F *phi000_eta_unscaled[2][num_tBins][3]; // 2 for the tag and 3 for the datasets
-	TH1F *phi045_eta_unscaled[2][num_tBins][3];
+	TH1F *phi045_eta_unscaled[2][num_tBins][3]; 
 	TH1F *phi090_eta_unscaled[2][num_tBins][3];
 	TH1F *phi135_eta_unscaled[2][num_tBins][3];
 	TH1F *phiAMO_eta_unscaled[2][num_tBins][3];
@@ -54,6 +57,7 @@ void fitAsymmetryPlots(){
 	TH1F *phi090_pi0_unscaled[2][num_tBins][3];
 	TH1F *phi135_pi0_unscaled[2][num_tBins][3];
 	TH1F *phiAMO_pi0_unscaled[2][num_tBins][3];
+	// --------------------------------------------------------------------------------------------------------------------
 	TH1F *phi000_eta_total[2][num_tBins];
 	TH1F *phi045_eta_total[2][num_tBins];
 	TH1F *phi090_eta_total[2][num_tBins];
@@ -96,6 +100,7 @@ void fitAsymmetryPlots(){
 			totalEntriesInPhi000_eta_total=0;
 			cout << "--------------\n" << tagEta[0] << "\n--------------" << endl;
 			// We first have to clone the first dataTag (2017 run) and scale by flux ratio if in para config
+			// we will scale the total in this to track the number of maxima and entires before and after scaling
 			phi000_eta_total[iTag][iteta] = (TH1F *)phi000_eta_unscaled[iTag][iteta][0]->Clone();
 			phi000_pi0_total[iTag][iteta] = (TH1F *)phi000_pi0_unscaled[iTag][iteta][0]->Clone();
 			phi135_eta_total[iTag][iteta] = (TH1F *)phi135_eta_unscaled[iTag][iteta][0]->Clone();
@@ -122,16 +127,26 @@ void fitAsymmetryPlots(){
 			cout << "-Cumulative entries after adding dataSet=0: " << totalEntriesInPhi000_eta_total << endl;
 			// for the last 2 runs we simply add with a weight if in para config and add with weight=1 if in perp config
 			for (int iData=1; iData < sizeof(fluxRatios_90_0)/sizeof(fluxRatios_90_0[0]); ++iData){
-				phi000_eta_total[iTag][iteta]->Add(phi000_eta_unscaled[iTag][iteta][iData]);
+				// keeping a count of the total entries to check if we are doing the Add right
 				totalEntriesInPhi000_eta_total += phi000_eta_unscaled[iTag][iteta][iData]->GetEntries();
 				cout << "-Cumulative entries after adding dataSet=" << iData << ": " << totalEntriesInPhi000_eta_total << endl;
+
+				// scale the rest of the data sets before adding them to the scaled+cloned 2017 dataset
+				// we will never use unscaled histograms anymore so we can just scale it directly
+				phi000_eta_unscaled[iTag][iteta][iData]->Scale(fluxRatios_90_0[0]);
+				phi000_pi0_unscaled[iTag][iteta][iData]->Scale(fluxRatios_90_0[0]);
+				phi135_eta_unscaled[iTag][iteta][iData]->Scale(fluxRatios_45_135[0]);
+				phi135_pi0_unscaled[iTag][iteta][iData]->Scale(fluxRatios_45_135[0]);
+				phi000_eta_total[iTag][iteta]->Add(phi000_eta_unscaled[iTag][iteta][iData]);
                 		phi000_pi0_total[iTag][iteta]->Add(phi000_pi0_unscaled[iTag][iteta][iData]);
+                		phi135_eta_total[iTag][iteta]->Add(phi135_eta_unscaled[iTag][iteta][iData]);
+                		phi135_pi0_total[iTag][iteta]->Add(phi135_pi0_unscaled[iTag][iteta][iData]);
+
+				// Dont have to scale these guys so just add them
                 		phi045_eta_total[iTag][iteta]->Add(phi045_eta_unscaled[iTag][iteta][iData]);
                 		phi045_pi0_total[iTag][iteta]->Add(phi045_pi0_unscaled[iTag][iteta][iData]);
                 		phi090_eta_total[iTag][iteta]->Add(phi090_eta_unscaled[iTag][iteta][iData]);
                 		phi090_pi0_total[iTag][iteta]->Add(phi090_pi0_unscaled[iTag][iteta][iData]);
-                		phi135_eta_total[iTag][iteta]->Add(phi135_eta_unscaled[iTag][iteta][iData]);
-                		phi135_pi0_total[iTag][iteta]->Add(phi135_pi0_unscaled[iTag][iteta][iData]);
                 		phiAMO_eta_total[iTag][iteta]->Add(phiAMO_eta_unscaled[iTag][iteta][iData]);
                 		phiAMO_pi0_total[iTag][iteta]->Add(phiAMO_pi0_unscaled[iTag][iteta][iData]);
 			}
@@ -142,9 +157,12 @@ void fitAsymmetryPlots(){
 	cout << "--------------------------------------------\nSTARTING FITTING\n--------------------------------------------" << endl;
 
 	// *****************************
-	// Defining some variables that we will use
+	// Defining array to hold Asymmetry values from fiting asymmetry histograms
 	// *****************************
+	static const int numPolarizations = 4;
 	string names[4] = {"phi000","phi045","phi090","phi135"};
+	//double perpOrPara[4] = {0, 90, 90, 0};
+	double perpOrPara[4] = {0, 0, 0, 0};
 	double asymmetries_000_eta[num_tBins];
 	double asymmetries_045_eta[num_tBins];
 	double asymmetries_000_eta_err[num_tBins];
@@ -153,18 +171,60 @@ void fitAsymmetryPlots(){
 	double asymmetries_045_pi0[num_tBins];
 	double asymmetries_000_pi0_err[num_tBins];
 	double asymmetries_045_pi0_err[num_tBins];
+
+	// *****************************
+	// Defining array to hold P*Sigma values from fitting prodPlanePhi
+	// *****************************
+	vector<double> phi_000_pi0;
+	vector<double> phi_045_pi0;
+	vector<double> phi_090_pi0;
+	vector<double> phi_135_pi0;
+	vector<double> phi_000_eta;
+	vector<double> phi_045_eta;
+	vector<double> phi_090_eta;
+	vector<double> phi_135_eta;
+	vector< vector<double > > phis_pi0_PSig;
+       	phis_pi0_PSig.push_back(phi_000_pi0);
+	phis_pi0_PSig.push_back(phi_045_pi0);
+	phis_pi0_PSig.push_back(phi_090_pi0);
+	phis_pi0_PSig.push_back(phi_135_pi0);
+	vector< vector<double > > phis_eta_PSig;
+	phis_eta_PSig.push_back(phi_000_eta);
+	phis_eta_PSig.push_back(phi_045_eta);
+	phis_eta_PSig.push_back(phi_090_eta);
+	phis_eta_PSig.push_back(phi_135_eta);
+	vector<double> phi_000_pi0_err;
+	vector<double> phi_045_pi0_err;
+	vector<double> phi_090_pi0_err;
+	vector<double> phi_135_pi0_err;
+	vector<double> phi_000_eta_err;
+	vector<double> phi_045_eta_err;
+	vector<double> phi_090_eta_err;
+	vector<double> phi_135_eta_err;
+	vector< vector<double > > phis_pi0_PSig_err;
+	phis_pi0_PSig_err.push_back(phi_000_pi0_err);
+	phis_pi0_PSig_err.push_back(phi_045_pi0_err);
+	phis_pi0_PSig_err.push_back(phi_090_pi0_err);
+	phis_pi0_PSig_err.push_back(phi_135_pi0_err);
+	vector< vector<double > > phis_eta_PSig_err;
+       	phis_eta_PSig_err.push_back(phi_000_eta_err);
+	phis_eta_PSig_err.push_back(phi_045_eta_err);
+	phis_eta_PSig_err.push_back(phi_090_eta_err);
+	phis_eta_PSig_err.push_back(phi_135_eta_err);
+
 	double tBins[num_tBins];
 	double tBins_err[num_tBins];
 	double tBinSize=0.2;
-	double orientation[4] = {0,45,90,135};
-
+	double orientation[4] = {0,45,90,-45};
+	double Phi0_0_90 = 0+3.1;
+	double Phi0_45_135 = -45+3.2;
 
 	string phis_orientation[5] =  {"phi000", "phi045", "phi090", "phi135", "phiAMO"};
+	Int_t fitStatus;
 	for (int iTag=0; iTag < sizeof(tagEta)/sizeof(tagEta[0]); ++iTag){
 		for (int iteta=0; iteta<num_tBins; ++iteta){ //num_tBins
 			// Need to define the polarization with the systematic shift
-			double Phi0_0_90 = 3.1;
-			double Phi0_45_135 = 3.2+45;
+			// the shift for 0/90 is 3.1 and shifting 45/135 is 3.2. Since 0 and 135/-45 is para the beginning orientation is 0 and -45 whih then we shift by 3.1, 3.2 respectively
 			string fitOption = "E S";
 			TH1F *phi000_eta = phi000_eta_total[iTag][iteta];
 			TH1F *phi045_eta = phi045_eta_total[iTag][iteta];
@@ -176,20 +236,36 @@ void fitAsymmetryPlots(){
 			TH1F *phi090_pi0 = phi090_pi0_total[iTag][iteta];
 			TH1F *phi135_pi0 = phi135_pi0_total[iTag][iteta];
 			TH1F *phiAMO_pi0 = phiAMO_pi0_total[iTag][iteta];
+			TH1F *phis_eta[4] =  {phi000_eta, phi045_eta, phi090_eta, phi135_eta};
+			TH1F *phis_pi0[4] =  {phi000_pi0, phi045_pi0, phi090_pi0, phi135_pi0};
 
 			// *****************************
-			// Some definitions for Eta
+			// Defining the tBins which will be shared
 			// *****************************
-			TH1F *phis_eta[4] =  {phi000_eta, phi045_eta, phi090_eta, phi135_eta};
-			TH1* asymmetry000_090_eta = phi000_eta->GetAsymmetry(phi090_eta);
+			tBins[iteta] = iteta*tBinSize;
+			tBins_err[iteta] = tBinSize/2;
+
+
+			// *****************************
+			// GETTING ASYMMETRIES
+			// *****************************
+			// **** IF WE EVER DECIDE TO CALCULATE ASYMMETRY OURSELVES THIS SHOULD WORK I THINK **
+			//TH1F* asymmetry000_090_eta = (TH1F *)phi090_eta->Clone();
+			//TH1F* asymmetry000_090_eta_denom = (TH1F *)phi090_eta->Clone();
+			//TH1F* asymmetry045_135_eta = (TH1F *)phi045_eta->Clone();
+			//TH1F* asymmetry045_135_eta_denom = (TH1F *)phi045_eta->Clone();
+			//asymmetry000_090_eta->Add(phi000_eta,-1);
+			//asymmetry045_135_eta->Add(phi135_eta,-1);
+			//asymmetry000_090_eta_denom->Add(phi000_eta,1);
+			//asymmetry045_135_eta_denom->Add(phi135_eta,1);
+			//asymmetry000_090_eta->Divide(asymmetry000_090_eta_denom);
+			//asymmetry045_135_eta->Divide(asymmetry045_135_eta_denom);
+			// ------------------------------------------------------------------------------------
+			TH1* asymmetry000_090_eta = phi090_eta->GetAsymmetry(phi000_eta);
 			TH1* asymmetry045_135_eta = phi045_eta->GetAsymmetry(phi135_eta);
 			asymmetry000_090_eta->SetTitle("0/90 Asymmetry");
 			asymmetry045_135_eta->SetTitle("45/135 Asymmetry");
-			// *****************************
-			// Some definitions for Pi0
-			// *****************************
-			TH1F *phis_pi0[4] =  {phi000_pi0, phi045_pi0, phi090_pi0, phi135_pi0};
-			TH1* asymmetry000_090_pi0 = phi000_pi0->GetAsymmetry(phi090_pi0);
+			TH1* asymmetry000_090_pi0 = phi090_pi0->GetAsymmetry(phi000_pi0);
 			TH1* asymmetry045_135_pi0 = phi045_pi0->GetAsymmetry(phi135_pi0);
 			asymmetry000_090_pi0->SetTitle(("0/90 Asymmetry"+tagEta[iTag]).c_str());
 			asymmetry045_135_pi0->SetTitle(("45/135 Asymmetry"+tagPi0[iTag]).c_str());
@@ -200,14 +276,12 @@ void fitAsymmetryPlots(){
 			allCanvases->Clear();
 			allCanvases->Divide(2,1);
 			allCanvases->cd(1);
-			Int_t fitStatus;
 			// We set P_perp = P_para = 0.35 which is close to the expected. We initialize asymmetry to be 0 since it can vary from [-1,1]. 
 			TF1 * fit_asym = new TF1("fit_asym",asymmetry,-180,180,numDOFsig_asym); 
-			fit_asym->SetParameters(0.35,0.35,0.5,0);
+			fit_asym->SetParameters(0.35,0.35,0.5,Phi0_0_90);
 			fit_asym->FixParameter(0,0.35);
 			fit_asym->FixParameter(1,0.35);
 			fit_asym->FixParameter(3,Phi0_0_90);
-			allCanvases->Clear();
 
 			TFitResultPtr fitPointer = asymmetry000_090_eta->Fit(fit_asym,fitOption.c_str());
 			asymmetries_000_eta[iteta] = fit_asym->GetParameter(2);
@@ -287,13 +361,6 @@ void fitAsymmetryPlots(){
 			likelihoodFit_045_135_eta->Draw("ALP");
 			likelihoodFit_045_135_eta->SetTitle(("045/135 - tBin"+to_string(iteta)).c_str());
 			allCanvases->SaveAs(("asymmetryPlots/likelihood"+tagEta[iTag]+"_tetaBin"+to_string(iteta)+".png").c_str());
-
-
-			// *****************************
-			// Defining the tBins which will be shared
-			// *****************************
-			tBins[iteta] = iteta*tBinSize;
-			tBins_err[iteta] = tBinSize/2;
 	
 			// *****************************
 			// Fitting prodPlanePhi for eta
@@ -308,9 +375,13 @@ void fitAsymmetryPlots(){
 				phi->SetTitle((names[counter]).c_str());
 				nEventsPhiEta[iTag].push_back(phi->GetEntries());
 				p0 = phi->GetEntries()/phi->GetNbinsX();
-				fit_sc->SetParameters(p0,0.1,orientation[counter]);
+				fit_sc->SetParameters(p0,0.1,orientation[counter],perpOrPara[counter]);
 				fit_sc->FixParameter(2, orientation[counter]);
-				fitStatus = phi->Fit(fit_sc,"RLQE");
+				fit_sc->FixParameter(3, perpOrPara[counter]);
+				cout << "\n\nFixing orientation for phi fit for fast eta to: " << orientation[counter] << endl;
+				fitStatus = phi->Fit(fit_sc,"E S");
+				phis_eta_PSig[counter].push_back(fit_sc->GetParameter(1));
+				phis_eta_PSig_err[counter].push_back(fit_sc->GetParError(1));
 				phi->Draw("SAME");
 				++counter;
 			}
@@ -319,9 +390,8 @@ void fitAsymmetryPlots(){
 			phiAMO_eta->SetTitle("phiAMO");
 			p0 = phiAMO_eta->GetEntries()/phiAMO_eta->GetNbinsX();
 			nEventsPhiEta[iTag].push_back(phiAMO_eta->GetEntries());
-			fit_sc->SetParameters(p0,p0/2,orientation[counter]);
-			fit_sc->FixParameter(2, orientation[counter]);
-			fitStatus = phiAMO_eta->Fit(fit_flat,"RLQE");
+			cout << "Doing flat fit to AMO for eta" << endl;
+			fitStatus = phiAMO_eta->Fit(fit_flat,"RQE");
 			phiAMO_eta->Draw("SAME");
 			allCanvases->SaveAs(("asymmetryPlots/phiYieldFits"+tagEta[iTag]+"_tetaBin"+to_string(iteta)+".png").c_str());
 			
@@ -337,9 +407,13 @@ void fitAsymmetryPlots(){
 				allCanvases->cd(counter+1);
 				phi->SetTitle((names[counter]).c_str());
 				p0 = phi->GetEntries()/phi->GetNbinsX();
-				fit_sc->SetParameters(p0,0.1,orientation[counter]);
+				fit_sc->SetParameters(p0,0.1,orientation[counter],perpOrPara[counter]);
 				fit_sc->FixParameter(2, orientation[counter]);
-				fitStatus = phi->Fit(fit_sc,"RLQE");
+				fit_sc->FixParameter(3, perpOrPara[counter]);
+				cout << "Fixing orientation for phi fit for fast pi0 to: " << orientation[counter] << endl;
+				fitStatus = phi->Fit(fit_sc,"E S");
+				phis_pi0_PSig[counter].push_back(fit_sc->GetParameter(1));
+				phis_pi0_PSig_err[counter].push_back(fit_sc->GetParError(1));
 				phi->Draw("SAME");
 				nEventsPhiPi0[iTag].push_back(phi->GetEntries());
 				cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phi->GetEntries() << endl;
@@ -350,12 +424,12 @@ void fitAsymmetryPlots(){
 			phiAMO_pi0->SetTitle("phiAMO");
 			nEventsPhiPi0[iTag].push_back(phiAMO_pi0->GetEntries());
 			p0 = phiAMO_pi0->GetEntries()/phiAMO_pi0->GetNbinsX();
-			fit_sc->SetParameters(p0,0.1,orientation[counter]);
-			fit_sc->FixParameter(2, orientation[counter]);
-			fitStatus = phiAMO_pi0->Fit(fit_flat,"RLQE");
+			cout << "Doing flat fit to AMO for pi0" << endl;
+			fitStatus = phiAMO_pi0->Fit(fit_flat,"E S");
 			phiAMO_pi0->Draw("SAME");
 			cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phiAMO_pi0->GetEntries() << endl;
 			allCanvases->SaveAs(("asymmetryPlots/phiYieldFits"+tagPi0[iTag]+"_tpi0Bin"+to_string(iteta)+".png").c_str());
+
 		}
 	
 		// *****************************
@@ -395,6 +469,60 @@ void fitAsymmetryPlots(){
 		gr_045->SetMarkerStyle(20);
 		gr_045->Draw("P SAME");
 		allCanvases->SaveAs(("asymmetryPlots/asymVst"+tag[iTag]+".png").c_str());
+
+
+		allCanvases->Clear();
+		allCanvases->Divide(2,1);
+		int counter = 0;
+   		auto legend_eta = new TLegend(0.6,0.7,0.9,0.9);
+   		legend_eta->SetHeader("","C"); // option "C" allows to center the header
+   		auto legend_pi0 = new TLegend(0.6,0.7,0.9,0.9);
+   		legend_pi0->SetHeader("","C"); // option "C" allows to center the header
+		TGraphErrors* gr_etas[numPolarizations];
+		TGraphErrors* gr_pi0s[numPolarizations];
+		for (int iphi=0; iphi<numPolarizations; ++iphi){
+			gr_etas[counter] = new TGraphErrors(num_tBins,tBins,&(phis_eta_PSig[counter][0]),tBins_err,&(phis_eta_PSig_err[counter][0]));
+			gr_etas[counter]->SetMarkerStyle(20+counter);
+			gr_etas[counter]->SetLineColor(kBlue+counter);
+			gr_etas[counter]->SetMarkerColor(kBlue+counter);
+			gr_pi0s[counter] = new TGraphErrors(num_tBins,tBins,&(phis_pi0_PSig[counter][0]),tBins_err,&(phis_pi0_PSig_err[counter][0]));
+			gr_pi0s[counter]->SetMarkerStyle(20+counter);
+			gr_pi0s[counter]->SetLineColor(kRed+counter);
+			gr_pi0s[counter]->SetMarkerColor(kRed+counter);
+
+			gr_etas[counter]->SetName(("eta_"+names[counter]).c_str());
+			gr_pi0s[counter]->SetName(("pi0_"+names[counter]).c_str());
+			if (counter==0){
+				allCanvases->cd(1);
+				gr_etas[counter]->SetTitle("PSigma fast eta");
+				gr_pi0s[counter]->SetTitle("PSigma fast pi0");
+				gr_etas[counter]->Draw("AP");
+				// apparently we have to AddEntry Before we cd? Or after we draw?
+   				legend_eta->AddEntry(("eta_"+names[counter]).c_str(),(names[counter]).c_str(),"lep");
+				allCanvases->cd(2);
+				gr_pi0s[counter]->Draw("AP");
+   				legend_pi0->AddEntry(("pi0_"+names[counter]).c_str(),(names[counter]).c_str(),"lep");
+			}
+			else {
+				allCanvases->cd(1);
+				gr_etas[counter]->Draw("P SAME");
+				// apparently we have to AddEntry Before we cd? Or after we draw?
+   				legend_eta->AddEntry(("eta_"+names[counter]).c_str(),(names[counter]).c_str(),"lep");
+				allCanvases->cd(2);
+				gr_pi0s[counter]->Draw("P SAME");
+   				legend_pi0->AddEntry(("pi0_"+names[counter]).c_str(),(names[counter]).c_str(),"lep");
+			}
+			gr_etas[counter]->GetHistogram()->SetMaximum(0.3);
+			gr_etas[counter]->GetHistogram()->SetMinimum(-0.3);
+			gr_pi0s[counter]->GetHistogram()->SetMaximum(0.3);
+			gr_pi0s[counter]->GetHistogram()->SetMinimum(-0.3);
+			++counter;
+		}
+		allCanvases->cd(1);
+   		legend_eta->Draw();
+		allCanvases->cd(2);
+   		legend_pi0->Draw();
+		allCanvases->SaveAs("asymmetryPlots/PSigma.png");
 	}
 
 
