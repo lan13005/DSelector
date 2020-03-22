@@ -1,8 +1,17 @@
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
-int numDOFsig_sc = 4;
-Double_t shiftedCos(Double_t *x, Double_t *par){
-	return par[0]*(1.0 - par[1]*TMath::Cos(2*degToRad*(x[0]-par[2]-par[3])));
+int numDOFsig_sc = 2;
+Double_t shiftedCos000(Double_t *x, Double_t *par){
+	return par[0]*(1.0 - par[1]*TMath::Cos(2*degToRad*x[0]));
+}
+Double_t shiftedCos045(Double_t *x, Double_t *par){
+	return par[0]*(1.0 + par[1]*TMath::Cos(2*degToRad*(x[0]-45-90)));
+}
+Double_t shiftedCos090(Double_t *x, Double_t *par){
+	return par[0]*(1.0 - par[1]*TMath::Cos(2*degToRad*(x[0]-90)));
+}
+Double_t shiftedCos135(Double_t *x, Double_t *par){
+	return par[0]*(1.0 - par[1]*TMath::Cos(2*degToRad*(x[0]-(-45))));
 }
 
 int numDOFsig_flat = 1;
@@ -32,62 +41,128 @@ void fitAsymmetryPlots(){
 	// *****************************
 	// Define flux ratios for 2017, 2018_1, 2018_2 
 	// *****************************
-	double fluxRatios_90_0[3] = {  4.346818e+12/4.188001e+12, 0.965429, 0.918503 };
-	double fluxRatios_45_135[3] = {  4.076065e+12/4.095013e+12, 1.02261, 1.03254 };
-	string dataSetTag[3] = { "2017", "2018_1", "2018_8" };
+	static const int nDataSets = 3;
+	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12, 0.965429, 0.918503 };
+	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12, 1.02261, 1.03254 };
+	string dataSetTag[nDataSets] = { "2017", "2018_1", "2018_8" };
 
+	static const int nTagEta = 2;
 	string tagEta[2] = {"","_backwardPi0P"};
 	string tagPi0[2] = {"","_backwardEtaP"};
-	string tag[2] = {"","vanHoveSelected"};
-	std::vector<int> nEventsPhiEta[2]; // second one is for the vanHove selected
-	std::vector<int> nEventsPhiPi0[2];
+	std::vector<int> nEventsPhiEta[nTagEta]; // second one is for the vanHove selected
+	std::vector<int> nEventsPhiPi0[nTagEta];
 
 	// *****************************
 	// Loading histograms for  2017, 2018_1, 2018_2, then scaling yield by the flux ratio. Then we can finally add the data sets together
 	// *****************************
 	//
 	//  ************* these are not really used, only as a place holder before scaling them to get the total *************
-	TH1F *phi000_eta_unscaled[2][num_tBins][3]; // 2 for the tag and 3 for the datasets
-	TH1F *phi045_eta_unscaled[2][num_tBins][3]; 
-	TH1F *phi090_eta_unscaled[2][num_tBins][3];
-	TH1F *phi135_eta_unscaled[2][num_tBins][3];
-	TH1F *phiAMO_eta_unscaled[2][num_tBins][3];
-	TH1F *phi000_pi0_unscaled[2][num_tBins][3];
-	TH1F *phi045_pi0_unscaled[2][num_tBins][3];
-	TH1F *phi090_pi0_unscaled[2][num_tBins][3];
-	TH1F *phi135_pi0_unscaled[2][num_tBins][3];
-	TH1F *phiAMO_pi0_unscaled[2][num_tBins][3];
-	// --------------------------------------------------------------------------------------------------------------------
-	TH1F *phi000_eta_total[2][num_tBins];
-	TH1F *phi045_eta_total[2][num_tBins];
-	TH1F *phi090_eta_total[2][num_tBins];
-	TH1F *phi135_eta_total[2][num_tBins];
-	TH1F *phiAMO_eta_total[2][num_tBins];
-	TH1F *phi000_pi0_total[2][num_tBins];
-	TH1F *phi045_pi0_total[2][num_tBins];
-	TH1F *phi090_pi0_total[2][num_tBins];
-	TH1F *phi135_pi0_total[2][num_tBins];
-	TH1F *phiAMO_pi0_total[2][num_tBins];
-	for (int iData=0; iData < sizeof(fluxRatios_90_0)/sizeof(fluxRatios_90_0[0]); ++iData){
-		string dataFileName = "deg000_data_"+dataSetTag[iData]+"_hists_DSelector.root";
-		TFile *dataFile = new TFile(dataFileName.c_str());
-		cout << "LOADING ROOT FILE: " << dataFileName << endl; 
-		for (int iTag=0; iTag < sizeof(tagEta)/sizeof(tagEta[0]); ++iTag){
-			for (int iteta=0; iteta<num_tBins; ++iteta){
-				dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_045_tetaBin"+to_string(iteta)).c_str(), phi045_eta_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_045_tpi0Bin"+to_string(iteta)).c_str(), phi045_pi0_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_090_tetaBin"+to_string(iteta)).c_str(), phi090_eta_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_090_tpi0Bin"+to_string(iteta)).c_str(), phi090_pi0_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_AMO_tetaBin"+to_string(iteta)).c_str(), phiAMO_eta_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_AMO_tpi0Bin"+to_string(iteta)).c_str(), phiAMO_pi0_unscaled[iTag][iteta][iData]);
-				// Need to scale these para yields by flux ratio.
-				dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_000_tetaBin"+to_string(iteta)).c_str(), phi000_eta_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_000_tpi0Bin"+to_string(iteta)).c_str(), phi000_pi0_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_135_tetaBin"+to_string(iteta)).c_str(), phi135_eta_unscaled[iTag][iteta][iData]);
-				dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_135_tpi0Bin"+to_string(iteta)).c_str(), phi135_pi0_unscaled[iTag][iteta][iData]);
+	static const int nHists=10;
+	TH1F *phi000_eta_unscaled[nTagEta][num_tBins][nDataSets]; // 2 for the tag and 3 for the datasets
+	TH1F *phi045_eta_unscaled[nTagEta][num_tBins][nDataSets]; 
+	TH1F *phi090_eta_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phi135_eta_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phiAMO_eta_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phi000_pi0_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phi045_pi0_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phi090_pi0_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phi135_pi0_unscaled[nTagEta][num_tBins][nDataSets];
+	TH1F *phiAMO_pi0_unscaled[nTagEta][num_tBins][nDataSets];
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ************************************************************ LOAD THE DATA WHATEVER WAY YOU WANT **********************************************************************
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//
+	// *************************************
+	// Loading the data in from the histogram 
+	// *************************************
+	//for (int iData=0; iData < sizeof(fluxRatios_90_0)/sizeof(fluxRatios_90_0[0]); ++iData){
+	//	string dataFileName = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/rootFiles/deg000_data_"+dataSetTag[iData]+"_hists_DSelector.root";
+	//	TFile *dataFile = new TFile(dataFileName.c_str());
+	//	cout << "LOADING ROOT FILE: " << dataFileName << endl; 
+	//	for (int iTag=0; iTag < sizeof(tagEta)/sizeof(tagEta[0]); ++iTag){
+	//		for (int iteta=0; iteta<num_tBins; ++iteta){
+	//			dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_045_tetaBin"+to_string(iteta)).c_str(), phi045_eta_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_045_tpi0Bin"+to_string(iteta)).c_str(), phi045_pi0_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_090_tetaBin"+to_string(iteta)).c_str(), phi090_eta_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_090_tpi0Bin"+to_string(iteta)).c_str(), phi090_pi0_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_AMO_tetaBin"+to_string(iteta)).c_str(), phiAMO_eta_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_AMO_tpi0Bin"+to_string(iteta)).c_str(), phiAMO_pi0_unscaled[iTag][iteta][iData]);
+	//			// Need to scale these para yields by flux ratio.
+	//			dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_000_tetaBin"+to_string(iteta)).c_str(), phi000_eta_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_000_tpi0Bin"+to_string(iteta)).c_str(), phi000_pi0_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagEta[iTag]+"_135_tetaBin"+to_string(iteta)).c_str(), phi135_eta_unscaled[iTag][iteta][iData]);
+	//			dataFile->GetObject(("prodPlanePSphi"+tagPi0[iTag]+"_135_tpi0Bin"+to_string(iteta)).c_str(), phi135_pi0_unscaled[iTag][iteta][iData]);
+	//		}
+	//	}
+	//}
+
+	// *************************************
+	// Loading the data in from the textFile
+	// *************************************
+	static const int nSetsBS=1;
+	
+	string baseFileLoc = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/";
+	string dataFolders[nDataSets] = {"deg000_data_2017", "deg000_data_2018_1", "deg000_data_2018_8"};
+	std::vector<double> values[nTagEta][num_tBins][nHists][nDataSets];
+	std::vector<double> weights[nTagEta][num_tBins][nHists][nDataSets];
+	double value;
+	double weight;
+
+	TCanvas* c1 = new TCanvas("","",1440,900);
+	// This histogram was used to check atleast the shape and counts are correct. We dont do FR scaling yet but w.e.
+	//TH1F* prodPlane = new TH1F("","",100,-180,180);
+
+	for ( int iDataSet=0; iDataSet<nDataSets; ++iDataSet){ // the dataset we use, 2017 or the two 2018 sets
+		for (int iTag=0; iTag < nTagEta; ++iTag){ // nothing or backwardPi0/Etap
+			for (int iteta=0; iteta<num_tBins; ++iteta){ // t bins
+				//ifstream inFile((baseFileLoc+dataFolders[iDataSet]+"/prodPlanePSphi_045_tetaBin3.txt").c_str());
+				ifstream inFile0(("prodPlanePSphi"+tagEta[iTag]+"_045_tetaBin"+to_string(iteta)).c_str());
+				ifstream inFile1(("prodPlanePSphi"+tagPi0[iTag]+"_045_tpi0Bin"+to_string(iteta)).c_str());
+				ifstream inFile2(("prodPlanePSphi"+tagEta[iTag]+"_090_tetaBin"+to_string(iteta)).c_str());
+				ifstream inFile3(("prodPlanePSphi"+tagPi0[iTag]+"_090_tpi0Bin"+to_string(iteta)).c_str());
+				ifstream inFile4(("prodPlanePSphi"+tagEta[iTag]+"_AMO_tetaBin"+to_string(iteta)).c_str());
+				ifstream inFile5(("prodPlanePSphi"+tagPi0[iTag]+"_AMO_tpi0Bin"+to_string(iteta)).c_str());
+				// Have to scale the para yields by flux ratio.
+				ifstream inFile6(("prodPlanePSphi"+tagEta[iTag]+"_000_tetaBin"+to_string(iteta)).c_str());
+				ifstream inFile7(("prodPlanePSphi"+tagPi0[iTag]+"_000_tpi0Bin"+to_string(iteta)).c_str());
+				ifstream inFile8(("prodPlanePSphi"+tagEta[iTag]+"_135_tetaBin"+to_string(iteta)).c_str());
+				ifstream inFile9(("prodPlanePSphi"+tagPi0[iTag]+"_135_tpi0Bin"+to_string(iteta)).c_str());
+				// Arrange everything in a vector so we can easily loop through them
+				std::vector<ifstream> inFiles={inFile0,inFile1,inFile2,inFile3,inFile4,inFile5,inFile6,inFile7,inFile8,inFile9};
+				// since these are pointers I think after I fill the histograms here I could use the oringal histogram pointer names and it should work still
+				std::vector<TH1F*> hists = {phi045_pi0_unscaled[iTag][iteta][iData],phi090_eta_unscaled[iTag][iteta][iData],phi090_pi0_unscaled[iTag][iteta][iData]
+				,phiAMO_eta_unscaled[iTag][iteta][iData],phiAMO_pi0_unscaled[iTag][iteta][iData],phi000_eta_unscaled[iTag][iteta][iData],phi000_pi0_unscaled[iTag][iteta][iData]
+				,phi135_eta_unscaled[iTag][iteta][iData],phi135_pi0_unscaled[iTag][iteta][iData]};
+				for ( int iHist=0; iHist<nHists; ++iHist){
+					while (inFiles[iHist] >> value >> weight){
+						values[iTag][iteta][iHist][iData].push_back(value);
+						weights[iTag][iteta][iHist][iData].push_back(weight);
+						hists[iHist]->Fill(value,weight);
+					}
+				}
 			}
 		}
 	}
+
+
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ************************************************** NOW THAT WE LOADED THE DATA WE CAN SCALE IT AND FIT IT *************************************************************
+	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------------------------------
+	// These are the weighted summed histograms. weighted according to the Flux ratio
+	TH1F *phi000_eta_total[nTagEta][num_tBins];
+	TH1F *phi045_eta_total[nTagEta][num_tBins];
+	TH1F *phi090_eta_total[nTagEta][num_tBins];
+	TH1F *phi135_eta_total[nTagEta][num_tBins];
+	TH1F *phiAMO_eta_total[nTagEta][num_tBins];
+	TH1F *phi000_pi0_total[nTagEta][num_tBins];
+	TH1F *phi045_pi0_total[nTagEta][num_tBins];
+	TH1F *phi090_pi0_total[nTagEta][num_tBins];
+	TH1F *phi135_pi0_total[nTagEta][num_tBins];
+	TH1F *phiAMO_pi0_total[nTagEta][num_tBins];
 	// Now we sum the scaled histograms over the 3 datasets
 	double maximum_before;
 	double maximum_after;
@@ -95,7 +170,7 @@ void fitAsymmetryPlots(){
 	cout << "--------------------------------------------\nLOADING AND SCALING HISTOGRAMS\n--------------------------------------------" << endl;
 	cout << "As a simple test we can GetMaximum before and after the scaling to see if it actually worked" << endl;
 	cout << "\tWe will follow phi000_eta_total throughout the process" << endl;
-	for (int iTag=0; iTag < sizeof(tagEta)/sizeof(tagEta[0]); ++iTag){
+	for (int iTag=0; iTag < nTagEta; ++iTag){
 		for (int iteta=0; iteta<num_tBins; ++iteta){
 			totalEntriesInPhi000_eta_total=0;
 			cout << "--------------\n" << tagEta[0] << "\n--------------" << endl;
@@ -126,7 +201,7 @@ void fitAsymmetryPlots(){
 			totalEntriesInPhi000_eta_total += phi000_eta_total[iTag][iteta]->GetEntries();
 			cout << "-Cumulative entries after adding dataSet=0: " << totalEntriesInPhi000_eta_total << endl;
 			// for the last 2 runs we simply add with a weight if in para config and add with weight=1 if in perp config
-			for (int iData=1; iData < sizeof(fluxRatios_90_0)/sizeof(fluxRatios_90_0[0]); ++iData){
+			for (int iData=1; iData < nDataSets; ++iData){
 				// keeping a count of the total entries to check if we are doing the Add right
 				totalEntriesInPhi000_eta_total += phi000_eta_unscaled[iTag][iteta][iData]->GetEntries();
 				cout << "-Cumulative entries after adding dataSet=" << iData << ": " << totalEntriesInPhi000_eta_total << endl;
@@ -161,8 +236,10 @@ void fitAsymmetryPlots(){
 	// *****************************
 	static const int numPolarizations = 4;
 	string names[4] = {"phi000","phi045","phi090","phi135"};
-	//double perpOrPara[4] = {0, 90, 90, 0};
-	double perpOrPara[4] = {0, 0, 0, 0};
+	//double perpOrPara[4] = {0, 90, 90, 0}; //p2
+	double orientation[4] = {0, 45, 0, -45}; //p1
+	double Phi0_0_90 = 0+3.1;
+	double Phi0_45_135 = -45+3.2;
 	double asymmetries_000_eta[num_tBins];
 	double asymmetries_045_eta[num_tBins];
 	double asymmetries_000_eta_err[num_tBins];
@@ -215,13 +292,10 @@ void fitAsymmetryPlots(){
 	double tBins[num_tBins];
 	double tBins_err[num_tBins];
 	double tBinSize=0.2;
-	double orientation[4] = {0,45,90,-45};
-	double Phi0_0_90 = 0+3.1;
-	double Phi0_45_135 = -45+3.2;
 
 	string phis_orientation[5] =  {"phi000", "phi045", "phi090", "phi135", "phiAMO"};
 	Int_t fitStatus;
-	for (int iTag=0; iTag < sizeof(tagEta)/sizeof(tagEta[0]); ++iTag){
+	for (int iTag=0; iTag<nTagEta; ++iTag){
 		for (int iteta=0; iteta<num_tBins; ++iteta){ //num_tBins
 			// Need to define the polarization with the systematic shift
 			// the shift for 0/90 is 3.1 and shifting 45/135 is 3.2. Since 0 and 135/-45 is para the beginning orientation is 0 and -45 whih then we shift by 3.1, 3.2 respectively
@@ -367,7 +441,11 @@ void fitAsymmetryPlots(){
 			// *****************************
 			allCanvases->Clear();
 			allCanvases->Divide(3,2);
-			TF1 * fit_sc = new TF1("fit_sc",shiftedCos,-180,180,numDOFsig_sc); 
+			TF1 * fit_sc000 = new TF1("fit_sc000",shiftedCos000,-180,180,numDOFsig_sc); 
+			TF1 * fit_sc045 = new TF1("fit_sc045",shiftedCos045,-180,180,numDOFsig_sc); 
+			TF1 * fit_sc090 = new TF1("fit_sc090",shiftedCos090,-180,180,numDOFsig_sc); 
+			TF1 * fit_sc135 = new TF1("fit_sc135",shiftedCos135,-180,180,numDOFsig_sc); 
+			std::vector<TF1*> fit_scs = {fit_sc000, fit_sc045, fit_sc090, fit_sc135 };
 			double p0;
 			int counter=0;
 			for (auto phi: phis_eta){
@@ -375,13 +453,11 @@ void fitAsymmetryPlots(){
 				phi->SetTitle((names[counter]).c_str());
 				nEventsPhiEta[iTag].push_back(phi->GetEntries());
 				p0 = phi->GetEntries()/phi->GetNbinsX();
-				fit_sc->SetParameters(p0,0.1,orientation[counter],perpOrPara[counter]);
-				fit_sc->FixParameter(2, orientation[counter]);
-				fit_sc->FixParameter(3, perpOrPara[counter]);
+				fit_scs[counter]->SetParameters(p0,0.1);
 				cout << "\n\nFixing orientation for phi fit for fast eta to: " << orientation[counter] << endl;
-				fitStatus = phi->Fit(fit_sc,"E S");
-				phis_eta_PSig[counter].push_back(fit_sc->GetParameter(1));
-				phis_eta_PSig_err[counter].push_back(fit_sc->GetParError(1));
+				fitStatus = phi->Fit(fit_scs[counter],"E S");
+				phis_eta_PSig[counter].push_back(fit_scs[counter]->GetParameter(1));
+				phis_eta_PSig_err[counter].push_back(fit_scs[counter]->GetParError(1));
 				phi->Draw("SAME");
 				++counter;
 			}
@@ -401,19 +477,21 @@ void fitAsymmetryPlots(){
 			// *****************************
 			allCanvases->Clear();
 			allCanvases->Divide(3,2);
-			fit_sc = new TF1("fit_sc",shiftedCos,-180,180,numDOFsig_sc); 
+			fit_sc000 = new TF1("fit_sc000",shiftedCos000,-180,180,numDOFsig_sc); 
+			fit_sc045 = new TF1("fit_sc045",shiftedCos045,-180,180,numDOFsig_sc); 
+			fit_sc090 = new TF1("fit_sc090",shiftedCos090,-180,180,numDOFsig_sc); 
+			fit_sc135 = new TF1("fit_sc135",shiftedCos135,-180,180,numDOFsig_sc); 
+			fit_scs = {fit_sc000, fit_sc045, fit_sc090, fit_sc135 };
 			counter=0;
 			for (auto phi: phis_pi0){
 				allCanvases->cd(counter+1);
 				phi->SetTitle((names[counter]).c_str());
 				p0 = phi->GetEntries()/phi->GetNbinsX();
-				fit_sc->SetParameters(p0,0.1,orientation[counter],perpOrPara[counter]);
-				fit_sc->FixParameter(2, orientation[counter]);
-				fit_sc->FixParameter(3, perpOrPara[counter]);
+				fit_scs[counter]->SetParameters(p0,0.1);
 				cout << "Fixing orientation for phi fit for fast pi0 to: " << orientation[counter] << endl;
-				fitStatus = phi->Fit(fit_sc,"E S");
-				phis_pi0_PSig[counter].push_back(fit_sc->GetParameter(1));
-				phis_pi0_PSig_err[counter].push_back(fit_sc->GetParError(1));
+				fitStatus = phi->Fit(fit_scs[counter],"E S");
+				phis_pi0_PSig[counter].push_back(fit_scs[counter]->GetParameter(1));
+				phis_pi0_PSig_err[counter].push_back(fit_scs[counter]->GetParError(1));
 				phi->Draw("SAME");
 				nEventsPhiPi0[iTag].push_back(phi->GetEntries());
 				cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phi->GetEntries() << endl;

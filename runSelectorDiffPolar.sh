@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ############################### README ###################################
+# 0. THIS IS USED TO OBTAIN ROOT FILES SEPARATED IN BEAM POLARIZATIO
 # We have to set up the DSelector and runDSelector properly. 
 # 1. There is some lines that which should be uncommented when running over just the 
 # polarization specific data sets in the runDSelector file. 

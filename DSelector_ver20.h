@@ -66,14 +66,42 @@ void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double
 }
 
 struct histDef_1D{
-    TH1F* hist;
-    string name;
-    bool* cut;
-    std::vector< double* > values;
-    double* weights; 
-    void clear(){
-        values.clear();
-    }
+	TH1F* hist;
+	string name;
+	bool* cut;
+	std::vector< double* > values;
+	double* weights; 
+
+	bool saveHistValues=false;
+	string baseLocation = "/d/grid15/ln16/pi0eta/092419/";
+
+	void Write(double value, double weight){
+		if (saveHistValues){
+			// if it doesnt exist
+			if ( gSystem->AccessPathName((baseLocation+"newGraphs_histValues").c_str() ) ){
+				cout << "Making newGraphs_histValues" << endl;
+				gSystem->Exec(("mkdir "+baseLocation+"newGraphs_histValues").c_str());
+			}
+			if ( gSystem->AccessPathName( ( (baseLocation+"newGraphs_histValues/"+name+".txt").c_str() ) ) ){
+				cout << baseLocation << "newGraphs_histValues/" << name << ".txt not found, making it" << endl;
+				gSystem->Exec(("touch "+baseLocation+"newGraphs_histValues/"+name+".txt").c_str());
+			}
+			//else {
+			//	cout << "newGraphs_histValues/" << name << ".txt found, so remaking it" << endl;
+			//	gSystem->Exec(("rm newGraphs_histValues/"+name+".txt").c_str());
+			//	gSystem->Exec(("touch newGraphs_histValues/"+name+".txt").c_str());
+			//}
+			cout << ("echo "+to_string(value)+" "+to_string(weight)+" >> "+baseLocation+"newGraphs_histValues/"+name+".txt").c_str() << endl;
+			cout << "Value is actually: " << value << endl;
+			gSystem->Exec(("echo "+to_string(value)+" "+to_string(weight)+" >> "+baseLocation+"newGraphs_histValues/"+name+".txt").c_str());
+		}	
+	}
+
+	void clear(){
+	    	values.clear();
+	}
+		
+
 };
 
 struct histDef_2D{
@@ -174,7 +202,10 @@ class trackingGroup{
              for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
 	        if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
 	            allUsedMapIds_1D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
-                    allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[0]), *(allHists_1D[iHist].weights) );
+		    double value = *(allHists_1D[iHist].values[0]); 
+		    cout << "(" << allHists_1D[iHist].name << ")" << "Value, Weight, Cut: " << value << ", " << *(allHists_1D[iHist].weights) << ", " << *(allHists_1D[iHist].cut) << ", " << endl;
+                    allHists_1D[iHist].hist->Fill( value, *(allHists_1D[iHist].weights) );
+		    //allHists_1D[iHist].Write( value, *(allHists_1D[iHist].weights) );
                 }
              }
              for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
@@ -228,7 +259,7 @@ class trackingGroup{
             }
         }
         
-        // have to use this everytime we fillHistogram or changing combos
+        // have to use this everytime we fillHistogram since we have a vector of values we input, i.e. photonXs
         void clear_values(){
             for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
                 allHists_1D[iHist].clear();
@@ -927,10 +958,13 @@ class DSelector_ver20 : public DSelector
 		bool mMPi0P14_ellipse=true;
 		bool baseCuts=true;
 		bool baseCuts_mChiUE=true;
-		bool baseAsymCut_teta=true;
-		bool baseAsymCut_teta_mMpi0etaGT17LT29=true;
+		bool baseAsymCut=true;
+		bool baseAsymCut_mMpi0etaGT17LT29=true;
 		bool baseAsymCut_backwardPi0P=true;
+		bool baseAsymCut_backwardPi0P_mDelta=true;
 		bool baseAsymCut_backwardEtaP=true;
+		bool baseAsymComparisionRegge=true;
+		bool baseAsymComparisionDelta=true;
 		bool looseCuts=true;
 		bool pBase_pT_pIE_pBE8288_pMPi0P_pDelta = true;
                 bool noCut=true;
