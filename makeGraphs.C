@@ -53,6 +53,8 @@ class overlayPlots{
 			leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
 			overlayHists[0]->SetTitle("");
 			overlayHists[0]->Draw("HIST");
+			overlayHists[0]->GetXaxis()->SetTitleSize(0.05);
+			overlayHists[0]->GetYaxis()->SetTitleSize(0.05);
 			overlayHists[0]->SetAxisRange(minimum1D,maximum1D*1.05,"Y");
 			for (int i=1; i<overlayHists.size(); ++i){
 				cout << "Overlaying hist " << overlayHists[i]->GetName() << endl;
@@ -113,6 +115,8 @@ class sideBySide2D{
 			overlayHists[0]->Scale(histWeights[0]);
 			//leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
 			overlayHists[0]->Draw("COLZ");
+			overlayHists[0]->GetXaxis()->SetTitleSize(0.05);
+			overlayHists[0]->GetYaxis()->SetTitleSize(0.05);
 			//for (int i=1; i<overlayHists.size(); ++i){
 			//	cout << "Overlaying hist " << overlayHists[i]->GetName() << endl;
 			//	overlayHists[i]->Scale(histWeights[i]);
@@ -139,7 +143,7 @@ class sideBySide2D{
 void makeGraphs(){
 	gStyle->SetOptStat(0);
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/pi0eta_test_hists_DSelector.root");
-	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/deg000_2017_hists_DSelector.root");
+	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/eta3pi/pi0eta_seanResoution_reco_3pi0_hists_DSelector.root");
 	TIter keyList(file->GetListOfKeys());
 	TKey *key;
@@ -179,6 +183,8 @@ void makeGraphs(){
    	   	if (cl->InheritsFrom("TH2")){
 			string fileName="newGraphs/";
    	   		TH2F *h = (TH2F*)key->ReadObj();
+			h->GetXaxis()->SetTitleSize(0.25);
+			h->GetYaxis()->SetTitleSize(0.25);
    	   		h->Draw("COLZ HIST");
 			fileName.append(h->GetName());
 			fileName.append(".png");
@@ -197,6 +203,8 @@ void makeGraphs(){
 		else if (cl->InheritsFrom("TH1")){
 			string fileName="newGraphs/";
    	   		TH1F *h = (TH1F*)key->ReadObj();
+			h->GetXaxis()->SetTitleSize(0.04);
+			h->GetYaxis()->SetTitleSize(0.04);
    	   		h->Draw("COLZ HIST");
 			fileName.append(h->GetName());
 			fileName.append(".png");
@@ -208,10 +216,11 @@ void makeGraphs(){
 			pi0eta1D_RectSBSubRegion_fixed.fillHist(h);
 			pi0MassDiffSubDetectors.fillHist(h);
 			etaMassDiffSubDetectors.fillHist(h);
-			pi0eta1DtAlltCut.fillHist(h);
-			trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1}, {"pi0proton1D_mDelta", 1} };
 			if ( strcmp(h->GetName(),"pi0proton1D_mMandelstamT_mdelta")==0 ){ h->SetTitle("all t'");}
 			if ( strcmp(h->GetName(),"pi0proton1D_mDelta")==0 ){ h->SetTitle("|t'|<1GeV^2");}
+			if ( strcmp(h->GetName(),"pi0eta1D_mMandelstamT")==0 ){ h->SetTitle("all t'");}
+			if ( strcmp(h->GetName(),"pi0eta1D_Cut")==0 ){ h->SetTitle("|t'|<1GeV^2");}
+			pi0eta1DtAlltCut.fillHist(h);
 			pi0proton1D_beforeAfterT.fillHist(h);
 		}
    	}

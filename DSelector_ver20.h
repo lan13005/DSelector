@@ -686,7 +686,7 @@ class DSelector_ver20 : public DSelector
 		double MMsqCut = 0.05;
 		//double CLCut1 = 0.1;
 		//double CLCut = 0.01; // CLCut is the cut we want to uses for all other cuts, these others ones are for the RFTime graph
-		double ChiSqCut = 5;
+		double ChiSqCut = 13.277;
 		double originalChiSqCut = 13.277;
 		double chiSq100 = 100;
 		//double CLCut3 = 0.001;

@@ -17,7 +17,7 @@ Double_t fitFunc(Double_t *x, Double_t *par){
 }
 
 void makeMassVaryChiSq(){
-	TFile* dataFile = TFile::Open("pi0eta_test_hists_DSelector.root");
+	TFile* dataFile = TFile::Open("degALL_data_2017_hists_DSelector.root");
     	//ofstream logFile;
     	//logFile.open("newGraphs/sigEffs/purityResults.txt");
 

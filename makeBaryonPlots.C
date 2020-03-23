@@ -4,7 +4,7 @@ void makeBaryonPlots(){
 	double tCut = 1;
 	TLine *lineCut;
 
-	TFile* dataFile = TFile::Open("pi0eta_all_tLT1_hists_DSelector.root");
+	TFile* dataFile = TFile::Open("degALL_data_2017_hists_DSelector.root");
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 
 	string baseNames[5] = {"vanHove","mandelstam_tp","pi0proton1D", "etaproton1D", "pi0eta1D"};

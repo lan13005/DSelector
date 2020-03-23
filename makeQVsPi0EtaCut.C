@@ -1,6 +1,6 @@
 void makeQVsPi0EtaCut(){
 	gStyle->SetOptStat(0);
-	TFile* dataFile = TFile::Open("pi0eta_all_tLT1_hists_DSelector.root");
+	TFile* dataFile = TFile::Open("degALL_data_2017_hists_DSelector.root");
 	TFile* qValueFile = TFile::Open("/d/grid15/ln16/pi0eta/q-values/postQVal.root");
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 	TH1F *signalRegion_mEllipse;

@@ -49,6 +49,7 @@ void fitAsymmetryPlots(){
 	static const int nTagEta = 2;
 	string tagEta[2] = {"","_backwardPi0P"};
 	string tagPi0[2] = {"","_backwardEtaP"};
+	string tag[2] = {"", "_vanHoveSelected"}; // same as above but a single name to group them both.
 	std::vector<int> nEventsPhiEta[nTagEta]; // second one is for the vanHove selected
 	std::vector<int> nEventsPhiPi0[nTagEta];
 
@@ -105,46 +106,71 @@ void fitAsymmetryPlots(){
 	
 	string baseFileLoc = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/";
 	string dataFolders[nDataSets] = {"deg000_data_2017", "deg000_data_2018_1", "deg000_data_2018_8"};
-	std::vector<double> values[nTagEta][num_tBins][nHists][nDataSets];
-	std::vector<double> weights[nTagEta][num_tBins][nHists][nDataSets];
+	std::vector<double> values[nTagEta][num_tBins][nDataSets][nHists];
+	std::vector<double> weights[nTagEta][num_tBins][nDataSets][nHists];
 	double value;
 	double weight;
 
-	TCanvas* c1 = new TCanvas("","",1440,900);
 	// This histogram was used to check atleast the shape and counts are correct. We dont do FR scaling yet but w.e.
 	//TH1F* prodPlane = new TH1F("","",100,-180,180);
 
-	for ( int iDataSet=0; iDataSet<nDataSets; ++iDataSet){ // the dataset we use, 2017 or the two 2018 sets
+	for ( int iData=0; iData<nDataSets; ++iData){ // the dataset we use, 2017 or the two 2018 sets
 		for (int iTag=0; iTag < nTagEta; ++iTag){ // nothing or backwardPi0/Etap
 			for (int iteta=0; iteta<num_tBins; ++iteta){ // t bins
-				//ifstream inFile((baseFileLoc+dataFolders[iDataSet]+"/prodPlanePSphi_045_tetaBin3.txt").c_str());
-				ifstream inFile0(("prodPlanePSphi"+tagEta[iTag]+"_045_tetaBin"+to_string(iteta)).c_str());
-				ifstream inFile1(("prodPlanePSphi"+tagPi0[iTag]+"_045_tpi0Bin"+to_string(iteta)).c_str());
-				ifstream inFile2(("prodPlanePSphi"+tagEta[iTag]+"_090_tetaBin"+to_string(iteta)).c_str());
-				ifstream inFile3(("prodPlanePSphi"+tagPi0[iTag]+"_090_tpi0Bin"+to_string(iteta)).c_str());
-				ifstream inFile4(("prodPlanePSphi"+tagEta[iTag]+"_AMO_tetaBin"+to_string(iteta)).c_str());
-				ifstream inFile5(("prodPlanePSphi"+tagPi0[iTag]+"_AMO_tpi0Bin"+to_string(iteta)).c_str());
+				string name0 = "prodPlanePSphi"+tagEta[iTag]+"_045_tetaBin"+to_string(iteta);
+				string name1 = "prodPlanePSphi"+tagPi0[iTag]+"_045_tpi0Bin"+to_string(iteta);
+				string name2 = "prodPlanePSphi"+tagEta[iTag]+"_090_tetaBin"+to_string(iteta);
+				string name3 = "prodPlanePSphi"+tagPi0[iTag]+"_090_tpi0Bin"+to_string(iteta);
+				string name4 = "prodPlanePSphi"+tagEta[iTag]+"_AMO_tetaBin"+to_string(iteta);
+				string name5 = "prodPlanePSphi"+tagPi0[iTag]+"_AMO_tpi0Bin"+to_string(iteta);
+				string name6 = "prodPlanePSphi"+tagEta[iTag]+"_000_tetaBin"+to_string(iteta);
+				string name7 = "prodPlanePSphi"+tagPi0[iTag]+"_000_tpi0Bin"+to_string(iteta);
+				string name8 = "prodPlanePSphi"+tagEta[iTag]+"_135_tetaBin"+to_string(iteta);
+				string name9 = "prodPlanePSphi"+tagPi0[iTag]+"_135_tpi0Bin"+to_string(iteta);
+
+        			phi045_eta_unscaled[iTag][iteta][iData] = new TH1F((name0+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi045_pi0_unscaled[iTag][iteta][iData] = new TH1F((name1+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi090_eta_unscaled[iTag][iteta][iData] = new TH1F((name2+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi090_pi0_unscaled[iTag][iteta][iData] = new TH1F((name3+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phiAMO_eta_unscaled[iTag][iteta][iData] = new TH1F((name4+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phiAMO_pi0_unscaled[iTag][iteta][iData] = new TH1F((name5+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi000_eta_unscaled[iTag][iteta][iData] = new TH1F((name6+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi000_pi0_unscaled[iTag][iteta][iData] = new TH1F((name7+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi135_eta_unscaled[iTag][iteta][iData] = new TH1F((name8+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        			phi135_pi0_unscaled[iTag][iteta][iData] = new TH1F((name9+"_iData"+to_string(iData)).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+				
+				ifstream* inFile0 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name0+".txt").c_str());
+				cout << "First file located at: " << baseFileLoc+dataFolders[iData]+"/"+name0 << endl;
+				ifstream* inFile1 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name1+".txt").c_str());
+				ifstream* inFile2 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name2+".txt").c_str());
+				ifstream* inFile3 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name3+".txt").c_str());
+				ifstream* inFile4 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name4+".txt").c_str());
+				ifstream* inFile5 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name5+".txt").c_str());
 				// Have to scale the para yields by flux ratio.
-				ifstream inFile6(("prodPlanePSphi"+tagEta[iTag]+"_000_tetaBin"+to_string(iteta)).c_str());
-				ifstream inFile7(("prodPlanePSphi"+tagPi0[iTag]+"_000_tpi0Bin"+to_string(iteta)).c_str());
-				ifstream inFile8(("prodPlanePSphi"+tagEta[iTag]+"_135_tetaBin"+to_string(iteta)).c_str());
-				ifstream inFile9(("prodPlanePSphi"+tagPi0[iTag]+"_135_tpi0Bin"+to_string(iteta)).c_str());
+				ifstream* inFile6 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name6+".txt").c_str());
+				ifstream* inFile7 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name7+".txt").c_str());
+				ifstream* inFile8 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name8+".txt").c_str());
+				ifstream* inFile9 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name9+".txt").c_str());
 				// Arrange everything in a vector so we can easily loop through them
-				std::vector<ifstream> inFiles={inFile0,inFile1,inFile2,inFile3,inFile4,inFile5,inFile6,inFile7,inFile8,inFile9};
+				std::vector<ifstream*> inFiles={inFile0,inFile1,inFile2,inFile3,inFile4,inFile5,inFile6,inFile7,inFile8,inFile9};
 				// since these are pointers I think after I fill the histograms here I could use the oringal histogram pointer names and it should work still
-				std::vector<TH1F*> hists = {phi045_pi0_unscaled[iTag][iteta][iData],phi090_eta_unscaled[iTag][iteta][iData],phi090_pi0_unscaled[iTag][iteta][iData]
-				,phiAMO_eta_unscaled[iTag][iteta][iData],phiAMO_pi0_unscaled[iTag][iteta][iData],phi000_eta_unscaled[iTag][iteta][iData],phi000_pi0_unscaled[iTag][iteta][iData]
-				,phi135_eta_unscaled[iTag][iteta][iData],phi135_pi0_unscaled[iTag][iteta][iData]};
+				std::vector<TH1F*> hists = {phi045_eta_unscaled[iTag][iteta][iData],phi045_pi0_unscaled[iTag][iteta][iData],phi090_eta_unscaled[iTag][iteta][iData]
+					,phi090_pi0_unscaled[iTag][iteta][iData],phiAMO_eta_unscaled[iTag][iteta][iData],phiAMO_pi0_unscaled[iTag][iteta][iData]
+					,phi000_eta_unscaled[iTag][iteta][iData],phi000_pi0_unscaled[iTag][iteta][iData],phi135_eta_unscaled[iTag][iteta][iData]
+					,phi135_pi0_unscaled[iTag][iteta][iData]};
 				for ( int iHist=0; iHist<nHists; ++iHist){
-					while (inFiles[iHist] >> value >> weight){
-						values[iTag][iteta][iHist][iData].push_back(value);
-						weights[iTag][iteta][iHist][iData].push_back(weight);
+					while (*(inFiles[iHist]) >> value >> weight){
+						cout << value << endl;
+						values[iTag][iteta][iData][iHist].push_back(value);
+						weights[iTag][iteta][iData][iHist].push_back(weight);
 						hists[iHist]->Fill(value,weight);
 					}
+					hists[iHist]->Print();
 				}
 			}
 		}
 	}
+
 
 
 	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
