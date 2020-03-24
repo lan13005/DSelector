@@ -13,7 +13,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	dOutputTreeFileNameMap["selected_tpLT1"] = polarization+"_gen_treeFlat_DSelector.root"; //key is user-defined, value is output file name
+	dOutputTreeFileNameMap["selected_tpLT1"] = polarization+"_gen_2017_treeFlat_DSelector.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 

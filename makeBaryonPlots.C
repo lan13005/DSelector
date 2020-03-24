@@ -43,7 +43,7 @@ void makeBaryonPlots(){
 				lineCut->Draw();
 			}
 		}
-		allCanvases->SaveAs(("baryonPlots/"+baseNames[iHist]+"_"+cutString+".pdf").c_str());
+		allCanvases->SaveAs(("newGraphs/baryonPlots/"+baseNames[iHist]+"_"+cutString+".pdf").c_str());
 	}
 
 	// mMandelstamT_mdelta = pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
@@ -95,7 +95,7 @@ void makeBaryonPlots(){
 	}
 	allCanvases->cd();
 	pt->Draw();
-	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
+	allCanvases->SaveAs(("newGraphs/baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 	
 	// mandelstam_tp would be the new primary
 	allCanvases->Clear();
@@ -134,7 +134,7 @@ void makeBaryonPlots(){
 	}
 	allCanvases->cd();
 	pt->Draw();
-	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
+	allCanvases->SaveAs(("newGraphs/baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 
 	// pi0proton would be the new primary
 	allCanvases->Clear();
@@ -173,7 +173,7 @@ void makeBaryonPlots(){
 	}
 	allCanvases->cd();
 	pt->Draw();
-	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
+	allCanvases->SaveAs(("newGraphs/baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 
 	// etaproton would be the new primary
 	allCanvases->Clear();
@@ -213,5 +213,5 @@ void makeBaryonPlots(){
 	}
 	allCanvases->cd();
 	pt->Draw();
-	allCanvases->SaveAs(("baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
+	allCanvases->SaveAs(("newGraphs/baryonPlots/baryonCheck-"+baseNames[ignoreIdx]+".pdf").c_str());
 }

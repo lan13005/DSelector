@@ -28,8 +28,8 @@ int itersToRun = 0;
 int finalStateComboID=0;
 
 string selectDetector="ALL";
-string polarization="degALL";
-string tag="_data_2017";
+string polarization="deg000";
+string tag="_acc_2017";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
