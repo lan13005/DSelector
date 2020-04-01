@@ -175,6 +175,10 @@ void makeGraphs(){
 	overlayPlots pi0eta1DtAlltCut(trackHists);
 	trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1}, {"pi0proton1D_mDelta", 1} };
 	overlayPlots pi0proton1D_beforeAfterT(trackHists);
+	trackHists = { {"pi0proton1D_baseAsymCut", 1}, {"pi0proton1D_baseAsymCut_fastEta", 1} };
+	overlayPlots pi0proton1D_baseAsym(trackHists);
+	trackHists = { {"etaproton1D_baseAsymCut", 1}, {"etaproton1D_baseAsymCut_fastPi0", 1} };
+	overlayPlots etaproton1D_baseAsym(trackHists);
 
 	TCanvas *c1 = new TCanvas("c1","",1440,900);
 	int i=0;
@@ -212,6 +216,8 @@ void makeGraphs(){
 			// Wait until we have finally used up TH1 object first. Otherwise casting it into TH1F early creates some problems
 			pi0proton1D_mMandelstamT_mdelta.fillHist(h);
 			etaproton1D_mMandelstamT_mdelta.fillHist(h);
+			pi0proton1D_baseAsym.fillHist(h);
+			etaproton1D_baseAsym.fillHist(h);
 			pi0eta1D_RectSBSubRegion.fillHist(h);
 			pi0eta1D_RectSBSubRegion_fixed.fillHist(h);
 			pi0MassDiffSubDetectors.fillHist(h);
@@ -234,6 +240,8 @@ void makeGraphs(){
 	etaMassDiffSubDetectors.plot("newGraphs/etaMassDiffSubDetectors.png",false,lineCutThresholds);
 	pi0eta1DtAlltCut.plot("newGraphs/pi0eta1DtAlltCut.png",false, lineCutThresholds);
 	pi0proton1D_beforeAfterT.plot("newGraphs/pi0proton1D_beforeAfterT.png",false, lineCutThresholds);
+	pi0proton1D_baseAsym.plot("newGraphs/pi0proton1D_baseAsym.png",false,lineCutThresholds);
+	etaproton1D_baseAsym.plot("newGraphs/etaproton1D_baseAsym.png",false,lineCutThresholds);
 
 	lineCutThresholds={selectPi0Proton};
 	pi0proton1D_mMandelstamT_mdelta.plot("newGraphs/pi0proton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
@@ -243,7 +251,7 @@ void makeGraphs(){
 	//cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
 	//pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
 	
-	cutThreshold2D = { {0.135881, 0.548625, 2*0.0076, 2*0.0191 } }; // kinFit
+	cutThreshold2D = { {0.135784, 0.548036, 2*0.0067, 2*0.014 } }; // kinFit
 	//cutThreshold2D = { {0.13381, 0.5388, 3*0.006, 3*0.0264 } };//eta3pi
 	pi0eta_mEllipsePre.plot("newGraphs/pi0eta_mEllipsePre_withCut.png","ellipse",cutThreshold2D);
 }

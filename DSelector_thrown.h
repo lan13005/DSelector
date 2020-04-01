@@ -45,8 +45,8 @@ class DSelector_thrown : public DSelector
 		double tMax=2.8;
 		int num_massBins=12;
 		const int numHists = num_tBins*num_massBins;
-		double mMin=1.7;
-		double mMax=2.9;
+		double mMin=1.6;
+		double mMax=2.8;
 		double tStep=(tMax-tMin)/num_tBins;
 		double mStep=(mMax-mMin)/num_massBins;
 		int idx_t_eta;
@@ -126,6 +126,7 @@ class DSelector_thrown : public DSelector
 		TH1F *dHist_pi0eta1D;
 		TH1F *dHist_phi8GeVPlus;
 		TH1F *dHist_cosTheta8GeVPlus;
+		double mandelstam_tp;
 
 
 		int maxevent;

@@ -23,7 +23,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	gROOT->ProcessLine(".x $(ROOT_ANALYSIS_HOME)/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 48;
+	int proof_Nthreads = 24;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
@@ -40,7 +40,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// MC flat
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_pi0eta__B4_M17_M7.root");
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
 	//
 	// ON THE JLAB FARM
 	//chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
@@ -78,13 +78,17 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 // ********************** BASE CUTS APPLIED ONLY ********************
 	// 2017
- 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+ 	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 	// 2017 - loose ChiSq and UE cut
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedLooseChiSqUE/pi0eta_looseCuts_tree_DSelector.root");
 	// 2018_8
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_8/pi0eta_baseCuts_2018_tree_DSelector.root");
 	// 2018_1
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_1/pi0eta_baseCuts_2018_tree_DSelector.root");
+	//
+	// BA for Double regge MC studies
+	// Rejection sampled the uniform phi distribution. 
+	//chain->Add("/d/grid15/ln16/hddm_filtered_root/zFiltered/fullRecon/tree_pi0eta__B4_M17_M7.root");
 
 	// **********************************************************************************	
 	// ************************** ------ PI0PI0 BELOW ---------**************************	
@@ -99,8 +103,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 
 	// should change the name below from data to reco when running over MC
-	string degAngle="deg000";
-	string tag="_acc_2017";
+	string degAngle="degALL";
+	string tag="_data_2017";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 

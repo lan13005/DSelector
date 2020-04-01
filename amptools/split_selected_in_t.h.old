@@ -115,7 +115,6 @@ public :
 
    /// ****************** MAKE SURE THEY TYPES MATCH!!!!!!! CHECK THE TYPE BY LOOKING AT THE FLAT TREE USING PRINT()
    Double_t        AccWeight;
-   Float_t	   float_AccWeight;
    Double_t        weightASBS;
    Float_t         float_weightASBS;
    Double_t        mandelstam_tp;
@@ -224,10 +223,14 @@ public :
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 
-   TFile *outFile;
+   TFile *outFile_tLT1;
+   TFile *outFile_tLT06;
+   TFile *outFile_tGT05LT1;
    TFile *m_diagnostic;
 
-   TTree *m_OutTree;
+   TTree *m_OutTree_tLT1;
+   TTree *m_OutTree_tLT06;
+   TTree *m_OutTree_tGT05LT1;
    TTree *diagnostic;
 
    int n_LT06;

@@ -96,11 +96,11 @@ split_gen::split_gen(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("deltaAsymRootFiles/thrownNotAmptoolsReady_flat_gen.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("deg000_gen_2017_treeFlat_DSelector.root");
       //TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("thrownNotAmptoolsReady_a0a2_nameAffix.root");
-      cout << "File input: deltaAsymRootFiles/thrownNotAmptoolsReady_flat_gen.root" << endl;
+      cout << "File input: deg000_gen_2017_treeFlat_DSelector.root" << endl;
       if (!f || !f->IsOpen()) {
-         f = new TFile("deltaAsymRootFiles/thrownNotAmptoolsReady_flat_gen.root");
+         f = new TFile("deg000_gen_2017_treeFlat_DSelector.root");
       }
       f->GetObject("Thrown_Tree",tree);
 

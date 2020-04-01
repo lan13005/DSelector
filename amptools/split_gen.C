@@ -31,7 +31,7 @@ void split_gen::Loop()
 //by  b_branchname->GetEntry(ientry); //read only this branch
    if (fChain == 0) return;
 
-   outFile = new TFile("gen_pi0eta_tLT1.root", "RECREATE");
+   outFile = new TFile("deg000_gen_pi0eta_amptools.root", "RECREATE");
    m_OutTree = new TTree("Thrown_Tree", "kin2");
 
    m_OutTree->Branch("Weight", new Float_t, "Weight/F");
@@ -85,7 +85,6 @@ void split_gen::Loop()
 	countProton=0;	
 	countPi0=0;	
 	countEta=0;	
-	cout << jentry << endl;
         for (int particleN=0; particleN<NumThrown; ++particleN){
                 TLorentzVector *single_P4 = (TLorentzVector *)Thrown__P4->At(particleN);
 		if (Thrown__PID[particleN]==221 && Thrown__ParentIndex[particleN]==-1) {

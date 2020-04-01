@@ -2,6 +2,7 @@
 #define DSelector_ver20_h
 
 #include <iostream>
+#include <fstream>
 
 #include "DSelector/DSelector.h"
 #include "DSelector/DHistogramActions.h"
@@ -327,8 +328,8 @@ class DSelector_ver20 : public DSelector
 		double tMax=2.8;
 		static const int num_massBins=12;
 		const int numHists = num_tBins*num_massBins;
-		double mMin=1.7;
-		double mMax=2.9;
+		double mMin=1.6;
+		double mMax=2.8;
 		double tStep=(tMax-tMin)/num_tBins;
 		double mStep=(mMax-mMin)/num_massBins;
 		double teta_recCounts=0;
@@ -724,7 +725,7 @@ class DSelector_ver20 : public DSelector
 		bool pBeamE8GeVPlus=true;
 		// For the Deck beam asymmetry
 		bool pBeamE82to88=true;
-		bool pMpi0etaGT17LT29=true;
+		bool pMpi0etaGT16LT28=true;
 
 		
 		// pi0Eta specifc cuts
@@ -899,27 +900,47 @@ class DSelector_ver20 : public DSelector
 		// removes the UE cut from allGeneralCutsPassed. m prefix basically stands for minus
 		bool allGeneralCutsPassed=true;
 		bool allGeneralCutsSinglePolarization=true;
-		//bool binteta[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_000[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_045[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_090[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_135[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_AMO[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_backwardPi0P_000[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_backwardPi0P_045[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_backwardPi0P_090[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_backwardPi0P_135[5]={true,true,true,true,true};
-		bool ptEtaBeamAsym_backwardPi0P_AMO[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_000[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_045[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_090[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_135[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_AMO[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_backwardEtaP_000[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_backwardEtaP_045[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_backwardEtaP_090[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_backwardEtaP_135[5]={true,true,true,true,true};
-		bool ptPi0BeamAsym_backwardEtaP_AMO[5]={true,true,true,true,true};
+		
+		// ------------------------------------------------------------------
+		// ***************** THE ORIGINAL BA MEASUREMENT ********************
+		// ------------------------------------------------------------------
+		static const int numMpi0eta = 5;
+		static const int numTBins = 5;
+		bool ptEtaBeamAsym_000[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_045[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_090[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_135[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_AMO[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_backwardPi0P_000[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_backwardPi0P_045[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_backwardPi0P_090[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_backwardPi0P_135[numMpi0eta*numTBins];
+		bool ptEtaBeamAsym_backwardPi0P_AMO[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_000[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_045[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_090[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_135[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_AMO[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_backwardEtaP_000[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_backwardEtaP_045[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_backwardEtaP_090[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_backwardEtaP_135[numMpi0eta*numTBins];
+		bool ptPi0BeamAsym_backwardEtaP_AMO[numMpi0eta*numTBins];
+		
+		// THE GOAL HERE IS TO LOOK AT THE BA CONTRIBUTIONS IN BINS OF M(PI0P) AND IN BINS OF M(ETAP). IN M(PI0P) WE SEE 3 N* RESONANCES. IF WE BIN IN THIS VARIABLE
+		// WE CAN DETERMINE WHAT THE CONTRIBUTIONS ARE TO THE TOTAL ASYMMETRY WE ARE SEEING
+		bool pMpi0pBeamAsym_000[3]={true,true,true}; // WOULD SELECT ON FAST ETA
+		bool pMpi0pBeamAsym_045[3]={true,true,true};
+		bool pMpi0pBeamAsym_090[3]={true,true,true};
+		bool pMpi0pBeamAsym_135[3]={true,true,true};
+		bool pMpi0pBeamAsym_AMO[3]={true,true,true};
+		bool pMetapBeamAsym_000[3]={true,true,true}; // WOULD SELECT ON FAST PI0
+		bool pMetapBeamAsym_045[3]={true,true,true};
+		bool pMetapBeamAsym_090[3]={true,true,true};
+		bool pMetapBeamAsym_135[3]={true,true,true};
+		bool pMetapBeamAsym_AMO[3]={true,true,true};
+		
+
 		bool mMandelstamT=true;
 		bool mMandelstamT_mBeamE8GeVPlus=true;
 		//bool pDiffCL=true; 
@@ -958,8 +979,13 @@ class DSelector_ver20 : public DSelector
 		bool mMPi0P14_ellipse=true;
 		bool baseCuts=true;
 		bool baseCuts_mChiUE=true;
+
+		ofstream outputDeckBA;
+		bool baseAsymCut_mDelta=true;
+		bool baseAsymCut_fastEta=true;
+		bool baseAsymCut_fastPi0=true;
 		bool baseAsymCut=true;
-		bool baseAsymCut_mMpi0etaGT17LT29=true;
+		bool baseAsymCut_mMpi0etaGT16LT28=true;
 		bool baseAsymCut_backwardPi0P=true;
 		bool baseAsymCut_backwardPi0P_mDelta=true;
 		bool baseAsymCut_backwardEtaP=true;

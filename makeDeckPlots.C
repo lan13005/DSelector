@@ -113,8 +113,8 @@ void makeDeckPlot(string selectionString){
 	double tMin=0;
 	double tMax=2.8;
 	const int num_massBins=12;
-	double mMin=1.7;
-	double mMax=2.9;
+	double mMin=1.6;
+	double mMax=2.8;
 	double tStep=(tMax-tMin)/num_tBins;
 	double mStep=(mMax-mMin)/num_massBins;
 	const int numHists = (const int)num_tBins*num_massBins;
@@ -125,8 +125,10 @@ void makeDeckPlot(string selectionString){
 	// *********************************************
 	// *********** CALCULATE YIELDS IN BINS  ***************
 	// *********************************************
-	string dataFileLoc[2] = {"pi0eta_data_treeFlat_DSelector.root","pi0eta_flat_21t_treeFlat_DSelector.root"}; 
-	string dataTreeName[2] = {"pi0eta_datatree_flat","pi0eta_flat_21ttree_flat"}; 
+	//string dataFileLoc[2] = {"pi0eta_data_treeFlat_DSelector.root","pi0eta_flat_21t_treeFlat_DSelector.root"}; 
+	//string dataTreeName[2] = {"pi0eta_datatree_flat","pi0eta_flat_21ttree_flat"}; 
+	string dataFileLoc[2] = {"degALL_data_2017_treeFlat_DSelector.root","degALL_acc_2017_treeFlat_DSelector.root"}; 
+	string dataTreeName[2] = {"degALL_data_2017_tree_flat","degALL_acc_2017_tree_flat"}; 
 	string dataTypes[2]={"data","reco"};
 	string branchNames[2]={"mandelstam_teta_meas","mandelstam_tpi0_meas"};
 	std::vector<std::vector<double>> tSlopes_etas;
@@ -203,7 +205,7 @@ void makeDeckPlot(string selectionString){
 			double yfitMin;
 			double yfitMax;
 
-			if (selectionString=="tLT1" || selectionString=="tAll" || selectionString=="tGT05LT1"){
+			if (selectionString=="tGT1" || selectionString=="tAll" || selectionString=="tGT05LT1"){
 				//  These were fitRange we used for the analysis presentation
 				yfitMin=0.45;
 				yfitMax=0.65;
@@ -213,6 +215,7 @@ void makeDeckPlot(string selectionString){
 				yfitMin=0.46;
 				yfitMax=0.625;
 			}
+			cout << "Current t selection will use [" << yfitMin << "," << yfitMax << "] as the fit range" << endl;
 
 			double chiSq;
 			double dof;
@@ -274,14 +277,35 @@ void makeDeckPlot(string selectionString){
 			// FIT PARAMS FOR DOUBLE GAUSSIAN
 			//feta->SetParameters(800,0.541,0.02,0.4,2.5,300,0);
 			// FIT PARAMS FOR GAUSSIAN
-			feta->SetParameters(2000, 0.55,0.025, 0.015, 0, 0);
+			feta->SetParameters(2000, 0.55,0.01, 0.01, 0, 0);
 			feta->SetParLimits(0, 0, 5000);
 			feta->SetParLimits(1, 0.52, 0.585);
 			feta->SetParLimits(2, 0, 0.1);
+			feta->SetParLimits(3, 0, 0.1);
 			feta->SetParLimits(4, 0, 1000); 
 			feta->SetLineColor(kRed);
 			Int_t fitStatus_eta = full_meta->Fit(feta,"RLQ");
-			full_meta->SetTitle(("ChiSqPerDOF: "+to_string(feta->GetChisquare()/feta->GetNDF())).c_str());
+			double chiPerDOF = feta->GetChisquare()/feta->GetNDF();
+			for(int iFit=0; iFit < 25; ++iFit){
+				if (chiPerDOF > 200){
+					if (iFit==49){ 
+						cout << "Meta full fit never converged... exiting" << endl; 
+						feta->Draw();
+						allCanvases->SaveAs(("deckPlots/"+selectionString+"/"+branchName+"/"+dataTypes[dType]+"/bad-project_full_meta.png").c_str());
+						exit(0); 
+					}
+					double rand_par0 = rand() % 2000;
+					double rand_par4 = rand() % 1000;
+					feta->SetParameters(2000, 0.55,0.01, 0.01, 0, 0);
+					feta->SetParLimits(0, 0, 10000);
+					feta->SetParLimits(1, 0.52, 0.585);
+					feta->SetParLimits(2, 0, 0.1);
+					feta->SetParLimits(4, 0, 5000); 
+					feta->SetLineColor(kRed);
+					Int_t fitStatus_eta = full_meta->Fit(feta,"RLQ");
+				}
+			}
+			full_meta->SetTitle(("ChiSqPerDOF: "+to_string(chiPerDOF)).c_str());
 			full_meta->Draw();
 			feta_before->SetLineColor(kBlue);
 			//feta_before->Draw("SAME");
@@ -519,7 +543,8 @@ void makeDeckPlot(string selectionString){
 	// *********************************************
 	// *********** CALCULATE EFFICIENCIES ***************
 	// *********************************************
-	TFile* genFile = TFile::Open("flat_21t_gen_hists_DSelector_pi0eta.root");
+	//TFile* genFile = TFile::Open("flat_21t_gen_hists_DSelector_pi0eta.root");
+	TFile* genFile = TFile::Open("degALL_gen_2017_hists_DSelector.root");
 	TH1F *tetaVsMpi0eta_genCounts;
 	TH1F *tpi0VsMpi0eta_genCounts;
 	genFile->GetObject( ("tetaVsMpi0eta_genCounts_"+selectionString).c_str(),tetaVsMpi0eta_genCounts);
@@ -611,7 +636,7 @@ void makeDeckPlot(string selectionString){
 	double minYield=DBL_MAX;
 	double maxUnscaledYield=DBL_MIN;
 	int branchIdx=-1;
-	int minNumberOfEvents=40;
+	int minNumberOfEvents=20;
 	for ( string branchName: branchNames ) {
 		++branchIdx;
 		for(int i=0; i<numHists; ++i){

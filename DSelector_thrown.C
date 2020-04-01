@@ -1,6 +1,6 @@
 #include "DSelector_thrown.h"
 #include "TRandom.h"
-string polarization="deg000";
+string polarization="degALL";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
@@ -13,7 +13,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	dOutputTreeFileNameMap["selected_tpLT1"] = polarization+"_gen_2017_treeFlat_DSelector.root"; //key is user-defined, value is output file name
+	//dOutputTreeFileNameMap["selected_tpLT1"] = polarization+"_gen_2017_treeFlat_DSelector.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
@@ -90,6 +90,9 @@ void DSelector_thrown::Init(TTree *locTree)
 	//
 	ievent=0;
 	maxevent=100;
+
+
+        //dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp"); //fundamental = char, int, float, double, etc.
 }
 
 Bool_t DSelector_thrown::Process(Long64_t locEntry)
@@ -143,9 +146,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
     	else if (locPolarizationAngle==135 && polarization=="deg135") { keepPolarization=true; }
     	else if (!hasPolarizationAngle && polarization=="degAMO") { keepPolarization=true; }
     	else {  cout << "FUDGE! THERE IS AN UNEXPECTED OUTCOME FROM THE POLARIZATION CHECK" << endl; } 
-
-	// Making a cut on the polarization angle to split the dataset up
-        dPreviousRunNumber = locRunNumber;
 
 	/********************************************* SETUP UNIQUENESS TRACKING ********************************************/
 	//INSERT USER ANALYSIS UNIQUENESS TRACKING HERE
@@ -272,7 +272,8 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		}
 		cout << "Calculated EBeam bins" << endl;
 
-        	double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamP4.E(), Proton, locEtaP4);
+        	//double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamP4.E(), Proton, locEtaP4);
+		double prodPlanePhi = locEtaP4.Phi()*180/3.14159;
 		
 		TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
 
@@ -329,7 +330,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		//double mandelstam_t0 = -((locProtonP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2())/(2*(locBeamP4+locTargetP4).M())-(locBeamP4_cm-locPi0EtaP4_cm).M2());
 		//above formulation is wrong. the last term uses magnitue, not p4
 		double mandelstam_t0 = -(TMath::Power(-locPi0EtaP4.M2()/(2*(locBeamP4+locTargetP4).M()),2)-TMath::Power(locBeamP4_cm.Vect().Mag()-locPi0EtaP4_cm.Vect().Mag(),2));
-		double mandelstam_tp = mandelstam_t-mandelstam_t0;
+		mandelstam_tp = mandelstam_t-mandelstam_t0;
 		
 		dHist_NumThrown->Fill(locNumThrown);
 		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
@@ -367,8 +368,9 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 
 
 		bool pBeamE8GeV = locBeamP4.E() > 8;
-		bool pMandelstam_tpAll = mandelstam_tp < 1;
-		if(correctFinalState*pBeamE8GeV*keepPolarization*pMandelstam_tpAll){
+		bool pBeamE8288 = 8.2 < locBeamP4.E() &&  locBeamP4.E() < 8.8;
+
+		if(correctFinalState*pBeamE8288*keepPolarization){
 			mandelstam_tpAll->Fill(mandelstam_tp);	
 			mandelstam_tAll->Fill(mandelstam_abst);
 
@@ -384,15 +386,15 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
 			dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
 
-			if (mandelstam_abst<0.5){
+			if (mandelstam_t<0.5){
 				dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
 				dHist_genCounts_pi0_tLT05->Fill(tpi0_genCounts);
 			}
-			if (mandelstam_abst>0.5 && mandelstam_abst<1){
+			if (mandelstam_t>0.5 && mandelstam_t<1){
 				dHist_genCounts_eta_tGT05LT1->Fill(teta_genCounts);
 				dHist_genCounts_pi0_tGT05LT1->Fill(tpi0_genCounts);
 			}
-			if (mandelstam_abst>1){
+			if (mandelstam_t>1){
 				dHist_genCounts_eta_tGT1->Fill(teta_genCounts);
 				dHist_genCounts_pi0_tGT1->Fill(tpi0_genCounts);
 			}
@@ -419,12 +421,11 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 			}
 			pass += 1;
-			//Fill_OutputTree();
 		}
 
 
 
-		if (correctFinalState*pBeamE8GeV*keepPolarization*(mandelstam_tp<1)){
+		if (correctFinalState*pBeamE8288*keepPolarization){//*(mandelstam_tp<1))
 			mandelstam_tpAll_selected->Fill(mandelstam_tp);
 			if ( locPolarizationAngle == 0 ) { 
 				dHist_prodPlanePS_000->Fill(prodPlanePhi);
@@ -463,10 +464,12 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 					dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
 				}
 			}	
-			Fill_OutputTree("selected_tpLT1"); //your user-defined key
-		}
-
-	}
+        		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
+			//Fill_OutputTree("selected_tpLT1"); //your user-defined key
+		} // if cuts not passed
+	} // if topology not correct
+	// If the following selections did not pass then this would have never executed and thus things are never filled
+	Fill_OutputTree();
 
 	++eventIdx;
 
