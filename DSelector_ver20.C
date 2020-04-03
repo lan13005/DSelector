@@ -553,9 +553,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_1234BP.insert_2D(histdef2d); 
 	// to check how the M(pi0eta) mass selection affects the VH plot
         histdef2d.clear();
-        name="vanHove_baseAsymCut_teta_mMpi0etaGT16LT28";
-        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_mMpi0etaGT16LT28;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
-        histdef2d.name = name; histdef2d.cut=&baseAsymCut_mMpi0etaGT16LT28; histdef2d.weights = &weightAS;
+        name="vanHove_baseAsymCut_teta_mMpi0etaDoubleRegge";
+        histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_mMpi0etaDoubleRegge;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_mMpi0etaDoubleRegge; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
         group_1234BP.insert_2D(histdef2d); 
@@ -822,6 +822,70 @@ void DSelector_ver20::Init(TTree *locTree)
         	name="prodPlanePSphi_AMO_MetapBin"+to_string(iMass);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         	histdef.name = name; histdef.cut=&pMetapBeamAsym_AMO[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+	}
+	// This section is used for getting BA of the fast eta/pi0 in bins of Mpi0p/Metap. So with a fast eta we bin in Mpi0p to see the baryon resonances.
+	// So in this case we want to use the phi of the eta
+	for (int iMass=0; iMass<5; ++iMass){
+        	histdef.clear();
+        	name="prodPlanePSphi_000_Mpi0eta_fastEtaBin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_000_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastEta[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_045_Mpi0eta_fastEtaBin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_045_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastEta[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_090_Mpi0eta_fastEtaBin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_090_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastEta[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_135_Mpi0eta_fastEtaBin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_135_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastEta[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_AMO_Mpi0eta_fastEtaBin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_AMO_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastEta[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_eta );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_000_Mpi0eta_fastPi0Bin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_000_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastPi0[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_045_Mpi0eta_fastPi0Bin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_045_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastPi0[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_090_Mpi0eta_fastPi0Bin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_090_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastPi0[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_135_Mpi0eta_fastPi0Bin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_135_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastPi0[iMass]; histdef.weights = &weightAS;
+        	histdef.values.push_back( &locPhi_pi0 );
+        	group_1234BP.insert(histdef); 
+        	histdef.clear();
+        	name="prodPlanePSphi_AMO_Mpi0eta_fastPi0Bin"+to_string(iMass);
+        	histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_AMO_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        	histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastPi0[iMass]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPhi_pi0 );
         	group_1234BP.insert(histdef); 
 	}
@@ -1300,9 +1364,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B_1234B.insert_2D(histdef2d); 
 
         histdef2d.clear();
-        name = "eta_cosTheta_GJvsMpi0p_baseAsymCut_fastEta";
-        histdef2d.hist = new TH2F(name.c_str(), "Cut=baseAsymCut_fastEta;M(#pi^{0} p)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.02",350,0,3.5,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=&baseAsymCut_fastEta; histdef2d.weights = &weightAS;
+        name = "eta_cosTheta_GJvsMpi0p_baseAsymCut_mDelta_fastEta";
+        histdef2d.hist = new TH2F(name.c_str(), "Cut=baseAsymCut_mDelta_fastEta;M(#pi^{0} p)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.02",350,0,3.5,100,-1,1);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_mDelta_fastEta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Proton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         group_34B_1234B.insert_2D(histdef2d); 
@@ -1316,9 +1380,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34B_1234B.insert_2D(histdef2d); 
 
         histdef2d.clear();
-        name = "eta_cosTheta_GJvsMetap_baseAsymCut_fastPi0";
-        histdef2d.hist = new TH2F(name.c_str(), "Cut=baseAsymCut_fastPi0;M(#eta p)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.02",400,0,4,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=&baseAsymCut_fastPi0; histdef2d.weights = &weightAS;
+        name = "eta_cosTheta_GJvsMetap_baseAsymCut_mDelta_fastPi0";
+        histdef2d.hist = new TH2F(name.c_str(), "Cut=baseAsymCut_mDelta_fastPi0;M(#eta p)Events / 0.01 GeV;Cos(#theta) of #eta Events / 0.02",400,0,4,100,-1,1);
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut_mDelta_fastPi0; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaProton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         group_34B_1234B.insert_2D(histdef2d); 
@@ -1826,9 +1890,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_12PB.insert(histdef); 
 
         histdef.clear();
-        name="pi0proton1D_baseAsymCut_fastEta";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_fastEta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
-        histdef.name = name; histdef.cut=&baseAsymCut_fastEta; histdef.weights = &weightAS;
+        name="pi0proton1D_baseAsymCut_mDelta_fastEta";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_mDelta_fastEta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
+        histdef.name = name; histdef.cut=&baseAsymCut_mDelta_fastEta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
         group_12PB.insert(histdef); 
 
@@ -1856,9 +1920,9 @@ void DSelector_ver20::Init(TTree *locTree)
         group_34PB.insert(histdef); 
 
         histdef.clear();
-        name="etaproton1D_baseAsymCut_fastPi0";
-        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_fastPi0;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
-        histdef.name = name; histdef.cut=&baseAsymCut_fastPi0; histdef.weights = &weightAS;
+        name="etaproton1D_baseAsymCut_mDelta_fastPi0";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_mDelta_fastPi0;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
+        histdef.name = name; histdef.cut=&baseAsymCut_mDelta_fastPi0; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
         group_34PB.insert(histdef); 
 
@@ -3689,7 +3753,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	pUnusedEnergy=true;
 
 
-	pMpi0etaGT16LT28=locPi0Eta_Kin>1.6 && locPi0Eta_Kin<2.9;
+	double minMpi0eta = 1.7;
+	double maxMpi0eta = 2.9;
+	pMpi0etaDoubleRegge=locPi0Eta_Kin>minMpi0eta && locPi0Eta_Kin<maxMpi0eta;
 	
 	/////////////////////// ************ BASE CUTS *********************
 	baseCuts = pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
@@ -3700,17 +3766,19 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         allGeneralCutsPassed = ptpLT1*!pMPi0P14*pShowerQuality*pBeamE8GeVPlus*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
 	allGeneralCutsSinglePolarization = allGeneralCutsPassed*keepPolarization;	
 	// same cuts as allGenearlCuts without the t' < 1 since we will use teta < 1. We will also choose a beam asym that John used and select out the Deck region with Mpi0eta > 1.9
-	bool baseAsymCut_mMpi0etaGT16LT28_mMpi0p = pBeamE82to88*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
-	baseAsymCut_mMpi0etaGT16LT28 = !pMPi0P14*baseAsymCut_mMpi0etaGT16LT28_mMpi0p;
-	baseAsymCut = pMpi0etaGT16LT28*baseAsymCut_mMpi0etaGT16LT28;
+	bool baseAsymCut_mMpi0etaDoubleRegge_mMpi0p = pBeamE82to88*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton*pinsideEllipse;
+	baseAsymCut_mMpi0etaDoubleRegge = !pMPi0P14*baseAsymCut_mMpi0etaDoubleRegge_mMpi0p;
+	baseAsymCut = pMpi0etaDoubleRegge*baseAsymCut_mMpi0etaDoubleRegge;
 	bool pBackwardPi0P = omega>300 && omega<360;
 	bool pBackwardEtaP = omega>180 && omega<240;
 	baseAsymCut_backwardPi0P = baseAsymCut*pBackwardPi0P;
-	baseAsymCut_backwardPi0P_mDelta = baseAsymCut_mMpi0etaGT16LT28_mMpi0p*pMpi0etaGT16LT28*pBackwardPi0P;
+	baseAsymCut_backwardPi0P_mDelta = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*pMpi0etaDoubleRegge*pBackwardPi0P;
 	baseAsymCut_backwardEtaP = baseAsymCut*pBackwardEtaP;
-	baseAsymCut_mDelta = baseAsymCut_mMpi0etaGT16LT28_mMpi0p*pMpi0etaGT16LT28;
-	baseAsymCut_fastEta = baseAsymCut_mMpi0etaGT16LT28_mMpi0p*(mandelstam_teta<1)*pMpi0etaGT16LT28;
-	baseAsymCut_fastPi0 = baseAsymCut_mMpi0etaGT16LT28_mMpi0p*(mandelstam_tpi0<1)*pMpi0etaGT16LT28;
+	baseAsymCut_mDelta = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*pMpi0etaDoubleRegge;
+	baseAsymCut_mDelta_fastEta = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*(mandelstam_teta<1)*pMpi0etaDoubleRegge;
+	baseAsymCut_mDelta_fastPi0 = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*(mandelstam_tpi0<1)*pMpi0etaDoubleRegge;
+	baseAsymCut_fastEta = !pMPi0P14*baseAsymCut_mDelta_fastEta;
+	baseAsymCut_fastPi0 = !pMPi0P14*baseAsymCut_mDelta_fastPi0;
 
 	//outputDeckBA << "pol_plane, t_eta, eta_px, eta_py, eta_pz, eta_E, piMinus_px, piMinus_py, piMinus_pz, piMinus_E, Delta++_px, Delta++_py, Delta++_pz, Delta++_E" << endl;
 	//if ( baseAsymCut*pDeltaTRF*hasPolarizationAngle*(mandelstam_teta<1 ) ) {
@@ -3725,9 +3793,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			cout << "Requring mandelstam_teta to be betweem " << iteta*0.2 << " and " << (iteta+1)*0.2 << endl;
 			bool select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
 			bool select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
-
-			//bool pThreshold = locPi0Eta_Kin > (1.6+0.1*iMpi0eta); 
-			bool pThreshold = true;
+			bool pThreshold = locPi0Eta_Kin > (minMpi0eta+0.1*iMpi0eta); 
+			//bool pThreshold = true;
 
 			ptEtaBeamAsym_000[iMpi0eta*numTBins+iteta] = keepPolarization000*baseAsymCut*select_teta_bin*pThreshold;
 			ptEtaBeamAsym_045[iMpi0eta*numTBins+iteta] = keepPolarization045*baseAsymCut*select_teta_bin*pThreshold;
@@ -3753,25 +3820,47 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		}
 	}
 	double minPi0P[3] = {1.4, 1.8, 2.2};
-	double maxPi0P[3] = {1.8, 2.2, 4};
-	double minEtaP[3] = {1.1, 1.4, 1.9};
-	double maxEtaP[3] = {1.4, 1.9, 4};
+	double maxPi0P[3] = {1.8, 2.2, 2.6};
+	double minEtaP[3] = {1.5, 1.9, 2.3};
+	double maxEtaP[3] = {1.9, 2.3, 2.7};
+	cout << "BA STUDY OF BARYONS\n------------------------" << endl;
 	for (int iMass=0; iMass<3; ++iMass){
-		pMpi0pBeamAsym_000[iMass] = baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin < maxPi0P[iMass]);
-		pMpi0pBeamAsym_045[iMass] = baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin < maxPi0P[iMass]);
-		pMpi0pBeamAsym_090[iMass] = baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin < maxPi0P[iMass]);
-		pMpi0pBeamAsym_135[iMass] = baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin < maxPi0P[iMass]);
-		pMpi0pBeamAsym_AMO[iMass] = baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin < maxPi0P[iMass]);
-		pMetapBeamAsym_000[iMass] = baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin < maxEtaP[iMass]);
-		pMetapBeamAsym_045[iMass] = baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin < maxEtaP[iMass]);
-		pMetapBeamAsym_090[iMass] = baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin < maxEtaP[iMass]);
-		pMetapBeamAsym_135[iMass] = baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin < maxEtaP[iMass]);
-		pMetapBeamAsym_AMO[iMass] = baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin < maxEtaP[iMass]);
+		cout << "*****" << endl;
+		cout << "Requiring " << minPi0P[iMass] << " < M(pi0p) < " << maxPi0P[iMass] << endl;
+		cout << "Requiring " << minEtaP[iMass] << " < M(etap) < " << maxEtaP[iMass] << endl;
+		pMpi0pBeamAsym_000[iMass] = keepPolarization000*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass]);
+		pMpi0pBeamAsym_045[iMass] = keepPolarization045*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass]);
+		pMpi0pBeamAsym_090[iMass] = keepPolarization090*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass]);
+		pMpi0pBeamAsym_135[iMass] = keepPolarization135*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass]);
+		pMpi0pBeamAsym_AMO[iMass] = keepPolarizationAMO*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass]);
+		pMetapBeamAsym_000[iMass] = keepPolarization000*baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin)*(locEtaProton_Kin < maxEtaP[iMass]);
+		pMetapBeamAsym_045[iMass] = keepPolarization045*baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin)*(locEtaProton_Kin < maxEtaP[iMass]);
+		pMetapBeamAsym_090[iMass] = keepPolarization090*baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin)*(locEtaProton_Kin < maxEtaP[iMass]);
+		pMetapBeamAsym_135[iMass] = keepPolarization135*baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin)*(locEtaProton_Kin < maxEtaP[iMass]);
+		pMetapBeamAsym_AMO[iMass] = keepPolarizationAMO*baseAsymCut_fastPi0*(minEtaP[iMass] < locEtaProton_Kin)*(locEtaProton_Kin < maxEtaP[iMass]);
 	}
-	
+
+	cout << "BA STUDY VARYING M(PI0ETA)\n------------------------" << endl;
+	for (int iMass=0; iMass<5; ++iMass){
+		double binSizeMpi0eta = (maxMpi0eta-minMpi0eta)/5;
+		bool acceptBin = (minMpi0eta+binSizeMpi0eta*iMass < locPi0Eta_Kin) && (locPi0Eta_Kin < minMpi0eta+binSizeMpi0eta*(iMass+1));
+		cout << "*****" << endl;
+		cout << "Requiring " << minMpi0eta+binSizeMpi0eta*iMass << " < M(pi0eta) < " << minMpi0eta+binSizeMpi0eta*(iMass+1) << endl;
+		pMpi0etaBeamAsym_000_fastEta[iMass] =  keepPolarization000*baseAsymCut_fastEta*acceptBin;
+		pMpi0etaBeamAsym_045_fastEta[iMass] =  keepPolarization045*baseAsymCut_fastEta*acceptBin;
+		pMpi0etaBeamAsym_090_fastEta[iMass] =  keepPolarization090*baseAsymCut_fastEta*acceptBin;
+		pMpi0etaBeamAsym_135_fastEta[iMass] =  keepPolarization135*baseAsymCut_fastEta*acceptBin;
+		pMpi0etaBeamAsym_AMO_fastEta[iMass] =  keepPolarizationAMO*baseAsymCut_fastEta*acceptBin;
+		pMpi0etaBeamAsym_000_fastPi0[iMass] =  keepPolarization000*baseAsymCut_fastPi0*acceptBin;
+		pMpi0etaBeamAsym_045_fastPi0[iMass] =  keepPolarization045*baseAsymCut_fastPi0*acceptBin;
+		pMpi0etaBeamAsym_090_fastPi0[iMass] =  keepPolarization090*baseAsymCut_fastPi0*acceptBin;
+		pMpi0etaBeamAsym_135_fastPi0[iMass] =  keepPolarization135*baseAsymCut_fastPi0*acceptBin;
+		pMpi0etaBeamAsym_AMO_fastPi0[iMass] =  keepPolarizationAMO*baseAsymCut_fastPi0*acceptBin;
+	}
+
 	// COMPARE VH FROM REGGE TO DELTA PRODUCTION
 	bool baseAsymComparisionReggeVsDelta = pBeamE8GeVPlus*(locChiSqKinFit <= originalChiSqCut)*pShowerQuality*pUnusedEnergy*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
-	baseAsymComparisionRegge = !pMPi0P14*baseAsymComparisionReggeVsDelta*pBackwardPi0P*(mandelstam_teta<1)*pMpi0etaGT16LT28;
+	baseAsymComparisionRegge = !pMPi0P14*baseAsymComparisionReggeVsDelta*pBackwardPi0P*(mandelstam_teta<1)*pMpi0etaDoubleRegge;
 	baseAsymComparisionDelta = pMPi0P14*baseAsymComparisionReggeVsDelta;
 
 
@@ -4071,7 +4160,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
-        if (!mEllipse_pre_tAll || !detectorCut){  // Deck analysis
+	if (!baseAsymCut || !detectorCut){ // double regge BA study
+        //if (!mEllipse_pre_tAll || !detectorCut)  // Deck analysis
         //if (!mEllipse_pre || !detectorCut) { // Q-values
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
 	//if (!looseCuts || !detectorCut )

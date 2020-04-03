@@ -725,7 +725,7 @@ class DSelector_ver20 : public DSelector
 		bool pBeamE8GeVPlus=true;
 		// For the Deck beam asymmetry
 		bool pBeamE82to88=true;
-		bool pMpi0etaGT16LT28=true;
+		bool pMpi0etaDoubleRegge=true;
 
 		
 		// pi0Eta specifc cuts
@@ -906,6 +906,7 @@ class DSelector_ver20 : public DSelector
 		// ------------------------------------------------------------------
 		static const int numMpi0eta = 5;
 		static const int numTBins = 5;
+		// So we will look at BA in bins of t_eta or t_pi but also vary the lower M(pi0eta) threshold. So we can see how the baryon contributions might enter
 		bool ptEtaBeamAsym_000[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_045[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_090[numMpi0eta*numTBins];
@@ -926,6 +927,19 @@ class DSelector_ver20 : public DSelector
 		bool ptPi0BeamAsym_backwardEtaP_090[numMpi0eta*numTBins];
 		bool ptPi0BeamAsym_backwardEtaP_135[numMpi0eta*numTBins];
 		bool ptPi0BeamAsym_backwardEtaP_AMO[numMpi0eta*numTBins];
+
+		// We can also look at BA in bins of M(pi0eta) for fast pion and for fast eta
+		bool pMpi0etaBeamAsym_000_fastEta[5]={true,true,true,true,true}; // WOULD SELECT ON FAST ETA
+		bool pMpi0etaBeamAsym_045_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_090_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_135_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_AMO_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_000_fastPi0[5]={true,true,true,true,true}; // WOULD SELECT ON FAST PI0
+		bool pMpi0etaBeamAsym_045_fastPi0[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_090_fastPi0[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_135_fastPi0[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_AMO_fastPi0[5]={true,true,true,true,true};
+
 		
 		// THE GOAL HERE IS TO LOOK AT THE BA CONTRIBUTIONS IN BINS OF M(PI0P) AND IN BINS OF M(ETAP). IN M(PI0P) WE SEE 3 N* RESONANCES. IF WE BIN IN THIS VARIABLE
 		// WE CAN DETERMINE WHAT THE CONTRIBUTIONS ARE TO THE TOTAL ASYMMETRY WE ARE SEEING
@@ -984,8 +998,10 @@ class DSelector_ver20 : public DSelector
 		bool baseAsymCut_mDelta=true;
 		bool baseAsymCut_fastEta=true;
 		bool baseAsymCut_fastPi0=true;
+		bool baseAsymCut_mDelta_fastEta=true;
+		bool baseAsymCut_mDelta_fastPi0=true;
 		bool baseAsymCut=true;
-		bool baseAsymCut_mMpi0etaGT16LT28=true;
+		bool baseAsymCut_mMpi0etaDoubleRegge=true;
 		bool baseAsymCut_backwardPi0P=true;
 		bool baseAsymCut_backwardPi0P_mDelta=true;
 		bool baseAsymCut_backwardEtaP=true;

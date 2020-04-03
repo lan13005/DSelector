@@ -50,11 +50,11 @@ void fitAsymmetryPlots(){
 	// *****************************
 	// Define flux ratios for 2017, 2018_1, 2018_2 
 	// *****************************
-	static const int nDataSets = 1;
-	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12};// , 0.965429, 0.918503 };
-	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12};// , 1.02261, 1.03254 };
-	string dataSetTag[nDataSets] = { "2017"};// , "2018_1", "2018_8" };
-	string dataFolders[nDataSets] = {"deg000_data_2017"};//, "deg000_data_2018_1", "deg000_data_2018_8"};
+	static const int nDataSets = 3;
+	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12, 0.965429, 0.918503 };
+	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12, 1.02261, 1.03254 };
+	string dataSetTag[nDataSets] = { "2017", "2018_1", "2018_8" };
+	string dataFolders[nDataSets] = {"deg000_data_2017", "deg000_data_2018_1", "deg000_data_2018_8"};
 
 	static const int nTagEta = 2;
 	string tagEta[2] = {"","_backwardPi0P"};
@@ -94,7 +94,7 @@ void fitAsymmetryPlots(){
 	if (nSetsBS == 1){
 		for (int iSet=0; iSet<nSetsBS; ++iSet){ // we add 1 since using the full dataset takes the first element of the array
 			for (int iData=0; iData <nDataSets; ++iData){
-				string dataFileName = "/d/grid15/ln16/pi0eta/092419/degALL_data_"+dataSetTag[iData]+"_hists_DSelector.root";
+				string dataFileName = "/d/grid15/ln16/pi0eta/092419/zzNoEllipticalCutNewPThresh/degALL_data_"+dataSetTag[iData]+"_hists_DSelector.root";
 				//string dataFileName = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/rootFiles/deg000_data_"+dataSetTag[iData]+"_hists_DSelector.root";
 				TFile *dataFile = new TFile(dataFileName.c_str());
 				cout << "LOADING ROOT FILE: " << dataFileName << endl; 
@@ -304,10 +304,10 @@ void fitAsymmetryPlots(){
 
 						// scale the rest of the data sets before adding them to the scaled+cloned 2017 dataset
 						// we will never use unscaled histograms anymore so we can just scale it directly
-						phi000_eta_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_90_0[0]);
-						phi000_pi0_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_90_0[0]);
-						phi135_eta_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_45_135[0]);
-						phi135_pi0_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_45_135[0]);
+						phi000_eta_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_90_0[iData]);
+						phi000_pi0_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_90_0[iData]);
+						phi135_eta_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_45_135[iData]);
+						phi135_pi0_unscaled[iTag][iMass][iteta][iData][iSet]->Scale(fluxRatios_45_135[iData]);
 						phi000_eta_total[iTag][iMass][iteta]->Add(phi000_eta_unscaled[iTag][iMass][iteta][iData][iSet]);
         	        			phi000_pi0_total[iTag][iMass][iteta]->Add(phi000_pi0_unscaled[iTag][iMass][iteta][iData][iSet]);
         	        			phi135_eta_total[iTag][iMass][iteta]->Add(phi135_eta_unscaled[iTag][iMass][iteta][iData][iSet]);
@@ -405,7 +405,7 @@ void fitAsymmetryPlots(){
 					// *****************************
 					// Defining the tBins which will be shared
 					// *****************************
-					tBins[iteta] = iteta*tBinSize;
+					tBins[iteta] = (iteta+0.5)*tBinSize;
 					tBins_err[iteta] = tBinSize/2;
 
 
@@ -753,17 +753,17 @@ void fitAsymmetryPlots(){
 						summedSqDiff_000_pi0 += TMath::Power(asymmetries_000_pi0[iTag][iSet][0][iteta]-mean_000_pi0,2);
 						summedSqDiff_045_pi0 += TMath::Power(asymmetries_045_pi0[iTag][iSet][0][iteta]-mean_045_pi0,2);
 					}
-					summedSqDiff_000_eta /= (iSetJustBS-1);
+					summedSqDiff_000_eta /= (iSetJustBS-2); // subtract by 2 here since 1 is from the "full" shift and one is for hte population std
 					summedSqDiff_000_eta = sqrt(summedSqDiff_000_eta);
 					// normalized to the full fit's error, the second zero since we do not bootstrap for diff Mpi0eta thresholds
 					summedSqDiff_000_eta /= asymmetries_000_eta_err[iTag][0][0][iteta];
-					summedSqDiff_045_eta /= (iSetJustBS);
+					summedSqDiff_045_eta /= (iSetJustBS-2);
 					summedSqDiff_045_eta = sqrt(summedSqDiff_045_eta);
 					summedSqDiff_045_eta /= asymmetries_045_eta_err[iTag][0][0][iteta]; 
-					summedSqDiff_000_pi0 /= (iSetJustBS);
+					summedSqDiff_000_pi0 /= (iSetJustBS-2);
 					summedSqDiff_000_pi0 = sqrt(summedSqDiff_000_pi0);
 					summedSqDiff_000_pi0 /= asymmetries_000_pi0_err[iTag][0][0][iteta]; 
-					summedSqDiff_045_pi0 /= (iSetJustBS);
+					summedSqDiff_045_pi0 /= (iSetJustBS-2);
 					summedSqDiff_045_pi0 = sqrt(summedSqDiff_045_pi0);
 					summedSqDiff_045_pi0 /= asymmetries_045_pi0_err[iTag][0][0][iteta]; 
 
