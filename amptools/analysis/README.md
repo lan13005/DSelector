@@ -21,6 +21,7 @@ DATA SETUP - we must first setup the data. DSelector_thrown outputs the data int
 
 -------------------------------
 
+### This section is not needed if you already have your flat trees ready to go. This section takes in flat trees from DSelector and makes them amptools ready.
 1. root -l -b -q runDSelectorThrown_7_17_14.C
 2. mv thrownNotAmptoolsReady_pi0eta_* amptools/newAnalysis
 3. CHANGE NAME OF degAngle in DSelector_ver20.C to data_
