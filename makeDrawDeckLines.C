@@ -1,6 +1,6 @@
 void makeDrawDeckLines(){
 	gStyle->SetOptStat(0);
-	TFile* infile_dat = TFile::Open("pi0eta_all_tLT1_hists_DSelector.root");
+	TFile* infile_dat = TFile::Open("degALL_data_2017_hists_DSelector.root");
 	TH2F *any2DHist;
 	infile_dat->GetObject("tetaVsMpi0eta",any2DHist);
 	TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);
@@ -9,8 +9,8 @@ void makeDrawDeckLines(){
 	double tMin=0;
 	double tMax=2.8;
 	const int num_massBins=12;
-	double mMin=1.7;
-	double mMax=2.9;
+	double mMin=1.6;
+	double mMax=2.8;
 	double tStep=(tMax-tMin)/num_tBins;
 	double mStep=(mMax-mMin)/num_massBins;
 

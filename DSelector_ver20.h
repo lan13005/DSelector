@@ -123,14 +123,15 @@ class trackingGroup{
 	//set< pair<Int_t,Int_t> > usedIds;
         set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > usedPairMapIds;
         set< map<Particle_t, set<Int_t> > >  usedMapIds;
+	//string name;
 
     public:
         TCanvas *anyCanvas;
-        trackingGroup(){ cout << "Calling constructor" << endl; }; 
+        trackingGroup(){ cout << "Calling constructor" << endl; };
         ~trackingGroup(){ cout << "Calling destructor" << endl; };
 
         void setNameMakeCanvas(string groupName){
-	    anyCanvas = new TCanvas((groupName).c_str(),"",1440, 900);
+            anyCanvas = new TCanvas((groupName).c_str(),"",1440, 900);
         }
 
         std::vector<histDef_1D> allHists_1D;
@@ -200,6 +201,7 @@ class trackingGroup{
 
         // Similar to above but just for 1D distributions where we don't need to track a pair of maps for correlations
         void fillHistograms_Map( map<Particle_t, set<Int_t> >  beingUsedMap ){
+	     //cout << "Starting to fill hists in group: " << name << endl;
              for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
 	        if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
 	            allUsedMapIds_1D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
@@ -298,8 +300,8 @@ class DSelector_ver20 : public DSelector
                 trackingGroup group_1234BP;
                 trackingGroup group_pairFCAL;
                 trackingGroup group_pairBCAL;
-                trackingGroup group_12PB;       
-                trackingGroup group_34PB;       
+                trackingGroup group_12PB;
+                trackingGroup group_34PB;
                 trackingGroup group_B;
                 trackingGroup group_1234B_12PB;
                 trackingGroup group_1234B_34PB;
@@ -943,16 +945,19 @@ class DSelector_ver20 : public DSelector
 		
 		// THE GOAL HERE IS TO LOOK AT THE BA CONTRIBUTIONS IN BINS OF M(PI0P) AND IN BINS OF M(ETAP). IN M(PI0P) WE SEE 3 N* RESONANCES. IF WE BIN IN THIS VARIABLE
 		// WE CAN DETERMINE WHAT THE CONTRIBUTIONS ARE TO THE TOTAL ASYMMETRY WE ARE SEEING
-		bool pMpi0pBeamAsym_000[3]={true,true,true}; // WOULD SELECT ON FAST ETA
-		bool pMpi0pBeamAsym_045[3]={true,true,true};
-		bool pMpi0pBeamAsym_090[3]={true,true,true};
-		bool pMpi0pBeamAsym_135[3]={true,true,true};
-		bool pMpi0pBeamAsym_AMO[3]={true,true,true};
-		bool pMetapBeamAsym_000[3]={true,true,true}; // WOULD SELECT ON FAST PI0
-		bool pMetapBeamAsym_045[3]={true,true,true};
-		bool pMetapBeamAsym_090[3]={true,true,true};
-		bool pMetapBeamAsym_135[3]={true,true,true};
-		bool pMetapBeamAsym_AMO[3]={true,true,true};
+		static const int numBaryonBins=3;
+		bool pMpi0pBeamAsym_000[numBaryonBins*numTBins]; // WOULD SELECT ON FAST ETA
+		bool pMpi0pBeamAsym_045[numBaryonBins*numTBins];
+		bool pMpi0pBeamAsym_090[numBaryonBins*numTBins];
+		bool pMpi0pBeamAsym_135[numBaryonBins*numTBins];
+		bool pMpi0pBeamAsym_AMO[numBaryonBins*numTBins];
+		bool pMetapBeamAsym_000[numBaryonBins*numTBins]; // WOULD SELECT ON FAST PI0
+		bool pMetapBeamAsym_045[numBaryonBins*numTBins];
+		bool pMetapBeamAsym_090[numBaryonBins*numTBins];
+		bool pMetapBeamAsym_135[numBaryonBins*numTBins];
+		bool pMetapBeamAsym_AMO[numBaryonBins*numTBins];
+		bool pMpi0pFastEta[numBaryonBins];
+		bool pMetapFastPi0[numBaryonBins];
 		
 
 		bool mMandelstamT=true;

@@ -115,8 +115,8 @@ class sideBySide2D{
 			overlayHists[0]->Scale(histWeights[0]);
 			//leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
 			overlayHists[0]->Draw("COLZ");
-			overlayHists[0]->GetXaxis()->SetTitleSize(0.05);
-			overlayHists[0]->GetYaxis()->SetTitleSize(0.05);
+			//overlayHists[0]->GetXaxis()->SetTitleSize(0.05);
+			//overlayHists[0]->GetYaxis()->SetTitleSize(0.05);
 			//for (int i=1; i<overlayHists.size(); ++i){
 			//	cout << "Overlaying hist " << overlayHists[i]->GetName() << endl;
 			//	overlayHists[i]->Scale(histWeights[i]);
@@ -175,9 +175,9 @@ void makeGraphs(){
 	overlayPlots pi0eta1DtAlltCut(trackHists);
 	trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1}, {"pi0proton1D_mDelta", 1} };
 	overlayPlots pi0proton1D_beforeAfterT(trackHists);
-	trackHists = { {"pi0proton1D_baseAsymCut", 1}, {"pi0proton1D_baseAsymCut_fastEta", 1} };
+	trackHists = { {"pi0proton1D_baseAsymCut", 1}, {"pi0proton1D_baseAsymCut_mDelta_fastEta", 1} };
 	overlayPlots pi0proton1D_baseAsym(trackHists);
-	trackHists = { {"etaproton1D_baseAsymCut", 1}, {"etaproton1D_baseAsymCut_fastPi0", 1} };
+	trackHists = { {"etaproton1D_baseAsymCut", 1}, {"etaproton1D_baseAsymCut_mDelta_fastPi0", 1} };
 	overlayPlots etaproton1D_baseAsym(trackHists);
 
 	TCanvas *c1 = new TCanvas("c1","",1440,900);
@@ -187,8 +187,8 @@ void makeGraphs(){
    	   	if (cl->InheritsFrom("TH2")){
 			string fileName="newGraphs/";
    	   		TH2F *h = (TH2F*)key->ReadObj();
-			h->GetXaxis()->SetTitleSize(0.25);
-			h->GetYaxis()->SetTitleSize(0.25);
+			h->GetXaxis()->SetTitleSize(0.04);
+			h->GetYaxis()->SetTitleSize(0.04);
    	   		h->Draw("COLZ HIST");
 			fileName.append(h->GetName());
 			fileName.append(".png");

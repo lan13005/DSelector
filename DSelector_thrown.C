@@ -32,11 +32,11 @@ void DSelector_thrown::Init(TTree *locTree)
         dHist_prodPlanePS_090 = new TH1F("prodPlanePS_090", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_prodPlanePS_135 = new TH1F("prodPlanePS_135", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_prodPlanePS_AMO = new TH1F("prodPlanePS_AM0", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_000_rejSamp = new TH1F("prodPlanePS_000_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_045_rejSamp = new TH1F("prodPlanePS_045_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_090_rejSamp = new TH1F("prodPlanePS_090_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_135_rejSamp = new TH1F("prodPlanePS_135_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        dHist_prodPlanePS_AMO_rejSamp = new TH1F("prodPlanePS_AM0_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_000_rejSamp = new TH1F("prodPlanePS_000_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_045_rejSamp = new TH1F("prodPlanePS_045_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_090_rejSamp = new TH1F("prodPlanePS_090_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_135_rejSamp = new TH1F("prodPlanePS_135_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //dHist_prodPlanePS_AMO_rejSamp = new TH1F("prodPlanePS_AM0_rejSamp", "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         dHist_BeamAngle = new TH1F("BeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV);Events / 2 Degree", 180,-180,180);
         dHist_SelectedBeamAngle = new TH1F("SelectedBeamAngle", "Beam Angle with no cuts applied;Beam Angle (GeV);Events / 2 Degree", 180,-180,180);
 	dHist_PID = new TH1I("PID","",50,0,50);
@@ -442,28 +442,28 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			if ( !hasPolarizationAngle ) { 
 				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
 			}
-			double degToRad = TMath::Pi()/180;
-			double p2 = 0.25;
-			double p1 = 0;
-			double p0 = 0.7;
-			double randomY = rgen->Uniform(0,1);
-			if ( randomY < p2*TMath::Cos(2*(prodPlanePhi-p1)*degToRad)+p0){
-				if ( locPolarizationAngle == 0 ) { 
-					dHist_prodPlanePS_000_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( locPolarizationAngle == 45 ) { 
-					dHist_prodPlanePS_045_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( locPolarizationAngle == 90 ) { 
-					dHist_prodPlanePS_090_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( locPolarizationAngle == 135 ) { 
-					dHist_prodPlanePS_135_rejSamp->Fill(prodPlanePhi);
-				}
-				if ( !hasPolarizationAngle ) { 
-					dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
-				}
-			}	
+			//double degToRad = TMath::Pi()/180;
+			//double p2 = 0.25;
+			//double p1 = 0;
+			//double p0 = 0.7;
+			//double randomY = rgen->Uniform(0,1);
+			//if ( randomY < p2*TMath::Cos(2*(prodPlanePhi-p1)*degToRad)+p0){
+			//	if ( locPolarizationAngle == 0 ) { 
+			//		dHist_prodPlanePS_000_rejSamp->Fill(prodPlanePhi);
+			//	}
+			//	if ( locPolarizationAngle == 45 ) { 
+			//		dHist_prodPlanePS_045_rejSamp->Fill(prodPlanePhi);
+			//	}
+			//	if ( locPolarizationAngle == 90 ) { 
+			//		dHist_prodPlanePS_090_rejSamp->Fill(prodPlanePhi);
+			//	}
+			//	if ( locPolarizationAngle == 135 ) { 
+			//		dHist_prodPlanePS_135_rejSamp->Fill(prodPlanePhi);
+			//	}
+			//	if ( !hasPolarizationAngle ) { 
+			//		dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
+			//	}
+			//}	
         		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
 			//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 		} // if cuts not passed

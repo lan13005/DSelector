@@ -96,14 +96,14 @@ void makeRectSBGraphs(){
 	TLegend* leg1 = new TLegend(0.75,0.7,0.9,0.9);
 	leg1->AddEntry(pi0eta_Qsubbed,"Q_{AS}","l");
 	leg1->AddEntry(rectSB_signal,"SB_{#pi^{0},#eta}","l");
-	leg1->AddEntry(rectSB_signal_fixed,"SB_{#pi^{0},#eta} fixed","l");
+	//leg1->AddEntry(rectSB_signal_fixed,"SB_{#pi^{0},#eta} fixed","l");
 	rectSB_signal->SetTitle("Q_{AS} vs SB_{#pi^{0},#eta}");
 	pi0eta_Qsubbed->SetLineColor(kBlue);
 	rectSB_signal->SetLineColor(kRed);
 	rectSB_signal_fixed->SetLineColor(kGreen+2);
 	cout << "Initialized legend and reset canvas" << endl;
 	rectSB_signal->Draw("HIST");
-	rectSB_signal_fixed->Draw("HIST SAME");
+	//rectSB_signal_fixed->Draw("HIST SAME");
 	cout << "Drawing rectSB_signal" << endl;
 
 	pi0eta_Qsubbed->Draw("HIST SAME");	

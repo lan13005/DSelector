@@ -93,7 +93,7 @@ void fitAsymmetryPlots2(){
 	if (nSetsBS == 1){
 		for (int iSet=0; iSet<nSetsBS; ++iSet){ // we add 1 since using the full dataset takes the first element of the array
 			for (int iData=0; iData <nDataSets; ++iData){
-				string dataFileName = "/d/grid15/ln16/pi0eta/092419/zzNoEllipticalCutNewPThresh/degALL_data_"+dataSetTag[iData]+"_hists_DSelector.root";
+				string dataFileName = "/d/grid15/ln16/pi0eta/092419/degALL_data_"+dataSetTag[iData]+"_hists_DSelector.root";
 				//string dataFileName = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/rootFiles/deg000_data_"+dataSetTag[iData]+"_hists_DSelector.root";
 				TFile *dataFile = new TFile(dataFileName.c_str());
 				cout << "LOADING ROOT FILE: " << dataFileName << endl; 
@@ -610,6 +610,7 @@ void fitAsymmetryPlots2(){
 			gr_000->SetMarkerStyle(21);
 			gr_000->SetLineColor(4);
 			gr_000->Draw("AP");
+			gr_000->GetXaxis()->SetTitle("M(#eta p)");
 			gr_000->GetHistogram()->SetMaximum(1.2);
 			gr_000->GetHistogram()->SetMinimum(-1);
 			gr_000 = new TGraphErrors(num_baryonBins,xBinsEta,asymmetries_045_eta[iTag][iSet],xBinsEta_err,asymmetries_045_eta_err[iTag][iSet]);
@@ -625,6 +626,7 @@ void fitAsymmetryPlots2(){
 			gr_045->SetLineColor(4);
 			gr_045->SetMarkerStyle(21);
 			gr_045->Draw("AP");
+			gr_045->GetXaxis()->SetTitle("M(#pi0 p)");
 			gr_045->GetHistogram()->SetMaximum(1.2);
 			gr_045->GetHistogram()->SetMinimum(-1);
 			gr_045 = new TGraphErrors(num_baryonBins,xBinsPi0,asymmetries_045_pi0[iTag][iSet],xBinsPi0_err,asymmetries_045_pi0_err[iTag][iSet]);
@@ -632,7 +634,7 @@ void fitAsymmetryPlots2(){
 			gr_045->SetLineColor(2);
 			gr_045->SetMarkerStyle(20);
 			gr_045->Draw("P SAME");
-			if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymVst"+tag[iTag]+"_iSet"+to_string(iSet)+".png").c_str()); }
+			if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymVsMbaryon"+tag[iTag]+"_iSet"+to_string(iSet)+".png").c_str()); }
 
 
 			//allCanvases->Clear();
