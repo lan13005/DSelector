@@ -906,8 +906,13 @@ class DSelector_ver20 : public DSelector
 		// ------------------------------------------------------------------
 		// ***************** THE ORIGINAL BA MEASUREMENT ********************
 		// ------------------------------------------------------------------
-		static const int numMpi0eta = 5;
+		static const int numMpi0eta = 5; // there will be this many lower thesholds to calculate asymmetries vs teta/tpi0 with
 		static const int numTBins = 5;
+		static const int numMpi0etaRes = 9; // there will be this many bins in Mpi0eta to find the asymmetries in. Will extend down into the resonance region
+		double lowerMpi0eta[numMpi0etaRes] = {0.9, 1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65};
+		double upperMpi0eta[numMpi0etaRes] = {1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65, 2.9};
+		bool pFastEtaBin[5]; 
+		bool pFastPi0Bin[5]; 
 		// So we will look at BA in bins of t_eta or t_pi but also vary the lower M(pi0eta) threshold. So we can see how the baryon contributions might enter
 		bool ptEtaBeamAsym_000[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_045[numMpi0eta*numTBins];

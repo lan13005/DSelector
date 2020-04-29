@@ -1,3 +1,5 @@
+// This one got replaced with fitAsymmetryPlots4.C. Was used for getting the asymmetry vs baryon masses (Mpi0p and Metap) with fast eta or fast pi
+
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
 int numDOFsig_sc = 2;

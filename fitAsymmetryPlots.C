@@ -1,3 +1,6 @@
+// This one is for Asymmetry vs teta/tpi0 as we vary the lower Mpi0eta threshold
+
+
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
 int numDOFsig_sc = 2;
