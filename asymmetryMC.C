@@ -224,7 +224,7 @@ void asymmetryMC(){
 		rgen090.SetSeed(1992);
 		double toyAsym;
 		double toyAsymErr;
-		for (int iter=0; iter<2000; ++iter){
+		for (int iter=0; iter<1000; ++iter){
 			cout << "Sampling number of events for 000 with mean " << numEntries000 << endl;
 			cout << "Sampling number of events for 090 with mean " << numEntries090 << endl;
 			Int_t rNumEntries000 = rgen000.Poisson((double)numEntries000);	
