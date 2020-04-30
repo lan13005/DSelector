@@ -224,7 +224,7 @@ void asymmetryMC(){
 		rgen090.SetSeed(1992);
 		double toyAsym;
 		double toyAsymErr;
-		for (int iter=0; iter<1000; ++iter){
+		for (int iter=0; iter<2000; ++iter){
 			cout << "Sampling number of events for 000 with mean " << numEntries000 << endl;
 			cout << "Sampling number of events for 090 with mean " << numEntries090 << endl;
 			Int_t rNumEntries000 = rgen000.Poisson((double)numEntries000);	
@@ -305,9 +305,11 @@ void asymmetryMC(){
 		TF1* pullFit = new TF1("pullFit","gausn",-5,5); 
 		dHist_pulls->Fit(pullFit,"S");
 		double pullMean = pullFit->GetParameter(1);
+		double pullMeanSig = pullFit->GetParError(1);
 		double pullSig = pullFit->GetParameter(2);
+		double pullSigSig = pullFit->GetParError(2);
 		dHist_pulls->Draw();
-		dHist_pulls->SetTitle(("Mean, Sigma = "+to_string(pullMean)+", "+to_string(pullSig)).c_str());
+		dHist_pulls->SetTitle(("#splitline{Mean, MeanSig, Sigma, SigmaSig = "+to_string(pullMean)+", "+to_string(pullMeanSig)+"}{"+to_string(pullSig)+", "+to_string(pullSigSig)+"}").c_str());
 		dHist_pulls->GetXaxis()->SetTitleSize(0.06);
 
 		allCanvases->SaveAs(("asymmetryMC/simulatedSigma_tBin"+to_string(iBin)+"_SigErr.png").c_str());

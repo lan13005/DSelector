@@ -52,11 +52,11 @@ void fitAsymmetryPlots3(){
 	// *****************************
 	// Define flux ratios for 2017, 2018_1, 2018_2 
 	// *****************************
-	static const int nDataSets = 3;
-	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12, 0.965429, 0.918503 };
-	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12, 1.02261, 1.03254 };
-	string dataSetTag[nDataSets] = { "2017", "2018_1", "2018_8" };
-	string dataFolders[nDataSets] = {"deg000_data_2017", "deg000_data_2018_1", "deg000_data_2018_8"};
+	static const int nDataSets = 1;
+	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12};//, 0.965429, 0.918503 };
+	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12};//, 1.02261, 1.03254 };
+	string dataSetTag[nDataSets] = { "2017"};//, "2018_1", "2018_8" };
+	string dataFolders[nDataSets] = {"deg000_data_2017"};//, "deg000_data_2018_1", "deg000_data_2018_8"};
 
 	static const int nTagEta = 1;
 	string tagEta[nTagEta] = {""};
@@ -96,7 +96,7 @@ void fitAsymmetryPlots3(){
 	if (nSetsBS == 1){
 		for (int iSet=0; iSet<nSetsBS; ++iSet){ // we add 1 since using the full dataset takes the first element of the array
 			for (int iData=0; iData <nDataSets; ++iData){
-				string dataFileName = "/d/grid15/ln16/pi0eta/092419/degALL_data_"+dataSetTag[iData]+"_hists_DSelector.root";
+				string dataFileName = "/d/grid15/ln16/pi0eta/092419/degALL_data_"+dataSetTag[iData]+"_BAres_hists_DSelector.root";
 				//string dataFileName = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/rootFiles/deg000_data_"+dataSetTag[iData]+"_hists_DSelector.root";
 				TFile *dataFile = new TFile(dataFileName.c_str());
 				cout << "LOADING ROOT FILE: " << dataFileName << endl; 
@@ -125,114 +125,114 @@ void fitAsymmetryPlots3(){
 			}
 		}
 	}
-	else { 
-		// *************************************
-		// Loading the data in from the textFile
-		// ONLY DO BS FOR LOWEST Mpi0eta THRESHOLD
-		// *************************************
-		string baseFileLoc = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/";
-		std::vector<double> values[nTagEta][num_Mpi0etaBins][nDataSets][nHists];
-		std::vector<double> weights[nTagEta][num_Mpi0etaBins][nDataSets][nHists];
-		// These two vectors will hold all the BA and their errors respectively. The array of two will be for the two orientations
-		std::vector<double> sigmas[2];
-		std::vector<double> sigma_errors[2];
-		
-		double value;
-		double weight;
+	//else { 
+	//	// *************************************
+	//	// Loading the data in from the textFile
+	//	// ONLY DO BS FOR LOWEST Mpi0eta THRESHOLD
+	//	// *************************************
+	//	string baseFileLoc = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/";
+	//	std::vector<double> values[nTagEta][num_Mpi0etaBins][nDataSets][nHists];
+	//	std::vector<double> weights[nTagEta][num_Mpi0etaBins][nDataSets][nHists];
+	//	// These two vectors will hold all the BA and their errors respectively. The array of two will be for the two orientations
+	//	std::vector<double> sigmas[2];
+	//	std::vector<double> sigma_errors[2];
+	//	
+	//	double value;
+	//	double weight;
 
-		// This histogram was used to check atleast the shape and counts are correct. We dont do FR scaling yet but w.e.
-		//TH1F* prodPlane = new TH1F("","",100,-180,180);
-		for ( int iData=0; iData<nDataSets; ++iData){ // the dataset we use, 2017 or the two 2018 sets
-			for (int iTag=0; iTag < nTagEta; ++iTag){ // nothing or backwardPi0/Etap
-				for (int iMpi0etaBin=0; iMpi0etaBin<num_Mpi0etaBins; ++iMpi0etaBin){ // t bins
-					string name0 = "prodPlanePSphi"+tagEta[iTag]+"_045_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
-					string name1 = "prodPlanePSphi"+tagPi0[iTag]+"_045_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
-					string name2 = "prodPlanePSphi"+tagEta[iTag]+"_090_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
-					string name3 = "prodPlanePSphi"+tagPi0[iTag]+"_090_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
-					string name4 = "prodPlanePSphi"+tagEta[iTag]+"_AMO_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
-					string name5 = "prodPlanePSphi"+tagPi0[iTag]+"_AMO_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
-					string name6 = "prodPlanePSphi"+tagEta[iTag]+"_000_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
-					string name7 = "prodPlanePSphi"+tagPi0[iTag]+"_000_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
-					string name8 = "prodPlanePSphi"+tagEta[iTag]+"_135_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
-					string name9 = "prodPlanePSphi"+tagPi0[iTag]+"_135_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
-					string nameTag = "_iData"+to_string(iData)+"_iSet0"; 
+	//	// This histogram was used to check atleast the shape and counts are correct. We dont do FR scaling yet but w.e.
+	//	//TH1F* prodPlane = new TH1F("","",100,-180,180);
+	//	for ( int iData=0; iData<nDataSets; ++iData){ // the dataset we use, 2017 or the two 2018 sets
+	//		for (int iTag=0; iTag < nTagEta; ++iTag){ // nothing or backwardPi0/Etap
+	//			for (int iMpi0etaBin=0; iMpi0etaBin<num_Mpi0etaBins; ++iMpi0etaBin){ // t bins
+	//				string name0 = "prodPlanePSphi"+tagEta[iTag]+"_045_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
+	//				string name1 = "prodPlanePSphi"+tagPi0[iTag]+"_045_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
+	//				string name2 = "prodPlanePSphi"+tagEta[iTag]+"_090_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
+	//				string name3 = "prodPlanePSphi"+tagPi0[iTag]+"_090_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
+	//				string name4 = "prodPlanePSphi"+tagEta[iTag]+"_AMO_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
+	//				string name5 = "prodPlanePSphi"+tagPi0[iTag]+"_AMO_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
+	//				string name6 = "prodPlanePSphi"+tagEta[iTag]+"_000_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
+	//				string name7 = "prodPlanePSphi"+tagPi0[iTag]+"_000_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
+	//				string name8 = "prodPlanePSphi"+tagEta[iTag]+"_135_Mpi0eta_fastEtaBin"+to_string(iMpi0etaBin);
+	//				string name9 = "prodPlanePSphi"+tagPi0[iTag]+"_135_Mpi0eta_fastPi0Bin"+to_string(iMpi0etaBin);
+	//				string nameTag = "_iData"+to_string(iData)+"_iSet0"; 
 
-        				phi045_eta_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name0+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi045_pi0_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name1+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi090_eta_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name2+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi090_pi0_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name3+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phiAMO_eta_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name4+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phiAMO_pi0_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name5+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi000_eta_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name6+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi000_pi0_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name7+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi135_eta_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name8+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-        				phi135_pi0_unscaled[iTag][iMpi0etaBin][iData][0] = new TH1F((name9+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
-					
-					ifstream* inFile0 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name0+".txt").c_str());
-					cout << "First file located at: " << baseFileLoc+dataFolders[iData]+"/"+name0 << endl;
-					ifstream* inFile1 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name1+".txt").c_str());
-					ifstream* inFile2 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name2+".txt").c_str());
-					ifstream* inFile3 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name3+".txt").c_str());
-					ifstream* inFile4 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name4+".txt").c_str());
-					ifstream* inFile5 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name5+".txt").c_str());
-					// Have to scale the para yields by flux ratio.
-					ifstream* inFile6 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name6+".txt").c_str());
-					ifstream* inFile7 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name7+".txt").c_str());
-					ifstream* inFile8 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name8+".txt").c_str());
-					ifstream* inFile9 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name9+".txt").c_str());
-					// Arrange everything in a vector so we can easily loop through them
-					std::vector<ifstream*> inFiles={inFile0,inFile1,inFile2,inFile3,inFile4,inFile5,inFile6,inFile7,inFile8,inFile9};
-					// since these are pointers I think after I fill the histograms here I could use the oringal histogram pointer names and it should work still
-					std::vector<TH1F*> hists = {phi045_eta_unscaled[iTag][iMpi0etaBin][iData][0],phi045_pi0_unscaled[iTag][iMpi0etaBin][iData][0]
-						,phi090_eta_unscaled[iTag][iMpi0etaBin][iData][0]
-						,phi090_pi0_unscaled[iTag][iMpi0etaBin][iData][0],phiAMO_eta_unscaled[iTag][iMpi0etaBin][iData][0],phiAMO_pi0_unscaled[iTag][iMpi0etaBin][iData][0]
-						,phi000_eta_unscaled[iTag][iMpi0etaBin][iData][0],phi000_pi0_unscaled[iTag][iMpi0etaBin][iData][0],phi135_eta_unscaled[iTag][iMpi0etaBin][iData][0]
-						,phi135_pi0_unscaled[iTag][iMpi0etaBin][iData][0]};
-					int nevents[nHists]; // since we split up the loop for the full dataset and the bootstrapped samples we have to keep track of how much events each hist has
-					for ( int iHist=0; iHist<nHists; ++iHist){
-						while (*(inFiles[iHist]) >> value >> weight){
-							//cout << value << endl;
-							values[iTag][iMpi0etaBin][iData][iHist].push_back(value);
-							weights[iTag][iMpi0etaBin][iData][iHist].push_back(weight);
-							hists[iHist]->Fill(value,weight);
-						}
-						hists[iHist]->Print();
-						nevents[iHist] = values[iTag][iMpi0etaBin][iData][iHist].size();	
-						cout << "(iData=" << iData << ")nevents in histogram: " << nevents[iHist] << endl;
-					}
+        //				phi045_eta_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name0+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi045_pi0_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name1+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi090_eta_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name2+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi090_pi0_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name3+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phiAMO_eta_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name4+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phiAMO_pi0_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name5+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi000_eta_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name6+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi000_pi0_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name7+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi135_eta_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name8+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+        //				phi135_pi0_unscaled[iTag][it][iMpi0etaBin][iData][0] = new TH1F((name9+nameTag).c_str(), "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
+	//				
+	//				ifstream* inFile0 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name0+".txt").c_str());
+	//				cout << "First file located at: " << baseFileLoc+dataFolders[iData]+"/"+name0 << endl;
+	//				ifstream* inFile1 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name1+".txt").c_str());
+	//				ifstream* inFile2 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name2+".txt").c_str());
+	//				ifstream* inFile3 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name3+".txt").c_str());
+	//				ifstream* inFile4 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name4+".txt").c_str());
+	//				ifstream* inFile5 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name5+".txt").c_str());
+	//				// Have to scale the para yields by flux ratio.
+	//				ifstream* inFile6 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name6+".txt").c_str());
+	//				ifstream* inFile7 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name7+".txt").c_str());
+	//				ifstream* inFile8 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name8+".txt").c_str());
+	//				ifstream* inFile9 = new ifstream((baseFileLoc+dataFolders[iData]+"/"+name9+".txt").c_str());
+	//				// Arrange everything in a vector so we can easily loop through them
+	//				std::vector<ifstream*> inFiles={inFile0,inFile1,inFile2,inFile3,inFile4,inFile5,inFile6,inFile7,inFile8,inFile9};
+	//				// since these are pointers I think after I fill the histograms here I could use the oringal histogram pointer names and it should work still
+	//				std::vector<TH1F*> hists = {phi045_eta_unscaled[iTag][iMpi0etaBin][iData][0],phi045_pi0_unscaled[iTag][iMpi0etaBin][iData][0]
+	//					,phi090_eta_unscaled[iTag][iMpi0etaBin][iData][0]
+	//					,phi090_pi0_unscaled[iTag][iMpi0etaBin][iData][0],phiAMO_eta_unscaled[iTag][iMpi0etaBin][iData][0],phiAMO_pi0_unscaled[iTag][iMpi0etaBin][iData][0]
+	//					,phi000_eta_unscaled[iTag][iMpi0etaBin][iData][0],phi000_pi0_unscaled[iTag][iMpi0etaBin][iData][0],phi135_eta_unscaled[iTag][iMpi0etaBin][iData][0]
+	//					,phi135_pi0_unscaled[iTag][iMpi0etaBin][iData][0]};
+	//				int nevents[nHists]; // since we split up the loop for the full dataset and the bootstrapped samples we have to keep track of how much events each hist has
+	//				for ( int iHist=0; iHist<nHists; ++iHist){
+	//					while (*(inFiles[iHist]) >> value >> weight){
+	//						//cout << value << endl;
+	//						values[iTag][iMpi0etaBin][iData][iHist].push_back(value);
+	//						weights[iTag][iMpi0etaBin][iData][iHist].push_back(weight);
+	//						hists[iHist]->Fill(value,weight);
+	//					}
+	//					hists[iHist]->Print();
+	//					nevents[iHist] = values[iTag][iMpi0etaBin][iData][iHist].size();	
+	//					cout << "(iData=" << iData << ")nevents in histogram: " << nevents[iHist] << endl;
+	//				}
 
-					// We will now bootstrap some datasets and calculate std of sigma
-					for (int iSet=1; iSet<nSetsBS; ++iSet){ // we add 1 since using the full dataset takes the first element of the array
-						string nameTag = "_iData"+to_string(iData)+"_iSet"+to_string(iSet);
-						string cutTag = "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees";
-        					phi045_eta_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name0+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi045_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name1+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi090_eta_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name2+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi090_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name3+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phiAMO_eta_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name4+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phiAMO_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name5+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi000_eta_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name6+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi000_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name7+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi135_eta_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name8+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-        					phi135_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet] = new TH1F((name9+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
-						hists = {phi045_eta_unscaled[iTag][iMpi0etaBin][iData][iSet],phi045_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet],phi090_eta_unscaled[iTag][iMpi0etaBin][iData][iSet]
-							,phi090_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet],phiAMO_eta_unscaled[iTag][iMpi0etaBin][iData][iSet],phiAMO_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet]
-							,phi000_eta_unscaled[iTag][iMpi0etaBin][iData][iSet],phi000_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet],phi135_eta_unscaled[iTag][iMpi0etaBin][iData][iSet]
-							,phi135_pi0_unscaled[iTag][iMpi0etaBin][iData][iSet]};
-						int randIdx;
-						for ( int iHist=0; iHist<nHists; ++iHist){
-							for (int ievent=0; ievent<nevents[iHist]; ++ievent){
-								randIdx = rand() % nevents[iHist];		
-								value = values[iTag][iMpi0etaBin][iData][iHist][randIdx];
-								weight = weights[iTag][iMpi0etaBin][iData][iHist][randIdx];
-								hists[iHist]->Fill(value, weight);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	//				// We will now bootstrap some datasets and calculate std of sigma
+	//				for (int iSet=1; iSet<nSetsBS; ++iSet){ // we add 1 since using the full dataset takes the first element of the array
+	//					string nameTag = "_iData"+to_string(iData)+"_iSet"+to_string(iSet);
+	//					string cutTag = "Cuts=ptEtaBeamAsym;#phi; Entries / 9 degrees";
+        //					phi045_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name0+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi045_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name1+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi090_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name2+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi090_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name3+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phiAMO_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name4+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phiAMO_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name5+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi000_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name6+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi000_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name7+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi135_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name8+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+        //					phi135_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet] = new TH1F((name9+nameTag).c_str(), cutTag.c_str(), 40, -180, 180);
+	//					hists = {phi045_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet],phi045_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet],phi090_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet]
+	//						,phi090_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet],phiAMO_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet],phiAMO_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet]
+	//						,phi000_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet],phi000_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet],phi135_eta_unscaled[iTag][it][iMpi0etaBin][iData][iSet]
+	//						,phi135_pi0_unscaled[iTag][it][iMpi0etaBin][iData][iSet]};
+	//					int randIdx;
+	//					for ( int iHist=0; iHist<nHists; ++iHist){
+	//						for (int ievent=0; ievent<nevents[iHist]; ++ievent){
+	//							randIdx = rand() % nevents[iHist];		
+	//							value = values[iTag][iMpi0etaBin][iData][iHist][randIdx];
+	//							weight = weights[iTag][iMpi0etaBin][iData][iHist][randIdx];
+	//							hists[iHist]->Fill(value, weight);
+	//						}
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 	
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -287,7 +287,7 @@ void fitAsymmetryPlots3(){
 					phi135_pi0_total[iTag][it][iMpi0etaBin]->Scale(fluxRatios_45_135[0]);
 					maximum_after = phi000_eta_total[iTag][it][iMpi0etaBin]->GetMaximum();
 					cout << "-Maximum after scaling of phi000_eta_total[" << iTag << "]" << it << "]["<< iMpi0etaBin << "]: " << maximum_after << endl;
-					cout << "-NEntries after scaling of phi000_eta_total[" << iTag << "][" << it << "]["<< iMpi0etaBin << "]: " << phi000_eta_total[iTag][iMpi0etaBin]->GetEntries() << endl; 
+					cout << "-NEntries after scaling of phi000_eta_total[" << iTag << "][" << it << "]["<< iMpi0etaBin << "]: " << phi000_eta_total[iTag][it][iMpi0etaBin]->GetEntries() << endl; 
 					cout << "-Scale factor vs Expected: " << maximum_after/maximum_before << " vs " << fluxRatios_90_0[0] << endl; 
 					phi045_eta_total[iTag][it][iMpi0etaBin] = (TH1F *)phi045_eta_unscaled[iTag][it][iMpi0etaBin][0][iSet]->Clone();
 					phi045_pi0_total[iTag][it][iMpi0etaBin] = (TH1F *)phi045_pi0_unscaled[iTag][it][iMpi0etaBin][0][iSet]->Clone();
@@ -520,7 +520,9 @@ void fitAsymmetryPlots3(){
 					TGraph* likelihoodFit_045_135_pi0 = new TGraph(50); 
 					//fitPointer->Scan(2,likelihoodFit_045_135_pi0,-2,2);
 
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymmetry"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tpi0Bin+"to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ 
+						allCanvases->SaveAs(("asymmetryPlots/asymmetry"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); 
+					}
 
 					//allCanvases->Clear();
 					//allCanvases->Divide(2,1);
@@ -678,8 +680,8 @@ void fitAsymmetryPlots3(){
 					gr_pi0s[counter]->SetName(("pi0_tBin"+to_string(it)+"_"+names[counter]).c_str());
 					if (counter==0){
 						allCanvases->cd(1);
-						gr_etas[counter]->SetTitle(("PSigma "+to_string(lowerT)+" < teta < "+to_string(upperT));
-						gr_pi0s[counter]->SetTitle(("PSigma "+to_string(lowerT)+" < tpi0 < "+to_string(upperT));
+						gr_etas[counter]->SetTitle(("PSigma "+to_string(lowerT)+" < teta < "+to_string(upperT)).c_str());
+						gr_pi0s[counter]->SetTitle(("PSigma "+to_string(lowerT)+" < tpi0 < "+to_string(upperT)).c_str());
 						gr_etas[counter]->Draw("AP");
 						// apparently we have to AddEntry Before we cd? Or after we draw?
    						legend_eta->AddEntry(("eta_"+names[counter]).c_str(),(names[counter]).c_str(),"lep");

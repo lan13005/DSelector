@@ -906,13 +906,8 @@ class DSelector_ver20 : public DSelector
 		// ------------------------------------------------------------------
 		// ***************** THE ORIGINAL BA MEASUREMENT ********************
 		// ------------------------------------------------------------------
-		static const int numMpi0eta = 5; // there will be this many lower thesholds to calculate asymmetries vs teta/tpi0 with
+		static const int numMpi0eta = 5;
 		static const int numTBins = 5;
-		static const int numMpi0etaRes = 9; // there will be this many bins in Mpi0eta to find the asymmetries in. Will extend down into the resonance region
-		double lowerMpi0eta[numMpi0etaRes] = {0.9, 1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65};
-		double upperMpi0eta[numMpi0etaRes] = {1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65, 2.9};
-		bool pFastEtaBin[5]; 
-		bool pFastPi0Bin[5]; 
 		// So we will look at BA in bins of t_eta or t_pi but also vary the lower M(pi0eta) threshold. So we can see how the baryon contributions might enter
 		bool ptEtaBeamAsym_000[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_045[numMpi0eta*numTBins];
@@ -936,16 +931,16 @@ class DSelector_ver20 : public DSelector
 		bool ptPi0BeamAsym_backwardEtaP_AMO[numMpi0eta*numTBins];
 
 		// We can also look at BA in bins of M(pi0eta) for fast pion and for fast eta
-		bool pMpi0etaBeamAsym_000_fastEta[numTBins*numMpi0etaRes]; // WOULD SELECT ON FAST ETA
-		bool pMpi0etaBeamAsym_045_fastEta[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_090_fastEta[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_135_fastEta[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_AMO_fastEta[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_000_fastPi0[numTBins*numMpi0etaRes]; // WOULD SELECT ON FAST PI0
-		bool pMpi0etaBeamAsym_045_fastPi0[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_090_fastPi0[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_135_fastPi0[numTBins*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_AMO_fastPi0[numTBins*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_000_fastEta[5]={true,true,true,true,true}; // WOULD SELECT ON FAST ETA
+		bool pMpi0etaBeamAsym_045_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_090_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_135_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_AMO_fastEta[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_000_fastPi0[5]={true,true,true,true,true}; // WOULD SELECT ON FAST PI0
+		bool pMpi0etaBeamAsym_045_fastPi0[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_090_fastPi0[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_135_fastPi0[5]={true,true,true,true,true};
+		bool pMpi0etaBeamAsym_AMO_fastPi0[5]={true,true,true,true,true};
 
 		
 		// THE GOAL HERE IS TO LOOK AT THE BA CONTRIBUTIONS IN BINS OF M(PI0P) AND IN BINS OF M(ETAP). IN M(PI0P) WE SEE 3 N* RESONANCES. IF WE BIN IN THIS VARIABLE
@@ -1008,8 +1003,6 @@ class DSelector_ver20 : public DSelector
 		bool baseAsymCut_mDelta=true;
 		bool baseAsymCut_fastEta=true;
 		bool baseAsymCut_fastPi0=true;
-		bool baseAsymCut_fastEta_res=true;
-		bool baseAsymCut_fastPi0_res=true;
 		bool baseAsymCut_mDelta_fastEta=true;
 		bool baseAsymCut_mDelta_fastPi0=true;
 		bool baseAsymCut=true;

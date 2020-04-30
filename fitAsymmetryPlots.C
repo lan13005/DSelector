@@ -606,6 +606,10 @@ void fitAsymmetryPlots(){
 				// *****************************
 				// Now we overlay the pi0 and eta beam asymmetries 
 				// *****************************
+				//
+				if (iMass==0 && iTag==0){
+					TFile *resultFile = new TFile("resultFile.root","RECREATE");
+				}
 					
 				auto leg1 = new TLegend(0.7,0.15,0.9,0.35);
 				allCanvases->Clear();
@@ -621,13 +625,24 @@ void fitAsymmetryPlots(){
 				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
 				gr_000->GetXaxis()->SetTitleSize(0.06);
 				leg1->AddEntry(gr_000,"t_{#eta}","lep");
-				gr_000->GetHistogram()->SetMaximum(1.2);
+				gr_000->GetHistogram()->SetMaximum(1);
 				gr_000->GetHistogram()->SetMinimum(-1);
+				if (iMass==0){
+					gr_000->Write(("asymVstEta_000"+tagEta[iTag]).c_str());
+				}
 				gr_000 = new TGraphErrors(num_tBins,tBins,asymmetries_000_pi0[iTag][iSet][iMass],tBins_err,asymmetries_000_pi0_err[iTag][iSet][iMass]);
+				gr_000->SetTitle("#Sigma 0/90 Orientation");
 				gr_000->SetLineColor(2);
 				gr_000->SetMarkerColor(2);
 				gr_000->SetMarkerStyle(20);
 				gr_000->Draw("P SAME");
+				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
+				gr_000->GetXaxis()->SetTitleSize(0.06);
+				gr_000->GetHistogram()->SetMaximum(1);
+				gr_000->GetHistogram()->SetMinimum(-1);
+				if (iMass==0){
+					gr_000->Write(("asymVstPi0_000"+tagPi0[iTag]).c_str());
+				}
 				leg1->AddEntry(gr_000,"t_{#eta}","lep");
 				leg1->Draw();
 			
@@ -641,13 +656,24 @@ void fitAsymmetryPlots(){
 				gr_045->Draw("AP");
 				gr_045->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
 				gr_045->GetXaxis()->SetTitleSize(0.06);
-				gr_045->GetHistogram()->SetMaximum(1.2);
+				gr_045->GetHistogram()->SetMaximum(1);
 				gr_045->GetHistogram()->SetMinimum(-1);
+				if (iMass==0){
+					gr_045->Write(("asymVstEta_045"+tagEta[iTag]).c_str());
+				}
 				gr_045 = new TGraphErrors(num_tBins,tBins,asymmetries_045_pi0[iTag][iSet][iMass],tBins_err,asymmetries_045_pi0_err[iTag][iSet][iMass]);
+				gr_045->SetTitle("#Sigma 45/135 Orientation");
 				gr_045->SetMarkerColor(2);
 				gr_045->SetLineColor(2);
 				gr_045->SetMarkerStyle(20);
 				gr_045->Draw("P SAME");
+				gr_045->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
+				gr_045->GetXaxis()->SetTitleSize(0.06);
+				gr_045->GetHistogram()->SetMaximum(1);
+				gr_045->GetHistogram()->SetMinimum(-1);
+				if (iMass==0){
+					gr_045->Write(("asymVstPi0_045"+tagPi0[iTag]).c_str());
+				}
 				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymVst"+tag[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_iSet"+to_string(iSet)+".png").c_str()); }
 
 
