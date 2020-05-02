@@ -36,7 +36,7 @@ void fitAsymmetryPlots3(){
 
 	// seems like this this would somehow instantiate gMinuit maybe? If I dont do this I get some errors
 	//ROOT::Math::MinimizerOptions::SetDefaultMinimizer("Minuit2"); // If I dont get this I get the error "Error in <TMinuitMinimizer::Scan>:  Error executing command SCAN" 
-	static const int num_tBins=5;
+	static const int num_tBins=6;
 	static const int num_Mpi0etaBins=9;
 	string phis_orientation[5] =  {"phi000", "phi045", "phi090", "phi135", "phiAMO"};
 
@@ -53,10 +53,10 @@ void fitAsymmetryPlots3(){
 	// Define flux ratios for 2017, 2018_1, 2018_2 
 	// *****************************
 	static const int nDataSets = 1;
-	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12};//, 0.965429, 0.918503 };
-	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12};//, 1.02261, 1.03254 };
-	string dataSetTag[nDataSets] = { "2017"};//, "2018_1", "2018_8" };
-	string dataFolders[nDataSets] = {"deg000_data_2017"};//, "deg000_data_2018_1", "deg000_data_2018_8"};
+	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12 };//, 0.965429, 0.918503 };
+	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12 };//, 1.02261, 1.03254 };
+	string dataSetTag[nDataSets] = { "2017" };//, "2018_1", "2018_8" };
+	string dataFolders[nDataSets] = {"deg000_data_2017" };//, "deg000_data_2018_1", "deg000_data_2018_8"};
 
 	static const int nTagEta = 1;
 	string tagEta[nTagEta] = {""};
@@ -381,11 +381,16 @@ void fitAsymmetryPlots3(){
 		phis_eta_PSig_err.push_back(phi_090_eta_err);
 		phis_eta_PSig_err.push_back(phi_135_eta_err);
 
+		double lowerMpi0eta[9] = {0.9, 1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65};
+		double upperMpi0eta[9] = {1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65, 2.9};
 		double mBins[num_Mpi0etaBins];
 		double mBins_err[num_Mpi0etaBins];
-		double minMpi0eta = 1.6;
-		double maxMpi0eta = 2.8;
-		double mBinSize = (maxMpi0eta-minMpi0eta)/5;
+
+		
+
+		//double minMpi0eta = 1.6;
+		//double maxMpi0eta = 2.8;
+		//double mBinSize = (maxMpi0eta-minMpi0eta)/5;
 
 		Int_t fitStatus;
 		for (int iTag=0; iTag<nTagEta; ++iTag){
@@ -412,8 +417,12 @@ void fitAsymmetryPlots3(){
 					// *****************************
 					// Defining the mBins which will be shared
 					// *****************************
-					mBins[iMpi0etaBin] = minMpi0eta+(iMpi0etaBin+0.5)*mBinSize;
-					mBins_err[iMpi0etaBin] = mBinSize/2;
+					//mBins[iMpi0etaBin] = minMpi0eta+(iMpi0etaBin+0.5)*mBinSize;
+					//mBins_err[iMpi0etaBin] = mBinSize/2;
+					double halfBinSize = (upperMpi0eta[iMpi0etaBin]-lowerMpi0eta[iMpi0etaBin])/2;
+					mBins[iMpi0etaBin] = lowerMpi0eta[iMpi0etaBin]+halfBinSize;
+					mBins_err[iMpi0etaBin] = halfBinSize;
+
 
 
 					// *****************************
@@ -667,11 +676,11 @@ void fitAsymmetryPlots3(){
 				TGraphErrors* gr_etas[numPolarizations];
 				TGraphErrors* gr_pi0s[numPolarizations];
 				for (int iphi=0; iphi<numPolarizations; ++iphi){
-					gr_etas[counter] = new TGraphErrors(num_Mpi0etaBins,mBins,&(phis_eta_PSig[counter][0]),mBins_err,&(phis_eta_PSig_err[counter][0]));
+					gr_etas[counter] = new TGraphErrors(num_Mpi0etaBins,mBins,&(phis_eta_PSig[counter][it]),mBins_err,&(phis_eta_PSig_err[counter][it]));
 					gr_etas[counter]->SetMarkerStyle(20+counter);
 					gr_etas[counter]->SetLineColor(kBlue+counter);
 					gr_etas[counter]->SetMarkerColor(kBlue+counter);
-					gr_pi0s[counter] = new TGraphErrors(num_Mpi0etaBins,mBins,&(phis_pi0_PSig[counter][0]),mBins_err,&(phis_pi0_PSig_err[counter][0]));
+					gr_pi0s[counter] = new TGraphErrors(num_Mpi0etaBins,mBins,&(phis_pi0_PSig[counter][it]),mBins_err,&(phis_pi0_PSig_err[counter][it]));
 					gr_pi0s[counter]->SetMarkerStyle(20+counter);
 					gr_pi0s[counter]->SetLineColor(kRed+counter);
 					gr_pi0s[counter]->SetMarkerColor(kRed+counter);

@@ -199,8 +199,9 @@ void asymmetryMC(){
 		cout << numEntries000 << " entries are in the 000 orientation for eta" << endl;
 		cout << numEntries090 << " entries are in the 090 orientation for eta" << endl;
 
-		TF1* fit000 = new TF1("fit000",("1.0-0.35*"+to_string(trueAsym)+"*cos(2*0.01745*x)").c_str(),-180,180);
-		TF1* fit090 = new TF1("fit000",("1.0-0.35*"+to_string(trueAsym)+"*cos(2*0.01745*(x-90))").c_str(),-180,180);
+	
+		TRandom3 rgaus;
+		double randAsym;
 		std::vector<double> simulated000;
 		std::vector<double> simulated090;
 		double randValue000;
@@ -224,7 +225,14 @@ void asymmetryMC(){
 		rgen090.SetSeed(1992);
 		double toyAsym;
 		double toyAsymErr;
-		for (int iter=0; iter<1000; ++iter){
+		cout << "Starting experiments" << endl;
+		for (int iter=0; iter<10000; ++iter){
+			randAsym = rgaus.Gaus(trueAsym,trueAsymErr);
+			randAsym = trueAsym; 
+			cout << "Experiment " << iter << " simulating with Asymmetry=" << randAsym << " {trueAsym, trueAsymErr} = {" << trueAsym << ", " << trueAsymErr << "}" << endl;
+			TF1* fit000 = new TF1("fit000",("1.0-0.35*"+to_string(randAsym)+"*cos(2*0.01745*x)").c_str(),-180,180);
+			TF1* fit090 = new TF1("fit000",("1.0-0.35*"+to_string(randAsym)+"*cos(2*0.01745*(x-90))").c_str(),-180,180);
+
 			cout << "Sampling number of events for 000 with mean " << numEntries000 << endl;
 			cout << "Sampling number of events for 090 with mean " << numEntries090 << endl;
 			Int_t rNumEntries000 = rgen000.Poisson((double)numEntries000);	
@@ -253,9 +261,10 @@ void asymmetryMC(){
 			dHist_simulated090->Fit(fit_sc090);
 
 			TF1 * fit_asym = new TF1("fit_asym",asymmetry,-180,180,numDOFsig_asym); 
-			fit_asym->SetParameters(0.35,0.35,0.5,0);
+			fit_asym->SetParameters(0.35,0.35,trueAsym,0);
 			fit_asym->FixParameter(0,0.35);
 			fit_asym->FixParameter(1,0.35);
+			//fit_asym->SetParLimits(2,trueAsym-trueAsymErr, trueAsym+trueAsymErr);
 			fit_asym->FixParameter(3,0);
 			string fitOption = "E S";
 			TFitResultPtr fitPointer = asymmetry000_090_eta->Fit(fit_asym,fitOption.c_str());
@@ -268,7 +277,8 @@ void asymmetryMC(){
 			dHist_asymmetries->Fill(toyAsym);
 			dHist_asymmetryErrors->Fill(toyAsymErr/toyAsym);
 
-			pull = (trueAsym-toyAsym)/sqrt(trueAsymErr*trueAsymErr-toyAsymErr*toyAsymErr);
+			//pull = (trueAsym-toyAsym)/sqrt(trueAsymErr*trueAsymErr-toyAsymErr*toyAsymErr);
+			pull = (toyAsym-trueAsym)/toyAsymErr;
 			dHist_pulls->Fill(pull);
 
 			if (iter<maxPrint){
@@ -309,7 +319,7 @@ void asymmetryMC(){
 		double pullSig = pullFit->GetParameter(2);
 		double pullSigSig = pullFit->GetParError(2);
 		dHist_pulls->Draw();
-		dHist_pulls->SetTitle(("#splitline{Mean, MeanSig, Sigma, SigmaSig = "+to_string(pullMean)+", "+to_string(pullMeanSig)+"}{"+to_string(pullSig)+", "+to_string(pullSigSig)+"}").c_str());
+		dHist_pulls->SetTitle(("#splitline{Mean, MeanSig = "+to_string(pullMean)+", "+to_string(pullMeanSig)+"}{Sigma, SigmaSig = "+to_string(pullSig)+", "+to_string(pullSigSig)+"}").c_str());
 		dHist_pulls->GetXaxis()->SetTitleSize(0.06);
 
 		allCanvases->SaveAs(("asymmetryMC/simulatedSigma_tBin"+to_string(iBin)+"_SigErr.png").c_str());

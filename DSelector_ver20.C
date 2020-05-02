@@ -828,7 +828,7 @@ void DSelector_ver20::Init(TTree *locTree)
 	//	}
 	//}
 	// This section will get asymmetries as a function of pi0eta
-	for (int it=0; it<5; ++it){
+	for (int it=0; it<6; ++it){
 		for (int iMass=0; iMass<numMpi0etaRes; ++iMass){
         		histdef.clear();
         		name="prodPlanePSphi_000_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
@@ -1689,16 +1689,22 @@ void DSelector_ver20::Init(TTree *locTree)
         group_pairBCAL.insert(histdef); 
 
         // *********************** PI0ETA MASS PLOTS ******************************
-	for (int it=0; it<5; ++it) {
+        histdef.clear();
+        name="pi0eta1D_baseAsymCut_res";
+        histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_res;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        histdef.name = name; histdef.cut=&baseAsymCut_res; histdef.weights = &weightAS;
+        histdef.values.push_back( &locPi0Eta_Kin );
+        group_1234B.insert(histdef); 
+	for (int it=0; it<6; ++it) {
         	histdef.clear();
         	name="pi0eta1D_pFastEtaBin"+to_string(it);
-        	histdef.hist = new TH1F(name.c_str(), "Cuts=pFastEtaBin;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastEtaBin["+to_string(it)+";M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
         	histdef.name = name; histdef.cut=&pFastEtaBin[it]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
         	group_1234B.insert(histdef); 
         	histdef.clear();
         	name="pi0eta1D_pFastPi0Bin"+to_string(it);
-        	histdef.hist = new TH1F(name.c_str(), "Cuts=pFastPi0Bin;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastPi0Bin["+to_string(it)+";M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
         	histdef.name = name; histdef.cut=&pFastPi0Bin[it]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
         	group_1234B.insert(histdef); 
@@ -3872,8 +3878,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	baseAsymCut_fastEta = !pMPi0P14*baseAsymCut_mDelta_fastEta;
 	baseAsymCut_fastPi0 = baseAsymCut_mDelta_fastPi0;
 
-	baseAsymCut_fastEta_res = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*(mandelstam_teta<1)*!pMPi0P14;
-	baseAsymCut_fastPi0_res = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*(mandelstam_tpi0<1)*!pMPi0P14;
+	baseAsymCut_res = baseAsymCut_mMpi0etaDoubleRegge_mMpi0p*!pMPi0P14;
 
 
 	//outputDeckBA << "pol_plane, t_eta, eta_px, eta_py, eta_pz, eta_E, piMinus_px, piMinus_py, piMinus_pz, piMinus_E, Delta++_px, Delta++_py, Delta++_pz, Delta++_E" << endl;
@@ -3948,14 +3953,24 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	}
 
 	cout << "BA STUDY VARYING M(PI0ETA)\n------------------------" << endl;
-	for (int iteta=0; iteta<numTBins; ++iteta){
-		bool select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
-		bool select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
-		pFastEtaBin[iteta] = baseAsymCut_fastEta_res*select_teta_bin;
-		pFastPi0Bin[iteta] = baseAsymCut_fastPi0_res*select_tpi0_bin;
+	for (int iteta=0; iteta<6; ++iteta){
+		bool select_teta_bin;
+		bool select_tpi0_bin;
+		if (iteta < 5 ) {
+			cout << "Also requiring " << iteta*0.2 << "< teta/tpi0 <" << (iteta+1)*0.2 << endl;
+	       		select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
+	       		select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
+		}
+		else {
+			cout << "Also requiring 1 < teta/tpi0" << endl;
+			select_teta_bin = mandelstam_teta > 1;
+			select_tpi0_bin = mandelstam_tpi0 > 1;
+		}
+
+		pFastEtaBin[iteta] = baseAsymCut_res*select_teta_bin;
+		pFastPi0Bin[iteta] = baseAsymCut_res*select_tpi0_bin;
 		cout << "numMpi0etaRes: " << numMpi0etaRes << endl;
-		for (int iMass=0; iMass<9; ++iMass){
-			cout << "Also requiring " << iteta*0.2 << " teta/tpi0 " << (iteta+1)*0.2 << endl;
+		for (int iMass=0; iMass<numMpi0etaRes; ++iMass){
 			cout << "locPi0Eta_Kin: " << locPi0Eta_Kin << endl;
 			cout << "iMass: " << iMass << endl;
 			//double binSizeMpi0eta = (maxMpi0eta-minMpi0eta)/5;
@@ -3964,16 +3979,16 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			cout << "*****" << endl;
 			cout << "Requiring " << to_string(lowerMpi0eta[iMass]) << " < M(pi0eta) < " << to_string(upperMpi0eta[iMass]) << endl;
 			cout << "Passed? " << acceptMBin << endl;
-			pMpi0etaBeamAsym_000_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization000*baseAsymCut_fastEta_res*select_teta_bin*acceptMBin;
-			pMpi0etaBeamAsym_045_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization045*baseAsymCut_fastEta_res*select_teta_bin*acceptMBin;
-			pMpi0etaBeamAsym_090_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization090*baseAsymCut_fastEta_res*select_teta_bin*acceptMBin;
-			pMpi0etaBeamAsym_135_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization135*baseAsymCut_fastEta_res*select_teta_bin*acceptMBin;
-			pMpi0etaBeamAsym_AMO_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarizationAMO*baseAsymCut_fastEta_res*select_teta_bin*acceptMBin;
-			pMpi0etaBeamAsym_000_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization000*baseAsymCut_fastPi0_res*select_tpi0_bin*acceptMBin;
-			pMpi0etaBeamAsym_045_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization045*baseAsymCut_fastPi0_res*select_tpi0_bin*acceptMBin;
-			pMpi0etaBeamAsym_090_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization090*baseAsymCut_fastPi0_res*select_tpi0_bin*acceptMBin;
-			pMpi0etaBeamAsym_135_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization135*baseAsymCut_fastPi0_res*select_tpi0_bin*acceptMBin;
-			pMpi0etaBeamAsym_AMO_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarizationAMO*baseAsymCut_fastPi0_res*select_tpi0_bin*acceptMBin;
+			pMpi0etaBeamAsym_000_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization000*baseAsymCut_res*select_teta_bin*acceptMBin;
+			pMpi0etaBeamAsym_045_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization045*baseAsymCut_res*select_teta_bin*acceptMBin;
+			pMpi0etaBeamAsym_090_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization090*baseAsymCut_res*select_teta_bin*acceptMBin;
+			pMpi0etaBeamAsym_135_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization135*baseAsymCut_res*select_teta_bin*acceptMBin;
+			pMpi0etaBeamAsym_AMO_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarizationAMO*baseAsymCut_res*select_teta_bin*acceptMBin;
+			pMpi0etaBeamAsym_000_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization000*baseAsymCut_res*select_tpi0_bin*acceptMBin;
+			pMpi0etaBeamAsym_045_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization045*baseAsymCut_res*select_tpi0_bin*acceptMBin;
+			pMpi0etaBeamAsym_090_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization090*baseAsymCut_res*select_tpi0_bin*acceptMBin;
+			pMpi0etaBeamAsym_135_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarization135*baseAsymCut_res*select_tpi0_bin*acceptMBin;
+			pMpi0etaBeamAsym_AMO_fastPi0[iteta*numMpi0etaRes+iMass] =  keepPolarizationAMO*baseAsymCut_res*select_tpi0_bin*acceptMBin;
 		}
 	}
 
