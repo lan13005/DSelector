@@ -2505,7 +2505,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     	set< map<Particle_t, set<Int_t> > > used123B;
     	set< map<Particle_t, set<Int_t> > > used124B;
 
-    	if(itersToRun>100){ return kTRUE; }// ++itersToRun; //so we can just try to show the outut of one event 
+    	//if(itersToRun>100){ return kTRUE; }// ++itersToRun; //so we can just try to show the outut of one event 
 	++count_events;
     	if(showOutput){cout << "Starting next process looping" << endl;}
     	// The Process() function is called for each entry in the tree. The entry argument

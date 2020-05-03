@@ -226,7 +226,7 @@ void asymmetryMC(){
 		double toyAsym;
 		double toyAsymErr;
 		cout << "Starting experiments" << endl;
-		for (int iter=0; iter<10000; ++iter){
+		for (int iter=0; iter<5000; ++iter){
 			randAsym = rgaus.Gaus(trueAsym,trueAsymErr);
 			randAsym = trueAsym; 
 			cout << "Experiment " << iter << " simulating with Asymmetry=" << randAsym << " {trueAsym, trueAsymErr} = {" << trueAsym << ", " << trueAsymErr << "}" << endl;

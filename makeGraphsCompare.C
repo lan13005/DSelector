@@ -212,7 +212,7 @@ class sideBySide2D{
 
 void makeGraphsCompare(){	
 	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_noCATA_hists_DSelector.root");
-	TFile* file2 = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_omegaPi0_hists_DSelector.root");
+	TFile* file2 = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_Pi0Pi0_hists_DSelector.root");
 
 	gStyle->SetOptStat(0);
 	TIter keyList(file->GetListOfKeys());
