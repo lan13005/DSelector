@@ -194,6 +194,8 @@ void makeGraphs(){
 	overlayPlots pi0eta1D_pFastEtaBin3(trackHists);
 	trackHists = { {"pi0eta1D_pFastEtaBin4", 1} };
 	overlayPlots pi0eta1D_pFastEtaBin4(trackHists);
+	trackHists = { {"pi0eta1D_pFastEtaBin5", 1} };
+	overlayPlots pi0eta1D_pFastEtaBin5(trackHists);
 	trackHists = { {"pi0eta1D_pFastPi0Bin0", 1} };
 	overlayPlots pi0eta1D_pFastPi0Bin0(trackHists);
 	trackHists = { {"pi0eta1D_pFastPi0Bin1", 1} };
@@ -204,6 +206,8 @@ void makeGraphs(){
 	overlayPlots pi0eta1D_pFastPi0Bin3(trackHists);
 	trackHists = { {"pi0eta1D_pFastPi0Bin4", 1} };
 	overlayPlots pi0eta1D_pFastPi0Bin4(trackHists);
+	trackHists = { {"pi0eta1D_pFastPi0Bin5", 1} };
+	overlayPlots pi0eta1D_pFastPi0Bin5(trackHists);
 
 	TCanvas *c1 = new TCanvas("c1","",1440,900);
 	int i=0;
@@ -253,11 +257,13 @@ void makeGraphs(){
 			pi0eta1D_pFastEtaBin2.fillHist(h); 
 			pi0eta1D_pFastEtaBin3.fillHist(h); 
 			pi0eta1D_pFastEtaBin4.fillHist(h); 
+			pi0eta1D_pFastEtaBin5.fillHist(h); 
 			pi0eta1D_pFastPi0Bin0.fillHist(h); 
 			pi0eta1D_pFastPi0Bin1.fillHist(h); 
 			pi0eta1D_pFastPi0Bin2.fillHist(h); 
 			pi0eta1D_pFastPi0Bin3.fillHist(h); 
 			pi0eta1D_pFastPi0Bin4.fillHist(h); 
+			pi0eta1D_pFastPi0Bin5.fillHist(h); 
 			pi0eta1D_pFastEta.fillHist(h);
 			pi0eta1D_pFastPi0.fillHist(h);
 			if ( strcmp(h->GetName(),"pi0proton1D_mMandelstamT_mdelta")==0 ){ h->SetTitle("all t'");}
@@ -290,11 +296,13 @@ void makeGraphs(){
 	pi0eta1D_pFastEtaBin2.plot("newGraphs/pi0eta1D_pFastEtaBin2.png", true, lineCutThresholds); 
 	pi0eta1D_pFastEtaBin3.plot("newGraphs/pi0eta1D_pFastEtaBin3.png", true, lineCutThresholds); 
 	pi0eta1D_pFastEtaBin4.plot("newGraphs/pi0eta1D_pFastEtaBin4.png", true, lineCutThresholds); 
+	pi0eta1D_pFastEtaBin5.plot("newGraphs/pi0eta1D_pFastEtaBin5.png", true, lineCutThresholds); 
 	pi0eta1D_pFastPi0Bin0.plot("newGraphs/pi0eta1D_pFastPi0Bin0.png", true, lineCutThresholds); 
 	pi0eta1D_pFastPi0Bin1.plot("newGraphs/pi0eta1D_pFastPi0Bin1.png", true, lineCutThresholds); 
 	pi0eta1D_pFastPi0Bin2.plot("newGraphs/pi0eta1D_pFastPi0Bin2.png", true, lineCutThresholds); 
 	pi0eta1D_pFastPi0Bin3.plot("newGraphs/pi0eta1D_pFastPi0Bin3.png", true, lineCutThresholds); 
 	pi0eta1D_pFastPi0Bin4.plot("newGraphs/pi0eta1D_pFastPi0Bin4.png", true, lineCutThresholds); 
+	pi0eta1D_pFastPi0Bin5.plot("newGraphs/pi0eta1D_pFastPi0Bin5.png", true, lineCutThresholds); 
 
 	lineCutThresholds={selectPi0Proton};
 	pi0proton1D_mMandelstamT_mdelta.plot("newGraphs/pi0proton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);

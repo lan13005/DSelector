@@ -87,9 +87,9 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// 2017 - loose ChiSq and UE cut
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedLooseChiSqUE/pi0eta_looseCuts_tree_DSelector.root");
 	// 2018_8
-	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_8/pi0eta_baseCuts_2018_tree_DSelector.root");
+	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_8/pi0eta_baseCuts_2018_tree_DSelector.root");
 	// 2018_1
-	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_1/pi0eta_baseCuts_2018_tree_DSelector.root");
+	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_1/pi0eta_baseCuts_2018_tree_DSelector.root");
 	//
 	// BA for Double regge MC studies
 	// Rejection sampled the uniform phi distribution. 
@@ -109,7 +109,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	// should change the name below from data to reco when running over MC
 	string degAngle="degALL";
-	string tag="_data_2018_1_BAres";
+	string tag="_data_2018_8_BAres";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 

@@ -29,7 +29,7 @@ int finalStateComboID=0;
 
 string selectDetector="ALL";
 string polarization="degALL";
-string tag="_data_2018_1_BAres";
+string tag="_data_2018_8_BAres";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -1698,13 +1698,13 @@ void DSelector_ver20::Init(TTree *locTree)
 	for (int it=0; it<6; ++it) {
         	histdef.clear();
         	name="pi0eta1D_pFastEtaBin"+to_string(it);
-        	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastEtaBin["+to_string(it)+";M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
+        	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastEtaBin["+to_string(it)+"];M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
         	histdef.name = name; histdef.cut=&pFastEtaBin[it]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
         	group_1234B.insert(histdef); 
         	histdef.clear();
         	name="pi0eta1D_pFastPi0Bin"+to_string(it);
-        	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastPi0Bin["+to_string(it)+";M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
+        	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastPi0Bin["+to_string(it)+"];M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
         	histdef.name = name; histdef.cut=&pFastPi0Bin[it]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
         	group_1234B.insert(histdef); 

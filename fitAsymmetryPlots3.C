@@ -52,11 +52,11 @@ void fitAsymmetryPlots3(){
 	// *****************************
 	// Define flux ratios for 2017, 2018_1, 2018_2 
 	// *****************************
-	static const int nDataSets = 1;
-	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12 };//, 0.965429, 0.918503 };
-	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12 };//, 1.02261, 1.03254 };
-	string dataSetTag[nDataSets] = { "2017" };//, "2018_1", "2018_8" };
-	string dataFolders[nDataSets] = {"deg000_data_2017" };//, "deg000_data_2018_1", "deg000_data_2018_8"};
+	static const int nDataSets = 3;
+	double fluxRatios_90_0[nDataSets] = {  4.346818e+12/4.188001e+12 , 0.965429, 0.918503 };
+	double fluxRatios_45_135[nDataSets] = {  4.076065e+12/4.095013e+12 , 1.02261, 1.03254 };
+	string dataSetTag[nDataSets] = { "2017" , "2018_1", "2018_8" };
+	string dataFolders[nDataSets] = {"deg000_data_2017" , "deg000_data_2018_1", "deg000_data_2018_8"};
 
 	static const int nTagEta = 1;
 	string tagEta[nTagEta] = {""};
