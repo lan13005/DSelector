@@ -143,7 +143,7 @@ class sideBySide2D{
 void makeGraphs(){
 	gStyle->SetOptStat(0);
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/pi0eta_test_hists_DSelector.root");
-	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_BAres_hists_DSelector.root");
+	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_mEllipse_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/eta3pi/pi0eta_seanResoution_reco_3pi0_hists_DSelector.root");
 	TIter keyList(file->GetListOfKeys());
 	TKey *key;
@@ -312,7 +312,7 @@ void makeGraphs(){
 	//cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
 	//pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
 	
-	cutThreshold2D = { {0.135784, 0.548036, 2*0.0067, 2*0.014 } }; // kinFit
+	cutThreshold2D = { {0.135784, 0.548036, 2*0.00753584, 2*0.0170809 } }; // kinFit
 	//cutThreshold2D = { {0.13381, 0.5388, 3*0.006, 3*0.0264 } };//eta3pi
 	pi0eta_mEllipsePre.plot("newGraphs/pi0eta_mEllipsePre_withCut.png","ellipse",cutThreshold2D);
 }

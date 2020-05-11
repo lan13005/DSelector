@@ -29,7 +29,7 @@ int finalStateComboID=0;
 
 string selectDetector="ALL";
 string polarization="degALL";
-string tag="_data_2018_8_BAres";
+string tag="_data_2017_mEllipse";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -58,7 +58,7 @@ void DSelector_ver20::Init(TTree *locTree)
                 //ellipseX = 0.134547; ellipseY = 0.541950; ellipseXr = 0.025449; ellipseYr = 0.069267;
 
                 //using the kin data
-                ellipseX = 0.135784; ellipseY = 0.548036; ellipseXr = 2*0.0067; ellipseYr = 2*0.014;
+                ellipseX = 0.135784; ellipseY = 0.548036; ellipseXr = 2*0.00753584; ellipseYr = 2*0.0170809;
 //                ellipseXBS1 = 0.135881; ellipseYBS1 = 0.548625; ellipseXrBS1 = 0.022; ellipseYrBS1 = 0.06;
 //                ellipseXBS2 = 0.135881; ellipseYBS2 = 0.548625; ellipseXrBS2 = 0.045; ellipseYrBS2 = 0.165;
 //		//ellipseXr_loose=0.0391; ellipseYr_loose=0.131;
@@ -1741,7 +1741,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.clear();
         name="pi0eta1D_AS";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
-        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
+        histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
         group_1234B.insert(histdef); 
 
