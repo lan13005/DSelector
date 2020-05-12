@@ -89,7 +89,6 @@ void makeDeckPlot(string selectionString){
 	// *********** PREPARING THE CODE ***************
 	// *********************************************
 	//gStyle->SetErrorX(0.000001); // remove the x-error bars
-   	TFile *deckDiagnosticFile = new TFile("deckDiagnosticHists.root", "RECREATE");
     	ofstream logFile;
     	logFile.open(("deckPlots/"+selectionString+"/failedFittingPlotIDs.txt").c_str());
 
@@ -127,7 +126,7 @@ void makeDeckPlot(string selectionString){
 	// *********************************************
 	//string dataFileLoc[2] = {"pi0eta_data_treeFlat_DSelector.root","pi0eta_flat_21t_treeFlat_DSelector.root"}; 
 	//string dataTreeName[2] = {"pi0eta_datatree_flat","pi0eta_flat_21ttree_flat"}; 
-	string dataFileLoc[2] = {"degALL_data_2017_treeFlat_DSelector.root","degALL_acc_2017_treeFlat_DSelector.root"}; 
+	string dataFileLoc[2] = {"selected_PWA_Deck_analysis_rootFiles/degALL_data_2017_treeFlat_DSelector.root","selected_PWA_Deck_analysis_rootFiles/degALL_acc_2017_treeFlat_DSelector.root"}; 
 	string dataTreeName[2] = {"degALL_data_2017_tree_flat","degALL_acc_2017_tree_flat"}; 
 	string dataTypes[2]={"data","reco"};
 	string branchNames[2]={"mandelstam_teta_meas","mandelstam_tpi0_meas"};
@@ -544,7 +543,7 @@ void makeDeckPlot(string selectionString){
 	// *********** CALCULATE EFFICIENCIES ***************
 	// *********************************************
 	//TFile* genFile = TFile::Open("flat_21t_gen_hists_DSelector_pi0eta.root");
-	TFile* genFile = TFile::Open("degALL_gen_2017_hists_DSelector.root");
+	TFile* genFile = TFile::Open("selected_PWA_Deck_analysis_rootFiles/degALL_gen_2017_hists_DSelector.root");
 	TH1F *tetaVsMpi0eta_genCounts;
 	TH1F *tpi0VsMpi0eta_genCounts;
 	genFile->GetObject( ("tetaVsMpi0eta_genCounts_"+selectionString).c_str(),tetaVsMpi0eta_genCounts);
@@ -749,9 +748,11 @@ void makeDeckPlot(string selectionString){
 			skipLastN = 0;
 		}	
 		
+   		TFile *deckDiagnosticFile = new TFile("deckDiagnosticHists.root", "RECREATE");
 		for (Int_t iMass=0; iMass<massBinTitles.size(); ++iMass){
 			cout << "Plotting histogram for mass bin: " << iMass << endl;
-			massHist = new TH1F(("massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi^{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
+			string massHistName = "massHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx);
+			massHist = new TH1F(massHistName.c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi^{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
 			unscaledMassHist = new TH1F(("unscaledMassHist_"+std::to_string(iMass)+"_"+std::to_string(branchIdx)).c_str(),(massBinTitles[iMass]+";t_{#eta}/t_{#pi^{0}} GeV^{2}").c_str(),num_tBins,tMin,tMax);	
 			// I think we have to zero suppress our graphs to make the scaling on the second axis to make sense
 			massHist->SetAxisRange(1,maxYield*1.1,"Y");
@@ -783,6 +784,7 @@ void makeDeckPlot(string selectionString){
 			cout << "Plotting on pad : " << iMass+1 << endl;
 			massHist->SetMarkerStyle(kFullCircle);
 			massHist->SetMarkerSize(0.75);
+			massHist->Write(massHistName.c_str());
 			unscaledMassHist->SetMarkerStyle(kFullCircle);
 			unscaledMassHist->SetMarkerSize(0.75);
 			double scaleAxis;
@@ -988,27 +990,27 @@ void makeDeckPlots(){
 	gSystem->Exec("mkdir -p deckPlots/tAll/tSlope/reco");
 	makeDeckPlot("tAll");
 
-	gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas/data");
-	gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_tpi0_meas/data");
-	gSystem->Exec("mkdir -p deckPlots/tGT1/tSlope/data");
-	gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas/reco");
-	gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_tpi0_meas/reco");
-	gSystem->Exec("mkdir -p deckPlots/tGT1/tSlope/reco");
-	makeDeckPlot("tGT1");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas/data");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_tpi0_meas/data");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/tSlope/data");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_teta_meas/reco");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/mandelstam_tpi0_meas/reco");
+	//gSystem->Exec("mkdir -p deckPlots/tGT1/tSlope/reco");
+	//makeDeckPlot("tGT1");
 
-	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas/data");
-	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_tpi0_meas/data");
-	gSystem->Exec("mkdir -p deckPlots/tLT05/tSlope/data");
-	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas/reco");
-	gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_tpi0_meas/reco");
-	gSystem->Exec("mkdir -p deckPlots/tLT05/tSlope/reco");
-	makeDeckPlot("tLT05");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas/data");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_tpi0_meas/data");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/tSlope/data");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_teta_meas/reco");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/mandelstam_tpi0_meas/reco");
+	//gSystem->Exec("mkdir -p deckPlots/tLT05/tSlope/reco");
+	//makeDeckPlot("tLT05");
 
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas/data");
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_tpi0_meas/data");
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/tSlope/data");
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas/reco");
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_tpi0_meas/reco");
-	gSystem->Exec("mkdir -p deckPlots/tGT05LT1/tSlope/reco");
-	makeDeckPlot("tGT05LT1");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas/data");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_tpi0_meas/data");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/tSlope/data");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_teta_meas/reco");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/mandelstam_tpi0_meas/reco");
+	//gSystem->Exec("mkdir -p deckPlots/tGT05LT1/tSlope/reco");
+	//makeDeckPlot("tGT05LT1");
 }

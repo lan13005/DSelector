@@ -38,15 +38,15 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	// Flat
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_thrown.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_thrown.root");
-	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_thrown.root");
+	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_thrown.root");
 
 	// BA studies. Hddm filtered to make phi have some cos dependence
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_21t_hddmFiltered_8288_1628_uniquePolar/tree_thrown.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_21t_hddmFiltered_8288_1628_uniquePolar/tree_thrown.root");
 
 	// test
 	//chain->Add("/d/grid13/ln16/MC/pi0eta_flat_2.3t/hddm/tree_thrown.root");
 	string degAngle="degALL";
-	string tag="hddmFiltered";
+	string tag="gen";
 
 	// The following two files work separately but not together...
 

@@ -29,7 +29,7 @@ int finalStateComboID=0;
 
 string selectDetector="ALL";
 string polarization="degALL";
-string tag="_data_2017_mEllipse";
+string tag="_reco_2017_mEllipse";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -58,7 +58,8 @@ void DSelector_ver20::Init(TTree *locTree)
                 //ellipseX = 0.134547; ellipseY = 0.541950; ellipseXr = 0.025449; ellipseYr = 0.069267;
 
                 //using the kin data
-                ellipseX = 0.135784; ellipseY = 0.548036; ellipseXr = 2*0.00753584; ellipseYr = 2*0.0170809;
+                //ellipseX = 0.135784; ellipseY = 0.548036; ellipseXr = 2*0.00753584; ellipseYr = 2*0.0170809;
+                ellipseX = 0.135881; ellipseY = 0.548625; ellipseXr = 2*0.0076; ellipseYr = 2*0.0191;
 //                ellipseXBS1 = 0.135881; ellipseYBS1 = 0.548625; ellipseXrBS1 = 0.022; ellipseYrBS1 = 0.06;
 //                ellipseXBS2 = 0.135881; ellipseYBS2 = 0.548625; ellipseXrBS2 = 0.045; ellipseYrBS2 = 0.165;
 //		//ellipseXr_loose=0.0391; ellipseYr_loose=0.131;
@@ -2644,7 +2645,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		else {
 			cout << "(Incorrect topology)" << endl;
 		}
-		correctFinalState=true;
+		//correctFinalState=true;
+		
 		// This section of the code will no longer be used since we have to do more than just have the 4 gamma topology. We must enforce other cuts like BeamE or mandelstam_t cut to match thrown
 		//else { 
         	//	if(showOutput) { cout << "\n\n\n*********************************************************\n**************************************************\n########    EventIdx: " << (eventIdx) << "    #############" << endl; }
@@ -2687,7 +2689,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		//}
 		cout << "mandelstam_tp_thrown: " << mandelstam_tp_thrown << endl;
 		cout << "Ebeam_thrown: " << Ebeam_thrown << endl;
-		if (correctFinalState*pBeamE_thrown*keepPolarization){//*(mandelstam_tp_thrown<1))
+		if (correctFinalState*pBeamE_thrown*keepPolarization*(mandelstam_tp_thrown<1)){
 			cout << "** GOOD THROWN EVENT, CONTINUE WITH COMBO LOOP" << endl;
 			dHist_thrown_tp_selected->Fill(mandelstam_tp_thrown);
 			//if ( locPolarizationAngle == 0 ) { 
@@ -3837,23 +3839,22 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dzRP = pMagP3Proton*pzCutmin*pRProton;
         dzR = pzCutmin*pRProton;
 
-        //pShowerQuality=pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3;
-	pShowerQuality=true;
+        pShowerQuality=pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3;
+	//pShowerQuality=true;
 	pdij3pass=true;
-	pUnusedEnergy=true;
+	//pUnusedEnergy=true;
 
 
 	double minMpi0eta = 1.6;
 	double maxMpi0eta = 2.8;
 	pMpi0etaDoubleRegge=locPi0Eta_Kin>minMpi0eta && locPi0Eta_Kin<maxMpi0eta;
 	
-
 	// ***********************
 	// cuts applied to all
 	bool cata = true;//(mandelstam_teta<1)*pMpi0etaDoubleRegge;
 	// ***********************
 	// temporary cuts
-	pMPi0P14 = false;
+	// pMPi0P14 = false;
 
 	/////////////////////// ************ BASE CUTS *********************
 	baseCuts = cata*pShowerQuality*pUnusedEnergy*pChiSq*pdij3pass*pPhotonE*pPhotonTheta*pMagP3Proton*pzCutmin*pRProton*pMissingMassSquared*pdEdxCDCProton;
@@ -4295,8 +4296,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
 	//if (!baseAsymCut || !detectorCut) // double regge BA study
-        //if (!mEllipse_pre_tAll || !detectorCut)  // Deck analysis
-        if (!mEllipse_pre || !detectorCut) { // Q-values
+        if (!mEllipse_pre_tAll || !detectorCut){  // Deck analysis
+        //if (!mEllipse_pre || !detectorCut)  // Q-values
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
 	//if (!looseCuts || !detectorCut )
 	//if (!allGeneralCutsSinglePolarization || !detectorCut) // For Matt's amptools studies
