@@ -370,7 +370,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		bool pBeamE8GeV = locBeamP4.E() > 8;
 		bool pBeamE8288 = 8.2 < locBeamP4.E() &&  locBeamP4.E() < 8.8;
 
-		if(correctFinalState*pBeamE8288*keepPolarization){
+		if(correctFinalState*pBeamE8GeV*keepPolarization*(mandelstam_tp<1)){
 			mandelstam_tpAll->Fill(mandelstam_tp);	
 			mandelstam_tAll->Fill(mandelstam_abst);
 
@@ -420,12 +420,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				// using this section to select out EBeam [8,9] and t'<1 for use in the delta+ asymmetry measurement
 				//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 			}
-			pass += 1;
-		}
 
-
-
-		if (correctFinalState*pBeamE8288*keepPolarization){//*(mandelstam_tp<1))
 			mandelstam_tpAll_selected->Fill(mandelstam_tp);
 			if ( locPolarizationAngle == 0 ) { 
 				dHist_prodPlanePS_000->Fill(prodPlanePhi);

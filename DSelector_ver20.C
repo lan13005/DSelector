@@ -29,7 +29,7 @@ int finalStateComboID=0;
 
 string selectDetector="ALL";
 string polarization="degALL";
-string tag="_reco_2017_mEllipse";
+string tag="_data_2018_1_mEllipse_tLT1";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -58,8 +58,7 @@ void DSelector_ver20::Init(TTree *locTree)
                 //ellipseX = 0.134547; ellipseY = 0.541950; ellipseXr = 0.025449; ellipseYr = 0.069267;
 
                 //using the kin data
-                //ellipseX = 0.135784; ellipseY = 0.548036; ellipseXr = 2*0.00753584; ellipseYr = 2*0.0170809;
-                ellipseX = 0.135881; ellipseY = 0.548625; ellipseXr = 2*0.0076; ellipseYr = 2*0.0191;
+                ellipseX = 0.135784; ellipseY = 0.548036; ellipseXr = 2*0.00753584; ellipseYr = 2*0.0170809;
 //                ellipseXBS1 = 0.135881; ellipseYBS1 = 0.548625; ellipseXrBS1 = 0.022; ellipseYrBS1 = 0.06;
 //                ellipseXBS2 = 0.135881; ellipseYBS2 = 0.548625; ellipseXrBS2 = 0.045; ellipseYrBS2 = 0.165;
 //		//ellipseXr_loose=0.0391; ellipseYr_loose=0.131;
@@ -828,71 +827,71 @@ void DSelector_ver20::Init(TTree *locTree)
         //		group_1234BP.insert(histdef); 
 	//	}
 	//}
-	// This section will get asymmetries as a function of pi0eta
-	for (int it=0; it<6; ++it){
-		for (int iMass=0; iMass<numMpi0etaRes; ++iMass){
-        		histdef.clear();
-        		name="prodPlanePSphi_000_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_000_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_eta );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_045_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_045_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_eta );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_090_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_090_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_eta );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_135_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_135_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_eta );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_AMO_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_AMO_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_eta );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_000_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_000_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_pi0 );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_045_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_045_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_pi0 );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_090_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_090_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_pi0 );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_135_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_135_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_pi0 );
-        		group_1234BP.insert(histdef); 
-        		histdef.clear();
-        		name="prodPlanePSphi_AMO_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
-        		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_AMO_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
-        		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
-        		histdef.values.push_back( &locPhi_pi0 );
-        		group_1234BP.insert(histdef); 
-		}
-	}
+	// This section will get asymmetries as a function of pi0ea, now down into the resonance region, and in bins of t
+	//for (int it=0; it<6; ++it){
+	//	for (int iMass=0; iMass<numMpi0etaRes; ++iMass){
+        //		histdef.clear();
+        //		name="prodPlanePSphi_000_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_000_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_eta );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_045_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_045_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_eta );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_090_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_090_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_eta );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_135_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_135_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_eta );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_AMO_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_AMO_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_eta );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_000_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_000_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_pi0 );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_045_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_045_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_pi0 );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_090_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_090_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_pi0 );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_135_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_135_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_pi0 );
+        //		group_1234BP.insert(histdef); 
+        //		histdef.clear();
+        //		name="prodPlanePSphi_AMO_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
+        //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_AMO_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
+        //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
+        //		histdef.values.push_back( &locPhi_pi0 );
+        //		group_1234BP.insert(histdef); 
+	//	}
+	//}
 
 
 	// ******************************** Checking ChiSq Cut for Matt **************************************************
@@ -4111,20 +4110,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		passMpi0Bin[iMpi0Bin] = passMpi0Bin[iMpi0Bin]*mEllipse_pre;
 	}
 
-		// Full rect
-	//withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin,ellipseX-ellipseXr, ellipseX+ellipseXr, ellipseY-0.03, ellipseY+0.03, skipX-0.005, 0.030);
-		// Diff rect size
-		// 	1st: half size
-		// 	2nd: half size closer
-	//withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin, 0.115, 0.155, 0.49, 0.59, 0.01, 0.02);
-	//withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin, 0.12, 0.15, 0.51, 0.57, 0.01, 0.035);
-		// Using meas values, full rect
-		//  ETA
-		// par3 0.540383
-		// par4 0.0233172
-		//  PI0
-		// par3 0.134285
-		// par4 0.00769639
 	withinBox(inBox, inBox_noOtherCuts, mEllipse_pre, locPi0Mass_Kin,locEtaMass_Kin, 0.135881-2*0.0076, 0.135881+2*0.0076, 0.548625-2*0.0191, 0.548625+2*0.0191, 0.01, 0.02);
 	if(inBox[4]){ 
 		pi0Momentum.SetXYZM(locPi0P4_Kin.X(),locPi0P4_Kin.Y(), locPi0P4_Kin.Z(),0.135);	
@@ -4234,28 +4219,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 
         if(showOutput){cout << endl << endl << "\n\nFilling histograms with uniqueness tracking!" << endl << "******************************************" << endl;}
-        //int idxCut = 0; 
-        //	
-        //if(vecLocUsedSoFar_Pi0Mass[idxCut].find(locUsedThisCombo_Pi0Mass) == vecLocUsedSoFar_Pi0Mass[idxCut].end())
-        //{
-        //	// EACH COMBO OF 1 PROTON + 4 PHOTONS CAN BE PAIRED WITH 1 BEAM PHOTON. LETS SAY IF THERE ARE 2 BEAM PHOTONS WHERE ONE OF THEM WILL HAVE COMBO PARAMETERS THAT PASS THE CUT AND THE OTHER ONE DOES (I.E. DIFF
-        //	// UNUSED ENERGIES OR CONFIDENCE LEVELS MAYBE?) IF WE WERE TO SELECT THE ONE THAT DOESNT PASS THE CUTS AND WE INSERT THE COMBO FOR UNIQUENESS TRACKING THEN WHEN WE CHECK THE COMBO WITH THE OTHER PHOTON
-        //	// THEN WE WONT GET A CHANCE TO ACCEPT IT SINCE THE COMBO WAS ALREADFY USED. 
-        //	if(allGeneralCutsPassed){ 
-        //		++count_allGeneralCutsPassedPlusTracked; 
-        //        	// FILL IN UNIQUENESS TRACKING FOR ALL VARIATION OF CUTS
-        //        	vecLocUsedSoFar_Pi0Mass[idxCut].insert(locUsedThisCombo_Pi0Mass);
-        //	}
-        //}
-
-        // Cut out this combo from the output tree.
-        //if (!allGeneralCutsPassed) { dComboWrapper->Set_IsComboCut(true); continue; }
-
-        // METHOD 1: We want to remove the elliptical cut (which doesn't affect our histograms since we filled then already) so that we have a flat tree that we can pass to another program
-        // 	that will do the bkg subtraction. 
-        // METHOD 2: Here we will apply a loose elliptical cut so that the data that we pass into SPlot has a better form that we can fit to
-        //
-        //
 
         group_PB.fillHistograms_Map( usingPB );
         group_12B_1234B.fillHistograms_pairMap( using12B_1234B );
@@ -4296,8 +4259,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
 	//if (!baseAsymCut || !detectorCut) // double regge BA study
-        if (!mEllipse_pre_tAll || !detectorCut){  // Deck analysis
-        //if (!mEllipse_pre || !detectorCut)  // Q-values
+        //if (!mEllipse_pre_tAll || !detectorCut)  // Deck analysis
+        if (!mEllipse_pre || !detectorCut){  // Q-values
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
 	//if (!looseCuts || !detectorCut )
 	//if (!allGeneralCutsSinglePolarization || !detectorCut) // For Matt's amptools studies

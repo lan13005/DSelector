@@ -643,7 +643,7 @@ void fitAsymmetryPlots(){
 				if (iMass==0){
 					gr_000->Write(("asymVstPi0_000"+tagPi0[iTag]).c_str());
 				}
-				leg1->AddEntry(gr_000,"t_{#eta}","lep");
+				leg1->AddEntry(gr_000,"t_{#pi}","lep");
 				leg1->Draw();
 			
 				allCanvases->cd(2);
