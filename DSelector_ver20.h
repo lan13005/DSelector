@@ -243,11 +243,14 @@ class trackingGroup{
 		for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
 			//cout << "Filling some histograms..." << endl;
 			if (allValues_1D[iHist].size() > 0) {
-				cout << allValues_1D[iHist].back() << allValues_1D_weight[iHist].back() << endl;
+				//cout << allValues_1D[iHist].back() << allValues_1D_weight[iHist].back() << endl;
 				int numVals = allValues_1D[iHist].size();
 				for ( int iValue=0; iValue<numVals; ++iValue){
-					//cout << "Filling 1D hist: " << allHists_1D[iHist].name << " with " << allValues_1D[iHist].back() <<
-					//	" with weight=" << allValues_1D_weight[iHist].back()/numVals << endl;
+					if (allHists_1D[iHist].name=="pi0Mass_Kin_noCut" ){
+						cout << "Filling 1D hist: " << allHists_1D[iHist].name << " with " << allValues_1D[iHist].back() <<
+							" with weight=" << allValues_1D_weight[iHist].back()/numVals << 
+							" -- nCombos=" << numVals << endl;
+					}
 		    			allHists_1D[iHist].hist->Fill( allValues_1D[iHist].back(), allValues_1D_weight[iHist].back()/numVals );
 		    			allValues_1D[iHist].pop_back();
 		    			allValues_1D_weight[iHist].pop_back();
@@ -257,7 +260,7 @@ class trackingGroup{
 		for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
 			//cout << "Filling some histograms 2D..." << endl;
 			if (allValues_2DX[iHist].size() > 0) {
-				cout << allValues_2DX[iHist].back() << allValues_2D_weight[iHist].back() << endl;
+				//cout << allValues_2DX[iHist].back() << allValues_2D_weight[iHist].back() << endl;
 				int numVals = allValues_2DX[iHist].size();
 				for ( int iValue=0; iValue<numVals; ++iValue){
 		    			allHists_2D[iHist].hist->Fill( allValues_2DX[iHist].back(), allValues_2DY[iHist].back(), allValues_2D_weight[iHist].back()/numVals );
@@ -419,6 +422,7 @@ class DSelector_ver20 : public DSelector
 		double Ebeam_thrown;
 
 		TH1F* countThrownEvents;
+		TH1I* dHist_numCombos;
 		TH1F* dHist_thrown_tp;
 		TH1F* dHist_thrown_tp_selected;
         	TH1F* dHist_prodPlanePS_000; 

@@ -187,6 +187,7 @@ void DSelector_ver20::Init(TTree *locTree)
         dHist_BeamAngleMPE = new TH1F("BeamAngleMPE", "Beam Angle with no cuts applied;Beam Angle (GeV)", 180,-180,180);
         dHist_BeamAngleMPE->SetYTitle("Events / 2 Degree");
 	dHist_Cuts = new TH1F("CutsPassed", "Number of times a cut has been passed", 17,0,17);
+	dHist_numCombos = new TH1I("numCombos", "" , 5,0,5);
 	for (int i =0; i<3; ++i){
 		if (is_pi0eta){
 			dHist_checkEllipseBS[i] = new TH2F(("checkEllipseBS"+std::to_string(i)+"noCutOnlyRegionSelected").c_str(), ";#pi^{0} Mass (GeV) with Events / 0.001 GeV;#eta Mass (GeV) with Events / 0.0025 GeV", atof(pi0BinRange[0].c_str()), atof(pi0BinRange[1].c_str()), atof(pi0BinRange[2].c_str()), atof(etaBinRange[0].c_str()), atof(etaBinRange[1].c_str()), atof(etaBinRange[2].c_str()));
@@ -2370,7 +2371,8 @@ void DSelector_ver20::Init(TTree *locTree)
 Bool_t DSelector_ver20::Process(Long64_t locEntry)
 {
 	++count_totEvents;
-	//if (count_totEvents>100){
+	int countNewPi0=0;
+	//if (count_totEvents>1000){
 	//	Abort("Lawrence... your max number of events is reached...");
 	//}
     	group_PhNB.clear_tracking();
@@ -2649,6 +2651,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 
     //Loop over combos
+    dHist_numCombos->Fill(Get_NumCombos());
     for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
     {
 
@@ -4160,6 +4163,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 	    	if (used12B.find(using12B)==used12B.end()){
             	    used12B.insert(using12B);
+		    ++countNewPi0;
+		    cout << "new ph12B number: " << countNewPi0 << endl; 
             	    isNotRepeated_pi0=true;
             	}
             	else { isNotRepeated_pi0=false; } 
