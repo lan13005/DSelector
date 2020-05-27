@@ -136,23 +136,30 @@ class trackingGroup{
 
         std::vector<histDef_1D> allHists_1D;
         std::vector<histDef_2D> allHists_2D;
+	std::vector<std::vector<double>> allValues_1D;
+	std::vector<std::vector<double>> allValues_1D_weight;
+	std::vector<std::vector<double>> allValues_2DX;
+	std::vector<std::vector<double>> allValues_2DY;
+	std::vector<std::vector<double>> allValues_2D_weight;
+	std::vector<double> emptyVector;
 
-        std::vector< set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > > allUsedPairMapIds_2D;
-        std::vector< set< pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > > > allUsedPairMapIds_1D;
         std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_1D;
         std::vector< set< map<Particle_t, set<Int_t> > > > allUsedMapIds_2D;
 
         // every time we add another histogram to track we will push back another tracking set to track it.
         void insert(histDef_1D hist){
             allHists_1D.push_back(hist);
+	    allValues_1D.push_back(emptyVector);
+	    allValues_1D_weight.push_back(emptyVector);
             allUsedMapIds_1D.push_back(usedMapIds);
-            allUsedPairMapIds_1D.push_back(usedPairMapIds); // we only need this for 2D histograms
         }
         void insert_2D(histDef_2D hist){
             // ***** NOTE THAT IT IS BEST IF WE DO NOT MIX USING BOTH OF TYPES OF TRACKING TYPES ***** NOT WORKED ON YET
             allHists_2D.push_back(hist);
+	    allValues_2DX.push_back(emptyVector);
+	    allValues_2DY.push_back(emptyVector);
+	    allValues_2D_weight.push_back(emptyVector);
             allUsedMapIds_2D.push_back(usedMapIds);
-            allUsedPairMapIds_2D.push_back(usedPairMapIds); // we only need this for 2D histograms
         }
 
         // for filling distance between pairs of particles like dij3FCAL
@@ -199,77 +206,79 @@ class trackingGroup{
             clear_values();
         }
 
+        // use when we are starting a new event. Only when using default uniqueness tracking
+        void clear_tracking(){
+            for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+                allUsedMapIds_1D[iHist].clear();
+            }
+            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+                allUsedMapIds_2D[iHist].clear();
+            }
+        }
+        
+
         // Similar to above but just for 1D distributions where we don't need to track a pair of maps for correlations
-        void fillHistograms_Map( map<Particle_t, set<Int_t> >  beingUsedMap ){
+        void saveHistograms(){
 	     //cout << "Starting to fill hists in group: " << name << endl;
              for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-	        if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
-	            allUsedMapIds_1D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
-		    double value = *(allHists_1D[iHist].values[0]); 
-		    cout << "(" << allHists_1D[iHist].name << ")" << "Value, Weight, Cut: " << value << ", " << *(allHists_1D[iHist].weights) << ", " << *(allHists_1D[iHist].cut) << ", " << endl;
-                    allHists_1D[iHist].hist->Fill( value, *(allHists_1D[iHist].weights) );
+	        if ( *(allHists_1D[iHist].cut)  ){
+		    //cout << "(" << allHists_1D[iHist].name << ")" << "Value, Weight, Cut: " << value << ", " << *(allHists_1D[iHist].weights) << ", " << *(allHists_1D[iHist].cut) << ", " << endl;
+                    allValues_1D[iHist].push_back(*(allHists_1D[iHist].values[0]));
+		    allValues_1D_weight[iHist].push_back( *(allHists_1D[iHist].weights) );
 		    //allHists_1D[iHist].Write( value, *(allHists_1D[iHist].weights) );
                 }
              }
              for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-	         if (allUsedMapIds_2D[iHist].find(beingUsedMap)==allUsedMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)  ){
-	            allUsedMapIds_2D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference.              
-                    allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
+	         if ( *(allHists_2D[iHist].cut)  ){
+                    allValues_2DX[iHist].push_back(*(allHists_2D[iHist].valuesX[0]));
+                    allValues_2DY[iHist].push_back(*(allHists_2D[iHist].valuesY[0]));
+		    allValues_2D_weight[iHist].push_back( *(allHists_2D[iHist].weights) );
                 }
              }
             clear_values();
         }
 
-        // This will be used for more complicated sets. Most generic is a pair of maps. i.e. for 2D plot of M(pi0eta) and cosThetaGJ(eta)
-        void fillHistograms_pairMap( pair< map<Particle_t, set<Int_t> >, map<Particle_t, set<Int_t> > > beingUsedMapPair ){
-             for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-	        if (allUsedPairMapIds_1D[iHist].find(beingUsedMapPair)==allUsedPairMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)){
-	            allUsedPairMapIds_1D[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
-                    allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[0]), *(allHists_1D[iHist].weights) );
-                }
-             }
-            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-	        if (allUsedPairMapIds_2D[iHist].find(beingUsedMapPair)==allUsedPairMapIds_2D[iHist].end() && *(allHists_2D[iHist].cut)){
-	            allUsedPairMapIds_2D[iHist].insert(beingUsedMapPair); //we get a iterator which references the element of the set so we need to dereference.              
-                    allHists_2D[iHist].hist->Fill( *(allHists_2D[iHist].valuesX[0]),*(allHists_2D[iHist].valuesY[0]), *(allHists_2D[iHist].weights) );
-                }
-            }
-            clear_values();
-        }
+	void fillHistograms(){
+		// use back and pop_back to fill the histograms, slowly consuming the values that passed the cuts
+		for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+			//cout << "Filling some histograms..." << endl;
+			if (allValues_1D[iHist].size() > 0) {
+				cout << allValues_1D[iHist].back() << allValues_1D_weight[iHist].back() << endl;
+				int numVals = allValues_1D[iHist].size();
+				for ( int iValue=0; iValue<numVals; ++iValue){
+					//cout << "Filling 1D hist: " << allHists_1D[iHist].name << " with " << allValues_1D[iHist].back() <<
+					//	" with weight=" << allValues_1D_weight[iHist].back()/numVals << endl;
+		    			allHists_1D[iHist].hist->Fill( allValues_1D[iHist].back(), allValues_1D_weight[iHist].back()/numVals );
+		    			allValues_1D[iHist].pop_back();
+		    			allValues_1D_weight[iHist].pop_back();
+				}
+			}
+		}
+		for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+			//cout << "Filling some histograms 2D..." << endl;
+			if (allValues_2DX[iHist].size() > 0) {
+				cout << allValues_2DX[iHist].back() << allValues_2D_weight[iHist].back() << endl;
+				int numVals = allValues_2DX[iHist].size();
+				for ( int iValue=0; iValue<numVals; ++iValue){
+		    			allHists_2D[iHist].hist->Fill( allValues_2DX[iHist].back(), allValues_2DY[iHist].back(), allValues_2D_weight[iHist].back()/numVals );
+					//cout << "Filling 2D hist: " << allHists_2D[iHist].name << " with " << allValues_2DX[iHist].back() << ", " << allValues_2DY[iHist].back() << 
+					//	" with weight=" << allValues_2D_weight[iHist].back()/numVals << endl;
+		    			allValues_2DX[iHist].pop_back();
+		    			allValues_2DY[iHist].pop_back();
+		    			allValues_2D_weight[iHist].pop_back();
+				}
+			}
+		}
+	}
 
-        void drawHistograms(){
-            for (UInt_t iHist=0; iHist < allHists_1D.size(); ++iHist){
-                anyCanvas->Clear();
-                allHists_1D[iHist].hist->Draw("HIST");
-                anyCanvas->SaveAs(("graphs/"+allHists_1D[iHist].name+".png").c_str());
-            }
-            for (UInt_t iHist=0; iHist < allHists_2D.size(); ++iHist){
-                anyCanvas->Clear();
-                allHists_2D[iHist].hist->Draw();
-                anyCanvas->SaveAs(("graphs/"+allHists_2D[iHist].name+".png").c_str());
-            }
-        }
-
-        // use when we are starting a new event
-        void clear_tracking(){
-            for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-                allUsedMapIds_1D[iHist].clear();
-                allUsedPairMapIds_1D[iHist].clear();
-            }
-            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-                allUsedMapIds_2D[iHist].clear();
-                allUsedPairMapIds_2D[iHist].clear();
-            }
-        }
-        
         // have to use this everytime we fillHistogram since we have a vector of values we input, i.e. photonXs
         void clear_values(){
-            for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-                allHists_1D[iHist].clear();
-            }
-            for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
-                allHists_2D[iHist].clear();
-            }
+            	for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+            	    allHists_1D[iHist].clear(); // calling histDef's clear function to remove values
+            	}
+            	for (UInt_t iHist=0; iHist<allHists_2D.size(); ++iHist){
+            	    allHists_2D[iHist].clear();
+		}
         }
 };
 
@@ -288,23 +297,9 @@ class DSelector_ver20 : public DSelector
 
 	private:
                 trackingGroup group_PhNB;
-		trackingGroup group_12PhNB;
-		trackingGroup group_34PhNB;
-                trackingGroup group_PB;
-                trackingGroup group_12B_1234B;
-                trackingGroup group_34B_1234B;
-                trackingGroup group_12B;
-                trackingGroup group_34B;
-                trackingGroup group_12B_34B;
-                trackingGroup group_1234B;
-                trackingGroup group_1234BP;
                 trackingGroup group_pairFCAL;
                 trackingGroup group_pairBCAL;
-                trackingGroup group_12PB;
-                trackingGroup group_34PB;
-                trackingGroup group_B;
-                trackingGroup group_1234B_12PB;
-                trackingGroup group_1234B_34PB;
+                trackingGroup groupHists;
 
 		void Get_ComboWrappers(void);
 		void Finalize(void);

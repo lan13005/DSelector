@@ -535,14 +535,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=allGeneralCutsPassed;RF Time (ns);Entries / 0.02 ns", 200, -20, 20);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &noWeight;
         histdef.values.push_back( &locDeltaTRF );
-        group_1234BP.insert(histdef); 
+        groupHists.insert(histdef); 
 	// **************************** BEAM ASYMMETRY STUFF ***************************
         //histdef.clear();
         //name="prodPlanePSphi";
         //histdef.hist = new TH1F(name.c_str(), "Cuts=noCut;#phi; Entries / 9 degrees", 40, -180, 180);
         //histdef.name = name; histdef.cut=&noCut; histdef.weights = &noWeight;
         //histdef.values.push_back( &locPhi );
-        //group_1234BP.insert(histdef); 
+        //groupHists.insert(histdef); 
 	
         histdef2d.clear();
         name="vanHove_baseAsymCut_teta";
@@ -550,7 +550,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 	// to check how the M(pi0eta) mass selection affects the VH plot
         histdef2d.clear();
         name="vanHove_baseAsymCut_teta_mMpi0etaDoubleRegge";
@@ -558,7 +558,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_mMpi0etaDoubleRegge; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
         histdef2d.clear();
 	// see if we are selecting the correct region
         name="vanHove_backwardPi0P";
@@ -566,14 +566,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardPi0P; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
         histdef2d.clear();
         name="vanHove_backwardEtaP";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymCut_backwardEtaP;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardEtaP; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 	// comparing the VH plot for the Deck process and the Double Regge region
         histdef2d.clear();
         name="vanHove_ReggeRegion";
@@ -581,14 +581,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymComparisionRegge; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
         histdef2d.clear();
         name="vanHove_DeltaRegion";
         histdef2d.hist = new TH2F(name.c_str(), "Cuts=baseAsymComparisionDelta;Events / 0.1 degrees;Events / 0.1 degrees",60,-3,3,60,-3,3);
         histdef2d.name = name; histdef2d.cut=&baseAsymComparisionDelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 	
 	//// The main loop to get all the histograms for calculating the BA. We wnat to vary the lower threshold for M(pi0eta) which is
 	//// done with iMpi0eta. iteta will be used for the bins in t_eta or t_pi. 
@@ -600,7 +600,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_000[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
 	//		histdef.saveHistValues=true;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_045_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -608,7 +608,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_045[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_090_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -616,7 +616,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_090[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_135_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -624,7 +624,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_135[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_AMO_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -632,7 +632,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_AMO[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
 	//		histdef.saveHistValues=true;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
 	//		// ** With vanhove selection
@@ -642,7 +642,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_000[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardPi0P_045_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -650,7 +650,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_045[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardPi0P_090_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -658,7 +658,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_090[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardPi0P_135_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -666,7 +666,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_135[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardPi0P_AMO_tetaBin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -674,7 +674,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptEtaBeamAsym_backwardPi0P_AMO[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
 
@@ -684,7 +684,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_000[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_045_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -692,7 +692,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_045[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_090_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -700,7 +700,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_090[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_135_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -708,7 +708,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_135[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_AMO_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -716,7 +716,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_AMO[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
 	//		// ** With vanhove selection pi0
         //		histdef.clear();
@@ -725,7 +725,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_000[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardEtaP_045_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -733,7 +733,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_045[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardEtaP_090_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -741,7 +741,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_090[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardEtaP_135_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -749,7 +749,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_135[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
         //		histdef.clear();
         //		name="prodPlanePSphi_backwardEtaP_AMO_tpi0Bin"+to_string(iteta)+"_Mpi0etaBin"+to_string(iMpi0eta);
@@ -757,7 +757,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.name = name; histdef.cut=&ptPi0BeamAsym_backwardEtaP_AMO[iMpi0eta*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
 	//		histdef.saveHistValues=true;
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//		histdef.saveHistValues=false;
 	//	}
 	//}
@@ -770,61 +770,61 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0pBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0pBeamAsym_000[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_045_Mpi0pBin"+to_string(iMass)+"_tetaBin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0pBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0pBeamAsym_045[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_090_Mpi0pBin"+to_string(iMass)+"_tetaBin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0pBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0pBeamAsym_090[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_135_Mpi0pBin"+to_string(iMass)+"_tetaBin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0pBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0pBeamAsym_135[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_AMO_Mpi0pBin"+to_string(iMass)+"_tetaBin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0pBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0pBeamAsym_AMO[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_000_MetapBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMetapBeamAsym_000[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_045_MetapBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMetapBeamAsym_045[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_090_MetapBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMetapBeamAsym_090[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_135_MetapBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMetapBeamAsym_135[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_AMO_MetapBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapBeamAsym;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMetapBeamAsym_AMO[iMass*numTBins+iteta]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//	}
 	//}
 	// This section will get asymmetries as a function of pi0ea, now down into the resonance region, and in bins of t
@@ -835,61 +835,61 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_000_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_045_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_045_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_090_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_090_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_135_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_135_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_AMO_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0etaBeamAsym_AMO_fastEta;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastEta[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_eta );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_000_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_000_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_000_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_045_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_045_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_045_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_090_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_090_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_090_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_135_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_135_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_135_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
         //		histdef.clear();
         //		name="prodPlanePSphi_AMO_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(it);
         //		histdef.hist = new TH1F(name.c_str(), "&pMpi0etaBeamAsym_AMO_fastPi0;#phi; Entries / 9 degrees", 40, -180, 180);
         //		histdef.name = name; histdef.cut=&pMpi0etaBeamAsym_AMO_fastPi0[it*numMpi0etaRes+iMass]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPhi_pi0 );
-        //		group_1234BP.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//	}
 	//}
 
@@ -909,14 +909,14 @@ void DSelector_ver20::Init(TTree *locTree)
         //		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#pi^{0}) (GeV);Events / 0.001 GeV").c_str(),200,0.05,0.25);
         //		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locPi0Mass_Kin );
-        //		group_12B.insert(histdef); 
+        //		groupHists.insert(histdef); 
 
         //		histdef.clear();
         //		name="etaMass_Kin_mEllipsePre_ChiMpi0etaBin"+to_string(cumulativeBinNum);
         //		histdef.hist = new TH1F(name.c_str(), ("Cuts=BaseCuts+tCut+Delta+BeamE+UE + #chi^{2}<"+to_string((int)iUpChiSq)+"  "+to_string(currentMin)+"< M(#pi^{0}#eta) < "+to_string(currentMax)+";M(#eta) (GeV);Events / 0.002 GeV").c_str(),300,0.25,0.85);
         //		histdef.name = name; histdef.cut=&p_pi0MassEtaMassChiSqregion[cumulativeBinNum]; histdef.weights = &weightAS;
         //		histdef.values.push_back( &locEtaMass_Kin );
-        //		group_34B.insert(histdef); 
+        //		groupHists.insert(histdef); 
 	//	
         //		//histdef2d.clear();
         //		//name = "eta_cosTheta_GJvsM_mEllipsePre";
@@ -924,7 +924,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //		//histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         //		//histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         //		//histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        //		//group_34B_1234B.insert_2D(histdef2d); 
+        //		//groupHists.insert_2D(histdef2d); 
         //		//histdef2d.clear();
         //	    	iUpChiSq+=2;
         //	}
@@ -935,14 +935,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mChiSq;Chi Squared; Entries / 2", 150, 0, 300);
         histdef.name = name; histdef.cut=&mChiSq; histdef.weights = &weightAS;
         histdef.values.push_back( &locChiSqKinFit );
-        group_1234BP.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="UnusedEnergy_noCut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=noCut;Chi Squared;Entries / 0.01 GeV", 100, 0, 1);
         histdef.name = name; histdef.cut=&noCut; histdef.weights = &weightAS;
         histdef.values.push_back( &locUnusedEnergy );
-        group_1234BP.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	// ********************************** DETECTOR SPECIFIC RELATED PLOTS FOR PI0/ETA *****************************************
         histdef.clear();
@@ -950,14 +950,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;0-FCAL 1-BCAL 2-SPLIT;", 3, 0, 3);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &noWeight;
         histdef.values.push_back( &pi0DetectedIn );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaDetectedIn";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;0-FCAL 1-BCAL 2-SPLIT;", 3, 0, 3);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &noWeight;
         histdef.values.push_back( &etaDetectedIn );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	// ********************************** DECK REALTED PLOTS *****************************************
         histdef.clear();
@@ -965,7 +965,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_t );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	// Will leave bin to contain all the bad regions
         histdef.clear();
@@ -974,56 +974,56 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&mEllipse_pre_tLT05; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
 	//    chose this uniqueness set since I use the 2D distribution to select out the regions. So technically I use this set
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tetaVsMpi0eta_recCounts_tGT05LT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT05LT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tGT05LT1; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tetaVsMpi0eta_recCounts_tGT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tGT1; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tetaVsMpi0eta_recCounts_tAll";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &teta_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tpi0VsMpi0eta_recCounts_tLT05";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tLT05;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tLT05; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tpi0VsMpi0eta_recCounts_tGT05LT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT05LT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tGT05LT1; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tpi0VsMpi0eta_recCounts_tGT1";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tGT1;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tGT1; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="tpi0VsMpi0eta_recCounts_tAll";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;efficiency", numHists+1, -1, numHists);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &tpi0_recCounts );
-        group_34B_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	//for ( int iMass=0; iMass < num_massBins; ++iMass){
         //	histdef.clear();
@@ -1031,14 +1031,14 @@ void DSelector_ver20::Init(TTree *locTree)
         //	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tetaIntegrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
         //	histdef.name = name; histdef.cut=&passMassBin_tetaIntegrated[iMass]; histdef.weights = &weightAS;
         //	histdef.values.push_back( &mandelstam_teta );
-        //	group_34B_1234B.insert(histdef); 
+        //	groupHists.insert(histdef); 
 
         //	histdef.clear();
         //	name="tpi0MassBinned"+to_string(iMass);
         //	histdef.hist = new TH1F(name.c_str(), "Cuts=passMassBin_tpi0Integrated;t_{#eta} (GeV^2)", num_tBins,tMin,tMax);
         //	histdef.name = name; histdef.cut=&passMassBin_tpi0Integrated[iMass]; histdef.weights = &weightAS;
         //	histdef.values.push_back( &mandelstam_tpi0 );
-        //	group_34B_1234B.insert(histdef); 
+        //	groupHists.insert(histdef); 
 	//}
 
 	// *************************** PHOTON VECTOR QUANTITIES ****************************
@@ -1142,7 +1142,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("etagamma_Cut","Cuts=GeneralCuts; M(#eta#gamma) GeV;Events / 0.01 cm", 350, 0, 3.5);
@@ -1151,7 +1151,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaEta[0]) );
         histdef.values.push_back( &( massGammaEta[1]) );
-        group_34PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("pi0gamma_mEllipse_pre","Cuts=mEllipse_pre; M(#gamma#pi^{0})GeV;Events / 0.01 GeV", 250, 0, 2.5);
@@ -1160,7 +1160,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("pi0gamma_mEllipse_pre_ASBS","Cuts=mEllipse_pre; M(#gamma#pi^{0})GeV;Events / 0.01 GeV", 250, 0, 2.5);
@@ -1169,7 +1169,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.weights = &weightAS_BS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         histdef.hist = new TH1F("etagamma_mEllipse_pre","Cuts=mEllipse_pre; M(#gamma#eta) GeV;Events / 0.01 GeV", 350, 0, 3.5);
@@ -1178,7 +1178,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaEta[0]) );
         histdef.values.push_back( &( massGammaEta[1]) );
-        group_34PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name="pi0gamma_RectSBSubRegion4";
@@ -1186,7 +1186,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&(inBox[4]); histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name="pi0gamma_RectSBSubRegion0268";
@@ -1194,7 +1194,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&(inBox[10]); histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name="pi0gamma_RectSBSubRegion17";
@@ -1202,7 +1202,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&(inBox[11]); histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name="pi0gamma_RectSBSubRegion35";
@@ -1210,42 +1210,42 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.name = name; histdef.cut=&(inBox[12]); histdef.weights = &weightAS;
         histdef.values.push_back( &( massGammaPi0[0]) );
         histdef.values.push_back( &( massGammaPi0[1]) );
-        group_12PhNB.insert(histdef);
+        groupHists.insert(histdef);
         // ************************** PROTON RELATED HISTS ***********************
         histdef.clear();
         name="RadiusProton_mRProton";
         histdef.hist = new TH1F(name.c_str(),"Cuts=mRProton;Radius(proton) (cm);Events / 0.05 cm", 200, 0 , 10);
         histdef.name = name; histdef.cut = &mRProton; histdef.weights = &weightAS;
         histdef.values.push_back( &locRProton ); 
-        group_PB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name="dzProton_ZMin";
         histdef.hist = new TH1F(name.c_str(), "Cuts=Zmin;z(Proton) (cm);Events / 1 cm", 160, 0 , 160);
         histdef.name = name; histdef.cut = &mZMin; histdef.weights = &weightAS;
         histdef.values.push_back( &locdzProton );
-        group_PB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name="dEdxProtonCDC_mdEdxCDC";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mdEdxCDC;dEdx(proton) GeV/cm;Events / 1.5E-7 GeV/cm", 200, 0. , 0.00003);
         histdef.name = name; histdef.cut=&mdEdxCDC; histdef.weights = &weightAS;
         histdef.values.push_back( &locdEdxCDCProton );
-        group_PB.insert(histdef);
+        groupHists.insert(histdef);
 
         histdef.clear();
         name = "PzProton_Cut";
         histdef.hist = new TH1F(name.c_str(),  "Cuts=GeneralCuts;Pz GeV;Events / 0.025 GeV", 200, 0, 5 );
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locPzProton );
-        group_PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="PolarAngleProton_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;#theta(Proton) degrees;Events / 0.5 degrees", 200, 0, 100);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed ; histdef.weights = &weightAS;
         histdef.values.push_back( &locPolarAngleProton );
-        group_PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name = "XYplaneProton_mRProton";
@@ -1253,7 +1253,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mRProton; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locXProton );
         histdef2d.valuesY.push_back( &locYProton );
-        group_PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "RZplaneProton_mRProtonZmin";
@@ -1261,14 +1261,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mRProtonZMin; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locRProton );
         histdef2d.valuesY.push_back( &locdzProton );
-        group_PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
         
         histdef.clear();
         name = "P3Proton_dzR";
         histdef.hist = new TH1F(name.c_str(), "Cuts=dzR;Momentum(proton) CDC (GeV/c) with Events / 0.04 GeV/c",100,0,4);
         histdef.name = name; histdef.cut=&dzR; histdef.weights = &weightAS;
         histdef.values.push_back( &locMagP3Proton );
-        group_PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name = "P3dEdxCDCProton_dzRP";
@@ -1276,7 +1276,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&dzRP; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locMagP3Proton );
         histdef2d.valuesY.push_back( &locdEdxCDCProton );
-        group_PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         //histdef2d.clear();
         //name = "P3dEdxFDCProton_Cut";
@@ -1284,7 +1284,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         //histdef2d.valuesX.push_back( &locMagP3Proton );
         //histdef2d.valuesY.push_back( &locdEdxFDCProton );
-        //group_PB.insert_2D(histdef2d); 
+        //groupHists.insert_2D(histdef2d); 
         
         histdef2d.clear();
         name = "PzPtProton_Cut";
@@ -1292,7 +1292,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPzProton );
         histdef2d.valuesY.push_back( &locPtProton );
-        group_PB.insert_2D(histdef2d);
+        groupHists.insert_2D(histdef2d);
 
         histdef2d.clear();
         name = "PzThetaProton_Cut";
@@ -1300,7 +1300,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPzProton );
         histdef2d.valuesY.push_back( &locPolarAngleProton );
-        group_PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name="PtThetaProton_Cut";
@@ -1308,7 +1308,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPtProton );
         histdef2d.valuesY.push_back( &locPolarAngleProton );
-        group_PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         // ********************** ANGULAR PLOTS ********************
         
@@ -1317,42 +1317,42 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;cos(#theta) of #pi^{0};Events / 0.02", 100,-1,1);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &cosTheta_eta_hel );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name = "pi0eta_cosTheta_hel_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;cos(#theta) of #pi^{0}+#eta;Events / 0.02",100,-1,1);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &cosTheta_pi0eta_hel );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name = "eta_phi_hel_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;#phi of #eta;Events / 4 degrees",90,-180,180);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &phi_eta_hel);
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name = "pi0eta_phi_hel_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cut=GeneralCuts;#phi of #pi^{0}+#eta;Events / 4 degrees",90,-180,180);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &phi_pi0eta_hel );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name = "eta_cosTheta_GJ_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cut=GeneralCuts;cos(#theta) of #eta;Events / 0.02",100,-1,1);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &cosTheta_eta_GJ );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="eta_phi_GJ_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cut=GeneralCuts;#phi of #eta;Events / 4 degrees", 90,-180,180);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &phi_eta_GJ );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsM_mMandelstamT";
@@ -1360,7 +1360,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsMpi0p_mMandelstamT";
@@ -1368,7 +1368,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Proton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsMetap_mMandelstamT";
@@ -1376,7 +1376,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaProton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 
 
@@ -1388,7 +1388,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_mDelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Proton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsMpi0p_baseAsymCut_mDelta_fastEta";
@@ -1396,7 +1396,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_mDelta_fastEta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Proton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsMetap_baseAsymCut";
@@ -1404,7 +1404,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_mDelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaProton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsMetap_baseAsymCut_mDelta_fastPi0";
@@ -1412,7 +1412,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_mDelta_fastPi0; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaProton_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 	histdef2d.clear();
         name = "eta_phi_GJvsM_mMandelstamT";
@@ -1420,7 +1420,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &phi_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_cosTheta_GJvsM_Cut";
@@ -1428,7 +1428,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name = "eta_phi_GJvsM_Cut";
@@ -1436,21 +1436,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &phi_eta_GJ );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef.clear();
         name = "pi0eta_cosTheta_CM_Cut";
         histdef.hist = new TH1F(name.c_str(),"Cut=GeneralCuts;cos(#theta) of #pi^{0}+#eta;Events / 0.02", 100,-1,1 );
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &cosTheta_pi0eta_CM );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name = "pi0eta_phi_CM_Cut";
         histdef.hist = new TH1F(name.c_str(),"Cut=GeneralCuts;#phi of #pi^{0}+#eta;Events / 4 degrees", 90,-180,180 );
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &phi_pi0eta_CM );
-        group_PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         // *********************** MASS SHIFT PLOTS *************************
         histdef.clear();
@@ -1458,14 +1458,14 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;M(#pi^{0}) GeV; Events / 0.001 GeV", 200, 0.05,0.25);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_charged );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name="etaMass_chargedVertex";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;M(#eta) GeV; Events / 0.002 GeV", 300, 0.25, 0.85);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_charged );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name="pi0eta_chargedVertex";
@@ -1473,21 +1473,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_charged );
         histdef2d.valuesY.push_back( &locEtaMass_charged );
-        group_12B_34B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
         
         histdef.clear();
         name="pi0Mass_targetVertex";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;M(#pi^{0}) GeV; Events / 0.001 GeV", 200, 0.05,0.25);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_target );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name="etaMass_targetVertex";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts;M(#eta) GeV; Events / 0.002 GeV", 300, 0.25, 0.85);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_target );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name="pi0eta_targetVertex";
@@ -1495,7 +1495,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_target );
         histdef2d.valuesY.push_back( &locEtaMass_target );
-        group_12B_34B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         // ********************* MASS PLOTS IN DIFFERENT PARTS OF DETECTOR **********************
         histdef.clear();
@@ -1503,70 +1503,70 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=noCut;M(#pi^{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&noCut; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_Kin );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0Mass_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_Kin );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0Mass_Meas_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0MassFCAL_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InFCAL;M(#pi^{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&mEllipse_pre_pi0FCAL; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_Kin );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name="pi0MassBCAL_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InBCAL;M(#pi^{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&mEllipse_pre_pi0BCAL; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_Kin );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0MassSPLIT_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*SPLIT;M(#pi^{0}) (GeV);Events / 0.001 GeV",200,0.05,0.25);
         histdef.name = name; histdef.cut=&mEllipse_pre_pi0SPLIT; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Mass_Kin );
-        group_12B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	histdef.clear();
         name="mandelstam_teta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut;t_{#eta} (GeV^2)", 80,0,8);
         histdef.name = name; histdef.cut=&baseAsymCut; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_teta );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	histdef.clear();
         name="mandelstam_teta_Kin";
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut;t_{#eta} (GeV^2)", 80,0,8);
         histdef.name = name; histdef.cut=&baseAsymCut; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_teta_Kin );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 	//for (int iteta=0; iteta<5; ++iteta){
 	//	histdef.clear();
         //	name="mandelstam_teta"+to_string(iteta);
         //	histdef.hist = new TH1F(name.c_str(), "Cuts=binteta;t_{#eta} (GeV^2)", 80,0,8);
         //	histdef.name = name; histdef.cut=&binteta[iteta]; histdef.weights = &weightAS;
         //	histdef.values.push_back( &mandelstam_teta );
-        //	group_34B.insert(histdef); 
+        //	groupHists.insert(histdef); 
 
 	//	histdef.clear();
         //	name="mandelstam_teta_Kin"+to_string(iteta);
         //	histdef.hist = new TH1F(name.c_str(), "Cuts=binteta;t_{#eta} (GeV^2)", 80,0,8);
         //	histdef.name = name; histdef.cut=&binteta[iteta]; histdef.weights = &weightAS;
         //	histdef.values.push_back( &mandelstam_teta_Kin );
-        //	group_34B.insert(histdef); 
+        //	groupHists.insert(histdef); 
 	//}
 
 	histdef2d.clear();
@@ -1575,21 +1575,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mEllipse_pre_tAll; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaMass_Kin );
         histdef2d.valuesY.push_back( &mandelstam_teta_Kin );
-        group_34B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef.clear();
         name="etaMass_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_Kin );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaMass_Kin_mEllipsePre_ASBS";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &locEtaMass_Kin );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	for (int iMpi0Bin=0; iMpi0Bin < num_mpi0Bins; ++iMpi0Bin){
         	histdef.clear();
@@ -1597,7 +1597,7 @@ void DSelector_ver20::Init(TTree *locTree)
         	histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         	histdef.name = name; histdef.cut=&passMpi0Bin[iMpi0Bin]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locEtaMass_Kin );
-        	group_34B.insert(histdef); 
+        	groupHists.insert(histdef); 
 	}
 
         histdef.clear();
@@ -1605,49 +1605,49 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaMassFCAL_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InFCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaFCAL; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_Kin );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name="etaMassBCAL_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InBCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaBCAL; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_Kin );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaMassSPLIT_Kin_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*SPLIT;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaSPLIT; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass_Kin );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaMassFCAL_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InFCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaFCAL; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         name="etaMassBCAL_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*InBCAL;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaBCAL; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaMassSPLIT_mEllipsePre";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre*SPLIT;M(#eta) (GeV);Events / 0.002 GeV",300,0.25,0.85);
         histdef.name = name; histdef.cut=&mEllipse_pre_etaSPLIT; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaMass );
-        group_34B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name="pi0eta_mEllipsePre";
@@ -1655,7 +1655,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mEllipse_pre; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_Kin );
         histdef2d.valuesY.push_back( &locEtaMass_Kin );
-        group_12B_34B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name="pi0eta_Meas_mEllipsePre";
@@ -1663,7 +1663,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mEllipse_pre; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass );
         histdef2d.valuesY.push_back( &locEtaMass );
-        group_12B_34B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 	//for (int i=0; i<10; ++i){
         histdef2d.clear();
@@ -1673,7 +1673,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&(inBox[9]); histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Mass_Kin );
         histdef2d.valuesY.push_back( &locEtaMass_Kin );
-        group_12B_34B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 	//}
         // *********************** PHOTON PAIR PLOTS ************************
         histdef.clear();
@@ -1694,20 +1694,20 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_res;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&baseAsymCut_res; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	for (int it=0; it<6; ++it) {
         	histdef.clear();
         	name="pi0eta1D_pFastEtaBin"+to_string(it);
         	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastEtaBin["+to_string(it)+"];M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
         	histdef.name = name; histdef.cut=&pFastEtaBin[it]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
-        	group_1234B.insert(histdef); 
+        	groupHists.insert(histdef); 
         	histdef.clear();
         	name="pi0eta1D_pFastPi0Bin"+to_string(it);
         	histdef.hist = new TH1F(name.c_str(), ("Cuts=pFastPi0Bin["+to_string(it)+"];M(#pi^{0}#eta) (GeV);Events / 0.01 GeV").c_str(), 350, 0, 3.5);
         	histdef.name = name; histdef.cut=&pFastPi0Bin[it]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
-        	group_1234B.insert(histdef); 
+        	groupHists.insert(histdef); 
 	}
 	
         histdef.clear();
@@ -1715,49 +1715,49 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_thrown_mMandelstamT_mBeamE8GeVPlus";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_thrown );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_res_mMandelstamT_mBeamE8GeVPlus";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mBeamE8GeVPlus;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 100, -0.5, 0.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mBeamE8GeVPlus; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_resolution );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=allGeneralCutsPassed;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&allGeneralCutsPassed; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_AS";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_ASBS";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_ASBS_meas";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &locPi0Eta );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	for (int iTBin=0; iTBin<10; ++iTBin){
         	histdef.clear();
@@ -1765,7 +1765,7 @@ void DSelector_ver20::Init(TTree *locTree)
         	histdef.hist = new TH1F(name.c_str(), ("Cuts=mMandelstamT*p_massTBinned["+to_string(iTBin)+"];M(#pi^{0}#eta) (GeV);Events / 0.02 GeV").c_str(), 125, 0, 3.5);
         	histdef.name = name; histdef.cut=&p_massTBinned[iTBin]; histdef.weights = &weightAS;
         	histdef.values.push_back( &locPi0Eta_Kin );
-        	group_1234B.insert(histdef); 
+        	groupHists.insert(histdef); 
 	}
 
         histdef.clear();
@@ -1773,21 +1773,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre_tAll;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mEllipse_pre_tAll; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_BaryBkg";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts*BaryBkg;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&allGen_barybkg; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_vanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=GeneralCuts*vanHove;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&allGen_vanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         
         histdef.clear();
         // so in side band subraction we have 4 regions. 1=circular signal. 2=disc skip region. 3=disc bkg region. 4=large disc reject region. 
@@ -1795,71 +1795,71 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 0_1_1+R_1;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         //histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_B;
         //histdef.values.push_back( &locPi0Eta_Kin );
-        //group_1234B.insert(histdef); 
+        //groupHists.insert(histdef); 
 
         //histdef.clear();
         //name="pi0eta1D_1_0_mR_0";
         //histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_0_-R_0;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         //histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS_BS;
         //histdef.values.push_back( &locPi0Eta_Kin );
-        //group_1234B.insert(histdef); 
+        //groupHists.insert(histdef); 
 
         //histdef.clear();
         //name="pi0eta1D_1_1_1_1";
         //histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- 1_1_1_1;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         //histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         //histdef.values.push_back( &locPi0Eta_Kin );
-        //group_1234B.insert(histdef); 
+        //groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion4";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- RectSBSubRregion4;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[4]); histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion0268";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- RectSBSubRregion0268;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[10]); histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion17";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- RectSBSubRregion17;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[11]); histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion35";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre -- RectSBSubRregion35;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[12]); histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion4_fixed";
         histdef.hist = new TH1F(name.c_str(), "FIXED MASS - Cuts=mEllipse_pre -- RectSBSubRregion4;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[4]); histdef.weights = &weightAS;
         histdef.values.push_back( &Mpi0eta_4 );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion0268_fixed";
         histdef.hist = new TH1F(name.c_str(), "FIXED MASS - Cuts=mEllipse_pre -- RectSBSubRregion0268;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[10]); histdef.weights = &weightAS;
         histdef.values.push_back( &Mpi0eta_10 );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion17_fixed";
         histdef.hist = new TH1F(name.c_str(), "FIXED MASS - Cuts=mEllipse_pre -- RectSBSubRregion17;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[11]); histdef.weights = &weightAS;
         histdef.values.push_back( &Mpi0eta_11 );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
         histdef.clear();
         name="pi0eta1D_RectSBSubRegion35_fixed";
         histdef.hist = new TH1F(name.c_str(), "FIXED MASS - Cuts=mEllipse_pre -- RectSBSubRregion35;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&(inBox[12]); histdef.weights = &weightAS;
         histdef.values.push_back( &Mpi0eta_12 );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 
         // ************************** GENERAL KINEMATIC QUANTITIES ***************************
@@ -1869,7 +1869,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &mandelstam_teta_Kin );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 	for (int iMass=0; iMass<3; ++iMass){
         	histdef.clear();
@@ -1877,14 +1877,14 @@ void DSelector_ver20::Init(TTree *locTree)
         	histdef.hist = new TH1F(name.c_str(), "Cuts=pMpi0pFastEta;t_{#eta} (GeV^2)", 80,0,2);
         	histdef.name = name; histdef.cut=&pMpi0pFastEta[iMass]; histdef.weights = &weightAS;
         	histdef.values.push_back( &mandelstam_teta_Kin );
-        	group_34B.insert(histdef); 
+        	groupHists.insert(histdef); 
 
         	histdef.clear();
         	name="tpi0_MetapBin"+to_string(iMass);
         	histdef.hist = new TH1F(name.c_str(), "Cuts=pMetapFastPi0;t_{#pi^0} (GeV^2)", 80,0,2);
         	histdef.name = name; histdef.cut=&pMetapFastPi0[iMass]; histdef.weights = &weightAS;
         	histdef.values.push_back( &mandelstam_tpi0_Kin );
-        	group_12B.insert(histdef); 
+        	groupHists.insert(histdef); 
 	}
 
         histdef2d.clear();
@@ -1893,7 +1893,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &mandelstam_tpi0_Kin );
-        group_34B_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         //dHist_mandelstam_t_thrown = new TH1F("dHist_mandelstam_t_thrown", "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         //dHist_mandelstam_t0_thrown = new TH1F("dHist_mandelstam_t0_thrown", "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
@@ -1904,35 +1904,35 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp_oldForm );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="mandelstam_tp";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="MissingMassSquared_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMMSq;Missing Mass Squared (GeV/c^{2})^{2};Events / 0.002 GeV/c^{2}",200,-0.2,0.2);
         histdef.name = name; histdef.cut=&mMMSq; histdef.weights = &weightAS;
         histdef.values.push_back( &locMissingMassSquared );
-        group_1234BP.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="BeamEnergy_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=noCut;Beam Energy (GeV) ;Events / 0.1 GeV",120,0,12);
         histdef.name = name; histdef.cut=&noCut; histdef.weights = &weightAS;
         histdef.values.push_back( &locBeamE );
-        group_B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="RFTime_meas";
         histdef.hist = new TH1F(name.c_str(), "Cuts=noCut; t_{#gamma}-t_{rf} (ns);Events / 0.2 GeV",120,-12,12);
         histdef.name = name; histdef.cut=&noCut; histdef.weights = &noWeight;
         histdef.values.push_back( &locDeltaTRF_meas );
-        group_B.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//WE WILL CUT OUT THE DELTA WITH T CUT AND ELLIPTICAL CUT. BUT ONE WITH BEAME>8 AND ONE WITHOUT
@@ -1941,7 +1941,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=pBase_pT_pIE_pBE8288_pMPi0P_pDelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&pBase_pT_pIE_pBE8288_pMPi0P_pDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         histdef.clear();
@@ -1949,21 +1949,21 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMPi0P14_ellipse;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mMPi0P14_ellipse; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0proton1D_baseAsymCut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_mDelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&baseAsymCut_mDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0proton1D_baseAsymCut_mDelta_fastEta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_mDelta_fastEta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&baseAsymCut_mDelta_fastEta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
 	// need this one for the graph, just delete afterwards
         histdef.clear();
@@ -1971,28 +1971,28 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMPi0P14_ellipse;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mMPi0P14_ellipse; histdef.weights = &weightAS_BS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_Cut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mEllipse_pre;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&mEllipse_pre; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_baseAsymCut";
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_mDelta;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&baseAsymCut_mDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_baseAsymCut_mDelta_fastPi0";
         histdef.hist = new TH1F(name.c_str(), "Cuts=baseAsymCut_mDelta_fastPi0;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&baseAsymCut_mDelta_fastPi0; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef2d.clear();
         name="pi0etaPi0Proton_Cut";
@@ -2000,7 +2000,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &locPi0Proton_Kin );
-        group_1234B_12PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name="pi0etaEtaProton_Cut";
@@ -2008,7 +2008,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&allGeneralCutsPassed; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &locEtaProton_Kin );
-        group_1234B_34PB.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 	// part of the deck analysis. Fast eta looks like a baryon(proton) + meson(pi0) system where Deltas might populate it
 	// We will use the same cut as when we were showing the vanHove selections. Basically the same cuts as the phi phi distributions but without a selection on teta nor tpi or the polarizations
@@ -2018,7 +2018,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardPi0P_mDelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Proton_Kin);
         histdef2d.valuesY.push_back( &mandelstam_tp );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef2d.clear();
         name="etaproton1D_fastPi0_Vs_tp";
@@ -2026,7 +2026,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&baseAsymCut_backwardEtaP; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locEtaProton_Kin );
         histdef2d.valuesY.push_back( &mandelstam_tp );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
         
         // *************** BARYON BACKGROUND HISTOGRAMS ***********************
 	// The goal of this section is to show how the 4 bkg rejection histograms work. { M(pi0proton), M(etaproton), vanHove, t } 
@@ -2045,35 +2045,35 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT_mdelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef.clear();
         name="mandelstam_tp_mMandelstamT_mdelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0proton1D_mMandelstamT_mdelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_mMandelstamT_mdelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_mMandelstamT_mdelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	
 	// -------------------- NOW WE USE VANHOVE AS THE PRIMARY ---------------------
         histdef.clear();
@@ -2081,28 +2081,28 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0proton1D_mMandelstamT_mdelta_pVanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_mMandelstamT_mdelta_pVanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_mMandelstamT_mdelta_pVanHove";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_pVanHove;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_pVanHove; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	// -------------------- NOW WE USE MANDELSTAM_T AS THE PRIMARY ---------------------
         histdef2d.clear();
         name="vanHove_mDelta";
@@ -2110,28 +2110,28 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mDelta; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef.clear();
         name="pi0proton1D_mDelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mDelta;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_mDelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mDelta;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&mDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_mDelta";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mDelta;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mDelta; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	// -------------------- NOW WE USE M(PI0PROTON) AS THE PRIMARY ---------------------
         histdef2d.clear();
         name="vanHove_mMandelstamT";
@@ -2139,28 +2139,28 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef.clear();
         name="mandelstam_tp_mMandelstamT";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="etaproton1D_mMandelstamT";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;M(#etaproton) (GeV);Events / 0.01 GeV",450,0,4.5);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &locEtaProton_Kin );
-        group_34PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_mMandelstamT";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	// -------------------- NOW WE USE M(ETAPROTON) AS THE PRIMARY ---------------------
         histdef2d.clear();
         name="vanHove_mMandelstamT_mdelta_petaProton";
@@ -2168,28 +2168,28 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.name = name; histdef2d.cut=&mMandelstamT_mdelta_petaProton; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &vanHove_x );
         histdef2d.valuesY.push_back( &vanHove_y );
-        group_1234BP.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
         histdef.clear();
         name="mandelstam_tp_mMandelstamT_mdelta_petaProton";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_petaProton;-t' momentum transfer of #pi^{0}+#eta;Events / 0.06 GeV", 100, 0, 6);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_petaProton; histdef.weights = &weightAS;
         histdef.values.push_back( &mandelstam_tp );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0proton1D_mMandelstamT_mdelta_petaProton";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_petaProton;M(#pi^{0}proton) (GeV);Events / 0.01 GeV", 400,0,4);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_petaProton; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Proton_Kin);
-        group_12PB.insert(histdef); 
+        groupHists.insert(histdef); 
 
         histdef.clear();
         name="pi0eta1D_mMandelstamT_mdelta_petaProton";
         histdef.hist = new TH1F(name.c_str(), "Cuts=mMandelstamT_mdelta_petaProton;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
         histdef.name = name; histdef.cut=&mMandelstamT_mdelta_petaProton; histdef.weights = &weightAS;
         histdef.values.push_back( &locPi0Eta_Kin );
-        group_1234B.insert(histdef); 
+        groupHists.insert(histdef); 
 	
 	// ------------------ END OF BARYON CUT HISTGRAMS ----------------------
 	// ---------------------------------------------------------------------
@@ -2202,7 +2202,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &mandelstam_tp );
 		// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
-        group_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 	// To show the t distribution as a function of M(pi0eta)
         histdef2d.clear();
@@ -2212,7 +2212,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &mandelstam_t );
 		// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
-        group_1234B.insert_2D(histdef2d); 
+        groupHists.insert_2D(histdef2d); 
 
 	//// To show the t' distribution as a function of M(pi0eta)
         //histdef2d.clear();
@@ -2222,7 +2222,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         //histdef2d.valuesY.push_back( &mandelstam_tp );
 	//	// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
-        //group_1234B.insert_2D(histdef2d); 
+        //groupHists.insert_2D(histdef2d); 
 
 	//// To show the t distribution as a function of M(pi0eta)
         //histdef2d.clear();
@@ -2232,7 +2232,7 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         //histdef2d.valuesY.push_back( &mandelstam_t );
 	//	// I THINK WE CAN JUST USE GROUP_1234B SINCE BOTH OF THE VARAIBLES DEPENDS ON THIS TRACKING
-        //group_1234B.insert_2D(histdef2d); 
+        //groupHists.insert_2D(histdef2d); 
 
 
         //name;
@@ -2240,100 +2240,16 @@ void DSelector_ver20::Init(TTree *locTree)
         //histdef2d.name = name; histdef2d.cut=; histdef2d.weights = &weightAS;
         //histdef2d.valuesX.push_back( & );
         //histdef2d.valuesY.push_back( & );
-        //group_PB.insert_2D(histdef2d); 
+        //groupHists.insert_2D(histdef2d); 
 
         //histdef.clear();
         //name;
         //histdef.hist = new TH1F(name.c_str(), );
         //histdef.name = name; histdef.cut=; histdef.weights = &weightAS;
         //histdef.values.push_back( & );
-        //group_PB.insert(histdef); 
+        //groupHists.insert(histdef); 
         
         
-
-        // ***** MUST CHANGE groupNames INSIDE THE HEADER FILE *****************
-        //std::string groupNames[16] = {"beam", "p1", "ph12b1", "ph1234", "ph12", "ph34", "ph34b1", "entire combo", "ph12p1", "ph34p1", "ph1234p1", "FCAL Pairs", "phN", "BCAL Pairs", "ph13", "ph24"};
-        if(showOutput) {cout << endl << "Uniqueness tracking: Let photon 1-4, proton 1, 1 beam photon = {ph1,ph2,ph3,ph4,p1,b1}" << endl << "----------------------- Tracking prototypes ---------------------------" << endl;}
-        if(showOutput) {cout <<  "Tracking group 1: beam will track only beam photon" << endl; }
-        if(showOutput) {cout <<  "Tracking group 2: proton will track {p1}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 3: pi0_cm will track {ph1,ph2,b1} - including b1 since Center of Mass uses photonbeam and target" << endl; }
-        if(showOutput) {cout <<  "Tracking group 4: pi0eta will track {ph1,ph2,ph3,ph4}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 5: pi0 will track {ph1,ph2}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 6: eta will track {ph3,ph4}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 7: eta_cm will track {ph3,ph4,b1} - include b1 since Center of Mass uses photonbeam and target" << endl; }
-        if(showOutput) {cout <<  "Tracking group 8: MissingMassSquared will track entire combo - will also track timing which relates to the RFtime and thus the entire combo" << endl; }
-        if(showOutput) {cout <<  "Tracking group 9: pi0proton will track {ph1,ph2,p1}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 10: etaproton will track {ph3,ph4,p1}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 11: pi0etaproton will track {ph1,ph2,ph3,ph4,p1}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 12: (FCAL) pairwise photon will track {phN,phM} agnostic to which particle number only PID" << endl; }
-        if(showOutput) {cout <<  "Tracking group 13: photon will track {phN} agnostic to which particle number only PID" << endl; }
-        if(showOutput) {cout <<  "Tracking group 14: (BCAL) pairwise photon will track {phN,phM} agnostic to which particle number only PID" << endl; }
-        if(showOutput) {cout <<  "Tracking group 15: pi0Mismatch will track {ph1,ph3}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 16: etaMismatch will track {ph2,ph4}" << endl; }
-        if(showOutput) {cout <<  "Tracking group 17: No uniqueness tracking check" << endl; }
-        int totalGroups=17;
-
-        // Split up the ids into groups so we do not have to loop through all the histograms when trying to do our filling.
-        //for(int groupNum=1; groupNum<totalGroups+1; ++groupNum){
-        //	group_ids.clear();
-        //	// loop through all the histograms
-        //	for(int id_idx=0; id_idx<id+1; ++id_idx){
-        //		if(histVals[id_idx][0]==groupNum){
-        //			group_ids.push_back(id_idx);
-        //			//if(showOutput){ cout << histList[id_idx][0] << " is under the group: " << std::to_string(groupNum) << endl; }
-        //		}
-        //	}
-        //	vec_group_ids.push_back(group_ids);
-        //}
-
-
-        //if(onlyNamesPi0_1){ cout << "ONLY HISTOGRAMS WITH AFFIX _1 and _2 FOR MERGING PI0_1 AND PI0_2 HISTOGRAMS !!!" << endl; }
-        //int hist_dim;
-        //for(std::size_t i = 0; i<vec_group_ids.size(); ++i){
-        //	if((!onlyNamesPi0_1)*showOutput) {cout << " hist Ids for a group: " << std::to_string(i+1) << " - " << groupNames[i] << endl << "=============================" << endl;}
-        //	for(std::size_t j = 0; j<vec_group_ids[i].size(); ++j){
-        //		if(onlyNamesPi0_1){
-        //			if(histList[vec_group_ids[i][j]][0].find("_1") != std::string::npos) {
-        //				if ( histList[vec_group_ids[i][j]].size() > 8 ){ hist_dim = 2; }
-        //				else { hist_dim = 1;}
-        //				if(showOutput){cout << histList[vec_group_ids[i][j]][0] << "," << hist_dim << endl;}
-        //			}
-        //		}
-        //		else {
-        //			if(showOutput){cout << histList[vec_group_ids[i][j]][0] << " with ID:" << histVals[vec_group_ids[i][j]][0] << endl;}
-        //		}
-        //	}
-        //}
-
-        //if(showOutput) { cout << endl << "-------------------------------" << endl << "Total Number of histograms: " << std::to_string(id+1) << endl << "----------------------------------" << endl;}
-
-        // *****//*********************************** MAKE THE HISTOGRAMS ********************************************//
-        //for(int i=0; i<id+1; ++i){// need + 1 since we have to include the last histogram.... 
-        //	if(showOutput) {cout << "Building histogram: " << histList[i][0] << " with id = " << std::to_string(i) << " and group = " << std::to_string(histVals[i][0]) << endl; }
-        //	int histListSize = (int)histList[i].size();
-        //	if(histListSize == 6 || histListSize == 7 ){
-        //		dHist_all1DHists[i] = new TH1F(histList[i][0].c_str(), histList[i][1].c_str(), atof(histList[i][2].c_str()), atof(histList[i][3].c_str()), atof(histList[i][4].c_str()));
-        //		dHist_all1DHists[i]->SetYTitle(histList[i][5].c_str());
-        //		// some have a title making the size 1 larger
-        //		if(histListSize==7){
-        //			dHist_all1DHists[i]->SetTitle(histList[i][6].c_str());
-        //		}
-        //		
-        //	}
-        //	else if (histListSize==10 || histListSize==11){
-        //		dHist_all2DHists[i] = new TH2F(histList[i][0].c_str(), histList[i][1].c_str(), atof(histList[i][2].c_str()), atof(histList[i][3].c_str()), atof(histList[i][4].c_str()), 
-        //			atof(histList[i][5].c_str()), atof(histList[i][6].c_str()), atof(histList[i][7].c_str()));
-        //		dHist_all2DHists[i]->SetXTitle(histList[i][8].c_str());
-        //		dHist_all2DHists[i]->SetYTitle(histList[i][9].c_str());
-        //		// it could exist that a 2D hist has a title making total num of params = 11
-        //		if((int)histList[i].size()==11){
-        //			dHist_all2DHists[i]->SetTitle(histList[i][10].c_str());
-        //		}
-        //	}
-        //	else { cout << "ERROR!" << endl  << "ERROR!" << endl << "ERROR!" << endl; }
-        //}
-
-
         if(showOutput){cout << endl << endl << "--------------------------------" << endl << "Initialized all histograms"  <<  endl;}
 
 
@@ -2454,44 +2370,12 @@ void DSelector_ver20::Init(TTree *locTree)
 Bool_t DSelector_ver20::Process(Long64_t locEntry)
 {
 	++count_totEvents;
-	//if (count_totEvents > 100) { return kTRUE; } 
-    	group_PB.clear_tracking();
-    	group_12B_1234B.clear_tracking();
-    	group_34B_1234B.clear_tracking();
-    	group_12B.clear_tracking();  
-    	group_34B.clear_tracking();  
-    	group_12B_34B.clear_tracking();
-    	group_1234B.clear_tracking();
+	//if (count_totEvents>100){
+	//	Abort("Lawrence... your max number of events is reached...");
+	//}
     	group_PhNB.clear_tracking();
-    	group_12PhNB.clear_tracking();
-    	group_34PhNB.clear_tracking();
     	group_pairFCAL.clear_tracking();
     	group_pairBCAL.clear_tracking();
-    	group_1234BP.clear_tracking();
-    	group_12PB.clear_tracking();       
-    	group_34PB.clear_tracking();       
-    	group_B.clear_tracking();
-    	group_1234B_12PB.clear_tracking();
-    	group_1234B_34PB.clear_tracking();
-
-	//group_PB.name = "group_PB"; 
-	//group_12B_1234B.name = "group_12B_1234B";
-	//group_34B_1234B.name = "group_34B_1234B";
-	//group_12B.name = "group_12B"; 
-	//group_34B.name = "group_34B"; 
-	//group_12B_34B.name = "group_12B_34B";
-	//group_1234B.name = "group_1234B";
-	//group_PhNB.name = "group_PhNB";
-	//group_12PhNB.name = "group_12PhNB";
-	//group_34PhNB.name = "group_34PhNB";
-	//group_pairFCAL.name = "group_pairFCAL";
-	//group_pairBCAL.name = "group_pairBCAL";
-	//group_1234BP.name = "group_1234BP";
-	//group_12PB.name = "group_12PB";
-	//group_34PB.name = "group_34PB";
-	//group_B.name = "group_B";
-	//group_1234B_12PB.name = "group_1234B_12PB";
-	//group_1234B_34PB.name = "group_1234B_34PB";
 
     	// everytime we start a new event we have to reset the tracking
     	set< map<Particle_t, set<Int_t> > > used1234B;
@@ -3891,13 +3775,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		
 	for (int iMpi0eta=0; iMpi0eta<numMpi0eta; ++iMpi0eta){
 		for (int iteta=0; iteta<numTBins; ++iteta){
-			cout << "Requring mandelstam_teta to be betweem " << iteta*0.2 << " and " << (iteta+1)*0.2 << endl;
+			//cout << "Requring mandelstam_teta to be betweem " << iteta*0.2 << " and " << (iteta+1)*0.2 << endl;
 			bool select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
 			bool select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
 			//select_teta_bin = mandelstam_teta<1;
 			//select_tpi0_bin = mandelstam_tpi0<1;
 			bool pThreshold = locPi0Eta_Kin > (minMpi0eta+0.1*iMpi0eta); 
-			cout << " - including a moving threshold at " << pThreshold << endl;
+			//cout << " - including a moving threshold at " << pThreshold << endl;
 			//bool pThreshold = true;
 
 			ptEtaBeamAsym_000[iMpi0eta*numTBins+iteta] = keepPolarization000*baseAsymCut*select_teta_bin*pThreshold;
@@ -3937,8 +3821,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			bool select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
 			bool select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
 			cout << "*****" << endl;
-			cout << "(tetaBin:"<<iteta<<")Requiring " << minPi0P[iMass] << " < M(pi0p) < " << maxPi0P[iMass] << endl;
-			cout << "(tetaBin:"<<iteta<<")Requiring " << minEtaP[iMass] << " < M(etap) < " << maxEtaP[iMass] << endl;
+			//cout << "(tetaBin:"<<iteta<<")Requiring " << minPi0P[iMass] << " < M(pi0p) < " << maxPi0P[iMass] << endl;
+			//cout << "(tetaBin:"<<iteta<<")Requiring " << minEtaP[iMass] << " < M(etap) < " << maxEtaP[iMass] << endl;
 			pMpi0pBeamAsym_000[iMass*numTBins+iteta] = keepPolarization000*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass])*select_teta_bin;
 			pMpi0pBeamAsym_045[iMass*numTBins+iteta] = keepPolarization045*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass])*select_teta_bin;
 			pMpi0pBeamAsym_090[iMass*numTBins+iteta] = keepPolarization090*baseAsymCut_fastEta*(minPi0P[iMass] < locPi0Proton_Kin)*(locPi0Proton_Kin < maxPi0P[iMass])*select_teta_bin;
@@ -3957,7 +3841,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		bool select_teta_bin;
 		bool select_tpi0_bin;
 		if (iteta < 5 ) {
-			cout << "Also requiring " << iteta*0.2 << "< teta/tpi0 <" << (iteta+1)*0.2 << endl;
+			//cout << "Also requiring " << iteta*0.2 << "< teta/tpi0 <" << (iteta+1)*0.2 << endl;
 	       		select_teta_bin = (iteta*0.2 < mandelstam_teta) && (mandelstam_teta < (iteta+1)*0.2);
 	       		select_tpi0_bin = (iteta*0.2 < mandelstam_tpi0) && (mandelstam_tpi0 < (iteta+1)*0.2);
 		}
@@ -3971,14 +3855,14 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		pFastPi0Bin[iteta] = baseAsymCut_res*select_tpi0_bin;
 		cout << "numMpi0etaRes: " << numMpi0etaRes << endl;
 		for (int iMass=0; iMass<numMpi0etaRes; ++iMass){
-			cout << "locPi0Eta_Kin: " << locPi0Eta_Kin << endl;
-			cout << "iMass: " << iMass << endl;
+			//cout << "locPi0Eta_Kin: " << locPi0Eta_Kin << endl;
+			//cout << "iMass: " << iMass << endl;
 			//double binSizeMpi0eta = (maxMpi0eta-minMpi0eta)/5;
 			//bool acceptBin = (minMpi0eta+binSizeMpi0eta*iMass < locPi0Eta_Kin) && (locPi0Eta_Kin < minMpi0eta+binSizeMpi0eta*(iMass+1));
 			bool acceptMBin = (lowerMpi0eta[iMass] < locPi0Eta_Kin) && (locPi0Eta_Kin < upperMpi0eta[iMass]);
-			cout << "*****" << endl;
-			cout << "Requiring " << to_string(lowerMpi0eta[iMass]) << " < M(pi0eta) < " << to_string(upperMpi0eta[iMass]) << endl;
-			cout << "Passed? " << acceptMBin << endl;
+			//cout << "*****" << endl;
+			//cout << "Requiring " << to_string(lowerMpi0eta[iMass]) << " < M(pi0eta) < " << to_string(upperMpi0eta[iMass]) << endl;
+			//cout << "Passed? " << acceptMBin << endl;
 			pMpi0etaBeamAsym_000_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization000*baseAsymCut_res*select_teta_bin*acceptMBin;
 			pMpi0etaBeamAsym_045_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization045*baseAsymCut_res*select_teta_bin*acceptMBin;
 			pMpi0etaBeamAsym_090_fastEta[iteta*numMpi0etaRes+iMass] =  keepPolarization090*baseAsymCut_res*select_teta_bin*acceptMBin;
@@ -4219,25 +4103,10 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 
         if(showOutput){cout << endl << endl << "\n\nFilling histograms with uniqueness tracking!" << endl << "******************************************" << endl;}
-
-        group_PB.fillHistograms_Map( usingPB );
-        group_12B_1234B.fillHistograms_pairMap( using12B_1234B );
-        group_34B_1234B.fillHistograms_pairMap( using34B_1234B );
-        group_12B.fillHistograms_Map( using12B );
-        group_34B.fillHistograms_Map( using34B );
-        group_12B_34B.fillHistograms_pairMap( using12B_34B );
-        group_1234B.fillHistograms_Map( using1234B );
         group_PhNB.fillHistograms_vectorMap(beingUsedNeutralIds);
-        group_12PhNB.fillHistograms_vectorMap( using12PhNBs );
-        group_34PhNB.fillHistograms_vectorMap( using34PhNBs );
         group_pairFCAL.fillHistograms_vectorMap(usedPairIdsFCAL);
         group_pairBCAL.fillHistograms_vectorMap(usedPairIdsBCAL);
-        group_1234BP.fillHistograms_Map( usingCombo );
-        group_12PB.fillHistograms_Map(using12PB);       
-        group_34PB.fillHistograms_Map(using34PB);       
-        group_B.fillHistograms_Map(usingB);
-        group_1234B_12PB.fillHistograms_pairMap(using1234B_12PB);
-        group_1234B_34PB.fillHistograms_pairMap(using1234B_34PB);
+        groupHists.saveHistograms();
 
 	if(showOutput){ cout << "Filling histogram's uniqueness elements" << endl; }
 
@@ -4458,6 +4327,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     ++eventIdx;
     if(showOutput){cout << "\n\n **************** Finishing the combo loop ***************\n**********************************************************\n" << endl;}
 
+    groupHists.fillHistograms();
+
 
     //FILL HISTOGRAMS: Num combos / events surviving actions
     Fill_NumCombosSurvivedHists();
@@ -4549,13 +4420,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 void DSelector_ver20::Finalize(void)
 {
-    //group_PhNB.drawHistograms();
-    //group_PB.drawHistograms();
-    //group_12B_1234B.drawHistograms();
-    //group_34B_1234B.drawHistograms();
-    //group_12B.drawHistograms();
-    //group_34B.drawHistograms();
-
     //Save anything to output here that you do not want to be in the default DSelector output ROOT file.
 
     //Otherwise, don't do anything else (especially if you are using PROOF).
