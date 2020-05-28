@@ -422,7 +422,7 @@ class DSelector_ver20 : public DSelector
 		double Ebeam_thrown;
 
 		TH1F* countThrownEvents;
-		TH1I* dHist_numCombos;
+		//TH1I* dHist_numCombos;
 		TH1F* dHist_thrown_tp;
 		TH1F* dHist_thrown_tp_selected;
         	TH1F* dHist_prodPlanePS_000; 

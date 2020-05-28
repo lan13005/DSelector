@@ -4,6 +4,8 @@
 double selectPi0Proton=1.4;
 double selectEtaProton=2;
 
+bool overlay1D=false;
+
 class overlayPlots{
 	private:
 		std::vector<TH1F*> overlayHists;
@@ -211,8 +213,8 @@ class sideBySide2D{
 
 
 void makeGraphsCompare(){	
-	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_tetaLT1_DR_hists_DSelector.root");
-	TFile* file2 = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_flat_2017_tetaLT1_DR_hists_DSelector.root");
+	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_test_hists_DSelector.root");
+	TFile* file2 = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_test_defUT_hists_DSelector.root");
 
 	gStyle->SetOptStat(0);
 	TIter keyList(file->GetListOfKeys());
@@ -248,8 +250,14 @@ void makeGraphsCompare(){
 	trackHists = { {"etaproton1D_baseAsymCut", 1}, {"etaproton1D_baseAsymCut_mDelta_fastPi0", 1} };
 	overlayPlots etaproton1D_baseAsym(trackHists);
 
-	TCanvas *c1 = new TCanvas("c1","",1440,900);
-	c1->Divide(2,1);
+	TCanvas *c1D = new TCanvas("c1D","",1440,900);
+	if ( overlay1D ) {
+		c1D->Divide(1,1);
+	} else {
+		c1D->Divide(2,1);
+	}
+	TCanvas *c2D = new TCanvas("c2D","",1440,900);
+	c2D->Divide(2,1);
 	int i=0;
    	while ((key = (TKey*)keyList())) {
    	   	TClass *cl = gROOT->GetClass(key->GetClassName());
@@ -258,22 +266,22 @@ void makeGraphsCompare(){
    	   		TH2F *h = (TH2F*)key->ReadObj();
 			h->GetXaxis()->SetTitleSize(0.04);
 			h->GetYaxis()->SetTitleSize(0.04);
-			c1->cd(1);
+			c2D->cd(1);
    	   		h->Draw("COLZ HIST");
-			c1->cd(2);
+			c2D->cd(2);
 			TH2 *h2;
 			file2->GetObject(h->GetName(),h2);
 			h2->Draw("COLZ HIST");
 			fileName.append(h->GetName());
 			fileName.append(".png");
-   	   		c1->SaveAs((fileName).c_str());
+   	   		c2D->SaveAs((fileName).c_str());
 			if ( strcmp(h->GetName(),"pi0eta_mEllipsePre")==0 ){
 				cout << "DRAWING RECTANGULAR SIDEBANDS" << endl;
 				drawRectSB(0.135881-2*0.0076, 0.135881+2*0.0076, 0.548625-2*0.0191, 0.548625+2*0.0191, 0.01, 0.02);
 				fileName="newGraphs/";
 				fileName.append(h->GetName());
 				fileName.append("_withRectCut.png");
-   	   			c1->SaveAs((fileName).c_str());
+   	   			c2D->SaveAs((fileName).c_str());
 			}	
 			pi0eta_mEllipsePre.fillHist(h,h2);
 			pi0eta_Meas_mEllipsePre_showEllipse.fillHist(h,h2);
@@ -283,15 +291,22 @@ void makeGraphsCompare(){
    	   		TH1F *h = (TH1F*)key->ReadObj();
 			h->GetXaxis()->SetTitleSize(0.04);
 			h->GetYaxis()->SetTitleSize(0.04);
-			c1->cd(1);
+			c1D->cd(1);
    	   		h->Draw("HIST");
 			TH1* h2;
 			file2->GetObject(h->GetName(),h2);
-			c1->cd(2);
-			h2->Draw("HIST");
+			if (overlay1D) {
+				h2->SetLineColor(kGreen+1);
+				h2->Scale(0.50);
+				h2->Draw("SAME");
+				h2->SetLineColor(kBlue);
+			} else { 
+				c1D->cd(2);
+				h2->Draw("HIST");
+			}
 			fileName.append(h->GetName());
 			fileName.append(".png");
-   	   		c1->SaveAs((fileName).c_str());
+   	   		c1D->SaveAs((fileName).c_str());
 			// Wait until we have finally used up TH1 object first. Otherwise casting it into TH1F early creates some problems
 			pi0proton1D_mMandelstamT_mdelta.fillHist(h,h2);
 			etaproton1D_mMandelstamT_mdelta.fillHist(h,h2);
