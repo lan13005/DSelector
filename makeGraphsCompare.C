@@ -297,7 +297,7 @@ void makeGraphsCompare(){
 			file2->GetObject(h->GetName(),h2);
 			if (overlay1D) {
 				h2->SetLineColor(kGreen+1);
-				h2->Scale(0.50);
+				h2->Scale(0.4);
 				h2->Draw("SAME");
 				h2->SetLineColor(kBlue);
 			} else { 

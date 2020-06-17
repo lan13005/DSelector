@@ -370,7 +370,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		bool pBeamE8GeV = locBeamP4.E() > 8;
 		bool pBeamE8288 = 8.2 < locBeamP4.E() &&  locBeamP4.E() < 8.8;
 
-		if(correctFinalState*pBeamE8GeV*keepPolarization*(mandelstam_tp<1)){
+		if(correctFinalState*pBeamE8288*keepPolarization){
 			mandelstam_tpAll->Fill(mandelstam_tp);	
 			mandelstam_tAll->Fill(mandelstam_abst);
 

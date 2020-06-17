@@ -20,6 +20,7 @@
 bool is_pi0eta=true;
 bool showThrownTopology=false;
 
+// Used to look for the daughters of a specific thrown particle 
 void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, int selfLoc ) {
         for ( auto parent=0; parent<(int)parentArray.size(); ++parent ){
                 if ( parentArray[parent] == selfLoc ){
@@ -27,7 +28,7 @@ void findDaughters( std::vector<int> parentArray, std::vector<int> &daughters, i
                 }
         }
 }
-
+// used to look for primary particles
 void findParents( std::vector<int> parentArray, std::vector<int> &parents) {
 	for (auto parent=0; parent<(int)parentArray.size(); ++parent) {
 		if ( parentArray[parent] == -1 ){
@@ -35,6 +36,38 @@ void findParents( std::vector<int> parentArray, std::vector<int> &parents) {
 		}
 	}
 }
+// Getting the thrown particle (if any) that a reconstrcuted particle, like a photon of a pi0, matched to.
+Int_t getParents( Int_t* thrownID, vector<Int_t> parentIDs, vector<Int_t> thrownPIDs, TString* string_ph ){
+        Int_t initialThrownID = *thrownID;
+        Int_t thrownPID = thrownPIDs[*thrownID];
+        *thrownID  = parentIDs[*thrownID];
+        if (*thrownID != -1){
+                Int_t parentPID = thrownPIDs[*thrownID];
+                cout << "ThrownID: " << initialThrownID << " with PID=" << thrownPID << " has ParentID: " << *thrownID << " with PID=" << parentPID << endl;
+                *string_ph += "("+to_string(parentPID)+")";
+                return *thrownID;
+        }
+        else {
+                cout << "Found primary particle" << endl;
+                //*string_ph += "(-1)";
+                return *thrownID;
+        }
+}
+
+// saves the topology information if using simulated data. We can try to track what thrown particles make up the reconstructed particles
+struct topology {
+        TString locThrownTopology;
+        TString composition;
+        TString beamProtonID;
+        TString spectroscopicID;
+        double chiSq;
+        double unusedEnergy;
+        Int_t nUnusedShowers;
+        double pi0Mass;
+        double etaMass;
+        double pi0etaMass;
+};
+
 
 void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double x, double y, double xmin, double xmax, double ymin, double ymax, double xskip, double yskip){
 	// regions are:
@@ -87,11 +120,6 @@ struct histDef_1D{
 				cout << baseLocation << "newGraphs_histValues/" << name << ".txt not found, making it" << endl;
 				gSystem->Exec(("touch "+baseLocation+"newGraphs_histValues/"+name+".txt").c_str());
 			}
-			//else {
-			//	cout << "newGraphs_histValues/" << name << ".txt found, so remaking it" << endl;
-			//	gSystem->Exec(("rm newGraphs_histValues/"+name+".txt").c_str());
-			//	gSystem->Exec(("touch newGraphs_histValues/"+name+".txt").c_str());
-			//}
 			cout << ("echo "+to_string(value)+" "+to_string(weight)+" >> "+baseLocation+"newGraphs_histValues/"+name+".txt").c_str() << endl;
 			cout << "Value is actually: " << value << endl;
 			gSystem->Exec(("echo "+to_string(value)+" "+to_string(weight)+" >> "+baseLocation+"newGraphs_histValues/"+name+".txt").c_str());
@@ -653,8 +681,6 @@ class DSelector_ver20 : public DSelector
 		double RFtime=1;
 		double RFtime_meas=1;
 		double RFtimeProton=1;
-		// Might not make sense to shift relative to the BeamX4.Z since we cant really track the photon in the detector. Use Protons maybe
-		//double locDeltaTRF = locBeamX4.T() - (dComboWrapper->Get_RFTime() + (locBeamX4.Z() - dComboWrapper->Get_TargetCenter().Z() )/29.9792458);
 		double locDeltaTRF=1;
 		double locDeltaTRF_meas=1;
 		
@@ -686,26 +712,13 @@ class DSelector_ver20 : public DSelector
 		///////////// General ///////////////////
 		double unusedEnergyCut = 0.010;
 		double MMsqCut = 0.05;
-		//double CLCut1 = 0.1;
-		//double CLCut = 0.01; // CLCut is the cut we want to uses for all other cuts, these others ones are for the RFTime graph
 		double ChiSqCut = 13.277;
 		double originalChiSqCut = 13.277;
 		double chiSq100 = 100;
-		//double CLCut3 = 0.001;
-		//double CLCut4 = 0.0001;
-		//double CLCut5 = 0.00001;
-		//double CLCut6 = 0.000001;
 		double RFCut = 0.5*4; // 4ns is the beam period.
 		double beamECut = 6;
 		double etaProtonBaryonCut;
 		double pi0ProtonBaryonCut;
-		// the equation of the TEllipse follows (0.135,0.47,0.0175,0.15) which should bound locPi0Mass_Kin and locEtaMass_Kin
-		//double ellipseX = 0.135; double ellipseY = 0.47; double ellipseXr = 0.0175; double ellipseYr = 0.15;
-		// For 25000 events root file with no vertex in kinFit we use (0.1325,0.54,0.014,0.055)
-		//
-		// These are the 3 sigma regions from the graph of the pi0Mass with mUE applied. 
-		//  mUE
-		//double ellipseX = 0.134581; double ellipseY = 0.539935; double ellipseXr = 0.024066; double ellipseYr = 0.066594;
 		// mUEChiSq
 		double ellipseX; double ellipseY; double ellipseXr; double ellipseYr; 
     		double ellipseXBS1; double ellipseYBS1; double ellipseXrBS1; double ellipseYrBS1;
@@ -768,12 +781,6 @@ class DSelector_ver20 : public DSelector
 		bool pChiSq=true;
 		bool pLooseChiSq=true;
 		bool pLooseUnusedEnergy=true;
-		//bool pCLKinFit1=true;
-		//bool pCLKinFit=true ;
-		//bool pCLKinFit3=true;
-		//bool pCLKinFit4=true;
-		//bool pCLKinFit5=true;
-		//bool pCLKinFit6=true;
 		bool pDeltaTRF=true ;
 		bool pMissingMassSquared=true;
 		
@@ -910,9 +917,9 @@ class DSelector_ver20 : public DSelector
 		static const int numMpi0etaRes = 9; // there will be this many bins in Mpi0eta to find the asymmetries in. Will extend down into the resonance region
 		double lowerMpi0eta[numMpi0etaRes] = {0.9, 1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65};
 		double upperMpi0eta[numMpi0etaRes] = {1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65, 2.9};
-		bool pFastEtaBin[6]; 
-		bool pFastPi0Bin[6]; 
 		// So we will look at BA in bins of t_eta or t_pi but also vary the lower M(pi0eta) threshold. So we can see how the baryon contributions might enter
+                bool ptEtaBeamAsym[4];
+                bool ptPi0BeamAsym[4];
 		bool ptEtaBeamAsym_000[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_045[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_090[numMpi0eta*numTBins];
@@ -1045,13 +1052,7 @@ class DSelector_ver20 : public DSelector
         	std::vector<int> group_ids;
         	int groupVec_it; // this isnt used here but will be used later to denote the graphs we are filling.
 
-		// this will index the different uniqueness tracking groups. In this updated uniqueness tracking method, we remove the need to have multiple uniquness tracking for each cut combination. So this value never changes
-		//int idxCut;
-
-
-		// Now lets make the array of histograms to fill
-                //TH1F* dHist_all1DHists[800];
-                //TH2F* dHist_all2DHists[800];
+		ofstream compositionFile;
 
 	ClassDef(DSelector_ver20, 0);
 };

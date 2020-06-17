@@ -1,3 +1,6 @@
+//Looking at teta/tpi and bins of Metap and Mpi0p
+
+
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
 int numDOFsig_sc = 2;

@@ -1,3 +1,6 @@
+// Was used as a check to see if the isNotRepeated uniqueness tracking scheme was doing what it should be
+// I think the result of this was yes
+
 void graphCheckUniqueContrib(){	
         TFile* dataFile=new TFile("/d/grid15/ln16/pi0eta/092419/pi0eta_a0_recotreeFlat_DSelector.root");
 	TTree *dataTree;

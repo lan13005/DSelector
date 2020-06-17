@@ -38,6 +38,11 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// **********************************************************************************	
 	// omega -> gamma pi0 as pi0eta
 	//chain->Add("/d/grid15/ln16/rootFiles/omega_gammaPi0/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/pi0eta/testing/omegaPi0/rootFiles/fullRecon_20M/0303_0304/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/pi0eta/testing/omegaPi0/rootFiles/fullRecon_20M/0305_0306/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/pi0eta/testing/omegaPi0/rootFiles/fullRecon_20M/0307_0308/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/pi0eta/testing/omegaPi0/rootFiles/fullRecon_20M/0309_0310/tree_pi0eta__B4_M17_M7.root");
+	//
 	// pi0pi0 as pi0eta
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0pi0/noResonances/tree_pi0eta__B4_M17_M7.root");
 	
@@ -109,7 +114,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	// should change the name below from data to reco when running over MC
 	string degAngle="degALL";
-	string tag="_test";
+	string tag="_data_2017_mEllipse";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 
