@@ -1,11 +1,11 @@
 void makeAcceptancePlot(){
-	TFile* infile_acc = TFile::Open("degALL_reco_2017_mEllipse_hists_DSelector.root");
-	TFile* infile_gen = TFile::Open("degALL_gen_2017_hists_DSelector.root");
-	TFile* infile_dat = TFile::Open("degALL_data_2017_mEllipse_hists_DSelector.root");
+	TFile* infile_acc = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_flat_2017_mEllipsePre_hists_DSelector.root");
+	TFile* infile_gen = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_gen_2017_hists_DSelector.root");
+	TFile* infile_dat = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_mEllipsePre_hists_DSelector.root");
 	TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);
 
-	std::vector<string> names2D_gen = {"cosThetaVsMass_tpLT1"};
-	std::vector<string> names2D_acc = {"eta_cosTheta_GJvsM_Cut"};
+	std::vector<string> names2D_gen = {"cosThetaVsMass_tpAll"};
+	std::vector<string> names2D_acc = {"eta_cosTheta_GJvsM_baseAsymCut"};
 
 	TH2F *any2DHist_acc;
 	TH2F *any2DHist_gen;

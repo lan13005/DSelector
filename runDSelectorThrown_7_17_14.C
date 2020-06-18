@@ -46,7 +46,7 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	// test
 	//chain->Add("/d/grid13/ln16/MC/pi0eta_flat_2.3t/hddm/tree_thrown.root");
 	string degAngle="degALL";
-	string tag="gen";
+	string tag="_gen_2017";
 
 	// The following two files work separately but not together...
 
@@ -55,8 +55,8 @@ void runDSelectorThrown_7_17_14(bool proof = 1, string path = "")
 	if(proof) { // add TTree to chain and use PROOFLiteManager
 		//string outputHistFileName = Form("flatUpTo3GeVResMass_2_gen_hists_DSelector_pi0eta.root");//_GEANT4.root");
                 //string outputTreeFileName = Form("flatUpTo3GeVResMass_2_gen_trees_DSelector_pi0eta.root");//_GEANT4.root");
-		string outputHistFileName = degAngle+"_"+tag+"_2017_hists_DSelector.root";//_GEANT4.root");
-                string outputTreeFileName = degAngle+"_"+tag+"_2017_trees_DSelector.root";//_GEANT4.root");
+		string outputHistFileName = degAngle+tag+"_hists_DSelector.root";//_GEANT4.root");
+                string outputTreeFileName = degAngle+tag+"_trees_DSelector.root";//_GEANT4.root");
 		DPROOFLiteManager::Process_Chain(chain, "DSelector_thrown.C+",  proof_Nthreads, outputHistFileName, outputTreeFileName, options);
 	}
 	else { // get TTree and use standard TTree::Process

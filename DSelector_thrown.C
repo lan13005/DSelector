@@ -75,6 +75,8 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_pi0eta1D = new TH1F("pi0eta1D","M(pi0eta)",350,0,3.5);
 	dHist_phi8GeVPlus = new TH1F("phi8GeVPlus","phi GJ",60,-180,180);
 	dHist_cosTheta8GeVPlus = new TH1F("cosTheta8GeVPlus","cosTheta GJ",60,-1,1);
+
+        dHist_Mpi0eta = new TH1F("Mpi0eta", "Mpi0eta;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
 	/******************************** EXAMPLE USER INITIALIZATION: STAND-ALONE HISTOGRAMS *******************************/
 
 	/************************************* ADVANCED EXAMPLE: CHOOSE BRANCHES TO READ ************************************/
@@ -335,7 +337,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		dHist_NumThrown->Fill(locNumThrown);
 		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
 		dHist_phi->Fill(phi_pi0_GJ);
-		dHist_cosTheta->Fill(cosTheta_pi0_GJ);
+		dHist_cosTheta->Fill(cosTheta_eta_GJ);
 		dHist_beamE->Fill(locBeamP4.E());
 		for (int beamE=0; beamE<12; ++beamE){
 			if (pBeamE[beamE]){
@@ -370,21 +372,23 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		bool pBeamE8GeV = locBeamP4.E() > 8;
 		bool pBeamE8288 = 8.2 < locBeamP4.E() &&  locBeamP4.E() < 8.8;
 
-		if(correctFinalState*pBeamE8288*keepPolarization){
+		if(correctFinalState*keepPolarization){
+                        dHist_Mpi0eta->Fill(locPi0EtaMass);
+
 			mandelstam_tpAll->Fill(mandelstam_tp);	
 			mandelstam_tAll->Fill(mandelstam_abst);
 
 			dHist_SelectedBeamAngle->Fill(locPolarizationAngle);
 
 			dHist_beamECut->Fill(locBeamP4.E());
-			dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
+			dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_eta_GJ);
 			dHist_genCounts_eta_tAll->Fill(teta_genCounts);
 			dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
 
 			//Fill_OutputTree must be run with proof!
 			dHist_pi0eta1D->Fill(locPi0EtaMass);
 			dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
-			dHist_cosTheta8GeVPlus->Fill(cosTheta_pi0_GJ);
+			dHist_cosTheta8GeVPlus->Fill(cosTheta_eta_GJ);
 
 			if (mandelstam_t<0.5){
 				dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
@@ -400,25 +404,8 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			}
 
 			if(mandelstam_t < 1){
-				//dHist_genCounts_eta->Fill(teta_genCounts);
-				//dHist_genCounts_pi0->Fill(tpi0_genCounts);
 				mandelstam_tpLT1->Fill(mandelstam_tp);
-				dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-				//Fill_OutputTree("selected_tLT1"); //your user-defined key
-			}
-			//if(mandelstam_tp < 0.6){
-			//	//Fill_OutputTree("selected_tLT06"); //your user-defined key
-			//	mandelstam_tpLT06->Fill(mandelstam_tp);
-			//	dHist_cosThetaVsMass_tpLT06->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-			//}
-			//if((mandelstam_tp >= 0.5) && (mandelstam_tp < 1)) {
-			//	//Fill_OutputTree("selected_tGT05LT1"); //your user-defined key
-			//	mandelstam_tpGT05LT1->Fill(mandelstam_tp);
-			//	dHist_cosThetaVsMass_tpGT05LT1->Fill(locPi0EtaMass,cosTheta_pi0_GJ);
-			//}
-			if(mandelstam_tp < 1){
-				// using this section to select out EBeam [8,9] and t'<1 for use in the delta+ asymmetry measurement
-				//Fill_OutputTree("selected_tpLT1"); //your user-defined key
+				dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_eta_GJ);
 			}
 
 			mandelstam_tpAll_selected->Fill(mandelstam_tp);
@@ -437,28 +424,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			if ( !hasPolarizationAngle ) { 
 				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
 			}
-			//double degToRad = TMath::Pi()/180;
-			//double p2 = 0.25;
-			//double p1 = 0;
-			//double p0 = 0.7;
-			//double randomY = rgen->Uniform(0,1);
-			//if ( randomY < p2*TMath::Cos(2*(prodPlanePhi-p1)*degToRad)+p0){
-			//	if ( locPolarizationAngle == 0 ) { 
-			//		dHist_prodPlanePS_000_rejSamp->Fill(prodPlanePhi);
-			//	}
-			//	if ( locPolarizationAngle == 45 ) { 
-			//		dHist_prodPlanePS_045_rejSamp->Fill(prodPlanePhi);
-			//	}
-			//	if ( locPolarizationAngle == 90 ) { 
-			//		dHist_prodPlanePS_090_rejSamp->Fill(prodPlanePhi);
-			//	}
-			//	if ( locPolarizationAngle == 135 ) { 
-			//		dHist_prodPlanePS_135_rejSamp->Fill(prodPlanePhi);
-			//	}
-			//	if ( !hasPolarizationAngle ) { 
-			//		dHist_prodPlanePS_AMO_rejSamp->Fill(prodPlanePhi);
-			//	}
-			//}	
+
         		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
 			//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 		} // if cuts not passed

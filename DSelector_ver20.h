@@ -190,15 +190,6 @@ class trackingGroup{
             allUsedMapIds_2D.push_back(usedMapIds);
         }
 
-        // for filling distance between pairs of particles like dij3FCAL
-        //void fillHistograms_vectorMap( std::vector< map<Particle_t, set<Int_t> > > beingUsedPairIds){
-        //    for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
-        //        for (UInt_t iVal=0; iVal<allHists_1D[iHist].values.size(); ++iVal){
-	//            if ( *(allHists_1D[iHist].cut) ) {
-        //               allHists_1D[iHist].hist->Fill( *(allHists_1D[iHist].values[iVal]), *(allHists_1D[iHist].weights) ); 
-        //            }
-        //        }
-        //    }
         void fillHistograms_vectorMap( std::vector< map<Particle_t, set<Int_t> > > beingUsedPairIds){
             // *********************** THIS COMMENTED CODE IS TO CHECK THE OUTPUT OF THE DIJ3 FCAL FILLING TO MAKE SURE WE ARE DOING THINGS CORRECLTY ***********************************
             //  cout << "size of {tracking,value}={"<<beingUsedPairIds.size()<<","<<allHists_1D[0].values.size()<<"}"<<endl;

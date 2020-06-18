@@ -120,6 +120,7 @@ class DSelector_thrown : public DSelector
         	TH1F *dHist_genCounts_eta_tGT05LT1;
         	TH1F *dHist_genCounts_pi0_tGT05LT1;
 
+                TH1F* dHist_Mpi0eta;
 		bool pBeamE[12];
 		bool pBeamE8to9GeV;
 		TH1F *dHist_pi0eta1DBeam[12];

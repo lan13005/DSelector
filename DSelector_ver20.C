@@ -1242,7 +1242,7 @@ void DSelector_ver20::Init(TTree *locTree)
         histdef2d.clear();
         name = "eta_cosTheta_GJvsM_baseAsymCut";
         histdef2d.hist = new TH2F(name.c_str(), "Cut=baseAsymCut;M(#pi^{0}#eta)Events / 0.02 GeV;Cos(#theta) of #eta Events / 0.02",175,0,3.5,100,-1,1);
-        histdef2d.name = name; histdef2d.cut=baseAsymCut; histdef2d.weights = &weightAS;
+        histdef2d.name = name; histdef2d.cut=&baseAsymCut; histdef2d.weights = &weightAS;
         histdef2d.valuesX.push_back( &locPi0Eta_Kin );
         histdef2d.valuesY.push_back( &cosTheta_eta_GJ );
         groupHists.insert_2D(histdef2d); 
@@ -2189,7 +2189,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 {
 	++count_totEvents;
 	int countNewPi0=0;
-	//if (count_totEvents>100){
+	//if (count_totEvents>5000){
 	//	Abort("Lawrence... your max number of events is reached...");
 	//}
     	group_PhNB.clear_tracking();
@@ -2316,7 +2316,7 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			pids.push_back(dThrownWrapper->Get_PID());
                         if (locPID==7 && locParentID==-1) { cout << "Found thrown pi0" << endl; pi0P4_thrown = dThrownWrapper->Get_P4(); }
                         if (locPID==17 && locParentID==-1) { cout << "Found thrown eta" << endl; etaP4_thrown = dThrownWrapper->Get_P4(); }
-                        if(locParentID==-1 && locPID==14) { cout << "Found thrown proton" << endl; locProtonP4_thrown = dThrownWrapper->Get_P4(); }
+                        if (locParentID==-1 && locPID==14) { cout << "Found thrown proton" << endl; locProtonP4_thrown = dThrownWrapper->Get_P4(); }
 		}
 
 		std::vector<int> parents;
@@ -2334,19 +2334,23 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			findDaughters( parentArray, daughters, parent );
 			for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
 				if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
-				if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
+				else if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
+                                else {
+                                    cout << pids[daughters[daughter]]; 
+                                }
 			}
+                        cout << endl;
 		}
 		if ( pi0ToNGamma==2 && etaToNGamma==2) {
 			correctFinalState=true;
-			//cout << "THIS EVENT HAS 4 GAMMA FINAL STATE!" << endl;
+                        cout << "pi0ToNGamma = " << pi0ToNGamma << " and etaToNGamma = " << etaToNGamma << endl;
 			++count_correctTopology;
 			cout << "(Correct topology)" << endl;
 		}
 		else {
+                        cout << "pi0ToNGamma = " << pi0ToNGamma << " and etaToNGamma = " << etaToNGamma << endl;
 			cout << "(Incorrect topology)" << endl;
 		}
-		
 		
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2368,31 +2372,13 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 		//dHist_mandelstam_tp_thrown->Fill(mandelstam_tp_thrown);
         	//double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(beamP4_thrown.E(), Proton, etaP4_thrown);
 		//cout << "Calculated thrown variables to be used for selection matching to thrown MC" << endl;
-		bool pBeamE_thrown = 8.8 > Ebeam_thrown > 8.2;
+		bool pBeamE_thrown = 8.8 > Ebeam_thrown && Ebeam_thrown > 8.2;
 		bool pMandelstam_tp_thrown = mandelstam_tp_thrown < 1;
-		//if(correctFinalState){
-		//	dHist_thrown_tp->Fill(mandelstam_tp_thrown);
-		//}
 		cout << "mandelstam_tp_thrown: " << mandelstam_tp_thrown << endl;
 		cout << "Ebeam_thrown: " << Ebeam_thrown << endl;
-		if (correctFinalState*pBeamE_thrown*keepPolarization){//*(mandelstam_tp_thrown<1))
+		if (correctFinalState*keepPolarization){//*(mandelstam_tp_thrown<1))
 			cout << "** GOOD THROWN EVENT, CONTINUE WITH COMBO LOOP" << endl;
 			dHist_thrown_tp_selected->Fill(mandelstam_tp_thrown);
-			//if ( locPolarizationAngle == 0 ) { 
-			//	dHist_prodPlanePS_000->Fill(prodPlanePhi);
-			//}
-			//if ( locPolarizationAngle == 45 ) { 
-			//	dHist_prodPlanePS_045->Fill(prodPlanePhi);
-			//}
-			//if ( locPolarizationAngle == 90 ) { 
-			//	dHist_prodPlanePS_090->Fill(prodPlanePhi);
-			//}
-			//if ( locPolarizationAngle == 135 ) { 
-			//	dHist_prodPlanePS_135->Fill(prodPlanePhi);
-			//}
-			//if ( !hasPolarizationAngle ) { 
-			//	dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
-			//}
 		}
 		// If the thrown variables do not pass our selections (on beam energy, or t' or w.e) we return the function also.
 		else {
