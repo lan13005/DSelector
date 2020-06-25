@@ -10,7 +10,7 @@ class overlayPlots{
 		std::vector<double> histWeights;
 		std::vector<int> histFillColors;
         	TLegend *leg = new TLegend(0.7,0.75,0.9,0.9);
-		int colors[10] = {4, 6, 8, 7, 9, 30, 27, 46, 41};
+		int colors[10] = {4, 6, kOrange, 7, 9, 30, 27, 46, 41};
 		TLine* cutLine;
 		int numberHists=0;
 		std::map<string, double> _trackNames;
@@ -45,11 +45,11 @@ class overlayPlots{
 		}
 
 		void plot(string fileName, bool b_xCut, std::vector<double> xCut) {
-			cout << "Creating hist " << overlayHists[0]->GetName() << endl;
+			cout << "Creating overlay hist " << overlayHists[0]->GetName() << endl;
 			TCanvas* overlayCanvas = new TCanvas( ("canvas_"+fileName).c_str(),"",1440,900);
 			overlayHists[0]->Scale(histWeights[0]);
 			overlayHists[0]->SetLineColor( colors[0] );
-			overlayHists[0]->SetLineWidth( 2 ) ;
+			overlayHists[0]->SetLineWidth( 3 ) ;
 			leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
 			overlayHists[0]->SetTitle("");
 			overlayHists[0]->Draw("HIST");
@@ -61,7 +61,7 @@ class overlayPlots{
 				leg->AddEntry(overlayHists[i],overlayHists[i]->GetTitle() , "l");
 				overlayHists[i]->Scale(histWeights[i]);
 				overlayHists[i]->SetLineColor( colors[i] );
-				overlayHists[i]->SetLineWidth( 2 ) ;
+				overlayHists[i]->SetLineWidth( 3 ) ;
 				overlayHists[i]->Draw("SAME HIST");
 			}
 			if (b_xCut){
@@ -110,7 +110,7 @@ class sideBySide2D{
 		}
 
 		void plot(string fileName, string cutShape, std::vector<double [4]> xCut) {
-			cout << "Creating hist " << overlayHists[0]->GetName() << endl;
+			cout << "Creating side by side hist " << overlayHists[0]->GetName() << endl;
 			TCanvas* overlayCanvas = new TCanvas( ("canvas_"+fileName).c_str(),"",1440,900);
 			overlayHists[0]->Scale(histWeights[0]);
 			//leg->AddEntry(overlayHists[0],overlayHists[0]->GetTitle() , "l");
@@ -143,7 +143,7 @@ class sideBySide2D{
 void makeGraphs(){
 	gStyle->SetOptStat(0);
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/pi0eta_test_hists_DSelector.root");
-	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2018_1_mEllipse_tLT1_hists_DSelector.root");
+	TFile* file = TFile::Open("degALL_data_2017_mEllipsePre_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_mEllipse_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/eta3pi/pi0eta_seanResoution_reco_3pi0_hists_DSelector.root");
 	TIter keyList(file->GetListOfKeys());

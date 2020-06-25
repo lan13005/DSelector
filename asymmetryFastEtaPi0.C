@@ -4,6 +4,7 @@
 //
 
 void drawHistAndAcc(TH1F* dataHist, TH1F* accHist, TCanvas* c1){
+    dataHist->SetMinimum(0);
     dataHist->Draw();
     c1->Update(); // need to update otherwise the gPad will not grab the correct value
     //scale accHist to the pad coordinates

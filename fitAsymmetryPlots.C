@@ -1,4 +1,5 @@
 // This one is for Asymmetry vs teta/tpi0 as we vary the lower Mpi0eta threshold
+// teta/tpi is t1 in vincent/colin language
 
 
 double degToRad=TMath::Pi()/180;
@@ -31,7 +32,14 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))));
 }
 
+
+
+
 void fitAsymmetryPlots(){
+        // Do some cleaning
+        gSystem->Exec("rm -rf asymmetryPlots/SigVst1_threshMpi0eta");
+        gSystem->Exec("mkdir asymmetryPlots/SigVst1_threshMpi0eta");
+        //////////////////
 	static const int nSetsBS=1; // (number of sets to bootstrap-1). 1 is for not bootstrapping at all
 	int maxPrintBS=1; // Only show up to this value when going through nSetsBS. This includes the "full" set in the count
 
@@ -97,7 +105,7 @@ void fitAsymmetryPlots(){
 	if (nSetsBS == 1){
 		for (int iSet=0; iSet<nSetsBS; ++iSet){ // we add 1 since using the full dataset takes the first element of the array
 			for (int iData=0; iData <nDataSets; ++iData){
-				string dataFileName = "/d/grid15/ln16/pi0eta/092419/degALL_"+dataSetTag[iData]+"_hists_DSelector.root";
+				string dataFileName = "/d/grid15/ln16/pi0eta/092419/degALL_"+dataSetTag[iData]+"_mEllipsePre_hists_DSelector.root";
 				//string dataFileName = "/d/grid15/ln16/pi0eta/092419/newGraphs_histValues/rootFiles/deg000_data_"+dataSetTag[iData]+"_hists_DSelector.root";
 				TFile *dataFile = new TFile(dataFileName.c_str());
 				cout << "LOADING ROOT FILE: " << dataFileName << endl; 
@@ -331,6 +339,8 @@ void fitAsymmetryPlots(){
 		cout << "--------------------------------------------\nSTARTING FITTING\n--------------------------------------------" << endl;
 
 
+					
+                double minMpi0eta=1.6;
 		for (int iMass=0; iMass<num_mBins; ++iMass){
 			// *****************************
 			// Defining array to hold Asymmetry values from fiting asymmetry histograms
@@ -472,7 +482,7 @@ void fitAsymmetryPlots(){
 					//fitPointer->Scan(2,likelihoodFit_045_135_eta,0,1);
 
 
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymmetry"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/asymmetry"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
 					
 					//allCanvases->Clear();
 					//allCanvases->Divide(2,1);
@@ -482,7 +492,7 @@ void fitAsymmetryPlots(){
 					//allCanvases->cd(2);
 					//likelihoodFit_045_135_eta->Draw("ALP");
 					//likelihoodFit_045_135_eta->SetTitle(("045_135 - tBin"+to_string(iteta)).c_str());
-					//if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/likelihood"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".root").c_str()); }
+					//if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SiVst1_threshMpi0eta/likelihood"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".root").c_str()); }
 
 					// *****************************
 					// Fitting asymmetry for pi0
@@ -517,7 +527,7 @@ void fitAsymmetryPlots(){
 					TGraph* likelihoodFit_045_135_pi0 = new TGraph(50); 
 					//fitPointer->Scan(2,likelihoodFit_045_135_pi0,-2,2);
 
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymmetry"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/asymmetry"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
 
 					//allCanvases->Clear();
 					//allCanvases->Divide(2,1);
@@ -527,7 +537,7 @@ void fitAsymmetryPlots(){
 					//allCanvases->cd(2);
 					//likelihoodFit_045_135_eta->Draw("ALP");
 					//likelihoodFit_045_135_eta->SetTitle(("045/135 - tBin"+to_string(iteta)).c_str());
-					//if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/likelihood"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".root").c_str()); }
+					//if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SiVst1_threshMpi0eta/likelihood"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".root").c_str()); }
 			
 					// *****************************
 					// Fitting prodPlanePhi for eta
@@ -562,7 +572,7 @@ void fitAsymmetryPlots(){
 					cout << "Doing flat fit to AMO for eta" << endl;
 					fitStatus = phiAMO_eta->Fit(fit_flat,"RQE");
 					phiAMO_eta->Draw("SAME");
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/phiYieldFits"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/phiYieldFits"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tetaBin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
 					
 			
 					// *****************************
@@ -599,7 +609,7 @@ void fitAsymmetryPlots(){
 					fitStatus = phiAMO_pi0->Fit(fit_flat,"E S");
 					phiAMO_pi0->Draw("SAME");
 					cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phiAMO_pi0->GetEntries() << endl;
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/phiYieldFits"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/phiYieldFits"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_tpi0Bin"+to_string(iteta)+"_iSet"+to_string(iSet)+".png").c_str()); }
 
 				}
 
@@ -610,10 +620,12 @@ void fitAsymmetryPlots(){
 				if (iMass==0 && iTag==0){
 					TFile *resultFile = new TFile("resultFile.root","RECREATE");
 				}
-					
 				auto leg1 = new TLegend(0.7,0.15,0.9,0.35);
-				allCanvases->Clear();
-				allCanvases->Divide(2,1);
+	                        allCanvases = new TCanvas("","",1440,900);
+                                TPaveLabel* title = new TPaveLabel(0.1,0.91,0.9,0.97,("M(#pi#eta) < "+to_string(minMpi0eta+iMass*0.1)).c_str());
+                                title->SetTextSize(0.8);
+                                title->Draw();
+				allCanvases->Divide(2,1,0,0);
 				allCanvases->cd(1);
 				gPad->SetBottomMargin(0.15);
 				auto gr_000 = new TGraphErrors(num_tBins,tBins,asymmetries_000_eta[iTag][iSet][iMass],tBins_err,asymmetries_000_eta_err[iTag][iSet][iMass]);
@@ -621,9 +633,9 @@ void fitAsymmetryPlots(){
 				gr_000->SetMarkerColor(4);
 				gr_000->SetMarkerStyle(21);
 				gr_000->SetLineColor(4);
-				gr_000->Draw("AP");
 				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
 				gr_000->GetXaxis()->SetTitleSize(0.06);
+				gr_000->Draw("AP");
 				leg1->AddEntry(gr_000,"t_{#eta}","lep");
 				gr_000->GetHistogram()->SetMaximum(1);
 				gr_000->GetHistogram()->SetMinimum(-1);
@@ -635,9 +647,9 @@ void fitAsymmetryPlots(){
 				gr_000->SetLineColor(2);
 				gr_000->SetMarkerColor(2);
 				gr_000->SetMarkerStyle(20);
-				gr_000->Draw("P SAME");
 				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
 				gr_000->GetXaxis()->SetTitleSize(0.06);
+				gr_000->Draw("P SAME");
 				gr_000->GetHistogram()->SetMaximum(1);
 				gr_000->GetHistogram()->SetMinimum(-1);
 				if (iMass==0){
@@ -674,7 +686,7 @@ void fitAsymmetryPlots(){
 				if (iMass==0){
 					gr_045->Write(("asymVstPi0_045"+tagPi0[iTag]).c_str());
 				}
-				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/asymVst"+tag[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_iSet"+to_string(iSet)+".png").c_str()); }
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/asymVst"+tag[iTag]+"_Mpi0etaBin"+to_string(iMass)+"_iSet"+to_string(iSet)+".png").c_str()); }
 
 
 				allCanvases->Clear();
@@ -728,7 +740,7 @@ void fitAsymmetryPlots(){
    				legend_eta->Draw();
 				allCanvases->cd(2);
    				legend_pi0->Draw();
-				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/PSigma_Mpi0etaBin"+to_string(iMass)+"_iSet"+to_string(iSet)+".png").c_str()); }
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/PSigma_Mpi0etaBin"+to_string(iMass)+"_iSet"+to_string(iSet)+".png").c_str()); }
 			}
 		}
 	}
@@ -762,7 +774,7 @@ void fitAsymmetryPlots(){
 			// dont begin with 2 since we have already filled up that one in the code above since we know it is zero
 			// so we begin with 3 and end with nSetsBS+2. So if like nSetsBS=6 then: for 3 to 8 gives 3,4,5,6,7 which contains 5 iterations or 5 histograms as expected
 			ofstream allAsymsBSFile;
-			allAsymsBSFile.open(("asymmetryPlots/allAsymsBSFile_iTag"+to_string(iTag)+".txt").c_str(),std::ios_base::trunc);
+			allAsymsBSFile.open(("asymmetryPlots/SigVst1_threshMpi0eta/allAsymsBSFile_iTag"+to_string(iTag)+".txt").c_str(),std::ios_base::trunc);
 			allAsymsBSFile << "asymmetries_000_eta[iTag][iSet][iMass][iteta]" << endl;
 			for(int iSetJustBS=3; iSetJustBS<nSetsBS+2; ++iSetJustBS){
 				nBoostdstrapped[iSetJustBS-2] = iSetJustBS-1;  // so following the logic of nBoostdstrapped[0] = 1 we have to shift iSetJustBS by 2 in the index and by 1 in the rvalue 
@@ -887,7 +899,7 @@ void fitAsymmetryPlots(){
 					gr_stds->Draw("SAME L");
 				}
 			}
-			allCanvases->SaveAs(("asymmetryPlots/bootstrappedErrors_iTag"+to_string(iTag)+".png").c_str());
+			allCanvases->SaveAs(("asymmetryPlots/SigVst1_threshMpi0eta/bootstrappedErrors_iTag"+to_string(iTag)+".png").c_str());
 		}
 	}
 

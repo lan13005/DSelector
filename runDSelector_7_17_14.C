@@ -49,7 +49,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// MC flat
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_pi0eta__B4_M17_M7.root");
-	chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
+	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
 	// BA studies. Hddm filtered to make phi have some cos dependence
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_21t_hddmFiltered_8288_1628_uniquePolar/tree_pi0eta__B4_M17_M7.root");
 	//
@@ -57,9 +57,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
 	
 	// a0a2 recon_2017
-	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
+        chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
-	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2pi1_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//
 	// vincent
@@ -89,8 +88,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
         // ********************** BASE CUTS APPLIED ONLY ********************
 	// 2017
- 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
-	// 2017 - loose ChiSq and UE cut
+        //chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+	//// 2017 - loose ChiSq and UE cut
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedLooseChiSqUE/pi0eta_looseCuts_tree_DSelector.root");
 	// 2018_8
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_8/pi0eta_baseCuts_2018_tree_DSelector.root");
@@ -115,7 +114,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	// should change the name below from data to reco when running over MC
 	string degAngle="degALL";
-	string tag="_flat_2017_mEllipsePre";
+	string tag="_a0a2Test";
 	//degAngle="pi0pi0_f2_reco";
 	//degAngle = "pi0pi0_May2_";
 

@@ -76,7 +76,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	dHist_phi8GeVPlus = new TH1F("phi8GeVPlus","phi GJ",60,-180,180);
 	dHist_cosTheta8GeVPlus = new TH1F("cosTheta8GeVPlus","cosTheta GJ",60,-1,1);
 
-        dHist_Mpi0eta = new TH1F("Mpi0eta", "Mpi0eta;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 350, 0, 3.5);
+        dHist_Mpi0eta = new TH1F("Mpi0eta", "Mpi0eta;M(#pi^{0}#eta) (GeV);Events / 0.01 GeV", 60,1.6,2.8);
 	/******************************** EXAMPLE USER INITIALIZATION: STAND-ALONE HISTOGRAMS *******************************/
 
 	/************************************* ADVANCED EXAMPLE: CHOOSE BRANCHES TO READ ************************************/

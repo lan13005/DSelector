@@ -908,9 +908,10 @@ class DSelector_ver20 : public DSelector
 		static const int numMpi0etaRes = 9; // there will be this many bins in Mpi0eta to find the asymmetries in. Will extend down into the resonance region
 		double lowerMpi0eta[numMpi0etaRes] = {0.9, 1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65};
 		double upperMpi0eta[numMpi0etaRes] = {1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65, 2.9};
-		// So we will look at BA in bins of t_eta or t_pi but also vary the lower M(pi0eta) threshold. So we can see how the baryon contributions might enter
-                bool ptEtaBeamAsym[4];
-                bool ptPi0BeamAsym[4];
+                bool ptEtaUpThreshold[4];  // Checking Mpi0eta yield asymmetry varying the upper threshold of teta/tpi.
+                bool ptPi0UpThreshold[4];
+                bool ptEtaBin[numMpi0etaRes]; // Plotting Mpi0eta in bins of teta/tpi. Can see contributions to the asymmetry as a function of Mpi0eta in bins of teta/tpi
+                bool ptPi0Bin[numMpi0etaRes];
 		bool ptEtaBeamAsym_000[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_045[numMpi0eta*numTBins];
 		bool ptEtaBeamAsym_090[numMpi0eta*numTBins];
@@ -933,6 +934,8 @@ class DSelector_ver20 : public DSelector
 		bool ptPi0BeamAsym_backwardEtaP_AMO[numMpi0eta*numTBins];
 
 		// We can also look at BA in bins of M(pi0eta) for fast pion and for fast eta
+                // 6 bins in t for 5 bins between 0 and 1, and t<1 is the 6th
+                // numMpi0etaRes has 9 bins which extend down into the resonance region
 		bool pMpi0etaBeamAsym_000_fastEta[6*numMpi0etaRes]; // WOULD SELECT ON FAST ETA
 		bool pMpi0etaBeamAsym_045_fastEta[6*numMpi0etaRes];
 		bool pMpi0etaBeamAsym_090_fastEta[6*numMpi0etaRes];
@@ -944,7 +947,30 @@ class DSelector_ver20 : public DSelector
 		bool pMpi0etaBeamAsym_135_fastPi0[6*numMpi0etaRes];
 		bool pMpi0etaBeamAsym_AMO_fastPi0[6*numMpi0etaRes];
 
+		// We can also look at BA in bins of t_recoil for fast pion and for fast eta
+		bool ptrecoilBeamAsym_000_fastEta[5*4]; // WOULD SELECT ON FAST ETA
+		bool ptrecoilBeamAsym_045_fastEta[5*4];
+		bool ptrecoilBeamAsym_090_fastEta[5*4];
+		bool ptrecoilBeamAsym_135_fastEta[5*4];
+		bool ptrecoilBeamAsym_AMO_fastEta[5*4];
+		bool ptrecoilBeamAsym_000_fastPi0[5*4]; // WOULD SELECT ON FAST PI0
+		bool ptrecoilBeamAsym_045_fastPi0[5*4];
+		bool ptrecoilBeamAsym_090_fastPi0[5*4];
+		bool ptrecoilBeamAsym_135_fastPi0[5*4];
+		bool ptrecoilBeamAsym_AMO_fastPi0[5*4];
 		
+                // Apply tighter cuts to select more strongly the teta/tpi asymmetries
+		bool ptightBeamAsym_000_fastEta[5]; // WOULD SELECT ON FAST ETA
+		bool ptightBeamAsym_045_fastEta[5];
+		bool ptightBeamAsym_090_fastEta[5];
+		bool ptightBeamAsym_135_fastEta[5];
+		bool ptightBeamAsym_AMO_fastEta[5];
+		bool ptightBeamAsym_000_fastPi0[5]; // WOULD SELECT ON FAST PI0
+		bool ptightBeamAsym_045_fastPi0[5];
+		bool ptightBeamAsym_090_fastPi0[5];
+		bool ptightBeamAsym_135_fastPi0[5];
+		bool ptightBeamAsym_AMO_fastPi0[5];
+
 		// THE GOAL HERE IS TO LOOK AT THE BA CONTRIBUTIONS IN BINS OF M(PI0P) AND IN BINS OF M(ETAP). IN M(PI0P) WE SEE 3 N* RESONANCES. IF WE BIN IN THIS VARIABLE
 		// WE CAN DETERMINE WHAT THE CONTRIBUTIONS ARE TO THE TOTAL ASYMMETRY WE ARE SEEING
 		static const int numBaryonBins=3;
@@ -1015,7 +1041,8 @@ class DSelector_ver20 : public DSelector
 		bool baseAsymCut_backwardEtaP=true;
 		bool baseAsymComparisionRegge=true;
 		bool baseAsymComparisionDelta=true;
-		bool looseCuts=true;
+		bool looseCutsUEChiSq=true;
+                bool kinematicSelected_looseCutsUEChiSq=true;
 		bool pBase_pT_pIE_pBE8288_pMPi0P_pDelta = true;
                 bool noCut=true;
 
