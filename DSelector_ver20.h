@@ -390,6 +390,8 @@ class DSelector_ver20 : public DSelector
 		string paddedRun="";
 
 
+                bool isTruePi0Eta=false;
+
 		Int_t uniqueComboID=0;
 
                 //string degAngle = "deg0";
@@ -439,6 +441,7 @@ class DSelector_ver20 : public DSelector
 		double mandelstam_t0_oldForm;
 		double mandelstam_tp_oldForm;
 		double Ebeam_thrown;
+                double Mpi0eta_thrown;
 
 		TH1F* countThrownEvents;
 		//TH1I* dHist_numCombos;
@@ -1043,6 +1046,7 @@ class DSelector_ver20 : public DSelector
 		bool baseAsymComparisionDelta=true;
 		bool looseCutsUEChiSq=true;
                 bool kinematicSelected_looseCutsUEChiSq=true;
+                bool combinatoricStudy=true;
 		bool pBase_pT_pIE_pBE8288_pMPi0P_pDelta = true;
                 bool noCut=true;
 
@@ -1057,7 +1061,10 @@ class DSelector_ver20 : public DSelector
                 bool allGen_barybkg=true;
                 bool allGen_vanHove=true;
 		bool cutsToApply = true; 
-		
+
+                Int_t whichSignalRegion;
+                bool beamPhotonMatchToThrown;
+
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////// ********* DEFINING ALL HISTOGRAMS ****************/////////////////////////////////////////////
 		
