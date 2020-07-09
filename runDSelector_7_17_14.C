@@ -23,7 +23,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	gROOT->ProcessLine(".x $(ROOT_ANALYSIS_HOME)/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 24;
+	int proof_Nthreads = 36;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
@@ -57,7 +57,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
 	
 	// a0a2 recon_2017
-        chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2pi1_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_091519/tree_pi0eta__B4_M17_M7.root");
@@ -89,7 +89,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
         // ********************** BASE CUTS APPLIED ONLY ********************
 	// 2017
-        //chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+        chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 	//// 2017 - loose ChiSq and UE cut
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedLooseChiSqUE/pi0eta_looseCuts_tree_DSelector.root");
 	// 2018_8
@@ -115,9 +115,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	// should change the name below from data to reco when running over MC
 	string degAngle="degALL";
-	string tag="_a0a2Test";
-	//degAngle="pi0pi0_f2_reco";
-	//degAngle = "pi0pi0_May2_";
+	string tag="_data_2017_BA";
+        //string tag="_a0a2Test";
 
 	//  ===== Section is for pulling in data by polarization for asymmetry ===== /////
 	// dividing allData into gorups by polarization. Actually the files we import have

@@ -391,6 +391,8 @@ class DSelector_ver20 : public DSelector
 
 
                 bool isTruePi0Eta=false;
+                Int_t numSpect=5; // 1 proton, 4 photons
+                string spectroscopicID="notThrown"; // just setting this as the default for data. If MC then thrown data exists and this will be updated
 
 		Int_t uniqueComboID=0;
 
@@ -939,16 +941,17 @@ class DSelector_ver20 : public DSelector
 		// We can also look at BA in bins of M(pi0eta) for fast pion and for fast eta
                 // 6 bins in t for 5 bins between 0 and 1, and t<1 is the 6th
                 // numMpi0etaRes has 9 bins which extend down into the resonance region
-		bool pMpi0etaBeamAsym_000_fastEta[6*numMpi0etaRes]; // WOULD SELECT ON FAST ETA
-		bool pMpi0etaBeamAsym_045_fastEta[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_090_fastEta[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_135_fastEta[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_AMO_fastEta[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_000_fastPi0[6*numMpi0etaRes]; // WOULD SELECT ON FAST PI0
-		bool pMpi0etaBeamAsym_045_fastPi0[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_090_fastPi0[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_135_fastPi0[6*numMpi0etaRes];
-		bool pMpi0etaBeamAsym_AMO_fastPi0[6*numMpi0etaRes];
+                static const int numt1BinRes=6;
+		bool pMpi0etaBeamAsym_000_fastEta[numt1BinRes*numMpi0etaRes]; // WOULD SELECT ON FAST ETA
+		bool pMpi0etaBeamAsym_045_fastEta[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_090_fastEta[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_135_fastEta[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_AMO_fastEta[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_000_fastPi0[numt1BinRes*numMpi0etaRes]; // WOULD SELECT ON FAST PI0
+		bool pMpi0etaBeamAsym_045_fastPi0[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_090_fastPi0[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_135_fastPi0[numt1BinRes*numMpi0etaRes];
+		bool pMpi0etaBeamAsym_AMO_fastPi0[numt1BinRes*numMpi0etaRes];
 
 		// We can also look at BA in bins of t_recoil for fast pion and for fast eta
 		bool ptrecoilBeamAsym_000_fastEta[5*4]; // WOULD SELECT ON FAST ETA
@@ -976,7 +979,15 @@ class DSelector_ver20 : public DSelector
 
 		// THE GOAL HERE IS TO LOOK AT THE BA CONTRIBUTIONS IN BINS OF M(PI0P) AND IN BINS OF M(ETAP). IN M(PI0P) WE SEE 3 N* RESONANCES. IF WE BIN IN THIS VARIABLE
 		// WE CAN DETERMINE WHAT THE CONTRIBUTIONS ARE TO THE TOTAL ASYMMETRY WE ARE SEEING
-		static const int numBaryonBins=3;
+		static const int numBaryonBins=5;
+	        double minPi0P[numBaryonBins] = {1.15, 1.4, 1.6, 1.75, 1.95};
+	        double maxPi0P[numBaryonBins] = {1.4, 1.6, 1.75, 1.95, 2.4};
+	        double minEtaP[numBaryonBins] = {1.5, 1.65, 1.9, 2.2, 2.4};
+	        double maxEtaP[numBaryonBins] = {1.65, 1.9, 2.2, 2.4, 2.8};
+	        //double minPi0P[3] = {1.1, 1.5, 1.9};
+	        //double maxPi0P[3] = {1.5, 1.9, 2.3};
+	        //double minEtaP[3] = {1.5, 1.9, 2.3};
+	        //double maxEtaP[3] = {1.9, 2.3, 2.7};
 		bool pMpi0pBeamAsym_000[numBaryonBins*numTBins]; // WOULD SELECT ON FAST ETA
 		bool pMpi0pBeamAsym_045[numBaryonBins*numTBins];
 		bool pMpi0pBeamAsym_090[numBaryonBins*numTBins];
@@ -989,6 +1000,7 @@ class DSelector_ver20 : public DSelector
 		bool pMetapBeamAsym_AMO[numBaryonBins*numTBins];
 		bool pMpi0pFastEta[numBaryonBins];
 		bool pMetapFastPi0[numBaryonBins];
+                bool beamAsymVeryFastEta=true;
 		
 
 		bool mMandelstamT=true;

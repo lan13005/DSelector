@@ -9,7 +9,7 @@ class overlayPlots{
 		std::vector<TH1F*> overlayHists;
 		std::vector<double> histWeights;
 		std::vector<int> histFillColors;
-        	TLegend *leg = new TLegend(0.7,0.75,0.9,0.9);
+        	TLegend *leg = new TLegend(0.6,0.65,0.9,0.9);
 		int colors[10] = {4, 6, kOrange, 7, 9, 30, 27, 46, 41};
 		TLine* cutLine;
 		int numberHists=0;
@@ -143,7 +143,7 @@ class sideBySide2D{
 void makeGraphs(){
 	gStyle->SetOptStat(0);
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/pi0eta_test_hists_DSelector.root");
-	TFile* file = TFile::Open("degALL_data_2017_mEllipsePre_hists_DSelector.root");
+	TFile* file = TFile::Open("degALL_data_2017_BA_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_mEllipse_hists_DSelector.root");
 	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/eta3pi/pi0eta_seanResoution_reco_3pi0_hists_DSelector.root");
 	TIter keyList(file->GetListOfKeys());
@@ -154,7 +154,6 @@ void makeGraphs(){
 	TH1F* sigHist;
 
 
-		
 	std::map<string, double> trackHists;
 	trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1 } };
 	overlayPlots pi0proton1D_mMandelstamT_mdelta(trackHists);
@@ -209,6 +208,12 @@ void makeGraphs(){
 	overlayPlots pi0eta1D_pFastPi0Bin4(trackHists);
 	trackHists = { {"pi0eta1D_pFastPi0Bin5", 1} };
 	overlayPlots pi0eta1D_pFastPi0Bin5(trackHists);
+		
+
+        trackHists = { {"pi0proton1D_baseAsymCut_mDelta_fastEta", 1} };
+        overlayPlots pi0proton1D_baseAsymCut_mDelta_fastEta(trackHists);
+        trackHists = { {"etaproton1D_baseAsymCut_mDelta_fastPi0", 1} };
+        overlayPlots etaproton1D_baseAsymCut_mDelta_fastPi0(trackHists);
 
 	TCanvas *c1 = new TCanvas("c1","",1440,900);
 	int i=0;
@@ -267,10 +272,28 @@ void makeGraphs(){
 			pi0eta1D_pFastPi0Bin5.fillHist(h); 
 			pi0eta1D_pFastEta.fillHist(h);
 			pi0eta1D_pFastPi0.fillHist(h);
+                        etaproton1D_baseAsymCut_mDelta_fastPi0.fillHist(h);
+                        pi0proton1D_baseAsymCut_mDelta_fastEta.fillHist(h);
+                        if ( strcmp(h->GetName(),"pi0proton1D_baseAsymCut_mDelta_fastEta")==0 ){ h->SetTitle("M(pi0proton) fastEta"); }
+                        if ( strcmp(h->GetName(),"etaproton1D_baseAsymCut_mDelta_fastPi0")==0 ){ h->SetTitle("M(etaproton) fastPi0"); }
 			if ( strcmp(h->GetName(),"pi0proton1D_mMandelstamT_mdelta")==0 ){ h->SetTitle("all t'");}
 			if ( strcmp(h->GetName(),"pi0proton1D_mDelta")==0 ){ h->SetTitle("|t'|<1GeV^2");}
 			if ( strcmp(h->GetName(),"pi0eta1D_mMandelstamT")==0 ){ h->SetTitle("all t'");}
 			if ( strcmp(h->GetName(),"pi0eta1D_Cut")==0 ){ h->SetTitle("|t'|<1GeV^2");}
+                        // title changes for the legend for Mpi0eta in different t1 bins
+                        if ( strcmp(h->GetName(),"pi0eta1D_baseAsymCut_res")==0 ) { h->SetTitle("Mpi0eta"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastEtaBin0")==0 ) { h->SetTitle("Mpi0eta: 0.0<t_{#eta}<0.2"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastEtaBin1")==0 ) { h->SetTitle("Mpi0eta: 0.2<t_{#eta}<0.4"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastEtaBin2")==0 ) { h->SetTitle("Mpi0eta: 0.4<t_{#eta}<0.6"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastEtaBin3")==0 ) { h->SetTitle("Mpi0eta: 0.6<t_{#eta}<0.8"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastEtaBin4")==0 ) { h->SetTitle("Mpi0eta: 0.8<t_{#eta}<1"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastEtaBin5")==0 ) { h->SetTitle("Mpi0eta: 1<t_{#eta}"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastPi0Bin0")==0 ) { h->SetTitle("Mpi0eta: 0.0<t_{#pi}<0.2"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastPi0Bin1")==0 ) { h->SetTitle("Mpi0eta: 0.2<t_{#pi}<0.4"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastPi0Bin2")==0 ) { h->SetTitle("Mpi0eta: 0.4<t_{#pi}<0.6"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastPi0Bin3")==0 ) { h->SetTitle("Mpi0eta: 0.6<t_{#pi}<0.8"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastPi0Bin4")==0 ) { h->SetTitle("Mpi0eta: 0.8<t_{#pi}<1"); }
+                        if ( strcmp(h->GetName(),"pi0eta1D_pFastPi0Bin5")==0 ) { h->SetTitle("Mpi0eta: 1<t_{#pi}"); }
 			pi0eta1DtAlltCut.fillHist(h);
 			pi0proton1D_beforeAfterT.fillHist(h);
 		}
@@ -287,11 +310,11 @@ void makeGraphs(){
 	pi0proton1D_beforeAfterT.plot("newGraphs/pi0proton1D_beforeAfterT.png",false, lineCutThresholds);
 	pi0proton1D_baseAsym.plot("newGraphs/pi0proton1D_baseAsym.png",false,lineCutThresholds);
 	etaproton1D_baseAsym.plot("newGraphs/etaproton1D_baseAsym.png",false,lineCutThresholds);
-	pi0eta1D_pFastEta.plot("newGraphs/pi0eta1D_pFastEta.png",false,lineCutThresholds);
-	pi0eta1D_pFastPi0.plot("newGraphs/pi0eta1D_pFastPi0.png",false,lineCutThresholds);
 
 
 	lineCutThresholds = {0.9, 1.060, 1.24, 1.4, 1.65, 1.9, 2.15, 2.4, 2.65, 2.9};
+	pi0eta1D_pFastEta.plot("newGraphs/pi0eta1D_pFastEta.png",true,lineCutThresholds);
+	pi0eta1D_pFastPi0.plot("newGraphs/pi0eta1D_pFastPi0.png",true,lineCutThresholds);
 	pi0eta1D_pFastEtaBin0.plot("newGraphs/pi0eta1D_pFastEtaBin0.png", true, lineCutThresholds); 
 	pi0eta1D_pFastEtaBin1.plot("newGraphs/pi0eta1D_pFastEtaBin1.png", true, lineCutThresholds); 
 	pi0eta1D_pFastEtaBin2.plot("newGraphs/pi0eta1D_pFastEtaBin2.png", true, lineCutThresholds); 
@@ -309,6 +332,11 @@ void makeGraphs(){
 	pi0proton1D_mMandelstamT_mdelta.plot("newGraphs/pi0proton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
 	lineCutThresholds={selectEtaProton};
 	etaproton1D_mMandelstamT_mdelta.plot("newGraphs/etaproton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
+
+        lineCutThresholds={1.5,1.65,1.9,2.2,2.4,2.8};
+        etaproton1D_baseAsymCut_mDelta_fastPi0.plot("newGraphs/etaproton1D_baseAsymCut_mDelta_fastPi0_showBins.png",true,lineCutThresholds);
+        lineCutThresholds={1.15,1.4,1.6,1.75,1.95,2.4};
+        pi0proton1D_baseAsymCut_mDelta_fastEta.plot("newGraphs/pi0proton1D_baseAsymCut_mDelta_fastEta_showBins.png",true,lineCutThresholds);
 	
 	//cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
 	//pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphs/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
