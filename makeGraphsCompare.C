@@ -7,6 +7,15 @@ double selectEtaProton=2;
 bool overlay1D=true;
 bool drawNormalized=true;
 
+
+void swap(TH1 *ptr1, TH1 *ptr2){
+    TH1* temp = ptr1;
+    ptr1 = ptr2; 
+    ptr2 = temp;
+    return;
+}
+
+
 class overlayPlots{
 	private:
 		std::vector<TH1F*> overlayHists;
@@ -261,6 +270,18 @@ void makeGraphsCompare(){
 
         set<string> makeLogHists={"UnusedEnergy_noCut","P4ChiSqKinFit_mChiSq"};
 
+        //TLine* someLine;
+        //map<string,double> drawLineOnThisHist;
+        //for (int i=0; i<2; ++i){
+        //    drawLineOnThisHist["pi0MassBCAL_Kin_mEllipsePre_thetaBin"+to_string(i)]=0.135;
+        //    drawLineOnThisHist["pi0MassFCAL_Kin_mEllipsePre_thetaBin"+to_string(i)]=0.135;
+        //    drawLineOnThisHist["pi0MassSPLIT_Kin_mEllipsePre_thetaBin"+to_string(i)]=0.135;
+        //    drawLineOnThisHist["etaMassBCAL_Kin_mEllipsePre_thetaBin"+to_string(i)]=0.548;
+        //    drawLineOnThisHist["etaMassFCAL_Kin_mEllipsePre_thetaBin"+to_string(i)]=0.548;
+        //    drawLineOnThisHist["etaMassSPLIT_Kin_mEllipsePre_thetaBin"+to_string(i)]=0.548;
+        //}
+
+
 	std::map<string, double> trackHists;
 	trackHists = { {"pi0proton1D_mMandelstamT_mdelta", 1 } };
 	overlayPlots pi0proton1D_mMandelstamT_mdelta(trackHists);
@@ -286,6 +307,10 @@ void makeGraphsCompare(){
 	overlayPlots pi0proton1D_baseAsym(trackHists);
 	trackHists = { {"etaproton1D_baseAsymCut", 1}, {"etaproton1D_baseAsymCut_mDelta_fastPi0", 1} };
 	overlayPlots etaproton1D_baseAsym(trackHists);
+        trackHists = { {"labThetaFCAL_eta_mEllipsePre", 1}, {"labThetaSPLIT_eta_mEllipsePre", 1}, {"labThetaBCAL_eta_mEllipsePre", 1} }; 
+	overlayPlots labTheta_eta(trackHists);
+        trackHists = { {"labThetaFCAL_pi0_mEllipsePre", 1}, {"labThetaSPLIT_pi0_mEllipsePre", 1}, {"labThetaBCAL_pi0_mEllipsePre", 1} }; 
+	overlayPlots labTheta_pi0(trackHists);
 
 	TCanvas *c1D = new TCanvas("c1D","",1440,900);
 	if ( overlay1D ) {
@@ -347,6 +372,15 @@ void makeGraphsCompare(){
 		else if (cl->InheritsFrom("TH1")){
 			string fileName="newGraphsCompare/";
    	   		TH1F *h = (TH1F*)key->ReadObj();
+			TH1* h2;
+			file2->GetObject(h->GetName(),h2);
+
+                        // since we draw normalized version this is not very helpful.
+                        //if(h->GetMaximum() < h2->GetMaximum()){
+                        //    cout << "first histograms max " << h->GetMaximum() << " is less than second " << h2->GetMaximum() << "! Swapping!" << endl;
+                        //    swap(h,h2);
+                        //}
+
 			h->GetXaxis()->SetTitleSize(0.04);
 			h->GetYaxis()->SetTitleSize(0.04);
 			c1D->cd(1);
@@ -358,8 +392,6 @@ void makeGraphsCompare(){
                         else{
 			    h->Draw("HIST");
                         }
-			TH1* h2;
-			file2->GetObject(h->GetName(),h2);
 			if (overlay1D) {
 				h2->SetLineColor(kGreen+1);
 				//h2->Scale(0.4); // temp scaling factor to compare different tracking schemes
@@ -386,6 +418,12 @@ void makeGraphsCompare(){
                         leg->Draw();
 			fileName.append(h->GetName());
 			fileName.append(".png");
+
+                        //if (drawLineOnThisHist.find(h->GetName()) != drawLineOnThisHist.end()){
+                        //    cout << "Adding line!" << endl;
+                        //    someLine->DrawLine(drawLineOnThisHist[h->GetName()],0,drawLineOnThisHist[h->GetName()],h->GetMaximum());
+                        //}
+
    	   		c1D->SaveAs((fileName).c_str());
                         leg->Clear();
 			// Wait until we have finally used up TH1 object first. Otherwise casting it into TH1F early creates some problems
@@ -403,6 +441,8 @@ void makeGraphsCompare(){
 			if ( strcmp(h->GetName(),"pi0eta1D_Cut")==0 ){ h->SetTitle("|t'|<1GeV^2");}
 			pi0eta1DtAlltCut.fillHist(h,h2);
 			pi0proton1D_beforeAfterT.fillHist(h,h2);
+                        labTheta_eta.fillHist(h,h2);
+                        labTheta_pi0.fillHist(h,h2);
 		}
    	}
 
@@ -417,12 +457,14 @@ void makeGraphsCompare(){
 	pi0proton1D_beforeAfterT.plot("newGraphsCompare/pi0proton1D_beforeAfterT.png",false, lineCutThresholds,drawNormalized);
 	pi0proton1D_baseAsym.plot("newGraphsCompare/pi0proton1D_baseAsym.png",false,lineCutThresholds,drawNormalized);
 	etaproton1D_baseAsym.plot("newGraphsCompare/etaproton1D_baseAsym.png",false,lineCutThresholds,drawNormalized);
+        labTheta_pi0.plot("newGraphsCompare/labTheta_pi0.png",true,lineCutThresholds,drawNormalized);
+        labTheta_eta.plot("newGraphsCompare/labTheta_eta.png",true,lineCutThresholds,drawNormalized);
 
 	lineCutThresholds={selectPi0Proton};
 	pi0proton1D_mMandelstamT_mdelta.plot("newGraphsCompare/pi0proton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds,drawNormalized);
 	lineCutThresholds={selectEtaProton};
 	etaproton1D_mMandelstamT_mdelta.plot("newGraphsCompare/etaproton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds,drawNormalized);
-	
+
 	//cutThreshold2D = { {0.134,0.538,0.013,0.04 }, {0.134,0.538,0.0155,0.05 }, {0.134,0.538, 0.0205,0.07} };
 	//pi0eta_Meas_mEllipsePre_showEllipse.plot("newGraphsCompare/pi0eta_Meas_mEllipsePre_showEllipse.png","ellipse",cutThreshold2D);
 	

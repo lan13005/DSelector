@@ -1006,6 +1006,8 @@ class DSelector_ver20 : public DSelector
 		bool mMandelstamT=true;
 		bool mMandelstamT_mBeamE8GeVPlus=true;
 		//bool pDiffCL=true; 
+                bool mP3Proton=true;
+                bool mFCALShower=true;
 		bool pDiffUE=true; 
 		bool mRProton=true;
 		bool mRProtonZMin = true; 
@@ -1038,7 +1040,7 @@ class DSelector_ver20 : public DSelector
 		bool mEllipseChiSq = true;
 		bool mEllipseChiSq_pre = true;
 		bool pMPi0P14=true;
-		bool mMPi0P14_ellipse=true;
+		bool mMPi0P14=true;
 		bool baseCuts=true;
 		bool baseCuts_mChiUE=true;
 
@@ -1070,6 +1072,26 @@ class DSelector_ver20 : public DSelector
 		bool mEllipse_pre_etaBCAL = true;
 		bool mEllipse_pre_etaFCAL = true;
 		bool mEllipse_pre_etaSPLIT = true;
+
+
+                static const int nThetaBins=5;
+                double thetaBinWidth=40/nThetaBins;
+                //double etaBCAL_thetaBins[nThetaBins+1]={0,11,180};
+                //double etaFCAL_thetaBins[nThetaBins+1]={0,3,180};
+                //double etaSPLIT_thetaBins[nThetaBins+1]={0,6,180};
+                //double pi0BCAL_thetaBins[nThetaBins+1]={0,17,180};
+                //double pi0FCAL_thetaBins[nThetaBins+1]={0,4,180};
+                //double pi0SPLIT_thetaBins[nThetaBins+1]={0,10,180};
+		bool mEllipse_pre_pi0BCAL_thetaBin[nThetaBins];
+		bool mEllipse_pre_pi0FCAL_thetaBin[nThetaBins];
+		bool mEllipse_pre_pi0SPLIT_thetaBin[nThetaBins];
+		bool mEllipse_pre_etaBCAL_thetaBin[nThetaBins];
+		bool mEllipse_pre_etaFCAL_thetaBin[nThetaBins];
+		bool mEllipse_pre_etaSPLIT_thetaBin[nThetaBins];
+
+
+
+
                 bool allGen_barybkg=true;
                 bool allGen_vanHove=true;
 		bool cutsToApply = true; 
