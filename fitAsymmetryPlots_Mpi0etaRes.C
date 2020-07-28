@@ -30,6 +30,8 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))));
 }
 
+string fileType="pdf";
+
 //
 void fitAsymmetryPlots_Mpi0etaRes(){
         // Do some cleaning
@@ -489,7 +491,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 					TGraph* likelihoodFit_045_135_eta = new TGraph(500); 
 					//fitPointer->Scan(2,likelihoodFit_045_135_eta,0,1);
 
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/asymmetry"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/asymmetry"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 					
 					//allCanvases->Clear();
 					//allCanvases->Divide(2,1);
@@ -535,7 +537,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 					//fitPointer->Scan(2,likelihoodFit_045_135_pi0,-2,2);
 
 					if ( iSet < maxPrintBS ){ 
-						allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/asymmetry"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); 
+						allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/asymmetry"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); 
 					}
 
 					//allCanvases->Clear();
@@ -581,7 +583,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 					cout << "Doing flat fit to AMO for eta" << endl;
 					fitStatus = phiAMO_eta->Fit(fit_flat,"RQE");
 					phiAMO_eta->Draw("SAME");
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/phiYieldFits"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/phiYieldFits"+tagEta[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 					
 		
 					// *****************************
@@ -618,7 +620,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 					fitStatus = phiAMO_pi0->Fit(fit_flat,"E S");
 					phiAMO_pi0->Draw("SAME");
 					cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phiAMO_pi0->GetEntries() << endl;
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/phiYieldFits"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/phiYieldFits"+tagPi0[iTag]+"_Mpi0etaBin"+to_string(iMpi0etaBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 
 				}
 
@@ -678,7 +680,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 				gr_045->SetLineColor(2);
 				gr_045->SetMarkerStyle(20);
 				gr_045->Draw("P SAME");
-				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/asymVsMpi0eta_tBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/asymVsMpi0eta_tBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 
 
 				allCanvases->Clear();
@@ -732,7 +734,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
    				legend_eta->Draw();
 				allCanvases->cd(2);
    				legend_pi0->Draw();
-				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/PSigma_tBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/PSigma_tBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 			}
 		}
 		
@@ -892,7 +894,7 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 	//				gr_stds->Draw("SAME L");
 	//			}
 	//		}
-	//		allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/bootstrappedErrors_iTag"+to_string(iTag)+".png").c_str());
+	//		allCanvases->SaveAs(("asymmetryPlots/SigVsMpi0eta_bint1/bootstrappedErrors_iTag"+to_string(iTag)+"."+fileType).c_str());
 	//	}
 	//}
 

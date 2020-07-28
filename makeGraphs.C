@@ -142,10 +142,8 @@ class sideBySide2D{
 
 void makeGraphs(){
 	gStyle->SetOptStat(0);
-	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/pi0eta_test_hists_DSelector.root");
-	TFile* file = TFile::Open("degALL_resolutionTest_hists_DSelector.root");
-	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_mEllipse_hists_DSelector.root");
-	//TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/eta3pi/pi0eta_seanResoution_reco_3pi0_hists_DSelector.root");
+	TFile* file = TFile::Open("degALL_data_2017_newProspectusGraphs/degALL_data_2017_hists_DSelector.root");
+	//TFile* file = TFile::Open("degALL_resolutionTest_hists_DSelector.root");
 	TIter keyList(file->GetListOfKeys());
 	TKey *key;
 
@@ -215,9 +213,9 @@ void makeGraphs(){
         trackHists = { {"etaproton1D_baseAsymCut_mDelta_fastPi0", 1} };
         overlayPlots etaproton1D_baseAsymCut_mDelta_fastPi0(trackHists);
 
-        trackHists = { {"labThetaSPLIT_eta_mEllipsePre", 1}, {"labThetaFCAL_eta_mEllipsePre", 1}, {"labThetaBCAL_eta_mEllipsePre", 1} }; 
+        trackHists = { {"//labThetaSPLIT_eta_mEllipsePre", 1}, {"labThetaFCAL_eta_mEllipsePre", 1}, {"labThetaBCAL_eta_mEllipsePre", 1} }; 
 	overlayPlots labTheta_eta(trackHists);
-        trackHists = { {"labThetaSPLIT_pi0_mEllipsePre", 1}, {"labThetaFCAL_pi0_mEllipsePre", 1}, {"labThetaBCAL_pi0_mEllipsePre", 1} }; 
+        trackHists = { {"//labThetaSPLIT_pi0_mEllipsePre", 1}, {"labThetaFCAL_pi0_mEllipsePre", 1}, {"labThetaBCAL_pi0_mEllipsePre", 1} }; 
 	overlayPlots labTheta_pi0(trackHists);
 
 	TCanvas *c1 = new TCanvas("c1","",1440,900);

@@ -32,6 +32,7 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 
 
 
+string fileType="pdf";
 
 void fitAsymmetryPlots_tRecoil(){
         // Do some cleaning
@@ -486,7 +487,7 @@ void fitAsymmetryPlots_tRecoil(){
 					TGraph* likelihoodFit_045_135_eta = new TGraph(500); 
 					//fitPointer->Scan(2,likelihoodFit_045_135_eta,0,1);
 
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymmetry"+tagEta[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymmetry"+tagEta[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 					
 					//allCanvases->Clear();
 					//allCanvases->Divide(2,1);
@@ -532,7 +533,7 @@ void fitAsymmetryPlots_tRecoil(){
 					//fitPointer->Scan(2,likelihoodFit_045_135_pi0,-2,2);
 
 					if ( iSet < maxPrintBS ){ 
-						allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymmetry"+tagPi0[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); 
+						allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymmetry"+tagPi0[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); 
 					}
 
 					//allCanvases->Clear();
@@ -578,7 +579,7 @@ void fitAsymmetryPlots_tRecoil(){
 					cout << "Doing flat fit to AMO for eta" << endl;
 					fitStatus = phiAMO_eta->Fit(fit_flat,"RQE");
 					phiAMO_eta->Draw("SAME");
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/phiYieldFits"+tagEta[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/phiYieldFits"+tagEta[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 					
 					// *****************************
 					// Fitting prodPlanePhi for pi0
@@ -614,7 +615,7 @@ void fitAsymmetryPlots_tRecoil(){
 					fitStatus = phiAMO_pi0->Fit(fit_flat,"E S");
 					phiAMO_pi0->Draw("SAME");
 					cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phiAMO_pi0->GetEntries() << endl;
-					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/phiYieldFits"+tagPi0[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+					if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/phiYieldFits"+tagPi0[iTag]+"_trecoilBin"+to_string(itrecoilBin)+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 
 				}
 
@@ -679,7 +680,7 @@ void fitAsymmetryPlots_tRecoil(){
 				gr_045->SetLineColor(2);
 				gr_045->SetMarkerStyle(20);
 				gr_045->Draw("P SAME");
-				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymVst_trecoilBin"+to_string(itrecoilBin)+"_iSet"+to_string(iSet)+".png").c_str()); }
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymVst_trecoilBin"+to_string(itrecoilBin)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 
 
 				allCanvases->Clear();
@@ -745,7 +746,7 @@ void fitAsymmetryPlots_tRecoil(){
    				legend_eta->Draw();
 				allCanvases->cd(2);
    				legend_pi0->Draw();
-				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/PSigma_trecoilBin"+to_string(itrecoilBin)+"_iSet"+to_string(iSet)+".png").c_str()); }
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/PSigma_trecoilBin"+to_string(itrecoilBin)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 			}
 		}
 		
@@ -905,7 +906,7 @@ void fitAsymmetryPlots_tRecoil(){
 	//				gr_stds->Draw("SAME L");
 	//			}
 	//		}
-	//		allCanvases->SaveAs(("asymmetryPlots/SigVsU3/bootstrappedErrors_iTag"+to_string(iTag)+".png").c_str());
+	//		allCanvases->SaveAs(("asymmetryPlots/SigVsU3/bootstrappedErrors_iTag"+to_string(iTag)+"."+fileType).c_str());
 	//	}
 	//}
 

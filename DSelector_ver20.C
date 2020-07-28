@@ -29,7 +29,8 @@ int protonID=0;
 
 string selectDetector="ALL";
 string polarization="degALL";
-string tag="_compare_data_2017";
+//string tag="_compare_data_2017";
+string tag="_data_2017";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -3870,10 +3871,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dzR = pzCutmin*pRProton;
 
         pShowerQuality=pShowerQuality0*pShowerQuality1*pShowerQuality2*pShowerQuality3;
-	//pShowerQuality=true;
-	pdij3pass=true;
-	//pUnusedEnergy=true;
-
 
 	double minMpi0eta = 1.6;
 	double maxMpi0eta = 2.8;
@@ -3882,6 +3879,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	// ***********************
 	// cuts applied to all
 	bool cata = chiSq100*pMpi0etaDoubleRegge;//(mandelstam_teta<1)*pMpi0etaDoubleRegge;
+	pShowerQuality=true;
+	pdij3pass=true;
 	// ***********************
 	// temporary cuts
 	// pMPi0P14 = false;

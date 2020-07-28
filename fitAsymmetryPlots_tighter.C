@@ -30,6 +30,8 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))));
 }
 
+string fileType="pdf";
+
 void fitAsymmetryPlots_tighter(){
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVst1_tight");
@@ -362,7 +364,7 @@ void fitAsymmetryPlots_tighter(){
 			 	TGraph* likelihoodFit_045_135_eta = new TGraph(500); 
 			 	//fitPointer->Scan(2,likelihoodFit_045_135_eta,0,1);
 
-			 	if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/asymmetry"+tagEta[iTag]+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+			 	if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/asymmetry"+tagEta[iTag]+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 			 	
 
 			 	// *****************************
@@ -399,7 +401,7 @@ void fitAsymmetryPlots_tighter(){
 			 	//fitPointer->Scan(2,likelihoodFit_045_135_pi0,-2,2);
 
 			 	if ( iSet < maxPrintBS ){ 
-			 		allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/asymmetry"+tagPi0[iTag]+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); 
+			 		allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/asymmetry"+tagPi0[iTag]+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); 
 			 	}
 
 		
@@ -436,7 +438,7 @@ void fitAsymmetryPlots_tighter(){
 			 	cout << "Doing flat fit to AMO for eta" << endl;
 			 	fitStatus = phiAMO_eta->Fit(fit_flat,"RQE");
 			 	phiAMO_eta->Draw("SAME");
-			 	if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/phiYieldFits"+tagEta[iTag]+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+			 	if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/phiYieldFits"+tagEta[iTag]+"_tetaBin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 			 	
 			 	// *****************************
 			 	// Fitting prodPlanePhi for pi0
@@ -472,7 +474,7 @@ void fitAsymmetryPlots_tighter(){
 			 	fitStatus = phiAMO_pi0->Fit(fit_flat,"E S");
 			 	phiAMO_pi0->Draw("SAME");
 			 	cout << "(iTag=" << iTag << ")Entries in nEventsPhiPi0 if different orientations: " << phiAMO_pi0->GetEntries() << endl;
-			 	if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/phiYieldFits"+tagPi0[iTag]+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+".png").c_str()); }
+			 	if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/phiYieldFits"+tagPi0[iTag]+"_tpi0Bin"+to_string(it)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 
 			 }
 
@@ -522,7 +524,7 @@ void fitAsymmetryPlots_tighter(){
 			 gr_045->SetLineColor(2);
 			 gr_045->SetMarkerStyle(20);
 			 gr_045->Draw("P SAME");
-			 if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/asymVst_iSet"+to_string(iSet)+".png").c_str()); }
+			 if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/asymVst_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 
 
 			 allCanvases->Clear();
@@ -572,7 +574,7 @@ void fitAsymmetryPlots_tighter(){
    			 legend_eta->Draw();
 			 allCanvases->cd(2);
    			 legend_pi0->Draw();
-			 if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/PSigma_iSet"+to_string(iSet)+".png").c_str()); }
+			 if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVst1_tight/PSigma_iSet"+to_string(iSet)+"."+fileType).c_str()); }
 		}
 	}
 
