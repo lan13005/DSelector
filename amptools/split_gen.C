@@ -31,7 +31,7 @@ void split_gen::Loop()
 //by  b_branchname->GetEntry(ientry); //read only this branch
    if (fChain == 0) return;
 
-   outFile = new TFile("deg000_gen_pi0eta_amptools.root", "RECREATE");
+   outFile = new TFile("deg000_gen_pi0eta_2017_amptools.root", "RECREATE");
    m_OutTree = new TTree("Thrown_Tree", "kin2");
 
    m_OutTree->Branch("Weight", new Float_t, "Weight/F");

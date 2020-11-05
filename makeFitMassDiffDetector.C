@@ -1,3 +1,5 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
 int numDOFbkg = 2;
 Double_t background(Double_t *x, Double_t *par){
 	return par[0]+par[1]*x[0];
@@ -14,6 +16,7 @@ Double_t fitFunc(Double_t *x, Double_t *par){
 }
 
 void makeFitMassDiffDetector(){
+        gluex_style();
 	TFile* dataFile = TFile::Open("pi0eta_data_hists_DSelector.root");
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 	auto legend = new TLegend(0.1,0.7,0.48,0.9);

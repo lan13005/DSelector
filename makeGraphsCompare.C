@@ -1,5 +1,6 @@
 #include "makeGraphs.h"
 #include "/d/grid15/ln16/pi0eta/q-values/makeDiagnosticHists.h"
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 double selectPi0Proton=1.4;
 double selectEtaProton=2;
@@ -86,8 +87,8 @@ class overlayPlots{
                         else{
                             overlayHists[0]->Draw("HIST");
                         }
-			overlayHists[0]->GetXaxis()->SetTitleSize(0.05);
-			overlayHists[0]->GetYaxis()->SetTitleSize(0.05);
+			//overlayHists[0]->GetXaxis()->SetTitleSize(0.05);
+			//overlayHists[0]->GetYaxis()->SetTitleSize(0.05);
 			overlayHists[0]->SetAxisRange(minimum1D,maximum1D*1.05,"Y");
 			for (int i=1; i<overlayHists.size(); ++i){
 				cout << "Overlaying hist " << overlayHists[i]->GetName() << endl;
@@ -128,8 +129,8 @@ class overlayPlots{
                         else{
                             overlayHists2[0]->Draw("HIST");
                         }
-			overlayHists2[0]->GetXaxis()->SetTitleSize(0.05);
-			overlayHists2[0]->GetYaxis()->SetTitleSize(0.05);
+			//overlayHists2[0]->GetXaxis()->SetTitleSize(0.05);
+			//overlayHists2[0]->GetYaxis()->SetTitleSize(0.05);
 			overlayHists2[0]->SetAxisRange(minimum1D2,maximum1D2*1.05,"Y");
 			cout << "Setting axis range for right panel: " << minimum1D2 << ", " << maximum1D2 << endl;
 			for (int i=1; i<overlayHists2.size(); ++i){
@@ -253,6 +254,7 @@ class sideBySide2D{
 
 
 void makeGraphsCompare(){	
+        gluex_style();
 	TFile* file = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_compare_reco_2017_hists_DSelector.root");
 	TFile* file2 = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_compare_data_2017_hists_DSelector.root");
         string legendNames[2]={"MC","Data"};
@@ -326,8 +328,8 @@ void makeGraphsCompare(){
    	   	if (cl->InheritsFrom("TH2")){
 			string fileName="newGraphsCompare/";
    	   		TH2F *h = (TH2F*)key->ReadObj();
-			h->GetXaxis()->SetTitleSize(0.04);
-			h->GetYaxis()->SetTitleSize(0.04);
+			//h->GetXaxis()->SetTitleSize(0.04);
+			//h->GetYaxis()->SetTitleSize(0.04);
 			c2D->cd(1);
                         if(makeLogHists.find(h->GetName()) != makeLogHists.end()){gPad->SetLogz(1);}
                         else{gPad->SetLogz(0); }
@@ -381,8 +383,8 @@ void makeGraphsCompare(){
                         //    swap(h,h2);
                         //}
 
-			h->GetXaxis()->SetTitleSize(0.04);
-			h->GetYaxis()->SetTitleSize(0.04);
+			//h->GetXaxis()->SetTitleSize(0.04);
+			//h->GetYaxis()->SetTitleSize(0.04);
 			c1D->cd(1);
                         if(makeLogHists.find(h->GetName()) != makeLogHists.end()){gPad->SetLogy(1);}
                         else{gPad->SetLogy(0); }

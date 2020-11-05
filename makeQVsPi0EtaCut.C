@@ -1,4 +1,8 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
+
 void makeQVsPi0EtaCut(){
+        gluex_style();
 	gStyle->SetOptStat(0);
 	TFile* dataFile = TFile::Open("degALL_data_2017_newProspectusGraphs/degALL_data_2017_hists_DSelector.root");
 	TFile* qValueFile = TFile::Open("/d/grid15/ln16/pi0eta/q-values/diagnosticPlots/postQVal.root");

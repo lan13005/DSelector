@@ -1,4 +1,7 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
 void makeOverlayRejectSamples(){
+        gluex_style();
 	TH1F* genHist;
 	TH1F* accHist;
 	TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);

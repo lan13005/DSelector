@@ -1,6 +1,9 @@
-void makeDrawDeckLines(){
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
+void makeDrawDeckLines(string fileLoc){
+        gluex_style();
 	gStyle->SetOptStat(0);
-	TFile* infile_dat = TFile::Open("degALL_data_2017_newProspectusGraphs/degALL_data_2017_hists_DSelector.root");
+	TFile* infile_dat = TFile::Open(fileLoc.c_str());
 	TH2F *any2DHist;
 	infile_dat->GetObject("tetaVsMpi0eta",any2DHist);
 	TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);

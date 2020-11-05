@@ -1,6 +1,6 @@
 #include "DSelector_thrown.h"
 #include "TRandom.h"
-string polarization="degALL";
+string polarization="degAMO";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
@@ -424,13 +424,13 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 			if ( !hasPolarizationAngle ) { 
 				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
 			}
+	                Fill_OutputTree();
 
         		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
 			//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 		} // if cuts not passed
 	} // if topology not correct
 	// If the following selections did not pass then this would have never executed and thus things are never filled
-	Fill_OutputTree();
 
 	++eventIdx;
 

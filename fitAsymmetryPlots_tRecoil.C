@@ -1,4 +1,5 @@
 // This one is for Asymmetry vs t_recoil which is equal to u3 in vincent/colin language.
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
@@ -32,9 +33,10 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 
 
 
-string fileType="pdf";
+string fileType="png";
 
 void fitAsymmetryPlots_tRecoil(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVsU3");
         gSystem->Exec("mkdir asymmetryPlots/SigVsU3");
@@ -644,18 +646,21 @@ void fitAsymmetryPlots_tRecoil(){
 				gPad->SetBottomMargin(0.15);
 				auto gr_000 = new TGraphErrors(num_tBins,tBins,asymmetries_000_eta[iTag][iSet][itrecoilBin],tBins_err,asymmetries_000_eta_err[iTag][iSet][itrecoilBin]);
 				leg1->AddEntry(gr_000,"t_{#eta}","lep");
-				gr_000->SetTitle("Beam Asymmetry 0/90 Orientation");
+				gr_000->SetTitle("0/90 Orientation");
 				gr_000->SetMarkerColor(4);
 				gr_000->SetMarkerStyle(21);
 				gr_000->SetLineColor(4);
-				gr_000->GetXaxis()->SetTitle("t_{#eta}/t_{#pi})");
-				gr_000->GetXaxis()->SetTitleSize(0.06);
 				gr_000->Draw("AP");
+				gr_000->GetXaxis()->SetTitle("t_{#eta}/t_{#pi})");
+                                gr_000->GetYaxis()->SetTitle("#Sigma");
+				//gr_000->GetXaxis()->SetTitleSize(0.06);
+                                gr_000->GetXaxis()->SetTitleSize(0.08);
+                                gr_000->GetYaxis()->SetTitleSize(0.08);
 				gr_000->GetHistogram()->SetMaximum(1.2);
 				gr_000->GetHistogram()->SetMinimum(-1);
 				gr_000 = new TGraphErrors(num_tBins,tBins,asymmetries_000_pi0[iTag][iSet][itrecoilBin],tBins_err,asymmetries_000_pi0_err[iTag][iSet][itrecoilBin]);
 				leg1->AddEntry(gr_000,"t_{#pi^{0}}","lep");
-				gr_000->SetTitle("Beam Asymmetry 0/90 Orientation");
+				gr_000->SetTitle("0/90 Orientation");
 				gr_000->SetLineColor(2);
 				gr_000->SetMarkerColor(2);
 				gr_000->SetMarkerStyle(20);
@@ -665,22 +670,60 @@ void fitAsymmetryPlots_tRecoil(){
 				allCanvases->cd(2);
 				gPad->SetBottomMargin(0.15);
 				auto gr_045 = new TGraphErrors(num_tBins,tBins,asymmetries_045_eta[iTag][iSet][itrecoilBin],tBins_err,asymmetries_045_eta_err[iTag][iSet][itrecoilBin]);
-				gr_045->SetTitle("Beam Asymmetry 45/135 Orientation");
+				gr_045->SetTitle("45/135 Orientation");
 				gr_045->SetMarkerColor(4);
 				gr_045->SetLineColor(4);
 				gr_045->SetMarkerStyle(21);
 				gr_045->GetXaxis()->SetTitle("t_{#eta}/t_{#pi}");
-				gr_000->GetXaxis()->SetTitleSize(0.06);
+                                gr_045->GetYaxis()->SetTitle("#Sigma");
+				//gr_000->GetXaxis()->SetTitleSize(0.06);
 				gr_045->Draw("AP");
+                                gr_045->GetXaxis()->SetTitleSize(0.08);
+                                gr_045->GetYaxis()->SetTitleSize(0.08);
 				gr_045->GetHistogram()->SetMaximum(1.2);
 				gr_045->GetHistogram()->SetMinimum(-1);
 				gr_045 = new TGraphErrors(num_tBins,tBins,asymmetries_045_pi0[iTag][iSet][itrecoilBin],tBins_err,asymmetries_045_pi0_err[iTag][iSet][itrecoilBin]);
-				gr_045->SetTitle("Beam Asymmetry 45/135 Orientation");
+				gr_045->SetTitle("45/135 Orientation");
 				gr_045->SetMarkerColor(2);
 				gr_045->SetLineColor(2);
 				gr_045->SetMarkerStyle(20);
 				gr_045->Draw("P SAME");
 				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/asymVst_trecoilBin"+to_string(itrecoilBin)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
+
+	                        allCanvases = new TCanvas("","",1440,900);
+                                int nBins = sizeof(asymmetries_000_eta[iTag][iSet][itrecoilBin])/sizeof(double);
+                                vector<double> asymmetries_000_045_eta;
+                                vector<double> asymmetries_000_045_pi0;
+                                vector<double> asymmetries_000_045_eta_err;
+                                vector<double> asymmetries_000_045_pi0_err;
+                                for (int iBin=0; iBin<nBins; ++iBin){
+                                   asymmetries_000_045_eta.push_back(0.5*(asymmetries_000_eta[iTag][iSet][itrecoilBin][iBin]+asymmetries_045_eta[iTag][iSet][itrecoilBin][iBin])); 
+                                   asymmetries_000_045_pi0.push_back(0.5*(asymmetries_000_pi0[iTag][iSet][itrecoilBin][iBin]+asymmetries_045_pi0[iTag][iSet][itrecoilBin][iBin])); 
+                                   double asym_eta_err = 0.5*TMath::Sqrt(asymmetries_000_eta_err[iTag][iSet][itrecoilBin][iBin]*asymmetries_000_eta_err[iTag][iSet][itrecoilBin][iBin]+asymmetries_045_eta_err[iTag][iSet][itrecoilBin][iBin]*asymmetries_045_eta_err[iTag][iSet][itrecoilBin][iBin]);
+                                   double asym_pi0_err = 0.5*TMath::Sqrt(asymmetries_000_pi0_err[iTag][iSet][itrecoilBin][iBin]*asymmetries_000_pi0_err[iTag][iSet][itrecoilBin][iBin]+asymmetries_045_pi0_err[iTag][iSet][itrecoilBin][iBin]*asymmetries_045_pi0_err[iTag][iSet][itrecoilBin][iBin]);
+                                   asymmetries_000_045_eta_err.push_back(asym_eta_err);
+                                   asymmetries_000_045_pi0_err.push_back(asym_pi0_err);
+                                }
+                                auto gr_avg_eta = new TGraphErrors(num_tBins,tBins,&asymmetries_000_045_eta[0],tBins_err,&asymmetries_000_045_eta_err[0]);
+                                auto gr_avg_pi0 = new TGraphErrors(num_tBins,tBins,&asymmetries_000_045_pi0[0],tBins_err,&asymmetries_000_045_pi0_err[0]);
+				gr_avg_eta->SetTitle("Beam Asymmetry");
+				gr_avg_eta->SetMarkerColor(4);
+				gr_avg_eta->SetLineColor(4);
+				gr_avg_eta->SetMarkerStyle(21);
+				gr_avg_eta->GetXaxis()->SetTitle("t_{#eta}/t_{#pi}");
+                                gr_avg_eta->GetYaxis()->SetTitle("#Sigma");
+				//gr_000->GetXaxis()->SetTitleSize(0.06);
+				gr_avg_eta->Draw("AP");
+                                gr_avg_eta->GetXaxis()->SetTitleSize(0.08);
+                                gr_avg_eta->GetYaxis()->SetTitleSize(0.08);
+				gr_avg_eta->GetHistogram()->SetMaximum(1.2);
+				gr_avg_eta->GetHistogram()->SetMinimum(-1);
+				gr_avg_pi0->SetMarkerColor(2);
+				gr_avg_pi0->SetLineColor(2);
+				gr_avg_pi0->SetMarkerStyle(20);
+				gr_avg_pi0->Draw("P SAME");
+				if ( iSet < maxPrintBS ){ allCanvases->SaveAs(("asymmetryPlots/SigVsU3/avg_asymVst_trecoilBin"+to_string(itrecoilBin)+"_iSet"+to_string(iSet)+"."+fileType).c_str()); }
+
 
 
 				allCanvases->Clear();
@@ -841,7 +884,7 @@ void fitAsymmetryPlots_tRecoil(){
 	//		TGraph* gr_stds;
 	//		for (int itrecoilBin=0; itrecoilBin<num_trecoilBins; ++itrecoilBin){
 	//			gr_stds = new TGraph(nSetsJustBS, nBoostdstrapped, asymmetries_000_eta_err_BS[iTag][itrecoilBin]);
-	//			gr_stds->SetTitle("Beam Asymmetry BS errors 0/90 eta");
+	//			gr_stds->SetTitle("BS errors 0/90 eta");
 	//			//gr_stds->SetMarkerColor(itrecoilBin+1);
 	//			//gr_stds->SetMarkerStyle(21);
 	//			gr_stds->SetLineColor(itrecoilBin+1);
@@ -858,7 +901,7 @@ void fitAsymmetryPlots_tRecoil(){
 	//		allCanvases->cd(2);
 	//		for (int itrecoilBin=0; itrecoilBin<num_trecoilBins; ++itrecoilBin){
 	//			gr_stds = new TGraph(nSetsJustBS, nBoostdstrapped, asymmetries_045_eta_err_BS[iTag][itrecoilBin]);
-	//			gr_stds->SetTitle("Beam Asymmetry BS errors 45/135 eta");
+	//			gr_stds->SetTitle("BS errors 45/135 eta");
 	//			//gr_stds->SetMarkerColor(itrecoilBin+1);
 	//			//gr_stds->SetMarkerStyle(21);
 	//			gr_stds->SetLineColor(itrecoilBin+1);
@@ -875,7 +918,7 @@ void fitAsymmetryPlots_tRecoil(){
 	//		allCanvases->cd(3);
 	//		for (int itrecoilBin=0; itrecoilBin<num_trecoilBins; ++itrecoilBin){
 	//			gr_stds = new TGraph(nSetsJustBS, nBoostdstrapped, asymmetries_000_pi0_err_BS[iTag][itrecoilBin]);
-	//			gr_stds->SetTitle("Beam Asymmetry BS errors 0/90 pi0");
+	//			gr_stds->SetTitle("BS errors 0/90 pi0");
 	//			//gr_stds->SetMarkerColor(itrecoilBin+1);
 	//			//gr_stds->SetMarkerStyle(21);
 	//			gr_stds->SetLineColor(itrecoilBin+1);
@@ -892,7 +935,7 @@ void fitAsymmetryPlots_tRecoil(){
 	//		allCanvases->cd(4);
 	//		for (int itrecoilBin=0; itrecoilBin<num_trecoilBins; ++itrecoilBin){
 	//			gr_stds = new TGraph(nSetsJustBS, nBoostdstrapped, asymmetries_045_pi0_err_BS[iTag][itrecoilBin]);
-	//			gr_stds->SetTitle("Beam Asymmetry BS errors 45/135 pi0");
+	//			gr_stds->SetTitle("BS errors 45/135 pi0");
 	//			//gr_stds->SetMarkerColor(itrecoilBin+1);
 	//			//gr_stds->SetMarkerStyle(21);
 	//			gr_stds->SetLineColor(itrecoilBin+1);

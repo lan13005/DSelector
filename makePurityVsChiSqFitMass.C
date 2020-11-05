@@ -1,3 +1,5 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
 
 // 1d double gaussian
 int numDOFsig=5;
@@ -17,6 +19,7 @@ Double_t fitFunc(Double_t *x, Double_t *par){
 }
 
 void makePurityVsChiSqFitMass(){
+        gluex_style();
 	TFile* dataFile = TFile::Open("degALL_data_2017_hists_DSelector.root");
     	//ofstream logFile;
     	//logFile.open("newGraphs/sigEffs/purityResults.txt");

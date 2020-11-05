@@ -1,4 +1,5 @@
 // This one is for Asymmetry vs Mpi0eta or s12 in vincent/colin language in bins of teta/tpi of t1 in vincent/colin language.
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
@@ -32,6 +33,7 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 
 //
 void fitAsymmetryPlots3(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVsMpi0eta_bint1");
         gSystem->Exec("mkdir asymmetryPlots/SigVsMpi0eta_bint1");

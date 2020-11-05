@@ -1,3 +1,5 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
 void plotTopology() {
 
 	gStyle->SetOptStat("");

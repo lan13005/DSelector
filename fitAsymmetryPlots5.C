@@ -1,4 +1,5 @@
 // This one is for Asymmetry vs teta/tpi with tighter cuts on u3, s23 and s12
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
@@ -31,6 +32,7 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 }
 
 void fitAsymmetryPlots5(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVst1_tight");
         gSystem->Exec("mkdir asymmetryPlots/SigVst1_tight");

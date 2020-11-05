@@ -23,7 +23,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	gROOT->ProcessLine(".x $(ROOT_ANALYSIS_HOME)/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 24;
+	int proof_Nthreads = 12;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
@@ -46,10 +46,21 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// pi0pi0 as pi0eta
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0pi0/noResonances/tree_pi0eta__B4_M17_M7.root");
 	
-	// MC flat
+	// MC flat -- older simulations, versions not using the most up to date version
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_noPlugin_Geant4_30730_8to9GeV/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_8GeVPlus_lustre_upTo3GeVResMass/tree_pi0eta__B4_M17_M7.root");
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_2.1t/tree_pi0eta__B4_M17_M7.root");
+        //
+        // MC flat pi0pi0 reconstructed as pi0eta
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_20M_2017_8GeVp/tree_pi0eta__B4_M17_M7.root");
+        //
+        // MC flat pi0eta
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/etapi0_flat_8GeVp_2017/tree_pi0eta__B4_M17_M7.root");
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/etapi0_flat_8GeVp_2017_Mpi0eta16to3/tree_pi0eta__B4_M17_M7.root");
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/etapi0_flat_8GeVp_2018_8_Mpi0eta16to3/tree_pi0eta__B4_M17_M7.root");
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/etapi0_flat_8GeVp_2018_1_Mpi0eta16to3/tree_pi0eta__B4_M17_M7.root");
+        //
+        //
 	// BA studies. Hddm filtered to make phi have some cos dependence
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/flat_21t_hddmFiltered_8288_1628_uniquePolar/tree_pi0eta__B4_M17_M7.root");
 	//
@@ -62,7 +73,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2pi1_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_091519/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M/tree_pi0eta__B4_M17_M7.root");
-        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer a2
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_10M_072120/tree_pi0eta__B4_M17_M7.root"); // newer a0
 	//
 	// vincent
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30461/tree_pi0eta__B4_M17_M7.root");
@@ -91,9 +103,9 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
         // ********************** BASE CUTS APPLIED ONLY ********************
 	//// 2017
-        //chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
+        chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts/pi0eta_data_tree_DSelector.root");
 	//// 2017 - loose ChiSq and UE cut
-	chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedLooseChiSqUE/pi0eta_looseCuts_tree_DSelector.root");
+	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedLooseChiSqUE/pi0eta_looseCuts_tree_DSelector.root");
 	// 2018_8
 	//chain->Add("/d/grid15/ln16/pi0eta/092419/zSelectedBaseCuts_2018_8/pi0eta_baseCuts_2018_tree_DSelector.root");
 	// 2018_1
@@ -117,7 +129,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 	// should change the name below from data to reco when running over MC
 	string degAngle="degALL";
-	string tag="_compare_data_2017";
+	//string tag="_compare_data_2017";
+        string tag="_data_2017_mEllipse";
         //string tag="_resolutionTest";
 
 	//  ===== Section is for pulling in data by polarization for asymmetry ===== /////

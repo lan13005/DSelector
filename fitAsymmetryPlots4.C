@@ -1,4 +1,5 @@
 //Looking at teta/tpi and bins of Metap and Mpi0p which is s23 in vincent/colin language
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 
 double degToRad=TMath::Pi()/180;
@@ -32,6 +33,7 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 }
 
 void fitAsymmetryPlots4(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVst1_binS23");
         gSystem->Exec("mkdir asymmetryPlots/SigVst1_binS23");

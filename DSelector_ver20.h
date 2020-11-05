@@ -17,6 +17,8 @@
 #include "TCanvas.h"
 #include "TRandom.h"
 
+#include "DSelector_helperFuncs.h"
+
 bool is_pi0eta=true;
 bool showThrownTopology=false;
 
@@ -69,7 +71,9 @@ struct topology {
 };
 
 
-void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double x, double y, double xmin, double xmax, double ymin, double ymax, double xskip, double yskip){
+void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double pi0Mass, double etaMass, double pi0Mean, double etaMean, double pi0Std, 
+                    double etaStd, double pi0Sig, double pi0Skip, double pi0SB, double etaSig, double etaSkip, double etaSB){
+        // Sig/Skip/SB are all in terms of stdevs
 	// regions are:
 	//  0 1 2
 	//  3 4 5 
@@ -77,20 +81,34 @@ void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double
 	//  where xmin, xmax, ymin,ymax all belong to region 5
 	//  the 10th element is the interesection of the negation of all regions 
 	//  11th element is 1345 and 12th element is 0268
-	double xlength = xmax-xmin;
-	double ylength = ymax-ymin;
+        
+        double xmin=pi0Mean-pi0Std*pi0Sig;
+        double xmax=pi0Mean+pi0Std*pi0Sig;
+        double ymin=etaMean-etaStd*etaSig;
+        double ymax=etaMean+etaStd*etaSig;
+        double xskip=pi0Std*pi0Skip;
+        double yskip=etaStd*etaSkip;
+        double xsb=pi0Std*pi0SB;
+        double ysb=etaStd*etaSB;
+        double x=pi0Mass;
+        double y=etaMass;
+
 	inBox[4] = x<xmax && x>xmin && y<ymax && y>ymin;
-	inBox[3] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) && y<ymax && y>ymin;
-	inBox[5] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y<ymax && y>ymin;
-	inBox[1] = x<xmax && x>xmin && y<(ymax+yskip+ylength) && y>(ymax+yskip);
-	inBox[7] = x<xmax && x>xmin && y>(ymin-yskip-ylength) && y<(ymin-yskip);
-	inBox[0] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
-	inBox[2] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
-	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) &&  y>(ymin-yskip-ylength) && y<(ymin-yskip);
-	inBox[8] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y>(ymin-yskip-ylength) && y<(ymin-yskip);
+	inBox[3] = x<(xmin-xskip) && x>(xmin-xskip-xsb) && y<ymax && y>ymin;
+	inBox[5] = x<(xmax+xskip+xsb) && x>(xmax+xskip) && y<ymax && y>ymin;
+	inBox[1] = x<xmax && x>xmin && y<(ymax+yskip+ysb) && y>(ymax+yskip);
+	inBox[7] = x<xmax && x>xmin && y>(ymin-yskip-ysb) && y<(ymin-yskip);
+	inBox[0] = x<(xmin-xskip) && x>(xmin-xskip-xsb) && y<(ymax+yskip+ysb) && y>(ymax+yskip);
+	inBox[2] = x<(xmax+xskip+xsb) && x>(xmax+xskip) && y<(ymax+yskip+ysb) && y>(ymax+yskip);
+	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xsb) &&  y>(ymin-yskip-ysb) && y<(ymin-yskip);
+	inBox[8] = x<(xmax+xskip+xsb) && x>(xmax+xskip) && y>(ymin-yskip-ysb) && y<(ymin-yskip);
+        // skip
 	inBox[9] = !inBox[0] * !inBox[1] * !inBox[2] * !inBox[3] * !inBox[4] * !inBox[5] * !inBox[6] * !inBox[7] * !inBox[8];	
+        // corner
 	inBox[10] = inBox[0] || inBox[2] || inBox[6] || inBox[8];
+        // eta sideband
 	inBox[11] = inBox[1] || inBox[7];
+        // pi0 sideband
        	inBox[12] = inBox[3] || inBox[5];
 
 	for (int i=0; i<13; ++i){
@@ -98,6 +116,7 @@ void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double
 		inBox[i]*=additionalCut;
 	}
 }
+
 
 struct histDef_1D{
 	TH1F* hist;
@@ -512,6 +531,7 @@ class DSelector_ver20 : public DSelector
 		double locCLKinFit=1;
 		double locUnusedEnergy=1;
 		double locNumExtraNeutralShowers=1;
+                UChar_t locNumUnusedShowers;
 		double locChiSqKinFit=1;
 		double locDOFKinFit=1;
 
@@ -693,6 +713,7 @@ class DSelector_ver20 : public DSelector
 		
 		/////////////// Charged Track Cuts/////////
 		double Rcut = 2;
+                // loose window. There is an alternative that loses ~10% of events
 		double zCutmin = 42; double zCutmax = 82;
 		double dEdxCut; // not static so we need to recompute it. TMath::Power(10,-6)*(0.9+TMath::Exp(3.0-3.3*locMagP3Proton/.93827)); // The bigger then number multiplying MagP3 the sharper the cut. 
 		double P3Cut = .3;
@@ -708,7 +729,7 @@ class DSelector_ver20 : public DSelector
 		///////////// General ///////////////////
 		double unusedEnergyCut = 0.010;
 		double MMsqCut = 0.05;
-		double ChiSqCut = 13.277;
+		double ChiSqCut = 5;
 		double originalChiSqCut = 13.277;
 		double chiSq100 = 100;
 		double RFCut = 0.5*4; // 4ns is the beam period.
@@ -722,6 +743,8 @@ class DSelector_ver20 : public DSelector
 		double skipX, skipY;
 		double ellipseXr_loose, ellipseYr_loose;
 		double weightBS=1;
+		double weightBSpi0=1;
+		double weightBSeta=1;
 		double weightB=1;
 		double areaRatio=1;
 		

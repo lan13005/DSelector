@@ -1,4 +1,5 @@
 //Looking at teta/tpi and bins of Metap and Mpi0p which is s23 in vincent/colin language
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 
 double degToRad=TMath::Pi()/180;
@@ -32,9 +33,10 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 }
 
 
-string fileType="pdf";
+string fileType="png";
 
 void fitAsymmetryPlots_baryon(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVst1_binS23");
         gSystem->Exec("mkdir asymmetryPlots/SigVst1_binS23");
@@ -557,9 +559,11 @@ void fitAsymmetryPlots_baryon(){
 				gr_000->SetMarkerColor(4);
 				gr_000->SetMarkerStyle(21);
 				gr_000->SetLineColor(4);
-				gr_000->GetXaxis()->SetTitle("t_{#eta} (GeV^{2})");
-				gr_000->GetXaxis()->SetTitleSize(0.05);
 				gr_000->Draw("AP");
+				gr_000->GetXaxis()->SetTitle("t_{#eta} (GeV^{2})");
+				//gr_000->GetXaxis()->SetTitleSize(0.05);
+                                gr_000->GetXaxis()->SetTitleSize(0.08);
+                                gr_000->GetYaxis()->SetTitleSize(0.08);
 				gr_000->SetTitle((to_string(minPi0P[iMass])+" < M(#pi^{0}p) < "+to_string(maxPi0P[iMass])).c_str());
 				gr_000->GetHistogram()->SetMaximum(1.2);
 				gr_000->GetHistogram()->SetMinimum(-1);
@@ -578,9 +582,11 @@ void fitAsymmetryPlots_baryon(){
 				gr_045->SetMarkerColor(4);
 				gr_045->SetLineColor(4);
 				gr_045->SetMarkerStyle(21);
-				gr_045->GetXaxis()->SetTitleSize(0.06);
-				gr_045->GetXaxis()->SetTitle("t_{#pi} (GeV^{2})");
+				//gr_045->GetXaxis()->SetTitleSize(0.06);
 				gr_045->Draw("AP");
+				gr_045->GetXaxis()->SetTitle("t_{#pi} (GeV^{2})");
+                                gr_045->GetXaxis()->SetTitleSize(0.08);
+                                gr_045->GetYaxis()->SetTitleSize(0.08);
 				gr_045->SetTitle((to_string(minEtaP[iMass])+" < M(#eta p) < "+to_string(maxEtaP[iMass])).c_str());
 				gr_045->GetHistogram()->SetMaximum(1.2);
 				gr_045->GetHistogram()->SetMinimum(-1);

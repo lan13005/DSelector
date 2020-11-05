@@ -1,5 +1,6 @@
 // This one is for Asymmetry vs teta/tpi0 as we vary the lower Mpi0eta threshold
 // teta/tpi is t1 in vincent/colin language
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 
 double degToRad=TMath::Pi()/180;
@@ -32,9 +33,10 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))));
 }
 
-string fileType="pdf";
+string fileType="png";
 
 void fitAsymmetryPlots_t1Mpi0etaThresh(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVst1_threshMpi0eta");
         gSystem->Exec("mkdir asymmetryPlots/SigVst1_threshMpi0eta");
@@ -632,9 +634,11 @@ void fitAsymmetryPlots_t1Mpi0etaThresh(){
 				gr_000->SetMarkerColor(4);
 				gr_000->SetMarkerStyle(21);
 				gr_000->SetLineColor(4);
-				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
-				gr_000->GetXaxis()->SetTitleSize(0.06);
 				gr_000->Draw("AP");
+				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
+                                gr_000->GetXaxis()->SetTitleSize(0.08);
+                                gr_000->GetYaxis()->SetTitleSize(0.08);
+				//gr_000->GetXaxis()->SetTitleSize(0.06);
 				leg1->AddEntry(gr_000,"t_{#eta}","lep");
 				gr_000->GetHistogram()->SetMaximum(1);
 				gr_000->GetHistogram()->SetMinimum(-1);
@@ -647,7 +651,7 @@ void fitAsymmetryPlots_t1Mpi0etaThresh(){
 				gr_000->SetMarkerColor(2);
 				gr_000->SetMarkerStyle(20);
 				gr_000->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
-				gr_000->GetXaxis()->SetTitleSize(0.06);
+				//gr_000->GetXaxis()->SetTitleSize(0.06);
 				gr_000->Draw("P SAME");
 				gr_000->GetHistogram()->SetMaximum(1);
 				gr_000->GetHistogram()->SetMinimum(-1);
@@ -666,7 +670,9 @@ void fitAsymmetryPlots_t1Mpi0etaThresh(){
 				gr_045->SetMarkerStyle(21);
 				gr_045->Draw("AP");
 				gr_045->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
-				gr_045->GetXaxis()->SetTitleSize(0.06);
+                                gr_045->GetXaxis()->SetTitleSize(0.08);
+                                gr_045->GetYaxis()->SetTitleSize(0.08);
+				//gr_045->GetXaxis()->SetTitleSize(0.06);
 				gr_045->GetHistogram()->SetMaximum(1);
 				gr_045->GetHistogram()->SetMinimum(-1);
 				if (iMass==0){
@@ -679,7 +685,7 @@ void fitAsymmetryPlots_t1Mpi0etaThresh(){
 				gr_045->SetMarkerStyle(20);
 				gr_045->Draw("P SAME");
 				gr_045->GetXaxis()->SetTitle("t_{#eta},t_{#pi}");
-				gr_045->GetXaxis()->SetTitleSize(0.06);
+				//gr_045->GetXaxis()->SetTitleSize(0.06);
 				gr_045->GetHistogram()->SetMaximum(1);
 				gr_045->GetHistogram()->SetMinimum(-1);
 				if (iMass==0){

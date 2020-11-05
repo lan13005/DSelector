@@ -1,7 +1,9 @@
-root -l -b -q makeGraphs.C 
-root -l -b -q makeBaryonPlots.C 
-root -l -b -q makeMpi0etaBinnedT.C 
-root -l -b -q makeQVsPi0EtaCut.C 
-root -l -b -q makeRectSBGraphs.C 
-root -l -b -q makeDrawDeckLines.C
-#root -l -b -q makeMassVaryChiSq.C
+fileLoc='"degALL_data_2017_newProspectusGraphs/degALL_data_2017_hists_DSelector.root"'
+
+#root -l -b -q "makeGraphs.C($fileLoc)" 
+#root -l -b -q "makeBaryonPlots.C($fileLoc)" 
+root -l -b -q "makeMpi0etaBinnedT.C($fileLoc)" 
+#root -l -b -q "makeRectSBGraphs.C($fileLoc)" 
+#root -l -b -q "makeDrawDeckLines.C($fileLoc)" 
+#root -l -b -q "makeSpecialtyPlots.C($fileLoc)" 
+#root -l -b -q "makeMassVaryChiSq.C($fileLoc)"

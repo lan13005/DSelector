@@ -1,10 +1,14 @@
-void makeBaryonPlots(){
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
+void makeBaryonPlots(string fileLoc){
+        gSystem->mkdir("newGraphs/baryonPlots");
+        gluex_style();
         double etaProtonBaryonCut = 1.65;
         double pi0ProtonBaryonCut = 2;
 	double tCut = 1;
 	TLine *lineCut;
 
-	TFile* dataFile = TFile::Open("degALL_data_2017_newProspectusGraphs/degALL_data_2017_hists_DSelector.root");
+	TFile* dataFile = TFile::Open(fileLoc.c_str());
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 
 	string baseNames[5] = {"vanHove","mandelstam_tp","pi0proton1D", "etaproton1D", "pi0eta1D"};
@@ -75,20 +79,20 @@ void makeBaryonPlots(){
 		cout << "Making hists with vanHove primary: " << baseNames[iHist] << "_" << cutString << endl;
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
-			anyHist->GetXaxis()->SetLabelSize(0.05);
-			anyHist->GetYaxis()->SetLabelSize(0.05);
-			anyHist->GetXaxis()->SetTitleSize(0.05);
-			anyHist->GetYaxis()->SetTitleSize(0.05);
-			anyHist->SetBit(TH1::kNoTitle);
+			//anyHist->GetXaxis()->SetLabelSize(0.05);
+			//anyHist->GetYaxis()->SetLabelSize(0.05);
+			//anyHist->GetXaxis()->SetTitleSize(0.05);
+			//anyHist->GetYaxis()->SetTitleSize(0.05);
+			//anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("HIST");
 		}
 		else { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
-			any2DHist->GetXaxis()->SetLabelSize(0.05);
-			any2DHist->GetYaxis()->SetLabelSize(0.05);
-			any2DHist->GetXaxis()->SetTitleSize(0.05);
-			any2DHist->GetYaxis()->SetTitleSize(0.05);
-			any2DHist->SetBit(TH1::kNoTitle);
+			//any2DHist->GetXaxis()->SetLabelSize(0.05);
+			//any2DHist->GetYaxis()->SetLabelSize(0.05);
+			//any2DHist->GetXaxis()->SetTitleSize(0.05);
+			//any2DHist->GetYaxis()->SetTitleSize(0.05);
+			//any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
@@ -110,24 +114,24 @@ void makeBaryonPlots(){
 	cutString = "mDelta"; 
 	for (int iHist=0; iHist<5; ++iHist){
 		allCanvases->cd(padIdx);
-		gStyle->SetOptStat(0);
+		//gStyle->SetOptStat(0);
 		if (iHist == ignoreIdx) { continue; } 	
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
-			anyHist->GetXaxis()->SetLabelSize(0.05);
-			anyHist->GetYaxis()->SetLabelSize(0.05);
-			anyHist->GetXaxis()->SetTitleSize(0.05);
-			anyHist->GetYaxis()->SetTitleSize(0.05);
-			anyHist->SetBit(TH1::kNoTitle);
+			//anyHist->GetXaxis()->SetLabelSize(0.05);
+			//anyHist->GetYaxis()->SetLabelSize(0.05);
+			//anyHist->GetXaxis()->SetTitleSize(0.05);
+			//anyHist->GetYaxis()->SetTitleSize(0.05);
+			//anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("COLZ");
 		}
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
-			any2DHist->GetXaxis()->SetLabelSize(0.05);
-			any2DHist->GetYaxis()->SetLabelSize(0.05);
-			any2DHist->GetXaxis()->SetTitleSize(0.05);
-			any2DHist->GetYaxis()->SetTitleSize(0.05);
-			any2DHist->SetBit(TH1::kNoTitle);
+			//any2DHist->GetXaxis()->SetLabelSize(0.05);
+			//any2DHist->GetYaxis()->SetLabelSize(0.05);
+			//any2DHist->GetXaxis()->SetTitleSize(0.05);
+			//any2DHist->GetYaxis()->SetTitleSize(0.05);
+			//any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
@@ -153,20 +157,20 @@ void makeBaryonPlots(){
 		if (iHist == ignoreIdx) { continue; } 	
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
-			anyHist->GetXaxis()->SetLabelSize(0.05);
-			anyHist->GetYaxis()->SetLabelSize(0.05);
-			anyHist->GetXaxis()->SetTitleSize(0.05);
-			anyHist->GetYaxis()->SetTitleSize(0.05);
-			anyHist->SetBit(TH1::kNoTitle);
+			//anyHist->GetXaxis()->SetLabelSize(0.05);
+			//anyHist->GetYaxis()->SetLabelSize(0.05);
+			//anyHist->GetXaxis()->SetTitleSize(0.05);
+			//anyHist->GetYaxis()->SetTitleSize(0.05);
+			//anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("COLZ");
 		}
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
-			any2DHist->GetXaxis()->SetLabelSize(0.05);
-			any2DHist->GetYaxis()->SetLabelSize(0.05);
-			any2DHist->GetXaxis()->SetTitleSize(0.05);
-			any2DHist->GetYaxis()->SetTitleSize(0.05);
-			any2DHist->SetBit(TH1::kNoTitle);
+			//any2DHist->GetXaxis()->SetLabelSize(0.05);
+			//any2DHist->GetYaxis()->SetLabelSize(0.05);
+			//any2DHist->GetXaxis()->SetTitleSize(0.05);
+			//any2DHist->GetYaxis()->SetTitleSize(0.05);
+			//any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;
@@ -193,20 +197,20 @@ void makeBaryonPlots(){
 		if (iHist == ignoreIdx) { continue; } 	
 		if (iHist !=0) { 
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), anyHist);
-			anyHist->GetXaxis()->SetLabelSize(0.05);
-			anyHist->GetYaxis()->SetLabelSize(0.05);
-			anyHist->GetXaxis()->SetTitleSize(0.05);
-			anyHist->GetYaxis()->SetTitleSize(0.05);
-			anyHist->SetBit(TH1::kNoTitle);
+			//anyHist->GetXaxis()->SetLabelSize(0.05);
+			//anyHist->GetYaxis()->SetLabelSize(0.05);
+			//anyHist->GetXaxis()->SetTitleSize(0.05);
+			//anyHist->GetYaxis()->SetTitleSize(0.05);
+			//anyHist->SetBit(TH1::kNoTitle);
 			anyHist->Draw("COLZ");
 		}
 		else {
 			dataFile->GetObject((baseNames[iHist]+"_"+cutString).c_str(), any2DHist);
-			any2DHist->GetXaxis()->SetLabelSize(0.05);
-			any2DHist->GetYaxis()->SetLabelSize(0.05);
-			any2DHist->GetXaxis()->SetTitleSize(0.05);
-			any2DHist->GetYaxis()->SetTitleSize(0.05);
-			any2DHist->SetBit(TH1::kNoTitle);
+			//any2DHist->GetXaxis()->SetLabelSize(0.05);
+			//any2DHist->GetYaxis()->SetLabelSize(0.05);
+			//any2DHist->GetXaxis()->SetTitleSize(0.05);
+			//any2DHist->GetYaxis()->SetTitleSize(0.05);
+			//any2DHist->SetBit(TH1::kNoTitle);
 			any2DHist->Draw("COLZ");
 		}
 		++padIdx;

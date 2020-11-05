@@ -258,12 +258,12 @@ split_selected_in_t::split_selected_in_t(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("deg000_acc_2017_treeFlat_DSelector.root");
-      cout << "File input: deg000_acc_2017_treeFlat_DSelector.root" << endl;
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("amptools4Rebecca/deg000_data_2018_1_treeFlat_DSelector.root");
+      cout << "File input: amptools4Rebecca/deg000_data_2018_1_treeFlat_DSelector.root" << endl;
       if (!f || !f->IsOpen()) {
-         f = new TFile("deg000_acc_2017_treeFlat_DSelector.root");
+         f = new TFile("amptools4Rebecca/deg000_data_2018_1_treeFlat_DSelector.root");
       }
-      f->GetObject("deg000_acc_2017_tree_flat",tree);
+      f->GetObject("deg000_data_2018_1_tree_flat",tree);
 
    }
    Init(tree);

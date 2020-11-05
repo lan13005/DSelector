@@ -1,6 +1,8 @@
 // I can use this to do t-slope matching 
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 void makeTSlope(){
+        gluex_style();
 	TFile* dataFile = TFile::Open("pi0eta_data_hists_DSelector.root");
 	TFile* recoFile = TFile::Open("pi0eta_flat8GeVPlus_hists_DSelector.root");
 

@@ -1,4 +1,7 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
 void makeAcceptancePlot(){
+        gluex_style();
 	TFile* infile_acc = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_flat_2017_mEllipsePre_hists_DSelector.root");
 	TFile* infile_gen = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_gen_2017_hists_DSelector.root");
 	TFile* infile_dat = TFile::Open("/d/grid15/ln16/pi0eta/092419/degALL_data_2017_mEllipsePre_hists_DSelector.root");

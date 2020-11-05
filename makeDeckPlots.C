@@ -1,3 +1,5 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
 int numDOFsig=8;
 // 2d gaussian with linear bkg
 Double_t gaus2D(Double_t *x, Double_t *par) {
@@ -77,6 +79,7 @@ Double_t asymGaus(Double_t *x, Double_t *par){
 }
 
 void makeDeckPlot(string selectionString){
+        gluex_style();
 	cout << " --------------------------------------------------------------------------------------------------------------------------" << endl;
 	cout << " --------------------------------------------------------------------------------------------------------------------------" << endl;
 	cout << "                                             BEGIN " << selectionString << " FIT CALCULATION" << endl;
@@ -186,7 +189,7 @@ void makeDeckPlot(string selectionString){
 		for ( string branchName: branchNames ) {
 			++branchIdx;
 			gStyle->SetErrorX(0.000001); // remove the x-error bars
-			gStyle->SetTitleSize(0.06,"t");
+			//gStyle->SetTitleSize(0.06,"t");
 			logFile << branchName << endl;
 			allCanvases->cd();
 			dataTree->SetBranchAddress( branchName.c_str(),&new_t);
@@ -758,13 +761,13 @@ void makeDeckPlot(string selectionString){
 			// I think we have to zero suppress our graphs to make the scaling on the second axis to make sense
 			massHist->SetAxisRange(1,maxYield*1.1,"Y");
 
-			gStyle->SetTitleSize(0.1,"t");
-			massHist->GetXaxis()->SetLabelSize(0.06);
-			massHist->GetYaxis()->SetLabelSize(0.06);
+			//gStyle->SetTitleSize(0.1,"t");
+			//massHist->GetXaxis()->SetLabelSize(0.06);
+			//massHist->GetYaxis()->SetLabelSize(0.06);
 			unscaledMassHist->SetAxisRange(1,maxUnscaledYield*1.1,"Y");
-			unscaledMassHist->SetTitleSize(1,"t");
-			unscaledMassHist->GetXaxis()->SetLabelSize(0.06);
-			unscaledMassHist->GetYaxis()->SetLabelSize(0.06);
+			//unscaledMassHist->SetTitleSize(1,"t");
+			//unscaledMassHist->GetXaxis()->SetLabelSize(0.06);
+			//unscaledMassHist->GetYaxis()->SetLabelSize(0.06);
 			if ( branchName == "mandelstam_teta_meas") { 
 				expFit_t = new TF1("expFit_t","expo",etaFitMin[iMass],etaFitMax[iMass]);//+pol0(2)) ,tMin+tStep,tMax);
 			}
@@ -796,8 +799,8 @@ void makeDeckPlot(string selectionString){
 				gStyle->SetOptStat(0);
 				unscaledMassHist->SetMarkerColor(kBlue);
 				unscaledMassHist->Draw("E1 PMC");
-				unscaledMassHist->GetXaxis()->SetTitleSize(0.08);
-				unscaledMassHist->GetYaxis()->SetTitleSize(0.08);
+				//unscaledMassHist->GetXaxis()->SetTitleSize(0.08);
+				//unscaledMassHist->GetYaxis()->SetTitleSize(0.08);
 				allCanvases_unscaledYields->Update();
 
 				allCanvases_tSlope->cd( iMass+1 );
@@ -806,8 +809,8 @@ void makeDeckPlot(string selectionString){
 				massHist->SetMarkerColor(kBlue);
 				massHist->Draw("E1 PMC");
 				massHist->SetAxisRange(30,maxYield*10,"Y");
-				massHist->GetXaxis()->SetTitleSize(0.08);
-				massHist->GetYaxis()->SetTitleSize(0.08);
+				//massHist->GetXaxis()->SetTitleSize(0.08);
+				//massHist->GetYaxis()->SetTitleSize(0.08);
 				allCanvases_tSlope->Update();
 				expFit_t->SetLineColor(kBlue);
 				expFit_t->Draw("SAME");
@@ -817,8 +820,8 @@ void makeDeckPlot(string selectionString){
 				massHist->SetMarkerColor(kBlue);
 				massHist->Draw("E1 PMC");
 				massHist->SetAxisRange(1,maxYield*1.1,"Y");
-				massHist->GetXaxis()->SetTitleSize(0.08);
-				massHist->GetYaxis()->SetTitleSize(0.08);
+				//massHist->GetXaxis()->SetTitleSize(0.08);
+				//massHist->GetYaxis()->SetTitleSize(0.08);
 				allCanvases_yields->Update();
 				scaleAxis = gPad->GetUymax()/(maxEfficiency*1.1); // this should be the same for all pads since I set the axisRange above
 				hist_efficiencies_eta[iMass]->Scale(scaleAxis);  
@@ -863,7 +866,7 @@ void makeDeckPlot(string selectionString){
 					            gPad->GetUxmax(), gPad->GetUymax(),0,maxEfficiency*1.1,510,"+L");
 			axis->SetLineColor(kRed);
 			axis->SetLabelColor(kRed);
-			axis->SetLabelSize(0.06);
+			//axis->SetLabelSize(0.06);
 			axis->Draw();
 		}
 		//cout << "Initial parameter values: " << endl;
@@ -939,8 +942,8 @@ void makeDeckPlot(string selectionString){
 	 hist_tSlopes_eta->SetMarkerStyle(kFullCircle);
 	 hist_tSlopes_eta->SetMarkerSize(1.5);
 	 hist_tSlopes_eta->SetMarkerColor(kBlue);
-	 hist_tSlopes_eta->GetXaxis()->SetLabelSize(0.05);
-	 hist_tSlopes_eta->GetYaxis()->SetLabelSize(0.05);
+	 //hist_tSlopes_eta->GetXaxis()->SetLabelSize(0.05);
+	 //hist_tSlopes_eta->GetYaxis()->SetLabelSize(0.05);
 	 hist_tSlopes_eta->SetMinimum(0);
 	 hist_tSlopes_eta->Draw("E1 PMC");
 
@@ -962,8 +965,8 @@ void makeDeckPlot(string selectionString){
 	 hist_tSlopes_eta_scaledMpi0eta->SetMarkerStyle(kFullCircle);
 	 hist_tSlopes_eta_scaledMpi0eta->SetMarkerSize(1.5);
 	 hist_tSlopes_eta_scaledMpi0eta->SetMarkerColor(kBlue);
-	 hist_tSlopes_eta_scaledMpi0eta->GetXaxis()->SetLabelSize(0.05);
-	 hist_tSlopes_eta_scaledMpi0eta->GetYaxis()->SetLabelSize(0.05);
+	 //hist_tSlopes_eta_scaledMpi0eta->GetXaxis()->SetLabelSize(0.05);
+	 //hist_tSlopes_eta_scaledMpi0eta->GetYaxis()->SetLabelSize(0.05);
 	 hist_tSlopes_eta_scaledMpi0eta->SetMinimum(0);
 	 hist_tSlopes_eta_scaledMpi0eta->Draw("E1 PMC");
 

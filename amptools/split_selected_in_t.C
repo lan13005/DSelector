@@ -72,9 +72,9 @@ void split_selected_in_t::Loop()
 
 
 
-   string fileNameTag = "deg000_acc";
-   outFile = new TFile((fileNameTag+"_pi0eta_amptools.root").c_str(), "RECREATE");
-   cout << "Making output tree file that is ready for amptools: " << (fileNameTag+"_pi0eta_amptools.root").c_str() << endl;
+   string fileNameTag = "deg000_data";
+   outFile = new TFile((fileNameTag+"_pi0eta_2018_1_amptools.root").c_str(), "RECREATE");
+   cout << "Making output tree file that is ready for amptools: " << (fileNameTag+"_pi0eta_2018_1_amptools.root").c_str() << endl;
    m_OutTree = new TTree("tree", "kin2");
 
    // Not so much diagnostic tree but rather allows me to grab the  for mandelstam_tp

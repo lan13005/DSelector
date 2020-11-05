@@ -1,4 +1,8 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+
+
 void makeEfficiency(){
+        gluex_style();
 	TFile* genFile = TFile::Open("v20_flat_gen_hists_DSelector_pi0eta.root");
 	TFile* recFile = TFile::Open("pi0eta_flat8GeVPlus_hists_DSelector.root");
 	TCanvas *allCanvases_yields = new TCanvas("anyHists_yields","",1440,900);

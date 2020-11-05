@@ -1,4 +1,5 @@
 // This one is for Asymmetry vs Mpi0eta or s12 in vincent/colin language in bins of teta/tpi of t1 in vincent/colin language.
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 double degToRad=TMath::Pi()/180;
 // par[3] is used to shift phase by the para or perp orientation, either 0 for para or 90 for perp. 0/-45 is para and 45/90 is perp. 
@@ -30,10 +31,11 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 	return ((par[0]+par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))/(2+(par[0]-par[1])*par[2]*TMath::Cos(2*degToRad*(x[0]-par[3]))));
 }
 
-string fileType="pdf";
+string fileType="png";
 
 //
 void fitAsymmetryPlots_Mpi0etaRes(){
+        gluex_style();
         // Do some cleaning
         gSystem->Exec("rm -rf asymmetryPlots/SigVsMpi0eta_bint1");
         gSystem->Exec("mkdir asymmetryPlots/SigVsMpi0eta_bint1");
@@ -648,9 +650,11 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 				gr_000->SetMarkerColor(4);
 				gr_000->SetMarkerStyle(21);
 				gr_000->SetLineColor(4);
-				gr_000->GetXaxis()->SetTitle("M(#pi^{0}#eta)");
-				gr_000->GetXaxis()->SetTitleSize(0.06);
 				gr_000->Draw("AP");
+				gr_000->GetXaxis()->SetTitle("M(#pi^{0}#eta)");
+				//gr_000->GetXaxis()->SetTitleSize(0.06);
+                                gr_000->GetXaxis()->SetTitleSize(0.08);
+                                gr_000->GetYaxis()->SetTitleSize(0.08);
 				gr_000->GetHistogram()->SetMaximum(1.2);
 				gr_000->GetHistogram()->SetMinimum(-1);
 				gr_000 = new TGraphErrors(num_Mpi0etaBins,mBins,asymmetries_000_pi0[iTag][iSet][it],mBins_err,asymmetries_000_pi0_err[iTag][iSet][it]);
@@ -669,9 +673,11 @@ void fitAsymmetryPlots_Mpi0etaRes(){
 				gr_045->SetMarkerColor(4);
 				gr_045->SetLineColor(4);
 				gr_045->SetMarkerStyle(21);
-				gr_045->GetXaxis()->SetTitle("M(#pi^{0}#eta)");
-				gr_045->GetXaxis()->SetTitleSize(0.06);
 				gr_045->Draw("AP");
+				gr_045->GetXaxis()->SetTitle("M(#pi^{0}#eta)");
+				//gr_045->GetXaxis()->SetTitleSize(0.06);
+                                gr_045->GetXaxis()->SetTitleSize(0.08);
+                                gr_045->GetYaxis()->SetTitleSize(0.08);
 				gr_045->GetHistogram()->SetMaximum(1.2);
 				gr_045->GetHistogram()->SetMinimum(-1);
 				gr_045 = new TGraphErrors(num_Mpi0etaBins,mBins,asymmetries_045_pi0[iTag][iSet][it],mBins_err,asymmetries_045_pi0_err[iTag][iSet][it]);

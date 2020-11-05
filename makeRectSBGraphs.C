@@ -1,5 +1,5 @@
-#include "/d/grid15/ln16/pi0eta/q-values/makeDiagnosticHists.h"
-#include "/d/grid15/ln16/pi0eta/092419/makeRectSBGraphs.h"
+#include "/d/grid15/ln16/pi0eta/092419/makeStackedHists.h"
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 TH1F combineSBRegions(TFile* dataFile, string reg1Name, string reg2Name, string reg3Name, string reg4Name, string histName, string fileSaveName){
 	TH1F* rectSB_17;
@@ -37,9 +37,10 @@ TH1F combineSBRegions(TFile* dataFile, string reg1Name, string reg2Name, string 
 	return *rectSB_signal;
 }
 
-void makeRectSBGraphs(){
+void makeRectSBGraphs(string fileLoc){
+        gluex_style();
 	gStyle->SetOptStat(0);
-	TFile* dataFile = TFile::Open("degALL_data_2017_newProspectusGraphs/degALL_data_2017_hists_DSelector.root");
+	TFile* dataFile = TFile::Open(fileLoc.c_str());
 	TFile* qValueFile = TFile::Open("/d/grid15/ln16/pi0eta/q-values/diagnosticPlots/postQVal.root");
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 	TH1F *pi0eta_Qsubbed;

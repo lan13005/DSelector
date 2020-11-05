@@ -1,3 +1,4 @@
+#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 // 1d double gaussian
 int numDOFsig=5;
@@ -16,8 +17,9 @@ Double_t fitFunc(Double_t *x, Double_t *par){
 	return background(x,par)+signal(x,&par[numDOFbkg]);
 }
 
-void makeMassVaryChiSq(){
-	TFile* dataFile = TFile::Open("degALL_data_2017_hists_DSelector.root");
+void makeMassVaryChiSq(string fileLoc){
+        gluex_style();
+	TFile* dataFile = TFile::Open(fileLoc.c_str());
     	//ofstream logFile;
     	//logFile.open("newGraphs/sigEffs/purityResults.txt");
 
@@ -30,7 +32,7 @@ void makeMassVaryChiSq(){
 	TH1F *pi0Hist;
 	string particles[2] = {"eta","pi0"};
 	string baseName = "Mass_Kin_mEllipsePre_ChiMpi0etaBin";
-	gStyle->SetTitleSize(0.08,"t");
+	//gStyle->SetTitleSize(0.08,"t");
 
 	std::vector<double> fitRangeEta;
 	std::vector<double> fitRangePi0;
