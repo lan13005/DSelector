@@ -15,7 +15,7 @@ double pi0Skip=1;
 double pi0SB=2;
 double etaSig=3;
 double etaSkip=1;
-double etaSB=5;
+double etaSB=2;
 // -- 
 double etaSBweight= -1.0*etaSig/etaSB;
 double pi0SBweight= -1.0*pi0Sig/pi0SB;
