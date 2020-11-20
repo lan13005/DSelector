@@ -1,6 +1,7 @@
 #include "DSelector_thrown.h"
 #include "TRandom.h"
-string polarization="degAMO";
+string polarization="deg000";
+string tag="_gen_2017";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
@@ -13,7 +14,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-	//dOutputTreeFileNameMap["selected_tpLT1"] = polarization+"_gen_2017_treeFlat_DSelector.root"; //key is user-defined, value is output file name
+        dOutputTreeFileNameMap["selected"] = polarization+tag+"_treeFlat_DSelector.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
@@ -425,9 +426,8 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
 			}
 	                Fill_OutputTree();
-
+			Fill_OutputTree("selected"); //your user-defined key
         		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
-			//Fill_OutputTree("selected_tpLT1"); //your user-defined key
 		} // if cuts not passed
 	} // if topology not correct
 	// If the following selections did not pass then this would have never executed and thus things are never filled

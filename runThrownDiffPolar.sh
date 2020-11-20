@@ -23,9 +23,9 @@ echo "with the degAngle related code. If ready ... type anything"
 read noUse
 
 
-sed -i 's@degAngle="deg*"@degAngle="deg000"@g' runDSelectorThrown_7_17_14.C
-sed -i 's@polarization="deg*"@polarization="deg000"@g' DSelector_thrown.C
-root -l -q -b runDSelectorThrown_7_17_14.C 
+#sed -i 's@degAngle="deg.*"@degAngle="deg000"@g' runDSelectorThrown_7_17_14.C
+#sed -i 's@polarization="deg.*"@polarization="deg000"@g' DSelector_thrown.C
+#root -l -q -b runDSelectorThrown_7_17_14.C 
 
 sed -i 's@degAngle="deg000"@degAngle="deg045"@g' runDSelectorThrown_7_17_14.C
 sed -i 's@polarization="deg000"@polarization="deg045"@g' DSelector_thrown.C

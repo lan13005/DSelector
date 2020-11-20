@@ -32,7 +32,7 @@ string polarization="degALL";
 //string tag="_compare_reco_2017";
 //string tag="_data_2017";
 //string tag="_a0a2Test";
-string tag="_data_2017_mEllipse";
+string tag="_looseChiUE";
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -4349,8 +4349,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         //if (!allGeneralCutsPassed || !detectorCut)
         //if (!mMandelstamT_mdelta || !detectorCut)
         //if (!mEllipse_pre_tAll || !detectorCut)  // Deck analysis
-        if (!mEllipse_pre || !detectorCut){ //  // Q-values
-        //if (!kinematicSelected_looseCutsUEChiSq || !detectorCut) // for studying which chiSq and UE to choose
+        //if (!mEllipse_pre || !detectorCut) //  // Q-values
+        if (!kinematicSelected_looseCutsUEChiSq || !detectorCut){ // for studying which chiSq and UE to choose
         //if (!combinatoricStudy || !detectorCut) // studying combinatorics 
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
 	//if (!looseCuts || !detectorCut )
