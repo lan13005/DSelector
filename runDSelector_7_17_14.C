@@ -23,7 +23,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	gROOT->ProcessLine(".x $(ROOT_ANALYSIS_HOME)/scripts/Load_DSelector.C");
 	// change the directory that proof saves the data to
 	//gEnv->SetValue("ProofLite.Sandbox", "/d/grid15/ln16/.proof");
-	int proof_Nthreads = 36;
+	int proof_Nthreads = 24;
 	//int proof_Nthreads = 50;
 
 	// open ROOT files and TTree
@@ -74,7 +74,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_091519/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer a2
-        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_10M_072120/tree_pi0eta__B4_M17_M7.root"); // newer a0
+        chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_10M_072120/tree_pi0eta__B4_M17_M7.root"); // newer a0
 	//
 	// vincent
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30461/tree_pi0eta__B4_M17_M7.root");
@@ -91,8 +91,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// 2017 DATA
 	// allData
 	// This one contains the showerQuality variables
-	chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_031*");
-	chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_0309*");
+	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_031*");
+	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2017-01/analysis-ver27/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_0309*");
 	//
 	// 2018 DATA
 	//chain->Add("/d/home/sdobbs/GlueX/gluex_data/RunPeriod-2018-01/analysis-ver02/tree_pi0eta__B4_M17_M7/merged/*");
@@ -130,7 +130,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	// should change the name below from data to reco when running over MC
 	string degAngle="degALL";
 	//string tag="_compare_data_2017";
-        string tag="_looseChiUE";
+        string tag="_a0_dat";
         //string tag="_resolutionTest";
 
 	//  ===== Section is for pulling in data by polarization for asymmetry ===== /////

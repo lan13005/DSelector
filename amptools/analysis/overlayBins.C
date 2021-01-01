@@ -1,18 +1,18 @@
-double LOW_MASS=0.7;
-double UPP_MASS=2.0;
-int NUMBER_BINS=60;
-double lowMass=LOW_MASS;
-double stepMass=(UPP_MASS-LOW_MASS)/NUMBER_BINS;
-double upMass=LOW_MASS+stepMass;
+double lowMass=0.7;
+double uppMass=2.0;
+int nBins=65;
+double stepMass=(uppMass-lowMass)/nBins;
+string fitName="EtaPi_fit";
+
 char slowMass[5];
-char supMass[5];
+char suppMass[5];
 
 void overlaySingleBin(int binN,bool isLast){
         gStyle->SetOptStat(kFALSE);
-        string fitDir = "divideRoot/bin_";
+        string fitLoc = fitName+"/bin_";
         string binNum = to_string(binN);
 	string outputFile = "/twopi_plot.root";
-        TFile* infile = TFile::Open((fitDir+binNum+outputFile).c_str());
+        TFile* infile = TFile::Open((fitLoc+binNum+outputFile).c_str());
         TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);
         std::vector<std::string> names1D = {"M2pi","cosTheta","Phi","phi","psi","t"};
 
@@ -20,10 +20,13 @@ void overlaySingleBin(int binN,bool isLast){
         TH1F *any1DHist_dat;
         TH1F *any1DHist_acc;
 	TPaveText *pt = new TPaveText();
-	sprintf(slowMass,"%.2lf",lowMass);
-	sprintf(supMass,"%.2lf",upMass);
+
+        double dLowMass=lowMass+binN*stepMass;
+        double dUppMass=lowMass+(binN+1)*stepMass;
+	sprintf(slowMass,"%.2lf",dLowMass);
+	sprintf(suppMass,"%.2lf",dUppMass);
         for (int histIdx=0; histIdx<namesSize1D; ++histIdx){
-   		pt->AddText(("BIN_"+to_string(binN)+" or Mass from ["+slowMass+","+supMass+"] GeV").c_str()); 
+   		pt->AddText(("BIN_"+to_string(binN)+" or Mass from ["+slowMass+","+suppMass+"] GeV").c_str()); 
                 infile->GetObject((names1D[histIdx]+"dat").c_str(),any1DHist_dat);
                 infile->GetObject((names1D[histIdx]+"acc").c_str(),any1DHist_acc);
 
@@ -32,8 +35,9 @@ void overlaySingleBin(int binN,bool isLast){
                 allCanvases->Update();
 
                 //any1DHist_acc->SetLineColor(kGreen);
-    		any1DHist_acc->SetFillStyle( 3001);
-    		any1DHist_acc->SetFillColor( kRed);
+                //any1DHist_acc->SetFillStyle( 3144);
+    		any1DHist_acc->SetFillColorAlpha( kOrange,0.5);
+
     		any1DHist_acc->SetLineColor( 0);
                 any1DHist_acc->Draw("HIST SAME");
                 
@@ -47,14 +51,11 @@ void overlaySingleBin(int binN,bool isLast){
 		allCanvases->Clear();
 		pt->Clear();
         }
-	lowMass+=stepMass;
-	upMass+=stepMass;
 }
 
 void overlayBins(){
-	int maxBin=60;
-	for (int iBin=0; iBin<maxBin;++iBin){
-		if(iBin<maxBin-1){
+	for (int iBin=0; iBin<nBins;++iBin){
+		if(iBin<nBins-1){
 			overlaySingleBin(iBin,false);
 		}
 		else {

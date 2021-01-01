@@ -20,5 +20,5 @@ def loadCfg():
 		raise ValueError("Config files does not exist!") 
 	return cfgDict
 
-#cfg = loadCfg("fit.cfg")
-#print(cfg)
+#cfg = loadCfg()
+#print(cfg["FIT_DIR"])

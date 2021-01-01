@@ -20,7 +20,7 @@ do
 	mkdir -p $cwd/$fitDir/bin_$i/seed-analysis/
 	mv $cwd/$fitDir/bin_$i/*seed*.* $cwd/$fitDir/bin_$i/seed-analysis/
 	# moving the fit and log files of the full fit back to their original place since we have moved all the seed files already
-	mv $cwd/$fitDir/bin_$i/bin_${i}-full.fit $cwd/$fitDir/bin_$i/bin_${i}.fit
-	mv $cwd/$fitDir/bin_$i/bin_${i}-full.log $cwd/$fitDir/bin_$i/bin_${i}.log
+	#mv $cwd/$fitDir/bin_$i/bin_${i}-full.fit $cwd/$fitDir/bin_$i/bin_${i}.fit
+	#mv $cwd/$fitDir/bin_$i/bin_${i}-full.log $cwd/$fitDir/bin_$i/bin_${i}.log
 
 done

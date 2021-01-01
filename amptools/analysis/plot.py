@@ -29,7 +29,7 @@ saveFolder="amplitudes"
 makeMoments=True
 # ---- Should we overlay bootstrapped errors of the first N seeds to see how inclusion of more seeds changes things ----
 overlaySomeSeeds=True
-firstNSeeds=50
+firstNSeeds=5
 # ---- exports the intensity and std and std_firstN for each amplitude into the csv below
 if os.path.isdir("csvData"):
 	shutil.rmtree("csvData")
@@ -49,7 +49,7 @@ csvNames_binVsSeededAmps=[]
 for massIdx, massNum in enumerate(binsToSave):
 	csvNames_binVsStd.append("csvData/csvData-binVsStd_bin"+str(massNum)+".txt")
 	csvNames_binVsSeededAmps.append("csvData/csvData-binVsSeededAmps_bin"+str(massNum)+".txt")
-	
+
 
 
 
@@ -361,7 +361,7 @@ if makeMoments:
 	if projMoms:
 		dHist_moment = TH1D("anyMoment","anyMoment",60,0,60)
 		proj_moments = []
-		momentFile = TFile.Open("moments-uniform.root")
+		momentFile = TFile.Open("moments-uniform.root","RECREATE")
 	# we want to still wrtie stuff to amplitudesFile and just keep momentFile to read. We have to change the working directory back
 	amplitudesFile.cd()	
 	

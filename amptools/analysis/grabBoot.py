@@ -23,7 +23,7 @@ print("nSeeds: "+str(nSeeds))
 print("saveAmps: "+str(saveAmps))
 #print("seedShift: "+str(seedShift))
 
-os.chdir("divideRoot")
+os.chdir(cfg["FIT_DIR"])
 
 # sys.argv takes the first arg automatically as the file name
 #if len(sys.argv) !=2 :

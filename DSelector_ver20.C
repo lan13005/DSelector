@@ -32,7 +32,9 @@ string polarization="degALL";
 //string tag="_compare_reco_2017";
 //string tag="_data_2017";
 //string tag="_a0a2Test";
-string tag="_looseChiUE";
+string tag="_a0_dat";
+
+int mcprocess=1;
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -2374,6 +2376,8 @@ void DSelector_ver20::Init(TTree *locTree)
         //1st function argument is the name of the branch
         //2nd function argument is the name of the branch that contains the size of the array (for fundamentals only)
         dTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0eta_thrown");
+        dTreeInterface->Create_Branch_Fundamental<Int_t>("mcprocess");
+        dTreeInterface->Create_Branch_FundamentalArray<Float_t>("DataWeight","NumCombos");
         /*
            dTreeInterface->Create_Branch_FundamentalArray<Int_t>("my_int_array", "my_int");
            dTreeInterface->Create_Branch_FundamentalArray<Float_t>("my_combo_array", "NumCombos");
@@ -2753,6 +2757,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
        for(int loc_i = 0; loc_i < locMyInt; ++loc_i)
        dTreeInterface->Fill_Fundamental<Int_t>("my_int_array", 3*loc_i, loc_i); //2nd argument = value, 3rd = array index
        */
+    dTreeInterface->Fill_Fundamental<Double_t>("Mpi0eta_thrown", Mpi0eta_thrown);
+    dTreeInterface->Fill_Fundamental<Int_t>("mcprocess", mcprocess);
 
     /************************************************* LOOP OVER COMBOS *************************************************/
 
@@ -4239,6 +4245,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
         // now that we have defined both the weights we can multiply them together
         weightAS_BS = weightAS*weightBS;
+	dTreeInterface->Fill_Fundamental<Float_t>("DataWeight", weightAS_BS, loc_i);
+
 	if ( abs(weightAS_BS)>1){
 		if(showOutput)cout << "weightBS,weightAS: " << weightBS << ", " << weightAS << endl;
 	}
@@ -4346,11 +4354,11 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
 	//if (!baseAsymCut || !detectorCut) // double regge BA study
-        //if (!allGeneralCutsPassed || !detectorCut)
+        if (!allGeneralCutsPassed || !detectorCut){
         //if (!mMandelstamT_mdelta || !detectorCut)
         //if (!mEllipse_pre_tAll || !detectorCut)  // Deck analysis
         //if (!mEllipse_pre || !detectorCut) //  // Q-values
-        if (!kinematicSelected_looseCutsUEChiSq || !detectorCut){ // for studying which chiSq and UE to choose
+        //if (!kinematicSelected_looseCutsUEChiSq || !detectorCut) // for studying which chiSq and UE to choose
         //if (!combinatoricStudy || !detectorCut) // studying combinatorics 
         //if (!mEllipseLooseUEChiSq_pre || !detectorCut)
 	//if (!looseCuts || !detectorCut )
@@ -4682,7 +4690,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
     }
     if(!locIsEventCut && dOutputTreeFileName != ""){ 
 	    if (showOutput) {cout<<"Filling outputt tree" << endl; }
-            dTreeInterface->Fill_Fundamental<Double_t>("Mpi0eta_thrown", Mpi0eta_thrown);
 	    Fill_OutputTree(); 
     }
     return kTRUE; // this return should close the process loop to return false as the kTrue as the output.

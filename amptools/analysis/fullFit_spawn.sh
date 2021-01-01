@@ -7,7 +7,7 @@ binsPerProc=$(($numBins/$processSpawned))
 
 echo "numBins, processSpawned, binsPerProc: $numBins, $processSpawned, $binsPerProc"
 echo "---------------------------------------------------------"
-rm -r fitLogs/full
+rm -rf fitLogs/full
 mkdir -p fitLogs/full
 
 # the final element of the set should be numBins-1

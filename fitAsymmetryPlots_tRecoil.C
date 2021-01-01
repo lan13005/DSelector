@@ -33,7 +33,7 @@ Double_t asymmetry(Double_t *x, Double_t *par){
 
 
 
-string fileType="png";
+string fileType="C";
 
 void fitAsymmetryPlots_tRecoil(){
         gluex_style();
