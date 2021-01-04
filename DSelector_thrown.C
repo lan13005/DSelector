@@ -1,7 +1,7 @@
 #include "DSelector_thrown.h"
 #include "TRandom.h"
-string polarization="degALL";
-string tag="_a0a2_dat";
+string polarization="deg090";
+string tag="_gen";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
@@ -426,7 +426,7 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
 			}
 	                Fill_OutputTree();
-			//Fill_OutputTree("selected"); //your user-defined key
+			Fill_OutputTree("selected"); //your user-defined key
         		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
 		} // if cuts not passed
 	} // if topology not correct

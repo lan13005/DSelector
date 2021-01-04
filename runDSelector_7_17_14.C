@@ -73,8 +73,8 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2pi1_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_091519/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M/tree_pi0eta__B4_M17_M7.root");
-        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer a2
-        chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_10M_072120/tree_pi0eta__B4_M17_M7.root"); // newer a0
+        chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer a2
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_10M_072120/tree_pi0eta__B4_M17_M7.root"); // newer a0
 	//
 	// vincent
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/vincent_noPlugin_Geant4_30461/tree_pi0eta__B4_M17_M7.root");
@@ -128,9 +128,9 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 
 	// should change the name below from data to reco when running over MC
-	string degAngle="degALL";
+	string degAngle="deg090";
 	//string tag="_compare_data_2017";
-        string tag="_a0_dat";
+        string tag="_a2_dat";
         //string tag="_resolutionTest";
 
 	//  ===== Section is for pulling in data by polarization for asymmetry ===== /////

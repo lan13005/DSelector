@@ -28,11 +28,11 @@ int itersToRun = 0;
 int protonID=0;
 
 string selectDetector="ALL";
-string polarization="degALL";
+string polarization="deg090";
 //string tag="_compare_reco_2017";
 //string tag="_data_2017";
 //string tag="_a0a2Test";
-string tag="_a0_dat";
+string tag="_a2_dat";
 
 int mcprocess=1;
 
