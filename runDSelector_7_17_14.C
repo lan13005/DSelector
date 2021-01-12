@@ -66,6 +66,10 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//
 	// ON THE JLAB FARM
 	//chain->Add("/cache/halld/RunPeriod-2017-01/analysis/bggen/batch01/tree_pi0eta__B4_M17_M7/merged/tree_pi0eta__B4_M17_M7_03*");
+        //
+        // a0a2a2pi1 polarized amplitudes
+        //chain->Add("/d/grid17/ln16/rootFiles/pi0eta/010820/a0a2a2pi1_polarized/trees/tree_pi0eta__B4_M17_M7_gen_amp_*");
+        chain->Add("/d/grid17/ln16/rootFiles/pi0eta/010820/etapi_flat/trees/tree_pi0eta__B4_M17_M7_gen_amp_*");
 	
 	// a0a2 recon_2017
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
@@ -73,7 +77,7 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 	//chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0a2_a2pi1/a0a2a2pi1_noPlugin_Geant4_30730/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_091519/tree_pi0eta__B4_M17_M7.root");
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M/tree_pi0eta__B4_M17_M7.root");
-        chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer a2
+        //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a2_10M_071620/tree_pi0eta__B4_M17_M7.root"); // newer a2
         //chain->Add("/d/grid15/ln16/rootFiles/pi0eta/a0_10M_072120/tree_pi0eta__B4_M17_M7.root"); // newer a0
 	//
 	// vincent
@@ -128,9 +132,9 @@ void runDSelector_7_17_14(bool useproof = 1, string path = "")
 
 
 	// should change the name below from data to reco when running over MC
-	string degAngle="deg090";
+	string degAngle="deg000";
 	//string tag="_compare_data_2017";
-        string tag="_a2_dat";
+        string tag="_etapi_acc_testing";
         //string tag="_resolutionTest";
 
 	//  ===== Section is for pulling in data by polarization for asymmetry ===== /////

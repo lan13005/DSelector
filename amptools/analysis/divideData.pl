@@ -22,9 +22,9 @@ $workinDir = getcwd();
 # to generate them or don't have them, see the documentation in gen_3pi
 # the Simulation area of the repository
 #$dataFile = "$workinDir/trees/tree_pimpip_coh_2017_amptools.root";
-$dataFile = "$workinDir/a0a2_sim/dat_pi0eta_$nameAffix\_w1.root";
-$accMCFile = "$workinDir/a0a2_sim/acc_pi0eta_$nameAffix.root";
-$genMCFile = "$workinDir/a0a2_sim/gen_pi0eta_$nameAffix.root";
+$dataFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_dat.root";
+$accMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen_as_acc.root";
+$genMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen.root";
 
 print $dataFile;
 print "\n";
@@ -36,7 +36,8 @@ print "\n";
 # this file sould be used for partially polarized or unpolarized beam fits
 #$cfgTempl = "$workinDir/threepi_unpol_TEMPLATE.cfg";
 
-$cfgTempl = "$workinDir/fit_etapi_moments.cfg";
+#$cfgTempl = "$workinDir/fit_etapi_moments.cfg";
+$cfgTempl = "$workinDir/zlm_etapi.cfg";
 
 
 ### things below here probably don't need to be modified
@@ -84,7 +85,7 @@ for( $i = 0; $i < $nBins; ++$i ){
   chdir "bin_$i";
 
 #we are essentially copying fit_etapi_moments.cfg and substituting some variables. CFGOUT is going to be a config file in all of our bins. CFGIN is fit_etapi_moments.cfg. Note how fit_etapi_moments.cfg has these place holders defined (DATAFILE,ACCMCFILE,GENMCFILE ... ). They will get replaced here to fit the bin directory. 
-  open( CFGOUT, ">bin_$i.cfg" );
+  open( CFGOUT, ">bin_$i-full.cfg" );
   open( CFGIN, $cfgTempl ); 
 
   while( <CFGIN> ){

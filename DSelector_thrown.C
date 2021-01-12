@@ -1,7 +1,7 @@
 #include "DSelector_thrown.h"
 #include "TRandom.h"
-string polarization="deg090";
-string tag="_gen";
+string polarization="deg000";
+string tag="_etapi_gen";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
@@ -14,7 +14,7 @@ void DSelector_thrown::Init(TTree *locTree)
 	//USERS: SET OUTPUT FILE NAME //can be overriden by user in PROOF
 	dOutputFileName = "v20_pi0eta_Thrown.root"; //"" for none
 	//USERS: SET OUTPUT TREE FILES/NAMES //e.g. binning into separate files for AmpTools
-        dOutputTreeFileNameMap["selected"] = polarization+tag+"_treeFlat_DSelector.root"; //key is user-defined, value is output file name
+        dOutputTreeFileNameMap["selected"] = polarization+tag+"_allEtaDecays_DSelector.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tLT06"] = "thrownNotAmptoolsReady_a0a2_tLT06.root"; //key is user-defined, value is output file name
 	//dOutputTreeFileNameMap["selected_tGT05LT1"] = "thrownNotAmptoolsReady_a0a2_tGT05LT1.root"; //key is user-defined, value is output file name
 
@@ -94,8 +94,9 @@ void DSelector_thrown::Init(TTree *locTree)
 	ievent=0;
 	maxevent=100;
 
-
-        //dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp"); //fundamental = char, int, float, double, etc.
+        dTreeInterface->Create_Branch_Fundamental<Double_t>("mandelstam_tp"); //fundamental = char, int, float, double, etc.
+        dTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0eta"); //fundamental = char, int, float, double, etc.
+        dTreeInterface->Create_Branch_Fundamental<Double_t>("cosTheta_eta_gj"); //fundamental = char, int, float, double, etc.
 }
 
 Bool_t DSelector_thrown::Process(Long64_t locEntry)
@@ -166,6 +167,10 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 	}
 	else { ++beamEinf; }	
 
+        double cosTheta_eta_GJ; 
+	double locPi0EtaMass;
+	double mandelstam_t;
+
 	std::vector<TLorentzVector> allP4;
 	std::vector<int> parentArray;
 	std::vector<int> pids;
@@ -220,7 +225,6 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
 		//exit(0);
 	}
 
-
 	if ( !notCorrectTopology ) { // if it has 1 pi0 and eta parent then we see if the daughters are both photons
 		std::vector<int> parents;
 		findParents(parentArray,parents);
@@ -256,180 +260,180 @@ Bool_t DSelector_thrown::Process(Long64_t locEntry)
                 else {
                         cout << "(Incorrect topology) Some histograms will still be filled without the correct final state! FYI" << endl;
                 }
-
-
 		cout << "Found all the daughters" << endl;
 
-		// check for etas in idxInitial
-		Int_t eta = 17;
-		Int_t pi0 = 7;
-		Int_t proton =14;
+	        // check for etas in idxInitial
+	        Int_t eta = 17;
+	        Int_t pi0 = 7;
+	        Int_t proton =14;
 
-		double lowE = 0;
-		double uppE = 1;
-		for (int beamE=0; beamE<12; ++beamE){
-			//cout << "lowE, uppE: "<<lowE<<", "<<uppE<<endl;
-			pBeamE[beamE] = lowE<locBeamP4.E() && locBeamP4.E()<uppE;
-			lowE+=1;
-			uppE+=1;
-		}
-		cout << "Calculated EBeam bins" << endl;
+	        double lowE = 0;
+	        double uppE = 1;
+	        for (int beamE=0; beamE<12; ++beamE){
+	        	//cout << "lowE, uppE: "<<lowE<<", "<<uppE<<endl;
+	        	pBeamE[beamE] = lowE<locBeamP4.E() && locBeamP4.E()<uppE;
+	        	lowE+=1;
+	        	uppE+=1;
+	        }
+	        cout << "Calculated EBeam bins" << endl;
 
-        	//double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamP4.E(), Proton, locEtaP4);
-		double prodPlanePhi = locEtaP4.Phi()*180/3.14159;
-		
-		TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
+                //double prodPlanePhi = dAnalysisUtilities.Calc_ProdPlanePhi_Pseudoscalar(locBeamP4.E(), Proton, locEtaP4);
+	        double prodPlanePhi = locEtaP4.Phi()*180/3.14159;
+	        
+	        TLorentzVector locPi0EtaP4 = locPi0P4+locEtaP4;
 
-        	TLorentzVector cm_vec = locBeamP4+locTargetP4;
-        	TLorentzVector locPi0EtaP4_cm = locPi0EtaP4;
-        	TLorentzVector locPi0P4_cm = locPi0P4;
-        	TLorentzVector locEtaP4_cm = locEtaP4;
-        	TLorentzVector locBeamP4_cm = locBeamP4;
-        	TLorentzVector locProtonP4_cm = locProtonP4;
-        	locPi0EtaP4_cm.Boost(-cm_vec.BoostVector());
-        	locPi0P4_cm.Boost(-cm_vec.BoostVector());
-        	locEtaP4_cm.Boost(-cm_vec.BoostVector());
-        	locBeamP4_cm.Boost(-cm_vec.BoostVector());
-        	locProtonP4_cm.Boost(-cm_vec.BoostVector());
+                TLorentzVector cm_vec = locBeamP4+locTargetP4;
+                TLorentzVector locPi0EtaP4_cm = locPi0EtaP4;
+                TLorentzVector locPi0P4_cm = locPi0P4;
+                TLorentzVector locEtaP4_cm = locEtaP4;
+                TLorentzVector locBeamP4_cm = locBeamP4;
+                TLorentzVector locProtonP4_cm = locProtonP4;
+                locPi0EtaP4_cm.Boost(-cm_vec.BoostVector());
+                locPi0P4_cm.Boost(-cm_vec.BoostVector());
+                locEtaP4_cm.Boost(-cm_vec.BoostVector());
+                locBeamP4_cm.Boost(-cm_vec.BoostVector());
+                locProtonP4_cm.Boost(-cm_vec.BoostVector());
 
-		TLorentzVector locPi0Eta_gj = locPi0EtaP4_cm;	
-		TLorentzVector locPi0P4_gj = locPi0P4_cm;
-		TLorentzVector locEtaP4_gj = locEtaP4_cm;
-		TLorentzVector locBeamP4_gj = locBeamP4_cm;
-		TLorentzVector locProtonP4_gj = locProtonP4_cm;
-		locPi0Eta_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-		locPi0P4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-		locEtaP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-		locBeamP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
-		locProtonP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+	        TLorentzVector locPi0Eta_gj = locPi0EtaP4_cm;	
+	        TLorentzVector locPi0P4_gj = locPi0P4_cm;
+	        TLorentzVector locEtaP4_gj = locEtaP4_cm;
+	        TLorentzVector locBeamP4_gj = locBeamP4_cm;
+	        TLorentzVector locProtonP4_gj = locProtonP4_cm;
+	        locPi0Eta_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+	        locPi0P4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+	        locEtaP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+	        locBeamP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
+	        locProtonP4_gj.Boost(-locPi0EtaP4_cm.BoostVector());
 
-		double radToDeg = 57.3;
-        	TVector3 locPi0P4_gj_unit = locPi0P4_gj.Vect().Unit();
-        	TVector3 locEtaP4_gj_unit = locEtaP4_gj.Vect().Unit();
-        	TVector3 locPi0EtaP4_gj_unit = locPi0Eta_gj.Vect().Unit();
-        	// Calculate cosTheta, phi in maybe the GJ axes.
-        	// since we already defined the x,y,z as TVector3 we don't have to do it again.
-        	TVector3 z = locBeamP4_gj.Vect().Unit();
-        	// this y should be the normal of the production plane. If we do a boost in a direction in the production plane the perp direction doesn't change. We could use the beam and the recoiled proton to define the
-        	// production plane in this new frame. Let us define it in the CM frame. 
-        	TVector3 y = locPi0EtaP4_cm.Vect().Cross(locBeamP4_cm.Vect()).Unit();
-        	TVector3 x = y.Cross(z).Unit();
+	        double radToDeg = 57.3;
+                TVector3 locPi0P4_gj_unit = locPi0P4_gj.Vect().Unit();
+                TVector3 locEtaP4_gj_unit = locEtaP4_gj.Vect().Unit();
+                TVector3 locPi0EtaP4_gj_unit = locPi0Eta_gj.Vect().Unit();
+                // Calculate cosTheta, phi in maybe the GJ axes.
+                // since we already defined the x,y,z as TVector3 we don't have to do it again.
+                TVector3 z = locBeamP4_gj.Vect().Unit();
+                // this y should be the normal of the production plane. If we do a boost in a direction in the production plane the perp direction doesn't change. We could use the beam and the recoiled proton to define the
+                // production plane in this new frame. Let us define it in the CM frame. 
+                TVector3 y = locPi0EtaP4_cm.Vect().Cross(locBeamP4_cm.Vect()).Unit();
+                TVector3 x = y.Cross(z).Unit();
 
-		TVector3 angles_pi0;
-		TVector3 angles_eta;
-        	angles_pi0.SetXYZ ( locPi0P4_gj_unit.Dot(x), locPi0P4_gj_unit.Dot(y), locPi0P4_gj_unit.Dot(z) );
-        	angles_eta.SetXYZ ( locEtaP4_gj_unit.Dot(x), locEtaP4_gj_unit.Dot(y), locEtaP4_gj_unit.Dot(z) );
+	        TVector3 angles_pi0;
+	        TVector3 angles_eta;
+                angles_pi0.SetXYZ ( locPi0P4_gj_unit.Dot(x), locPi0P4_gj_unit.Dot(y), locPi0P4_gj_unit.Dot(z) );
+                angles_eta.SetXYZ ( locEtaP4_gj_unit.Dot(x), locEtaP4_gj_unit.Dot(y), locEtaP4_gj_unit.Dot(z) );
 
-        	double cosTheta_pi0_GJ = angles_pi0.CosTheta();
-        	double cosTheta_eta_GJ = angles_eta.CosTheta();
-        	double phi_pi0_GJ = angles_pi0.Phi()*radToDeg;
-        	double phi_eta_GJ = angles_eta.Phi()*radToDeg;
+                double cosTheta_pi0_GJ = angles_pi0.CosTheta();
+                cosTheta_eta_GJ= angles_eta.CosTheta();
+                double phi_pi0_GJ = angles_pi0.Phi()*radToDeg;
+                double phi_eta_GJ = angles_eta.Phi()*radToDeg;
 
-		cout << "Calculated the kinematic angles" << endl;
+	        cout << "Calculated the kinematic angles" << endl;
 
-		double locPi0EtaMass = locPi0EtaP4.M();
-		double mandelstam_t = -(locProtonP4-locTargetP4).M2();
-		double mandelstam_abst = abs(mandelstam_t);
-		//double mandelstam_t0 = -((locProtonP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2())/(2*(locBeamP4+locTargetP4).M())-(locBeamP4_cm-locPi0EtaP4_cm).M2());
-		//above formulation is wrong. the last term uses magnitue, not p4
-		double mandelstam_t0 = -(TMath::Power(-locPi0EtaP4.M2()/(2*(locBeamP4+locTargetP4).M()),2)-TMath::Power(locBeamP4_cm.Vect().Mag()-locPi0EtaP4_cm.Vect().Mag(),2));
-		mandelstam_tp = mandelstam_t-mandelstam_t0;
-		
-		dHist_NumThrown->Fill(locNumThrown);
-		dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
-		dHist_phi->Fill(phi_pi0_GJ);
-		dHist_cosTheta->Fill(cosTheta_eta_GJ);
-		dHist_beamE->Fill(locBeamP4.E());
-		for (int beamE=0; beamE<12; ++beamE){
-			if (pBeamE[beamE]){
-				dHist_pi0eta1DBeam[beamE]->Fill(locPi0EtaMass);
-			}
-		}
-		pBeamE8to9GeV=locBeamP4.E()>8 && locBeamP4.E()<9;	
-		cout << "Filled some histograms" << endl;
+                locPi0EtaMass = locPi0EtaP4.M();
+                mandelstam_t = -(locProtonP4-locTargetP4).M2();
+	        double mandelstam_abst = abs(mandelstam_t);
+	        //double mandelstam_t0 = -((locProtonP4.M2()-locPi0EtaP4.M2()-locTargetP4.M2())/(2*(locBeamP4+locTargetP4).M())-(locBeamP4_cm-locPi0EtaP4_cm).M2());
+	        //above formulation is wrong. the last term uses magnitue, not p4
+	        double mandelstam_t0 = -(TMath::Power(-locPi0EtaP4.M2()/(2*(locBeamP4+locTargetP4).M()),2)-TMath::Power(locBeamP4_cm.Vect().Mag()-locPi0EtaP4_cm.Vect().Mag(),2));
+	        mandelstam_tp = mandelstam_t-mandelstam_t0;
+	        
+	        dHist_NumThrown->Fill(locNumThrown);
+	        dHist_phiVsMass->Fill(locPi0EtaMass,phi_pi0_GJ);
+	        dHist_phi->Fill(phi_pi0_GJ);
+	        dHist_cosTheta->Fill(cosTheta_eta_GJ);
+	        dHist_beamE->Fill(locBeamP4.E());
+	        for (int beamE=0; beamE<12; ++beamE){
+	        	if (pBeamE[beamE]){
+	        		dHist_pi0eta1DBeam[beamE]->Fill(locPi0EtaMass);
+	        	}
+	        }
+	        pBeamE8to9GeV=locBeamP4.E()>8 && locBeamP4.E()<9;	
+	        cout << "Filled some histograms" << endl;
 
-		//if ( passCutsOneEtaPi0 && mandelstam_tp < 1) {
-		//}
-        	mandelstam_teta = -(locBeamP4-locEtaP4).M2();
-        	mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
-		idx_t_eta = (int)( (mandelstam_teta-tMin)/tStep ); 
-		idx_t_pi0 = (int)( (mandelstam_tpi0-tMin)/tStep ); 
-		idx_m = (int)( (locPi0EtaP4.M()-mMin)/mStep );
-		if ( mandelstam_teta < tMin || locPi0EtaP4.M() < mMin || mandelstam_teta>tMax || locPi0EtaP4.M() >mMax ) {
-			teta_genCounts = -1;
-		}
-		else {
-			teta_genCounts = idx_t_eta+num_tBins*idx_m;
-		}
-		if ( mandelstam_tpi0 < tMin || locPi0EtaP4.M() < mMin || mandelstam_tpi0>tMax || locPi0EtaP4.M() >mMax ) {
-			tpi0_genCounts = -1;
-		}
-		else {
-			tpi0_genCounts = idx_t_pi0+num_tBins*idx_m;
-		}
-		cout << "Determined teta and tpi0 bins" << endl;
+	        //if ( passCutsOneEtaPi0 && mandelstam_tp < 1) {
+	        //}
+                mandelstam_teta = -(locBeamP4-locEtaP4).M2();
+                mandelstam_tpi0 = -(locBeamP4-locPi0P4).M2();
+	        idx_t_eta = (int)( (mandelstam_teta-tMin)/tStep ); 
+	        idx_t_pi0 = (int)( (mandelstam_tpi0-tMin)/tStep ); 
+	        idx_m = (int)( (locPi0EtaP4.M()-mMin)/mStep );
+	        if ( mandelstam_teta < tMin || locPi0EtaP4.M() < mMin || mandelstam_teta>tMax || locPi0EtaP4.M() >mMax ) {
+	        	teta_genCounts = -1;
+	        }
+	        else {
+	        	teta_genCounts = idx_t_eta+num_tBins*idx_m;
+	        }
+	        if ( mandelstam_tpi0 < tMin || locPi0EtaP4.M() < mMin || mandelstam_tpi0>tMax || locPi0EtaP4.M() >mMax ) {
+	        	tpi0_genCounts = -1;
+	        }
+	        else {
+	        	tpi0_genCounts = idx_t_pi0+num_tBins*idx_m;
+	        }
+	        cout << "Determined teta and tpi0 bins" << endl;
 
 
-		bool pBeamE8GeV = locBeamP4.E() > 8;
-		bool pBeamE8288 = 8.2 < locBeamP4.E() &&  locBeamP4.E() < 8.8;
+	        bool pBeamE8GeV = locBeamP4.E() > 8;
+	        bool pBeamE8288 = 8.2 < locBeamP4.E() &&  locBeamP4.E() < 8.8;
 
-		if(correctFinalState*keepPolarization){
+	        if(correctFinalState*keepPolarization){
                         dHist_Mpi0eta->Fill(locPi0EtaMass);
 
-			mandelstam_tpAll->Fill(mandelstam_tp);	
-			mandelstam_tAll->Fill(mandelstam_abst);
+	        	mandelstam_tpAll->Fill(mandelstam_tp);	
+	        	mandelstam_tAll->Fill(mandelstam_abst);
 
-			dHist_SelectedBeamAngle->Fill(locPolarizationAngle);
+	        	dHist_SelectedBeamAngle->Fill(locPolarizationAngle);
 
-			dHist_beamECut->Fill(locBeamP4.E());
-			dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_eta_GJ);
-			dHist_genCounts_eta_tAll->Fill(teta_genCounts);
-			dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
+	        	dHist_beamECut->Fill(locBeamP4.E());
+	        	dHist_cosThetaVsMass_tpAll->Fill(locPi0EtaMass,cosTheta_eta_GJ);
+	        	dHist_genCounts_eta_tAll->Fill(teta_genCounts);
+	        	dHist_genCounts_pi0_tAll->Fill(tpi0_genCounts);
 
-			//Fill_OutputTree must be run with proof!
-			dHist_pi0eta1D->Fill(locPi0EtaMass);
-			dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
-			dHist_cosTheta8GeVPlus->Fill(cosTheta_eta_GJ);
+	        	//Fill_OutputTree must be run with proof!
+	        	dHist_pi0eta1D->Fill(locPi0EtaMass);
+	        	dHist_phi8GeVPlus->Fill(phi_pi0_GJ);
+	        	dHist_cosTheta8GeVPlus->Fill(cosTheta_eta_GJ);
 
-			if (mandelstam_t<0.5){
-				dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
-				dHist_genCounts_pi0_tLT05->Fill(tpi0_genCounts);
-			}
-			if (mandelstam_t>0.5 && mandelstam_t<1){
-				dHist_genCounts_eta_tGT05LT1->Fill(teta_genCounts);
-				dHist_genCounts_pi0_tGT05LT1->Fill(tpi0_genCounts);
-			}
-			if (mandelstam_t>1){
-				dHist_genCounts_eta_tGT1->Fill(teta_genCounts);
-				dHist_genCounts_pi0_tGT1->Fill(tpi0_genCounts);
-			}
+	        	if (mandelstam_t<0.5){
+	        		dHist_genCounts_eta_tLT05->Fill(teta_genCounts);
+	        		dHist_genCounts_pi0_tLT05->Fill(tpi0_genCounts);
+	        	}
+	        	if (mandelstam_t>0.5 && mandelstam_t<1){
+	        		dHist_genCounts_eta_tGT05LT1->Fill(teta_genCounts);
+	        		dHist_genCounts_pi0_tGT05LT1->Fill(tpi0_genCounts);
+	        	}
+	        	if (mandelstam_t>1){
+	        		dHist_genCounts_eta_tGT1->Fill(teta_genCounts);
+	        		dHist_genCounts_pi0_tGT1->Fill(tpi0_genCounts);
+	        	}
 
-			if(mandelstam_t < 1){
-				mandelstam_tpLT1->Fill(mandelstam_tp);
-				dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_eta_GJ);
-			}
+	        	if(mandelstam_t < 1){
+	        		mandelstam_tpLT1->Fill(mandelstam_tp);
+	        		dHist_cosThetaVsMass_tpLT1->Fill(locPi0EtaMass,cosTheta_eta_GJ);
+	        	}
 
-			mandelstam_tpAll_selected->Fill(mandelstam_tp);
-			if ( locPolarizationAngle == 0 ) { 
-				dHist_prodPlanePS_000->Fill(prodPlanePhi);
-			}
-			if ( locPolarizationAngle == 45 ) { 
-				dHist_prodPlanePS_045->Fill(prodPlanePhi);
-			}
-			if ( locPolarizationAngle == 90 ) { 
-				dHist_prodPlanePS_090->Fill(prodPlanePhi);
-			}
-			if ( locPolarizationAngle == 135 ) { 
-				dHist_prodPlanePS_135->Fill(prodPlanePhi);
-			}
-			if ( !hasPolarizationAngle ) { 
-				dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
-			}
+	        	mandelstam_tpAll_selected->Fill(mandelstam_tp);
+	        	if ( locPolarizationAngle == 0 ) { 
+	        		dHist_prodPlanePS_000->Fill(prodPlanePhi);
+	        	}
+	        	if ( locPolarizationAngle == 45 ) { 
+	        		dHist_prodPlanePS_045->Fill(prodPlanePhi);
+	        	}
+	        	if ( locPolarizationAngle == 90 ) { 
+	        		dHist_prodPlanePS_090->Fill(prodPlanePhi);
+	        	}
+	        	if ( locPolarizationAngle == 135 ) { 
+	        		dHist_prodPlanePS_135->Fill(prodPlanePhi);
+	        	}
+	        	if ( !hasPolarizationAngle ) { 
+	        		dHist_prodPlanePS_AMO->Fill(prodPlanePhi);
+	        	}
+                        dTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
+                        dTreeInterface->Fill_Fundamental<Double_t>("cosTheta_eta_gj",cosTheta_eta_GJ); //fundamental = char, int, float, double, etc.
+                        dTreeInterface->Fill_Fundamental<Double_t>("Mpi0eta", locPi0EtaMass); //fundamental = char, int, float, double, etc.
 	                Fill_OutputTree();
-			Fill_OutputTree("selected"); //your user-defined key
-        		//dFlatTreeInterface->Fill_Fundamental<Double_t>("mandelstam_tp", mandelstam_tp); //fundamental = char, int, float, double, etc.
-		} // if cuts not passed
-	} // if topology not correct
+	        } // if cuts not passed
+	        Fill_OutputTree("selected"); //your user-defined key
+        } // Cut for checking if pi0 and eta is there
 	// If the following selections did not pass then this would have never executed and thus things are never filled
 
 	++eventIdx;
