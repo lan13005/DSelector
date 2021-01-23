@@ -71,6 +71,37 @@ struct topology {
 };
 
 
+
+//void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double x, double y, double xmin, double xmax, double ymin, double ymax, double xskip, double yskip){
+//	// regions are:
+//	//  0 1 2
+//	//  3 4 5 
+//	//  6 7 8
+//	//  where xmin, xmax, ymin,ymax all belong to region 5
+//	//  the 10th element is the interesection of the negation of all regions 
+//	//  11th element is 1345 and 12th element is 0268
+//	double xlength = xmax-xmin;
+//	double ylength = ymax-ymin;
+//	inBox[4] = x<xmax && x>xmin && y<ymax && y>ymin;
+//	inBox[3] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) && y<ymax && y>ymin;
+//	inBox[5] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y<ymax && y>ymin;
+//	inBox[1] = x<xmax && x>xmin && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+//	inBox[7] = x<xmax && x>xmin && y>(ymin-yskip-ylength) && y<(ymin-yskip);
+//	inBox[0] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+//	inBox[2] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y<(ymax+yskip+ylength) && y>(ymax+yskip);
+//	inBox[6] = x<(xmin-xskip) && x>(xmin-xskip-xlength/2) &&  y>(ymin-yskip-ylength) && y<(ymin-yskip);
+//	inBox[8] = x<(xmax+xskip+xlength/2) && x>(xmax+xskip) && y>(ymin-yskip-ylength) && y<(ymin-yskip);
+//	inBox[9] = !inBox[0] * !inBox[1] * !inBox[2] * !inBox[3] * !inBox[4] * !inBox[5] * !inBox[6] * !inBox[7] * !inBox[8];	
+//	inBox[10] = inBox[0] || inBox[2] || inBox[6] || inBox[8];
+//	inBox[11] = inBox[1] || inBox[7];
+//       	inBox[12] = inBox[3] || inBox[5];
+//
+//	for (int i=0; i<13; ++i){
+//		inBox_noOtherCuts[i] = inBox[i]; // save the inBox bools before modifiying them by the cut. We will use these for defining the weightBS
+//		inBox[i]*=additionalCut;
+//	}
+//}
+
 void withinBox(bool inBox[], bool inBox_noOtherCuts[],bool additionalCut, double pi0Mass, double etaMass, double pi0Mean, double etaMean, double pi0Std, 
                     double etaStd, double pi0Sig, double pi0Skip, double pi0SB, double etaSig, double etaSkip, double etaSB){
         // Sig/Skip/SB are all in terms of stdevs

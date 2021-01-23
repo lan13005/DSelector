@@ -7,14 +7,15 @@ string fitName="EtaPi_fit";
 char slowMass[5];
 char suppMass[5];
 
+vector<string> group={};
 void overlaySingleBin(int binN,bool isLast){
         gStyle->SetOptStat(kFALSE);
         string fitLoc = fitName+"/bin_";
         string binNum = to_string(binN);
-	string outputFile = "/twopi_plot.root";
+	string outputFile = "/etapi_plot.root";
         TFile* infile = TFile::Open((fitLoc+binNum+outputFile).c_str());
         TCanvas *allCanvases = new TCanvas("anyHists","",1440,900);
-        std::vector<std::string> names1D = {"M2pi","cosTheta","Phi","phi","psi","t"};
+        std::vector<std::string> names1D = {"Metapi","cosTheta","Phi","phi","psi","t"};
 
         int namesSize1D = static_cast<int>(names1D.size());
         TH1F *any1DHist_dat;

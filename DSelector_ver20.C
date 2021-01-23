@@ -28,13 +28,14 @@ int itersToRun = 0;
 int protonID=0;
 
 string selectDetector="ALL";
-string polarization="deg000";
+string polarization="deg090";
 //string tag="_compare_reco_2017";
 //string tag="_data_2017";
 //string tag="_a0a2Test";
-string tag="_etapi_acc_testing";
+//string tag="_a0a2a2pi1_largerpi1_dat";
+string tag="_pi1_dat";
 
-int mcprocess=1;
+int mcprocess=0;
 
 void DSelector_ver20::Init(TTree *locTree)
 {
@@ -2623,6 +2624,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
                 thrownBeamID=dThrownBeam->Get_ID();
 		Ebeam_thrown = beamP4_thrown.E();
 
+
+                int n_pi0s=0;
+                int n_etas=0;
 		for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
 		{	
 			//Set branch array indices corresponding to this particle
@@ -2634,8 +2638,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 
 			parentArray.push_back(dThrownWrapper->Get_ParentIndex());
 			pids.push_back(dThrownWrapper->Get_PID());
-                        if (locPID==7 && locParentID==-1) { cout << "Found thrown pi0" << endl; pi0P4_thrown = dThrownWrapper->Get_P4(); }
-                        if (locPID==17 && locParentID==-1) { cout << "Found thrown eta" << endl; etaP4_thrown = dThrownWrapper->Get_P4(); }
+                        if (locPID==7 && locParentID==-1) { cout << "Found thrown pi0" << endl; ++n_pi0s; pi0P4_thrown = dThrownWrapper->Get_P4(); }
+                        if (locPID==17 && locParentID==-1) { cout << "Found thrown eta" << endl; ++n_etas; etaP4_thrown = dThrownWrapper->Get_P4(); }
                         if (locParentID==-1 && locPID==14) { cout << "Found thrown proton" << endl; locProtonP4_thrown = dThrownWrapper->Get_P4(); }
 		}
 
@@ -2646,30 +2650,32 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 			//cout << parents[parent] << endl;
 		}
 
-		int pi0ToNGamma=0;
-		int etaToNGamma=0;
-		for (auto parent : parents){
-			std::vector<int> daughters;
-			cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
-			findDaughters( parentArray, daughters, parent );
-			for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
-				if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
-				else if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
-                                else {
-                                    cout << pids[daughters[daughter]]; 
-                                }
-			}
-                        cout << endl;
-		}
-		if ( pi0ToNGamma==2 && etaToNGamma==2) {
-			correctFinalState=true;
+                if (n_pi0s==1 && n_etas==1){
+		    int pi0ToNGamma=0;
+		    int etaToNGamma=0;
+		    for (auto parent : parents){
+		    	std::vector<int> daughters;
+		    	cout << "Parent: " << parent << " which has PID=" << pids[parent] << " has children:" << endl;
+		    	findDaughters( parentArray, daughters, parent );
+		    	for ( auto daughter=0; daughter < (int)daughters.size(); ++daughter) {
+		    		if ( pids[parent]==7 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++pi0ToNGamma; }
+		    		else if ( pids[parent]==17 && pids[daughters[daughter]] == 1 && daughters.size()==2){ ++etaToNGamma; }
+                                    else {
+                                        cout << pids[daughters[daughter]]; 
+                                    }
+		    	}
+                            cout << endl;
+		    }
+		    if ( pi0ToNGamma==2 && etaToNGamma==2) {
+		    	correctFinalState=true;
                         cout << "pi0ToNGamma = " << pi0ToNGamma << " and etaToNGamma = " << etaToNGamma << endl;
-			++count_correctTopology;
-			cout << "(Correct topology)" << endl;
-		}
-		else {
+		    	++count_correctTopology;
+		    	cout << "(Correct topology)" << endl;
+		    }
+		    else {
                         cout << "pi0ToNGamma = " << pi0ToNGamma << " and etaToNGamma = " << etaToNGamma << endl;
-			cout << "(Incorrect topology)" << endl;
+		    	cout << "(Incorrect topology)" << endl;
+                    }
 		}
 		
 		
@@ -4232,6 +4238,12 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	else if ( inBox_noOtherCuts[12] ) { weightBS = pi0SBweight; weightB = 1-weightBS; }
 	else if ( inBox_noOtherCuts[4] ) { weightBS = 1; weightB = 0; }
 	else { weightBS=0; weightB=1; }
+	//if ( inBox_noOtherCuts[10] ) { weightBS = 0.25; weightB = -1.25; }
+	//else if ( inBox_noOtherCuts[11] ) { weightBS = -0.5; weightB = 1.5; }
+	//else if ( inBox_noOtherCuts[12] ) { weightBS = -0.5; weightB = 1.5; }
+	//else if ( inBox_noOtherCuts[4] ) { weightBS = 1; weightB = 0; }
+	//else { weightBS=0; weightB=1; }
+
         
         // Calculate weights ignoring the other dimension
         if ( locPi0Mass_Kin > pi0Mean-pi0Std*pi0Sig && locPi0Mass_Kin < pi0Mean+pi0Std*pi0Sig ) { weightBSpi0 = 1; } 

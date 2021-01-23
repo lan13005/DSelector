@@ -21,9 +21,9 @@ $workinDir = getcwd();
 # these files must exist in the workin directory.  If you don't know how
 # to generate them or don't have them, see the documentation in gen_3pi
 # the Simulation area of the repository
-#$dataFile = "$workinDir/trees/tree_pimpip_coh_2017_amptools.root";
-$dataFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_dat.root";
-$accMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen_as_acc.root";
+# a0a2a2pi1_polarized/amptools_thrown_a0a2a2pi1_as_dat.root
+$dataFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_onlypi1_gen.root";
+$accMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen.root";
 $genMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen.root";
 
 print $dataFile;

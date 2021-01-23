@@ -6,7 +6,7 @@
 // 2. The eventNumbers can be repeated in the MC. So we can have two events with the same event number. Hopefully we avoided this by checking against the previous event number
 // 3. Program is very convoluted with a lot of conditions. I know.
 
-bool verbose=true;
+bool verbose=false;
 
 void addUTWeightsBranch(string rootFileLoc, string rootFileName, string treeName){
     TFile* dataFile = new TFile((rootFileLoc+rootFileName+".root").c_str());
@@ -91,7 +91,7 @@ void addUTWeightsBranch(string rootFileLoc, string rootFileName, string treeName
         if(verbose)cout << "(previousEvent "<< previousEvent << ")currentEvent " << event  << " BeamID " << beamID << " chiSq " << chiSq <<  endl;
         if (ientry==0) previousEvent=event; // have to make a special case for just the first event to get the right initialization
         if (previousEvent==event){
-            cout << "-previousEvent same as currentEvent... Filling" << endl;
+            if(verbose){cout << "-previousEvent same as currentEvent... Filling" << endl;}
             ++count; // counts total number of combos in an event
 
             // --------------------
@@ -287,11 +287,11 @@ void addUTWeightsBranch(string rootFileLoc, string rootFileName, string treeName
 
 
 void getUniquenessWeights(){
-    string rootFileLoc = "/d/grid15/ln16/pi0eta/092419/";
+    string rootFileLoc = "../";
     //string rootFileName = "degALL_a0a2Test_treeFlat_DSelector";
     //string treeName = "degALL_a0a2Test_tree_flat";
-    string rootFileName = "degALL_ALL_a0a2_treeFlat_DSelector";
-    string treeName = "degALL_ALL_a0a2_tree_flat";
+    string rootFileName = "degALL_a0a2_mEllipse_treeFlat_DSelector";
+    string treeName = "degALL_a0a2_mEllipse_tree_flat";
     addUTWeightsBranch(rootFileLoc, rootFileName, treeName);
 
     //string rootFileLoc = "/d/grid15/ln16/pi0eta/q-values/";

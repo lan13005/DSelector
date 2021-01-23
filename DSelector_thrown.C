@@ -1,7 +1,7 @@
 #include "DSelector_thrown.h"
 #include "TRandom.h"
-string polarization="deg000";
-string tag="_etapi_gen";
+string polarization="deg090";
+string tag="_onlypi1_gen";
 
 void DSelector_thrown::Init(TTree *locTree)
 {
