@@ -3,7 +3,7 @@
 
 numBins=$(grep "NUMBER_BINS" fit.cfg | cut -d "=" -f2)
 processSpawned=$(grep "PROCESSES_TO_SPAWN" fit.cfg | cut -d "=" -f2) # so that each one takes care of 5 bins
-binsPerProc=$(($numBins/$processSpawned))
+binsPerProc=$(python -c "from math import ceil; print int(ceil(1.0*$numBins/$processSpawned))")
 
 
 echo "numBins, processSpawned, binsPerProc: $numBins, $processSpawned, $binsPerProc"
@@ -29,7 +29,7 @@ done
 wait
 #echo "**The bin ranges, i.e. 0 5 will run on bin_0 to bin_4**"
 #echo "** Below are the bins that did not converge! ** "
-##grep 'not\ converged' fitLogs/boot/driveFit_*
+#grep 'not\ converged' fitLogs/boot/driveFit_*
 #grep 'maxIter times' fitLogs/boot/driveFit_*
 #echo "----------------------------"
 #echo "** Below are files that had to try more than once to converge and the total number of tries attemped ** "

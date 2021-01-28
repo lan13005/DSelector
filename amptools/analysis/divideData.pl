@@ -22,9 +22,9 @@ $workinDir = getcwd();
 # to generate them or don't have them, see the documentation in gen_3pi
 # the Simulation area of the repository
 # a0a2a2pi1_polarized/amptools_thrown_a0a2a2pi1_as_dat.root
-$dataFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_onlypi1_gen.root";
-$accMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen.root";
-$genMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_gen.root";
+$dataFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_deg000_a0a2a2pi1_thrown.root";
+$accMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_deg000_flat_thrown.root";
+$genMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_deg000_flat_thrown.root";
 
 print $dataFile;
 print "\n";
@@ -79,7 +79,7 @@ print "splitted data!\n";
 for( $i = 0; $i < $nBins; ++$i ){
 
   mkdir "bin_$i" unless -d "bin_$i";
-
+  
   system( "mv *\_$i.root bin_$i" );
 
   chdir "bin_$i";

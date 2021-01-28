@@ -26,8 +26,12 @@ if nargs!=3:
 else:
     option=int(args[1])
     ampString=str(args[2])
-    groups=ampString.split(";")
-    groups=['"'+group+'"' for group in groups]
+    groupVec=ampString.split(";")
+    groups=[tmp if tmp!="" else tmp for tmp in groupVec]
+    groupTags=["_"+tmp if tmp!="" else tmp for tmp in groupVec]
+    groupsWithQuotes=['"_'+tmp+'"' if tmp!="" else '""' for tmp in groupVec]
+    print("GROUPS: ")
+    print(groups)
 
 cfg=loadCfg()
 fitName=cfg["FIT_DIR"]
@@ -46,13 +50,14 @@ def runEtaPiPlotterForAllBins():
         print("moving to "+binLoc)
         os.chdir(binLoc)
         print("   running etapi_plotter...")
-        for group in ["_"+tmp if tmp!="" else tmp for tmp in groups]:
+        for igroup in range(len(groups)):
+            cmd=["etapi_plotter","bin_"+str(iBin)+"-full.fit","-o","etapi_plot"+groupTags[igroup]+".root","-s",groups[igroup]]
+            print("calling: "+" ".join(cmd))
             if verbose:
-                subprocess.check_call(["etapi_plotter","bin_"+str(iBin)+"-full.fit","-o","etapi_plot"+group+".root","-s",group])
+                subprocess.check_call(cmd)
             else:
                 with open(os.devnull, 'wb') as devnull:
-                    subprocess.check_call(["etapi_plotter","bin_"+str(iBin)+"-full.fit","-o","etapi_plot"+group+".root","-s",group], stdout=devnull, stderr=subprocess.STDOUT)
-    print("\n\nGathering all etapi_plotter outputs...")
+                    subprocess.check_call(cmd, stdout=devnull, stderr=subprocess.STDOUT)
     time.sleep(2)
 
 def gatherPlotResultsIntoPDFs():
@@ -64,26 +69,28 @@ def gatherPlotResultsIntoPDFs():
     subprocess.Popen(sedArgs, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
     sedArgs=["sed","-i",'s@fitName=.*;@fitName="'+fitName+'";@g',"overlayBins.C"]
     subprocess.Popen(sedArgs, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+    repStr="vector<string> groups="
+    vecStr="{"
+    vecStr+=",".join(groupsWithQuotes)
+    vecStr+="}"
+    print("replacing vector to "+vecStr)
+    sedArgs=["sed","-i",'s@'+repStr+'.*;@'+repStr+vecStr+';@g',"overlayBins.C"]
+    subprocess.Popen(sedArgs, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
     if verbose:
         subprocess.check_call(["root","-l","-b","-q","overlayBins.C"])
     else:
         with open(os.devnull, 'wb') as devnull:
             subprocess.check_call(["root","-l","-b","-q","overlayBins.C"], stdout=devnull, stderr=subprocess.STDOUT)
 
-repStr="vector<string> group="
-vecStr="{"
-vecStr+=",".join(groups)
-vecStr+="}"
-sedArgs=["sed","-i",'s@'+repStr+'.*;@'+repStr+vecStr+';@g',"overlayBins.C.bk"]
-subprocess.Popen(sedArgs, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).wait()
+if option==0 or option==2:
+    print("RUNNING etapi_plotter FOR ALL BINS...")
+    runEtaPiPlotterForAllBins()
+if option==1 or option==2:
+    print("Recreating overlayPlots folder...")
+    if os.path.exists("overlayPlots") and os.path.isdir("overlayPlots"):
+        shutil.rmtree("overlayPlots")
+    os.mkdir("overlayPlots")
+    print("GATHERING ALL THE RESULTS INTO A PDF...")
+    gatherPlotResultsIntoPDFs()
 
-#if option==0 or option==2:
-#    print("RUNNING etapi_plotter FOR ALL BINS...")
-#    runEtaPiPlotterForAllBins()
-#if option==1 or option==2:
-#    print("Recreating overlayPlots folder...")
-#    shutil.rmtree("overlayPlots")
-#    os.mkdir("overlayPlots")
-#    print("GATHERING ALL THE RESULTS INTO A PDF...")
-#    gatherPlotResultsIntoPDFs()
 print("DONE!")

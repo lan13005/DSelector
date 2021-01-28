@@ -7,6 +7,7 @@ import random
 import shutil
 import glob
 from loadCfg import loadCfg
+from fitHelper import getAmps
 
 
 ## max iteration of attempts to fit a specific bootstrapped dataset with each iteration changing in initialization
@@ -101,9 +102,13 @@ def getBinsArray(i,bpt,threads,singleBin):
         array1 = [i]
         bptm1 = bpt-1
         for iproc in range(bptm1):
-            array1.append(i+(iproc+1)*threads)
+            nextBin=i+(iproc+1)*threads
+            if nextBin<nBins: # make sure we dont go over the max number of bins.
+                array1.append(nextBin)
     return array1
 binsArray = getBinsArray(iProcess,binsPerProc,processSpawned,singleBin)
+print("Running over these bins for this process:")
+print(binsArray)
 
 start = time.time()
 
@@ -117,63 +122,64 @@ fitDir = workingDir+"/"+fitName
 print("fit directory: %s" % (fitDir))
 
 random.seed(seedAmpInit)
-def getAmps(binDir,percentDeviation,baseDeviation,rndSamp,verbose=True):
-    # this function works in the current directory... make sure to cd
-    if(rndSamp==False):
-        print("We will use the converged values instead of randomly sampling around them!")
-        percentDeviation=0
-        baseDeviation=0
-    else:
-        print("using percentDeviation as: "+str(percentDeviation))
-        print("using baseDeviation as: "+str(baseDeviation))
-    realAmps=[]
-    imAmps=[]
-    isreal=[]
-    print("Opening: "+binDir+"/"+seedFile)
-    with open(binDir+"/"+seedFile,"r") as param_init_cfg:
-        paramLines = param_init_cfg.readlines()
-        lineCounter=0
-        ampCounter=-1
-        for paramLine in paramLines:
-            if lineCounter%2==0:
-                ampCounter+=1
-            realAmp = float(paramLine.split(" ")[3])
-            imAmp = float(paramLine.split(" ")[4])
-            lenParams = len(paramLine.split(" "))
-            real_low = float(realAmp*(1-percentDeviation)-baseDeviation)
-            real_up = float(realAmp*(1+percentDeviation)+baseDeviation)
-            im_low = float(imAmp*(1-percentDeviation)-baseDeviation)
-            im_up = float(imAmp*(1+percentDeviation)+baseDeviation)
-            realSampled = str(random.uniform(real_low,real_up))
-            if (lenParams>5) and (paramLine.split(" ")[5].rstrip()=="real"):
-                imSampled="0.0"
-                isreal.append(True)
-            else: 
-                imSampled= str(random.uniform(im_low,im_up))
-                isreal.append(False)
-            if(verbose):
-                print("Below is paramLists, check if below values match:")
-                print(paramLine.split(" "))
-                print("Amps from "+seedFile+": "+ampNames[ampCounter])
-                print("realAmp: "+str(realAmp))
-                print("imAmp: "+str(imAmp))
-                print("Sampling from the below ranges")
-                print("real_low, real_up: "+str(real_low)+", "+str(real_up))
-                print("im_low, im_up: "+str(im_low)+", "+str(im_up))
-                print("realSampled, imSampled: {0},{1}".format(realSampled,imSampled))
-            realAmps.append(realSampled)
-            imAmps.append(imSampled)
-            lineCounter+=1
-            print("----------------------------")
-        if (len(realAmps)==len(imAmps)==len(isreal)):
-            print("length of realAmps, imAmps, isreal is good!")
-        else:
-            print("length of realAmps: "+str(len(realAmps)))
-            print("length of imAmps: "+str(len(imAmps)))
-            print("length of isreal: "+str(len(isreal)))
-            raise ValueError("length of realAmps, imAmps, isreal is not good!")
-        #print("==================================\n\n")
-    return realAmps, imAmps, isreal
+#def getAmps(binDir,percentDeviation,baseDeviation,rndSamp,verbose=True):
+#    # this function works in the current directory... make sure to cd
+#    if(rndSamp==False):
+#        print("We will use the converged values instead of randomly sampling around them!")
+#        percentDeviation=0
+#        baseDeviation=0
+#    else:
+#        print("using percentDeviation as: "+str(percentDeviation))
+#        print("using baseDeviation as: "+str(baseDeviation))
+#    realAmps=[]
+#    imAmps=[]
+#    isreal=[]
+#    print("Opening: "+binDir+"/"+seedFile)
+#    with open(binDir+"/"+seedFile,"r") as param_init_cfg:
+#        paramLines = param_init_cfg.readlines()
+#        lineCounter=0
+#        ampCounter=-1
+#        for paramLine in paramLines:
+#            if lineCounter%2==0:
+#                ampCounter+=1
+#            realAmp = float(paramLine.split(" ")[3])
+#            imAmp = float(paramLine.split(" ")[4])
+#            lenParams = len(paramLine.split(" "))
+#            real_low = float(realAmp*(1-percentDeviation)-baseDeviation)
+#            real_up = float(realAmp*(1+percentDeviation)+baseDeviation)
+#            im_low = float(imAmp*(1-percentDeviation)-baseDeviation)
+#            im_up = float(imAmp*(1+percentDeviation)+baseDeviation)
+#            realSampled = str(random.uniform(real_low,real_up))
+#            if (lenParams>5) and (paramLine.split(" ")[5].rstrip()=="real"):
+#                imSampled="0.0"
+#                isreal.append(True)
+#            else: 
+#                imSampled= str(random.uniform(im_low,im_up))
+#                isreal.append(False)
+#            if(verbose):
+#                print("Below is paramLists, check if below values match:")
+#                print(paramLine.split(" "))
+#                print("Amps from "+seedFile+": "+ampNames[ampCounter])
+#                print("realAmp: "+str(realAmp))
+#                print("imAmp: "+str(imAmp))
+#                print("Sampling from the below ranges")
+#                print("real_low, real_up: "+str(real_low)+", "+str(real_up))
+#                print("im_low, im_up: "+str(im_low)+", "+str(im_up))
+#                print("realSampled, imSampled: {0},{1}".format(realSampled,imSampled))
+#            realAmps.append(realSampled)
+#            imAmps.append(imSampled)
+#            lineCounter+=1
+#            print("----------------------------")
+#        if (len(realAmps)==len(imAmps)==len(isreal)):
+#            print("length of realAmps, imAmps, isreal is good!")
+#        else:
+#            print("length of realAmps: "+str(len(realAmps)))
+#            print("length of imAmps: "+str(len(imAmps)))
+#            print("length of isreal: "+str(len(isreal)))
+#            raise ValueError("length of realAmps, imAmps, isreal is not good!")
+#        #print("==================================\n\n")
+#    return realAmps, imAmps, isreal
+
 def writeCfg(ampNames,bin_cfg,bin_cfg_seed,seed,binDir,percentDeviation,baseDeviation,rndSamp):
     # this function works in the current directory... make sure to cd
     ampCounter=0
@@ -183,7 +189,7 @@ def writeCfg(ampNames,bin_cfg,bin_cfg_seed,seed,binDir,percentDeviation,baseDevi
     sedCall="sed -i s/"+bin_cfg_base+"/"+bin_cfg_seed_base+"/g "+bin_cfg_seed
     print(sedCall)
     subprocess.Popen(sedCall.split(" ")).wait()
-    realAmps,imAmps,isreal = getAmps(binDir,percentDeviation,baseDeviation,rndSamp,True)
+    realAmps,imAmps,isreal = getAmps(ampNames,binDir,seedFile,rndSamp,percentDeviation,baseDeviation,True)
     for line in fileinput.input(bin_cfg_seed,inplace=1):
         if line.strip().startswith("data"):
             line = line.replace("ROOTDataReader","ROOTDataReaderBootstrap").replace(".root",".root "+str(seed))
