@@ -1,7 +1,7 @@
-#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+//#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 void makeDrawDeckLines(string fileLoc){
-        gluex_style();
+        //gluex_style();
 	gStyle->SetOptStat(0);
 	TFile* infile_dat = TFile::Open(fileLoc.c_str());
 	TH2F *any2DHist;

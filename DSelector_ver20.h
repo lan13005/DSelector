@@ -314,6 +314,7 @@ class trackingGroup{
 			if (allValues_1D[iHist].size() > 0) {
 				//cout << allValues_1D[iHist].back() << allValues_1D_weight[iHist].back() << endl;
 				int numVals = allValues_1D[iHist].size();
+                                numVals=1;
 				for ( int iValue=0; iValue<numVals; ++iValue){
 					if (allHists_1D[iHist].name=="pi0Mass_Kin_noCut" ){
 						cout << "Filling 1D hist: " << allHists_1D[iHist].name << " with " << allValues_1D[iHist].back() <<
@@ -331,6 +332,7 @@ class trackingGroup{
 			if (allValues_2DX[iHist].size() > 0) {
 				//cout << allValues_2DX[iHist].back() << allValues_2D_weight[iHist].back() << endl;
 				int numVals = allValues_2DX[iHist].size();
+                                numVals=1;
 				for ( int iValue=0; iValue<numVals; ++iValue){
 		    			allHists_2D[iHist].hist->Fill( allValues_2DX[iHist].back(), allValues_2DY[iHist].back(), allValues_2D_weight[iHist].back()/numVals );
 					//cout << "Filling 2D hist: " << allHists_2D[iHist].name << " with " << allValues_2DX[iHist].back() << ", " << allValues_2DY[iHist].back() << 
@@ -760,7 +762,7 @@ class DSelector_ver20 : public DSelector
 		///////////// General ///////////////////
 		double unusedEnergyCut = 0.010;
 		double MMsqCut = 0.05;
-		double ChiSqCut = 5;
+		double ChiSqCut = 13.277;
 		double originalChiSqCut = 13.277;
 		double chiSq100 = 100;
 		double RFCut = 0.5*4; // 4ns is the beam period.

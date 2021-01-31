@@ -8,25 +8,27 @@ $highMass = 2; #2 is the upper cutoff of the thrown data and 3ish is the upper c
 $nBins=65; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
 
 $fitName = "EtaPi_fit";
-$nameAffix = "amptools";
 
 # put a limit on the number of data events to process
 # gen MC and acc MC smaples are not limited
 $maxEvts = 1E9;
 
-# this directory can be adjusted if you want to do the fit elsewhere
-# but it needs to be an explicit path
-$workinDir = getcwd();
+$workingDir=getcwd();
+print "current working dir: $workingDir";
+print "\n";
 
 # these files must exist in the workin directory.  If you don't know how
 # to generate them or don't have them, see the documentation in gen_3pi
 # the Simulation area of the repository
 # a0a2a2pi1_polarized/amptools_thrown_a0a2a2pi1_as_dat.root
-$dataFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_deg000_a0a2a2pi1_thrown.root";
-$accMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_deg000_flat_thrown.root";
-$genMCFile = "$workinDir/a0a2a2pi1_polarized/$nameAffix\_deg000_flat_thrown.root";
+$dataFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_a0a2a2largerpi1_onlySig.root";
+$bkgndFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_a0a2a2largerpi1_onlySB.root";
+$accMCFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_flat.root";
+$genMCFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_flat_gen.root";
 
 print $dataFile;
+print "\n";
+print $bkgndFile;
 print "\n";
 print $accMCFile;
 print "\n";
@@ -34,16 +36,17 @@ print $genMCFile;
 print "\n";
 
 # this file sould be used for partially polarized or unpolarized beam fits
-#$cfgTempl = "$workinDir/threepi_unpol_TEMPLATE.cfg";
+#$cfgTempl = "$workingDir/threepi_unpol_TEMPLATE.cfg";
 
-#$cfgTempl = "$workinDir/fit_etapi_moments.cfg";
-$cfgTempl = "$workinDir/zlm_etapi.cfg";
+$cfgTempl = "$workingDir/zlm_etapi.cfg";
 
 
 ### things below here probably don't need to be modified
 
 # this is where the goodies for the fit will end up
-$fitDir = "$workinDir/$fitName/";
+$fitDir = "$workingDir/$fitName/";
+print "Output fitDir: $fitDir";
+print "\n";
 mkdir $fitDir unless -d $fitDir;
 
 chdir $fitDir;
@@ -60,12 +63,21 @@ print "datatag: $dataTag\n";
 system( "split_mass $dataFile $dataTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
 print "splitted data!\n"; 
 
+# bkgnd into bins of resonance mass
+@bkgndParts = split /\//, $bkgndFile; #splitting the path into sections so we can pop out the last important file name
+$bkgndTag = pop @bkgndParts;
+$bkgndTag =~ s/\.root//;
+print "bkgndtag: $bkgndTag\n";
+# here we will use the thrown MC data to get the best represention of how PWA calculates things
+system( "split_mass $bkgndFile $bkgndTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
+print "splitted bkgnd!\n"; 
+
 @accMCParts = split /\//, $accMCFile;
 $accMCTag = pop @accMCParts;
 $accMCTag =~ s/\.root//;
 print "datatag: $accMCTag\n";
 system( "split_mass $accMCFile $accMCTag $lowMass $highMass $nBins -T kin:kin" );
-print "splitted data!\n"; 
+print "splitted acc!\n"; 
 
 @genMCParts = split /\//, $genMCFile;
 $genMCTag = pop @genMCParts;
@@ -73,7 +85,7 @@ $genMCTag =~ s/\.root//;
 print "datatag: $genMCTag\n";
 system( "split_mass $genMCFile $genMCTag $lowMass $highMass $nBins -T kin:kin" );
 #system( "split_mass $genMCFile $genMCTag $lowMass $highMass $nBins -T $nameAffix:kin" );
-print "splitted data!\n"; 
+print "splitted gen!\n"; 
 
 # make directories to perform the fits in
 for( $i = 0; $i < $nBins; ++$i ){
@@ -90,11 +102,8 @@ for( $i = 0; $i < $nBins; ++$i ){
 
   while( <CFGIN> ){
 
-    # for some reason we have to print these following statements or else the substition in the following lines wont work....
-    #print("dataTag: $dataTag\_$i.root\n");
-    #print("accMCTag: $accMCTag\_$i.root\n");
-    #print("genMCTag: $genMCTag\_$i.root\n");
     s/DATAFILE/$dataTag\_$i.root/;
+    s/BKGNDFILE/$bkgndTag\_$i.root/;
     s/ACCMCFILE/$accMCTag\_$i.root/;
     s/GENMCFILE/$genMCTag\_$i.root/;
     s/NIFILE/bin_$i.ni/;

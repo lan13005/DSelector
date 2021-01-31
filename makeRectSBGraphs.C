@@ -1,7 +1,8 @@
 #include "/d/grid15/ln16/pi0eta/092419/makeStackedHists.h"
-#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+//#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
-TH1F combineSBRegions(TFile* dataFile, string reg1Name, string reg2Name, string reg3Name, string reg4Name, string histName, string fileSaveName){
+TH1F combineSBRegions(TFile* dataFile, string reg1Name, string reg2Name, string reg3Name, string reg4Name, string histName, string fileSaveName,
+        string totLabel, string sigLabel, string bkgLabel){
 	TH1F* rectSB_17;
 	TH1F* rectSB_35;
 	TH1F* rectSB_0268;
@@ -33,12 +34,12 @@ TH1F combineSBRegions(TFile* dataFile, string reg1Name, string reg2Name, string 
 	// For illustration we will just invert the background to see what we a removing from the total
 	rectSB_background->Scale(-1);
 
-	makeStackedHist(rectSB_total, rectSB_signal, rectSB_background, fileSaveName.c_str(),"newGraphs");
+	makeStackedHist(rectSB_total, rectSB_signal, rectSB_background, fileSaveName.c_str(),"newGraphs",totLabel,sigLabel,bkgLabel);
 	return *rectSB_signal;
 }
 
 void makeRectSBGraphs(string fileLoc){
-        gluex_style();
+        //gluex_style();
 	gStyle->SetOptStat(0);
 	TFile* dataFile = TFile::Open(fileLoc.c_str());
 	TFile* qValueFile = TFile::Open("/d/grid15/ln16/pi0eta/q-values/diagnosticPlots/postQVal.root");
@@ -57,9 +58,9 @@ void makeRectSBGraphs(string fileLoc){
 	//dataFile->GetObject("pi0eta1D_RectSBSubRegion35",rectSB_35);
 	//dataFile->GetObject("pi0eta1D_RectSBSubRegion0268",rectSB_0268);
 	//dataFile->GetObject("pi0eta1D_RectSBSubRegion4",rectSB_4);
-	objRectSBSignal = combineSBRegions( dataFile, "pi0eta1D_RectSBSubRegion17", "pi0eta1D_RectSBSubRegion35", "pi0eta1D_RectSBSubRegion0268", "pi0eta1D_RectSBSubRegion4", "rectSB_signal", "pi0eta1D_total");
+	objRectSBSignal = combineSBRegions( dataFile, "pi0eta1D_RectSBSubRegion17", "pi0eta1D_RectSBSubRegion35", "pi0eta1D_RectSBSubRegion0268", "pi0eta1D_RectSBSubRegion4", "rectSB_signal", "pi0eta1D_total", "Total","Signal","SB");
 	rectSB_signal = &objRectSBSignal;
-	objRectSBSignal_fixed = combineSBRegions( dataFile, "pi0eta1D_RectSBSubRegion17_fixed", "pi0eta1D_RectSBSubRegion35_fixed", "pi0eta1D_RectSBSubRegion0268_fixed", "pi0eta1D_RectSBSubRegion4_fixed", "rectSB_signal_fixed", "pi0eta1D_total_fixed");
+	objRectSBSignal_fixed = combineSBRegions( dataFile, "pi0eta1D_RectSBSubRegion17_fixed", "pi0eta1D_RectSBSubRegion35_fixed", "pi0eta1D_RectSBSubRegion0268_fixed", "pi0eta1D_RectSBSubRegion4_fixed", "rectSB_signal_fixed", "pi0eta1D_total_fixed","Total","Signal","SB");
 	rectSB_signal_fixed = &objRectSBSignal_fixed;
 	cout << "Made stacked histograms" << endl;
 
@@ -77,17 +78,6 @@ void makeRectSBGraphs(string fileLoc){
 	//rectSB_background->Scale(0.5);
 	//rectSB_background->Add(rectSB_17,-0.5);
 	//rectSB_background->Add(rectSB_35,-1);
-
-	//// Simply add the background to the total since the background is properly weighted
-	//TH1F *rectSB_signal = (TH1F*)rectSB_total->Clone();
-	//rectSB_signal->SetName("rectSB_signal");
-
-	//rectSB_signal->Add(rectSB_background,1);
-
-	//// For illustration we will just invert the background to see what we a removing from the total
-	//rectSB_background->Scale(-1);
-
-	//makeStackedHist(rectSB_total, rectSB_signal, rectSB_background, "pi0eta1D_total","newGraphs");
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////// DO IT AGAIN WITH THE FIXED MASS ////////////////////////////////////

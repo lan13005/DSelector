@@ -2,7 +2,7 @@
 #include "/d/grid15/ln16/pi0eta/q-values/makeDiagnosticHists.h"
 #include "DSelector_helperFuncs.h"
 
-#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+//#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 double selectPi0Proton=1.4;
 double selectEtaProton=2;
@@ -12,7 +12,7 @@ class overlayPlots{
 		std::vector<TH1F*> overlayHists;
 		std::vector<double> histWeights;
 		std::vector<int> histFillColors;
-        	TLegend *leg = new TLegend(0.6,0.65,0.9,0.9);
+        	TLegend *leg = new TLegend(0.6,0.75,0.9,0.95);
 		int colors[10] = {4, 6, kOrange, 7, 9, 30, 27, 46, 41};
 		TLine* cutLine;
 		int numberHists=0;
@@ -48,7 +48,7 @@ class overlayPlots{
 		}
 
 		void plot(string fileName, bool b_xCut, std::vector<double> xCut) {
-                        gluex_style();
+                        //gluex_style();
 			cout << "Creating overlay hist " << overlayHists[0]->GetName() << endl;
 			TCanvas* overlayCanvas = new TCanvas( ("canvas_"+fileName).c_str(),"",1440,900);
 			overlayHists[0]->Scale(histWeights[0]);
@@ -114,7 +114,7 @@ class sideBySide2D{
 		}
 
 		void plot(string fileName, string cutShape, std::vector<double [4]> xCut) {
-                        gluex_style();
+                        //gluex_style();
 			cout << "Creating side by side hist " << overlayHists[0]->GetName() << endl;
 			TCanvas* overlayCanvas = new TCanvas( ("canvas_"+fileName).c_str(),"",1440,900);
 			overlayHists[0]->Scale(histWeights[0]);
@@ -146,7 +146,7 @@ class sideBySide2D{
 
 
 void makeGraphs(string fileLoc){
-        gluex_style();
+        //gluex_style();
 
 
         TFile* file = TFile::Open(fileLoc.c_str());
@@ -238,6 +238,8 @@ void makeGraphs(string fileLoc){
    	   		h->Draw("COLZ HIST");
 			fileName.append(h->GetName());
 			fileName.append(".png");
+                        gluex_style->cd();
+                        gROOT->ForceStyle();
    	   		c1->SaveAs((fileName).c_str());
 			if ( strcmp(h->GetName(),"pi0eta_mEllipsePre")==0 ){
 				cout << "DRAWING RECTANGULAR SIDEBANDS" << endl;
@@ -258,6 +260,8 @@ void makeGraphs(string fileLoc){
    	   		h->Draw("COLZ HIST");
 			fileName.append(h->GetName());
 			fileName.append(".png");
+                        gluex_style->cd();
+                        gROOT->ForceStyle();
    	   		c1->SaveAs((fileName).c_str());
 			// Wait until we have finally used up TH1 object first. Otherwise casting it into TH1F early creates some problems
 			pi0proton1D_mMandelstamT_mdelta.fillHist(h);
@@ -350,8 +354,8 @@ void makeGraphs(string fileLoc){
 
 	lineCutThresholds={selectPi0Proton};
 	pi0proton1D_mMandelstamT_mdelta.plot("newGraphs/pi0proton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
-	lineCutThresholds={selectEtaProton};
-	etaproton1D_mMandelstamT_mdelta.plot("newGraphs/etaproton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
+        //lineCutThresholds={selectEtaProton};
+	//etaproton1D_mMandelstamT_mdelta.plot("newGraphs/etaproton1D_mMandelstamT_mdelta_showCut.png",true,lineCutThresholds);
 
         //lineCutThresholds={1.5,1.65,1.9,2.2,2.4,2.8};
         //etaproton1D_baseAsymCut_mDelta_fastPi0.plot("newGraphs/etaproton1D_baseAsymCut_mDelta_fastPi0_showBins.png",true,lineCutThresholds);

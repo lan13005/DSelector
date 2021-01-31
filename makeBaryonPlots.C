@@ -1,8 +1,8 @@
-#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+//#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 void makeBaryonPlots(string fileLoc){
         gSystem->mkdir("newGraphs/baryonPlots");
-        gluex_style();
+        //gluex_style();
         double etaProtonBaryonCut = 1.65;
         double pi0ProtonBaryonCut = 2;
 	double tCut = 1;

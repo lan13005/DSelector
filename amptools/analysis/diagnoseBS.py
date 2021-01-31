@@ -16,7 +16,7 @@ def printHelp():
     print("Usage: python diagnoseBS.py <amp> <folder> <fileName> <uncertColName> <delim> <accumlateRunning>")
     print("This will look for <fileName>-seedN.out files in <folder> directory and build diagnostic plots for <amp>")
     print("   The data will be read in with a <delim> and error columns are taken to contain the word <uncertColName>")
-    print("    if we dont care about calculating the running std we can speed things up with flag <accumlateRunning>")
+    print("    if we dont care about calculating the running std we can speed things up by seeting false to flag <accumlateRunning>")
     print('i.e. python diagnoseBS.py S0+ plot_etapi_delta_results plot_etapi_delta err "\\t" True')
     print('i.e. python diagnoseBS.py H0_10 plot_etapi_delta_results project_moments_polarized uncert " " True') 
 

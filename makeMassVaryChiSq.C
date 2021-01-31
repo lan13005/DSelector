@@ -1,4 +1,4 @@
-#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+//#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 // 1d double gaussian
 int numDOFsig=5;
@@ -18,7 +18,7 @@ Double_t fitFunc(Double_t *x, Double_t *par){
 }
 
 void makeMassVaryChiSq(string fileLoc){
-        gluex_style();
+        //gluex_style();
 	TFile* dataFile = TFile::Open(fileLoc.c_str());
     	//ofstream logFile;
     	//logFile.open("newGraphs/sigEffs/purityResults.txt");

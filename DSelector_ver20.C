@@ -28,12 +28,8 @@ int itersToRun = 0;
 int protonID=0;
 
 string selectDetector="ALL";
-string polarization="deg090";
-//string tag="_compare_reco_2017";
-//string tag="_data_2017";
-//string tag="_a0a2Test";
-//string tag="_a0a2a2pi1_largerpi1_dat";
-string tag="_pi1_dat";
+string polarization="degALL";
+string tag="_data_2017_allCuts";
 
 int mcprocess=0;
 
@@ -4244,7 +4240,6 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	//else if ( inBox_noOtherCuts[4] ) { weightBS = 1; weightB = 0; }
 	//else { weightBS=0; weightB=1; }
 
-        
         // Calculate weights ignoring the other dimension
         if ( locPi0Mass_Kin > pi0Mean-pi0Std*pi0Sig && locPi0Mass_Kin < pi0Mean+pi0Std*pi0Sig ) { weightBSpi0 = 1; } 
         else if ( locPi0Mass_Kin > pi0Mean-pi0Std*(pi0Sig+pi0Skip+pi0SB) && locPi0Mass_Kin < pi0Mean-pi0Std*(pi0Sig+pi0Skip) ) { weightBSpi0 = pi0SBweight; } 
@@ -4366,7 +4361,9 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
 	/******************************************* CUT ON THE COMBINATION *********************************************************/
 
 	//if (!baseAsymCut || !detectorCut) // double regge BA study
-        if (!allGeneralCutsPassed || !detectorCut){
+        //if (!allGeneralCutsPassed || !detectorCut){
+        if (!inBox[4] || !detectorCut){
+        //if (!(inBox[10] || inBox[11] || inBox[12]) || !detectorCut){
         //if (!mMandelstamT_mdelta || !detectorCut)
         //if (!mEllipse_pre_tAll || !detectorCut)  // Deck analysis
         //if (!mEllipse_pre || !detectorCut) //  // Q-values

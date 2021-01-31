@@ -1,7 +1,7 @@
-#include "/d/grid13/gluex/gluex_top/gluex_style.C"
+//#include "/d/grid13/gluex/gluex_top/gluex_style.C"
 
 void makeMpi0etaBinnedT(string fileLoc){
-        gluex_style();
+        //gluex_style();
 	TFile* dataFile = TFile::Open(fileLoc.c_str());
 	TCanvas *allCanvases = new TCanvas("","",1440,900);
 	gPad->SetLeftMargin(0.2);

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm -rf fitLogs/full
+mkdir -p fitLogs/full
 python fullFit.py  > fitLogs/full/driveFit.log 
 
 #####################
