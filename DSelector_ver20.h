@@ -311,8 +311,10 @@ class trackingGroup{
 		// use back and pop_back to fill the histograms, slowly consuming the values that passed the cuts
 		for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
 			//cout << "Filling some histograms..." << endl;
+                        //for (UInt_t iHist=0; iHist<allHists_1D.size(); ++iHist){
+	                //   if (allUsedMapIds_1D[iHist].find(beingUsedMap)==allUsedMapIds_1D[iHist].end() && *(allHists_1D[iHist].cut)  ){
+	                //       allUsedMapIds_1D[iHist].insert(beingUsedMap); //we get a iterator which references the element of the set so we need to dereference 
 			if (allValues_1D[iHist].size() > 0) {
-				//cout << allValues_1D[iHist].back() << allValues_1D_weight[iHist].back() << endl;
 				int numVals = allValues_1D[iHist].size();
                                 numVals=1;
 				for ( int iValue=0; iValue<numVals; ++iValue){

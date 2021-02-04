@@ -215,7 +215,9 @@ for binNum in binsArray:
 for seedIdx in range(len(seedNums)):
     seed = seeds[seedIdx]
     seedNum = seedNums[seedIdx]
+    print("\n**********************************************************************\n***************************** NEXT SEED *********************************\n")
     for binNum in binsArray:
+        print("------------------------ NEW BIN -------------------------\n-------------------------------------------------------")
         print("Running on seed,seedNum,binNum={0},{1},{2}".format(seed,seedNum,binNum))
         binDir=fitDir+"/bin_"+str(binNum)
         os.chdir(binDir)
@@ -233,6 +235,7 @@ for seedIdx in range(len(seedNums)):
         # if rndSamp_flag=False we will not start with the converged amplitudes
         rndSamp=rndSamp_flag
         for j in range(maxIter):
+            print("======================== NEW ATTEMPT =========================\n=======================================================")
             if (j<rampIter):
                 baseDeviation=baseDeviation1
             else:
@@ -276,8 +279,6 @@ for seedIdx in range(len(seedNums)):
             if (num_lines==0 and j==(maxIter-1)):
                 print("Bin_"+str(binNum)+" did not converge maxIter times!")
                 raise ValueError("Bin_"+str(binNum)+" did not converge maxIter times! Have to rethink this!")
-            print("======================== NEXT ATTEMPT =========================\n=======================================================")
-        print("\n\n**********************************************************************\n***************************** NEXT SEED *********************************\n")
 
 stop = time.time()
 print("Execution time in seconds: %s" % (stop-start))

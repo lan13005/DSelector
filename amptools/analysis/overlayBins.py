@@ -15,7 +15,7 @@ def printHelp():
     print('where y is a string -- Set to "" to do nothing')
     print("      y is a string containing _ separated amplitudes to plot that are again ; separated to group another set")
     print('      i.e "S0+_D0+;S0+_D0+_P1+" will run etapi_plotter twice. One that plots the S0+ and D0+ contributions only.')
-    print("      The second will include P0+ contribution also")
+    print("      The second will include P1+ contribution also")
     
 
 args=sys.argv

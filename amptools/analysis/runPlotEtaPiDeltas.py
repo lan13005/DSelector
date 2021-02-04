@@ -7,6 +7,7 @@ import sys
 def printHelp():
     print("\nUsage: \n-----------------")
     print("Running plot_etapi_delta and/or project_moments for all the bins and gathering their results")
+    print("YOU NEED TO MODIFY/COMPILE THE ABOVE PROGRAMS TO YOUR OWN WAVESET+CONFIG AS THIS IS JUST A DRIVER SCRIPT")
     print("python runPlotEtaPiDeltas.py x b")
     print("where x=0 -- only run plot_etapi_delta")
     print("      x=1 -- only run project_moments")

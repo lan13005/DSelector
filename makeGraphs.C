@@ -243,7 +243,7 @@ void makeGraphs(string fileLoc){
    	   		c1->SaveAs((fileName).c_str());
 			if ( strcmp(h->GetName(),"pi0eta_mEllipsePre")==0 ){
 				cout << "DRAWING RECTANGULAR SIDEBANDS" << endl;
-				drawRectSB(0.135881-2*0.0076, 0.135881+2*0.0076, 0.548625-2*0.0191, 0.548625+2*0.0191, 0.01, 0.02);
+                                drawRectSB(0.135881, 0.548625, 0.0076, 0.0191, 3, 1, 2, 3, 1, 2);
 				fileName="newGraphs/";
 				fileName.append(h->GetName());
 				fileName.append("_withRectCut.png");
