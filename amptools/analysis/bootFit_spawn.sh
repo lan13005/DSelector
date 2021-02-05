@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-numBins=$(grep "NUMBER_BINS" fit.cfg | cut -d "=" -f2)
-processSpawned=$(grep "PROCESSES_TO_SPAWN" fit.cfg | cut -d "=" -f2) # so that each one takes care of 5 bins
+numBins=$(grep "NUMBER_BINS" fit.cfg | cut -d "=" -f2 | tr -d -c 0-9)
+processSpawned=$(grep "PROCESSES_TO_SPAWN" fit.cfg | cut -d "=" -f2 | tr -d -c 0-9) # so that each one takes care of 5 bins
 binsPerProc=$(python -c "from math import ceil; print int(ceil(1.0*$numBins/$processSpawned))")
 
 

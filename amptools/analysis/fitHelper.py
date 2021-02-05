@@ -18,6 +18,7 @@ def getAmps(ampNames,binDir,seedFile,rndSamp,percentDeviation,baseDeviation,verb
     realAmps=[]
     imAmps=[]
     isreal=[]
+    isAmpReal=False
     print("Opening: "+binDir+"/"+seedFile)
     with open(binDir+"/"+seedFile,"r") as param_init_cfg:
         paramLines = param_init_cfg.readlines()
@@ -34,12 +35,12 @@ def getAmps(ampNames,binDir,seedFile,rndSamp,percentDeviation,baseDeviation,verb
                 im_low = float(imAmp*(1-percentDeviation)-baseDeviation)
                 im_up = float(imAmp*(1+percentDeviation)+baseDeviation)
                 realSampled = str(random.uniform(real_low,real_up))
-            if (lenParams>5) and (paramLine.split(" ")[5].rstrip()=="real"):
-                imSampled="0.0"
-                isreal.append(True)
-            else: 
-                imSampled= str(random.uniform(im_low,im_up))
-                isreal.append(False)
+                if (lenParams>5) and (paramLine.split(" ")[5].rstrip()=="real"):
+                    imSampled="0.0"
+                    isAmpReal=True
+                else: 
+                    imSampled= str(random.uniform(im_low,im_up))
+                    isAmpReal=False
             if(verbose):
                 print("Below is paramLists, check if below values match:")
                 print(paramLine.split(" "))
@@ -53,6 +54,7 @@ def getAmps(ampNames,binDir,seedFile,rndSamp,percentDeviation,baseDeviation,verb
                 print("----------------------------")
             realAmps.append(realSampled)
             imAmps.append(imSampled)
+            isreal.append(isAmpReal)
             #print("lc, ra, ia: "+str(lineCounter)+", "+str(realSampled)+", "+str(imSampled))
             lineCounter+=1
         if (len(realAmps)==len(imAmps)==len(isreal)):

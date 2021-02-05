@@ -190,8 +190,13 @@ def writeCfg(ampNames,bin_cfg,bin_cfg_seed,seed,binDir,percentDeviation,baseDevi
     print(sedCall)
     subprocess.Popen(sedCall.split(" ")).wait()
     realAmps,imAmps,isreal = getAmps(ampNames,binDir,seedFile,rndSamp,percentDeviation,baseDeviation,True)
+    print(realAmps)
+    print(imAmps)
+    print(isreal)
     for line in fileinput.input(bin_cfg_seed,inplace=1):
         if line.strip().startswith("data"):
+            line = line.replace("ROOTDataReader","ROOTDataReaderBootstrap").replace(".root",".root "+str(seed))
+        if line.strip().startswith("bkgnd"):
             line = line.replace("ROOTDataReader","ROOTDataReaderBootstrap").replace(".root",".root "+str(seed))
         if line.strip().startswith("initialize"):
             posNegTag=line.split(" ")[1].split("::")[1]

@@ -2,10 +2,10 @@
 
 use Cwd;
 
-$lowMass = 0.7; #is a shared lower cutoff for all 3 datas.
+$lowMass = 0.82; #is a shared lower cutoff for all 3 datas.
 $highMass = 2; #2 is the upper cutoff of the thrown data and 3ish is the upper cutoff for the reco/data
 #$nBins = 65; # not sure why old me chose 65 bins... that is alot of bins and we might not have enough statistics
-$nBins=52; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
+$nBins=60; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
 
 $fitName = "EtaPi_fit";
 

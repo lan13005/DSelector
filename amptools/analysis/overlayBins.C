@@ -1,13 +1,13 @@
 double lowMass=0.7;
 double uppMass=2.0;
-int nBins=65;
+int nBins=52;
 double stepMass=(uppMass-lowMass)/nBins;
 string fitName="EtaPi_fit";
 
 char slowMass[5];
 char suppMass[5];
 
-vector<string> groups={"_S0+","_S0+_D0+","_S0+_D0+_D1+","_S0+_D0+_D1+_D2+","_P1+",""};
+vector<string> groups={""};
 void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas*> allCanvases){
 	TPaveText *pt = new TPaveText();
         double dLowMass=lowMass+iBin*stepMass;
@@ -25,8 +25,10 @@ void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas
 
         TH1F *any1DHist_dat;
         TH1F *any1DHist_acc;
+        TH1F *any1DHist_bkg;
         vector<TH1F> any1DHists_dat;
         vector<TH1F> any1DHists_acc;
+        vector<TH1F> any1DHists_bkg;
         cout << "Defined some variables..." << endl;
 
         int igroup=1;
@@ -51,6 +53,13 @@ void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas
 
     	    	any1DHist_acc->SetLineColor( 0);
                 any1DHist_acc->Draw("HIST SAME");
+
+                if (infile->GetListOfKeys()->Contains((names1D[histIdx]+"bkg").c_str())){
+                    infile->GetObject((names1D[histIdx]+"bkg").c_str(),any1DHist_bkg);
+    	    	    any1DHist_bkg->SetFillColorAlpha( kGray,0.5);
+    	    	    any1DHist_bkg->SetLineColor(0);
+                    any1DHist_bkg->Draw("HIST SAME");
+                }
 
                 if (igroup==1){
                     // draw a pavetext showing the mass range for only the first pad
@@ -84,8 +93,7 @@ void overlayBins(){
 
         TCanvas* anyCanvas;
         vector<TCanvas*> allCanvases;
-        std::vector<std::string> names1D = {"Metapi","cosTheta","Phi000","Phi045","Phi090","Phi135","phi",
-            "psi000","psi045","psi090","psi135","t"};
+        std::vector<std::string> names1D = {"Metapi","cosTheta","Phi","phi","t"};
         for (auto name: names1D){
             anyCanvas = new TCanvas(("c"+name).c_str(),"",1440,900);
             anyCanvas->Divide(ncols,nrows);

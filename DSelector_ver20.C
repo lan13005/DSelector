@@ -2401,6 +2401,7 @@ void DSelector_ver20::Init(TTree *locTree)
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Ebeam"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("whichSignalRegion"); // *** 1=signal 2=sideband 3=skip
         dFlatTreeInterface->Create_Branch_Fundamental<bool>("isTruePi0Eta"); //fundamental = char, int, float, double, etc.
+        dFlatTreeInterface->Create_Branch_Fundamental<bool>("insideEllipse"); //fundamental = char, int, float, double, etc.
         dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("Mpi0eta_thrown");
         dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("numSpect");
         dFlatTreeInterface->Create_Branch_FundamentalArray<Int_t>("spectroscopicID","numSpect"); //fundamental = char, int, float, double, etc.
@@ -4509,7 +4510,8 @@ Bool_t DSelector_ver20::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0p", locPi0Proton_Kin);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("Metap", locEtaProton_Kin);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("whichSignalRegion", whichSignalRegion);
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("isTruePi0Eta", isTruePi0Eta);
+        dFlatTreeInterface->Fill_Fundamental<bool>("isTruePi0Eta", isTruePi0Eta);
+        dFlatTreeInterface->Fill_Fundamental<bool>("insideEllipse", pinsideEllipse);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("Mpi0eta_thrown", Mpi0eta_thrown);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("numSpect", numSpect);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("spectroscopicID",locProtonTrackID,0); // branch name, value, array index
