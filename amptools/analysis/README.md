@@ -12,7 +12,7 @@ processes will ignore!
 3. fullFit_spawn.sh 
 4. bootFit_spawn.sh
 5. python overlayBins.py -- to run this you need to put the contents of halld_sim folder of the this repo into halld_sim and compile it
-6. python runPlotEtaPiDeltas.py -- need to update plote_etapi_delta and project_moments to your own waveset and configuration
+6. python runPlotEtaPiDeltas.py -- need to update plote_etapi_delta and project_moments (halld_sim functions) to your own waveset and configuration
 7. python diagnoseBS.py 
 8. python plotIntensities.py
 

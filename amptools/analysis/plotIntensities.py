@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import math
 import sys
@@ -5,36 +6,42 @@ import matplotlib
 matplotlib.use('agg') # TKinter might not be installed so use agg
 import matplotlib.pyplot as plt
 
+
+#def printHelp():
+#    print("Usage:\n--------")
+#    print("python plotIntensities.py <ampOrMom>")
+#    print("Will look for the csv output from diagnoseBS.py")
+#    print("<ampOrMom> is a flag to make the plots for moments with bootstrapped errors --- True")
+#    print("    or amplitudes with bootstrapped errors --- False")
+#    print("-------------------------------------")
+
+#argc=len(sys.argv)
+#if argc!=2:
+#    printHelp()
+#    exit()
+#
+#if sys.argv[1]:
+#    # For moments
+#    massCol="M"
+#    uncertColName="uncert."
+#    fileName="project_moments_polarized"
+#    colToSetYlim="H0_00"
+#else:
+#    # For amplitudes
+#    massCol="M"
+#    uncertColName="err"
+#    fileName="plot_etapi_delta"
+
+
+massCol="M"
+uncertColName="err"
+location="plot_etapi_delta_results/plot_etapi_delta.out"
+fileName="amplitudes"
+colToSetYlim="all"
 label="GlueX acceptance"
 
-def printHelp():
-    print("Usage:\n--------")
-    print("python plotIntensities.py <ampOrMom>")
-    print("Will look for the csv output from diagnoseBS.py")
-    print("<ampOrMom> is a flag to make the plots for moments with bootstrapped errors --- True")
-    print("    or amplitudes with bootstrapped errors --- False")
-    print("-------------------------------------")
-
-
-argc=len(sys.argv)
-if argc!=2:
-    printHelp()
-    exit()
-
-if sys.argv[1]:
-    # For moments
-    massCol="M"
-    uncertColName="uncert."
-    fileName="project_moments_polarized"
-    colToSetYlim="H0_00"
-else:
-    # For amplitudes
-    massCol="M"
-    uncertColName="err"
-    fileName="plot_etapi_delta"
-    colToSetYlim="all"
-
-data=pd.read_csv("bootstrapDiagnostics/"+fileName+"_BS.csv")
+data=pd.read_csv(location,delimiter="\t")
+#data=pd.read_csv("bootstrapDiagnostics/"+fileName+"_BS.csv")
 print("Columns in dataframe:")
 print(data.columns)
 
@@ -63,11 +70,13 @@ legend_loc=(1.6,)
 for i in range(len(intCols)):
     data.plot(massCol,intCols[i],yerr=errCols[i],kind="scatter",ax=axes[i],c=color,s=size)
     if i==0:
-        limits=axes[i].get_ylim()
+        limits=list(axes[i].get_ylim())
+        limits[0]=0; # zero suppress
     else:
         axes[i].set_ylim(limits)
     axes[i].set_ylabel("Intensity")
     axes[i].set_title(intCols[i])
     
 plt.tight_layout()
-fig.savefig("bootstrapDiagnostics/"+fileName+".png")
+os.system("mkdir -p diagnostics")
+fig.savefig("diagnostics/"+fileName+".png")

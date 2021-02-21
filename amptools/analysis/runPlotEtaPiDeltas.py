@@ -46,7 +46,7 @@ def setFitFile(dirTag,fitTag):
     for iBin in range(nBins):
         binName="bin_"+str(iBin)
         baseName=fitDir+"/"+binName+"/"
-        #print("Moving "+baseName+dirTag+binName+fitTag+".fit  to  "+baseName+binName+".fit")
+        print("Moving "+baseName+dirTag+binName+fitTag+".fit  to  "+baseName+binName+".fit")
         try:
             shutil.move(baseName+dirTag+binName+fitTag+".fit", baseName+binName+".fit")
         except:
@@ -55,7 +55,7 @@ def fixFitFile(dirTag,fitTag):
     for iBin in range(nBins):
         binName="bin_"+str(iBin)
         baseName=fitDir+"/"+binName+"/"
-        #print("Moving "+baseName+binName+".fit  to  "+baseName+dirTag+binName+fitTag+".fit")
+        print("Moving "+baseName+binName+".fit  to  "+baseName+dirTag+binName+fitTag+".fit")
         try:
             shutil.move(baseName+binName+".fit", baseName+dirTag+binName+fitTag+".fit")
         except:

@@ -1,13 +1,13 @@
 double lowMass=0.7;
 double uppMass=2.0;
-int nBins=52;
+int nBins=65;
 double stepMass=(uppMass-lowMass)/nBins;
 string fitName="EtaPi_fit";
 
 char slowMass[5];
 char suppMass[5];
 
-vector<string> groups={""};
+vector<string> groups={"_S0+","_P0+","_P1+","_D0+","_D1+","_D2+",""};
 void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas*> allCanvases){
 	TPaveText *pt = new TPaveText();
         double dLowMass=lowMass+iBin*stepMass;
@@ -47,19 +47,18 @@ void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas
                 any1DHist_dat->SetMinimum(0);
                 allCanvases[histIdx]->Update();
 
-                //any1DHist_acc->SetLineColor(kGreen);
-                //any1DHist_acc->SetFillStyle( 3144);
-    	    	any1DHist_acc->SetFillColorAlpha( kOrange,0.5);
+                if (infile->GetListOfKeys()->Contains((names1D[histIdx]+"bkg").c_str())){
+                    cout << "Bkg file is included! Will add the distribution onto acc" << endl;
+                    infile->GetObject((names1D[histIdx]+"bkg").c_str(),any1DHist_bkg);
+    	    	    any1DHist_bkg->SetFillColorAlpha( kBlue-6,0.9);
+    	    	    any1DHist_bkg->SetLineColor(0);
+                    any1DHist_acc->Add(any1DHist_bkg);
+                }
 
+    	    	any1DHist_acc->SetFillColorAlpha( kOrange,0.9);
     	    	any1DHist_acc->SetLineColor( 0);
                 any1DHist_acc->Draw("HIST SAME");
-
-                if (infile->GetListOfKeys()->Contains((names1D[histIdx]+"bkg").c_str())){
-                    infile->GetObject((names1D[histIdx]+"bkg").c_str(),any1DHist_bkg);
-    	    	    any1DHist_bkg->SetFillColorAlpha( kGray,0.5);
-    	    	    any1DHist_bkg->SetLineColor(0);
-                    any1DHist_bkg->Draw("HIST SAME");
-                }
+                any1DHist_bkg->Draw("HIST SAME");
 
                 if (igroup==1){
                     // draw a pavetext showing the mass range for only the first pad
@@ -70,6 +69,13 @@ void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas
         }
         // we could have put this into the above loop but then we would have to open the same root file a lot more times
         for (int histIdx=0; histIdx<(int)names1D.size(); ++histIdx){
+            if (names1D[histIdx]=="Phi"){
+                names1D[histIdx]="BigPhi";
+            }
+            if (iBin==47){
+                allCanvases[histIdx]->Print(("overlayPlots/"+names1D[histIdx]+".pdf)").c_str(),"pdf");
+                continue;
+            }
             if (iBin==0){
                 allCanvases[histIdx]->Print(("overlayPlots/"+names1D[histIdx]+".pdf(").c_str(),"pdf");
             }
@@ -84,16 +90,25 @@ void overlaySingleBin(int iBin,int nBins, vector<string> names1D, vector<TCanvas
 
 void overlayBins(){
         int ngroups=(int)groups.size();
-        int nrows=(int)sqrt(ngroups);
-        int ncols;
-        if (nrows*nrows<ngroups)
-            ncols=nrows+1;
-        else
-            ncols=nrows;
+        int flooredRoot=(int)sqrt(ngroups);
+        int nrows, ncols;
+        if (flooredRoot*flooredRoot>ngroups){
+            nrows=flooredRoot;
+            ncols=flooredRoot;
+        }
+        else if (flooredRoot*(flooredRoot+1)>ngroups){
+            nrows=flooredRoot;
+            ncols=flooredRoot+1;
+        }
+        else {
+            nrows=flooredRoot+1;
+            ncols=flooredRoot+1;
+        }
+        cout << "Dividing pad to have ncols,nrows: " << ncols << ", " << nrows << endl;
 
         TCanvas* anyCanvas;
         vector<TCanvas*> allCanvases;
-        std::vector<std::string> names1D = {"Metapi","cosTheta","Phi","phi","t"};
+        std::vector<std::string> names1D = {"Metapi","cosTheta","Phi","phi","psi","t"};
         for (auto name: names1D){
             anyCanvas = new TCanvas(("c"+name).c_str(),"",1440,900);
             anyCanvas->Divide(ncols,nrows);
@@ -101,7 +116,8 @@ void overlayBins(){
         }
         cout << "Defined all the canvases" << endl;
 
-	for (int iBin=0; iBin<nBins;++iBin){
+	for (int iBin=0; iBin<48;++iBin){
+	//for (int iBin=0; iBin<nBins;++iBin){
 	    	overlaySingleBin(iBin,nBins,names1D,allCanvases);
 	}
 }

@@ -2,10 +2,10 @@
 
 use Cwd;
 
-$lowMass = 0.82; #is a shared lower cutoff for all 3 datas.
+$lowMass = 0.7; #is a shared lower cutoff for all 3 datas.
 $highMass = 2; #2 is the upper cutoff of the thrown data and 3ish is the upper cutoff for the reco/data
 #$nBins = 65; # not sure why old me chose 65 bins... that is alot of bins and we might not have enough statistics
-$nBins=60; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
+$nBins=65; # 26 because it is kind of small and (2-0.7)/26 = 0.05 which is nice and round
 
 $fitName = "EtaPi_fit";
 
@@ -14,32 +14,61 @@ $fitName = "EtaPi_fit";
 $maxEvts = 1E9;
 
 $workingDir=getcwd();
-print "current working dir: $workingDir";
-print "\n";
+print "\n\ncurrent working dir: $workingDir";
+print "\n===================================\n";
 
 # these files must exist in the workin directory.  If you don't know how
 # to generate them or don't have them, see the documentation in gen_3pi
 # the Simulation area of the repository
-# a0a2a2pi1_polarized/amptools_thrown_a0a2a2pi1_as_dat.root
-$dataFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_a0a2a2pi1_onlySig.root";
-$bkgndFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_a0a2a2pi1_onlySB.root";
-$accMCFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_flat.root";
-$genMCFile = "/d/grid15/ln16/pi0eta/092419/amptools/analysis/a0a2a2pi1_polarized/amptools_flat_gen.root";
 
-print $dataFile;
-print "\n";
-print $bkgndFile;
-print "\n";
-print $accMCFile;
-print "\n";
-print $genMCFile;
-print "\n";
+$baseDir="/d/grid15/ln16/pi0eta/092419/amptools/analysis/amptools_qfactor/";
+
+#$dataFile = "amptools_a0a2a2pi1_onlySig.root";
+#$dataFile = "amptools_a0a2a2pi1_onlySB.root";
+#$accMCFile = "amptools_flat.root";
+#$genMCFile = "amptools_flat_gen.root";
+#print "ACCFILE\n";
+#print $accMCFile;
+#print "\n------------------\n";
+#print "GENFILE:\n";
+#print $genMCFile;
+#print "\n------------------\n";
+
+$baseDatFileName="amptools_data_chi5_tot_";
+$baseBkgFileName="amptools_data_chi5_sb_";
+$baseAccFileName="amptools_flat_chi5_";
+$baseGenFileName="amptools_flat_gen_";
+
+@polTags=qw(000 045 090 135 AMO);
+print "DATAFILES:\n";
+foreach $polTag (@polTags){
+    print "$baseDir$baseDatFileName$polTag\.root\n";
+}
+print "------------------\n";
+
+print "BKGNDFILES:\n";
+foreach $polTag (@polTags){
+    print "$baseDir$baseBkgFileName$polTag.root\n";
+}
+print "------------------\n";
+
+print "ACCFILES:\n";
+foreach $polTag (@polTags){
+    print "$baseDir$baseAccFileName$polTag.root\n";
+}
+print "------------------\n";
+
+print "GENFILES:\n";
+foreach $polTag (@polTags){
+    print "$baseDir$baseGenFileName$polTag.root\n";
+}
+print "------------------\n";
+
 
 # this file sould be used for partially polarized or unpolarized beam fits
-#$cfgTempl = "$workingDir/threepi_unpol_TEMPLATE.cfg";
 
-$cfgTempl = "$workingDir/zlm_etapi.cfg";
-
+#$cfgTempl = "$workingDir/fit_etapi_moments_test.cfg";
+$cfgTempl = "$workingDir/loop_zlm_etapi.cfg";
 
 ### things below here probably don't need to be modified
 
@@ -54,38 +83,29 @@ chdir $fitDir;
 print "Changing into $fitDir\n";
 
 # use the split_mass command line tool to divide up the
-# data into bins of resonance mass
-@dataParts = split /\//, $dataFile; #splitting the path into sections so we can pop out the last important file name
-$dataTag = pop @dataParts;
-$dataTag =~ s/\.root//;
-print "datatag: $dataTag\n";
-# here we will use the thrown MC data to get the best represention of how PWA calculates things
-system( "split_mass $dataFile $dataTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
-print "splitted data!\n"; 
+foreach $polTag (@polTags){
+    $fileTag="$baseDatFileName$polTag";
+    $dataFile="$fileTag.root";
+    print "splitting datatag: $dataFile\n";
+    system( "split_mass $baseDir$dataFile $fileTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
 
-# bkgnd into bins of resonance mass
-@bkgndParts = split /\//, $bkgndFile; #splitting the path into sections so we can pop out the last important file name
-$bkgndTag = pop @bkgndParts;
-$bkgndTag =~ s/\.root//;
-print "bkgndtag: $bkgndTag\n";
-# here we will use the thrown MC data to get the best represention of how PWA calculates things
-system( "split_mass $bkgndFile $bkgndTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
-print "splitted bkgnd!\n"; 
+    $fileTag="$baseBkgFileName$polTag";
+    $dataFile="$fileTag.root";
+    print "splitting bkgtag: $dataFile\n";
+    system( "split_mass $baseDir$dataFile $fileTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
 
-@accMCParts = split /\//, $accMCFile;
-$accMCTag = pop @accMCParts;
-$accMCTag =~ s/\.root//;
-print "datatag: $accMCTag\n";
-system( "split_mass $accMCFile $accMCTag $lowMass $highMass $nBins -T kin:kin" );
-print "splitted acc!\n"; 
+    $fileTag="$baseAccFileName$polTag";
+    #$fileTag="amptools_flat_000";
+    $dataFile="$fileTag.root";
+    print "splitting acctag: $dataFile\n";
+    system( "split_mass $baseDir$dataFile $fileTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
 
-@genMCParts = split /\//, $genMCFile;
-$genMCTag = pop @genMCParts;
-$genMCTag =~ s/\.root//;
-print "datatag: $genMCTag\n";
-system( "split_mass $genMCFile $genMCTag $lowMass $highMass $nBins -T kin:kin" );
-#system( "split_mass $genMCFile $genMCTag $lowMass $highMass $nBins -T $nameAffix:kin" );
-print "splitted gen!\n"; 
+    $fileTag="$baseGenFileName$polTag";
+    #$fileTag="amptools_flat_gen_000";
+    $dataFile="$fileTag.root";
+    print "splitting gentag: $dataFile\n";
+    system( "split_mass $baseDir$dataFile $fileTag $lowMass $highMass $nBins $maxEvts -T kin:kin" );
+}
 
 # make directories to perform the fits in
 for( $i = 0; $i < $nBins; ++$i ){
@@ -101,12 +121,14 @@ for( $i = 0; $i < $nBins; ++$i ){
   open( CFGIN, $cfgTempl ); 
 
   while( <CFGIN> ){
+    foreach $polTag (@polTags){
+        s/DATAFILE_$polTag/$baseDatFileName$polTag\_$i.root/;
+        s/BKGNDFILE_$polTag/$baseBkgFileName$polTag\_$i.root/;
+        s/ACCMCFILE_$polTag/$baseAccFileName$polTag\_$i.root/;
+        s/GENMCFILE_$polTag/$baseGenFileName$polTag\_$i.root/;
+        s/NIFILE_$polTag/bin_$i\_$polTag.ni/;
+    }
 
-    s/DATAFILE/$dataTag\_$i.root/;
-    s/BKGNDFILE/$bkgndTag\_$i.root/;
-    s/ACCMCFILE/$accMCTag\_$i.root/;
-    s/GENMCFILE/$genMCTag\_$i.root/;
-    s/NIFILE/bin_$i.ni/;
     s/FITNAME/bin_$i/;
 
     print CFGOUT $_;

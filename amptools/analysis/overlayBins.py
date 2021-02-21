@@ -12,7 +12,7 @@ def printHelp():
     print("where x=0 -- for all bins run etapi_plotter")
     print("      x=1 -- gather all results from etapi_plotter into overlayPlots folder")
     print("      x=2 -- do both")
-    print('where y is a string -- Set to "" to do nothing')
+    print('where y is a string -- Set to "" to plot everything' )
     print("      y is a string containing _ separated amplitudes to plot that are again ; separated to group another set")
     print('      i.e "S0+_D0+;S0+_D0+_P1+" will run etapi_plotter twice. One that plots the S0+ and D0+ contributions only.')
     print("      The second will include P1+ contribution also")
@@ -54,10 +54,18 @@ def runEtaPiPlotterForAllBins():
             cmd=["etapi_plotter","bin_"+str(iBin)+"-full.fit","-o","etapi_plot"+groupTags[igroup]+".root","-s",groups[igroup]]
             print("calling: "+" ".join(cmd))
             if verbose:
-                subprocess.check_call(cmd)
+                try:
+                    subprocess.check_call(cmd)
+                except:
+                    print("  ERROR OCCURED IN ABOVE CALL. Not really sure what the root cause is. Will continue anyways")
+                    pass
             else:
                 with open(os.devnull, 'wb') as devnull:
-                    subprocess.check_call(cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                    try:
+                        subprocess.check_call(cmd, stdout=devnull, stderr=subprocess.STDOUT)
+                    except:
+                        print("  ERROR OCCURED IN ABOVE CALL. Not really sure what the root cause is. Will continue anyways")
+                        pass
     time.sleep(2)
 
 def gatherPlotResultsIntoPDFs():
